@@ -471,7 +471,6 @@ const POOL = [
   {name:"Dambi", roles:["duelist"], overall:90, tags:["entry","clutch","mm","campeao_mundial"]},
   {name:"Xross", roles:["flex","initiator","duelist"], overall:88, tags:["utility","entry","mm","campeao_mundial"]},
   {name:"Mazino", roles:["flex","controller","initiator"], overall:88, tags:["igl","clutch","utility"]},
-  {name:"Cebando", roles:["controller"], overall:83, tags:["utility"]},
   {name:"MrFaliN", roles:["initiator","controller"], overall:85, tags:["clutch","utility"]},
   {name:"yetujey", roles:["sentinel","controller"], overall:86, tags:["clutch","utility","lurker"]},
   {name:"N4RRATE", roles:["flex","duelist","sentinel","initiator"], overall:87, tags:["clutch","utility","mm"]},
@@ -491,9 +490,6 @@ const POOL = [
   {name:"Timotino", roles:["duelist"], overall:89, tags:["entry","mm","clutch","campeao_mundial"]},
   {name:"Vora", roles:["initiator"], overall:88, tags:["igl","utility","campeao_mundial"]},
   {name:"Lar0k", roles:["duelist","flex"], overall:88, tags:["entry"]},
-  {name:"Rubkkoide", roles:["flex","initiator"], overall:85, tags:["utility"]},
-  {name:"ruso", roles:["duelist","flex","sentinel"], overall:84, tags:["entry"]},
-  {name:"Darky", roles:["controller","flex"], overall:84, tags:["utility"]},
   {name:"jotinha", roles:["initiator","controller"], overall:85, tags:["utility"]},
   {name:"summoNN", roles:["flex","duelist","initiator","controller","sentinel"], overall:84, tags:["utility"]},
   {name:"hAwksinho", roles:["flex","duelist","controller"], overall:84, tags:["entry","utility"]},
@@ -548,8 +544,8 @@ const COACHES = ["Nbs","bzkA","Potter","fRoD","mini","Chet","d00mbros","Kaplan",
 // Buff de cada Head Coach: bônus fixo aplicado ao rating do time em todo cálculo de vitória
 // de rodada/partida — vale pra qualquer equipe (sua ou adversária) que tiver esse técnico.
 const COACH_BUFFS = {
-  Nbs:4, bzkA:3, Potter:5, fRoD:4, mini:5, Chet:5, d00mbros:4, Kaplan:4,
-  alecks:4, Romanilly:3, Stk:3, Onur:4, JoshRT:5, bonkar:4, shaW:4, Kamino:3,
+  Nbs:4, bzkA:3, Potter:5, fRoD:5, mini:5, Chet:5, d00mbros:4, Kaplan:4,
+  alecks:4, Romanilly:3, Stk:3, Onur:4, JoshRT:6, bonkar:4, shaW:4, Kamino:2,
   SilKanoN:2, NaThanD:2, Stunner:2, KEY:2, WKN:2, Ewok:2, Engh:2, PatronW:2,
 };
 // Elencos das Seleções pro futuro Modo Copa do Mundo — separado do país "real" de cada craque
@@ -558,15 +554,15 @@ const COACH_BUFFS = {
 // entram no modo até o banco crescer mais.
 const WC_SELECOES = {
   "United States": {
-    players: ["BABYBAY","Boostio","C0M","Cryocells","Demon1","Derrek","Ethan","N4RRATE","OXY","Paincakes","Rossy","Verno","Victor","Xeppaa","Zellsis","bang","bdog","brawk","crashies","icy","jakee","leaf","neT","nerve","runi","s0m","skuba","supamen","trent","v1c","valyn","yay","zekken","zerona"],
+    players: ["BABYBAY","Boostio","C0M","Cryocells","Demon1","Ethan","N4RRATE","OXY","Verno","Victor","Zellsis","bang","brawk","crashies","leaf","s0m","skuba","trent","valyn","yay","zekken"],
     coaches: ["JoshRT","Potter","Chet","Kaplan","fRoD"],
   },
   "South Korea": {
-    players: ["Ash","BuZz","Dambi","Flashback","Francis","Ivy","Karon","Kess","Lakia","MaKo","Meteor","Munchkin","P0PPIN","Rb","Smoggy","Sylvan","Xross","iZu","stax","t3xture"],
+    players: ["Ash","BuZz","Dambi","Flashback","Francis","Ivy","Karon","Lakia","MaKo","Meteor","Munchkin","Rb","Smoggy","Sylvan","Xross","iZu","stax","t3xture"],
     coaches: ["SilKanoN"],
   },
   "China": {
-    players: ["CHICHOO","Haodong","Jieni7","Lysoar","NaturE","ZmjjKK","happywei","nobody"],
+    players: ["CHICHOO","Haodong","Jieni7","Lysoar","ZmjjKK","happywei","nobody"],
     coaches: ["NaThanD"],
   },
   "Canada": {
@@ -578,11 +574,11 @@ const WC_SELECOES = {
     coaches: ["KEY"],
   },
   "Brazil": {
-    players: ["Brinks","Khalil","PxS","Sacy","Sato","Zap","artzin","aspas","basic","bezn1","blowz","cauanzin","cortezia","dgzin","frz","gobera","havoc","heat","kon4n","less","liazzi","lukxo","lz","mazin","murizzz","mwzera","pANcada","pollo","prozin","pryze","qck","raafa","silentzz","spikezin","tkzin","tuyz","urango","v1nny","xand","xenom"],
+    players: ["Sacy","Sato","artzin","aspas","basic","blowz","cauanzin","cortezia","dgzin","less","lukxo","mwzera","pANcada","spikezin","tkzin","tuyz"],
     coaches: ["shaW","bzkA","Stk","Kamino"],
   },
   "Argentina": {
-    players: ["saadhak","Neon","Dantedeu5","nzr","Cebando","Rubkkoide","ruso","Darky","jotinha"],
+    players: ["saadhak","Neon","Dantedeu5","nzr","jotinha"],
     coaches: ["Onur","Romanilly"],
   },
   "Chile": {
@@ -668,7 +664,7 @@ const PLAYER_COUNTRY = {
   "lz":"BR",
   "sato":"BR",
   "basic":"BR",
-  "pxs":"BR",
+  "pxs":"US",
   "khalil":"BR",
   "tkzin":"BR",
   "boostio":"US",
@@ -716,7 +712,7 @@ const PLAYER_COUNTRY = {
   "karon":"KR",
   "stax":"KR",
   "smoggy":"KR",
-  "p0ppin":"KR",
+  "p0ppin":"US",
   "ivy":"KR",
   "dambi":"KR",
   "xross":"KR",
@@ -737,9 +733,6 @@ const PLAYER_COUNTRY = {
   "timotino":"CA",
   "vora":"CA",
   "lar0k":"TR",
-  "rubkkoide":"AR",
-  "ruso":"AR",
-  "darky":"AR",
   "jotinha":"AR",
   "summonn":"MA",
   "hawksinho":"MA",
@@ -801,7 +794,7 @@ const PLAYER_COUNTRY = {
   "leo":"SE",
   "sayf":"SE",
   "cryocells":"US",
-  "nature":"CN",
+  "nature":"US",
   "lysoar":"CN",
   "haodong":"CN",
   "zmjjkk":"CN",
@@ -826,7 +819,12 @@ const PLAYER_COUNTRY = {
   "kicks":"EE",
   "noman":"HK",
   "tex":"DE",
-  "shao":"RU","oxy":"US","cebando":"AR",
+  "shao":"RU","oxy":"US",
+};
+// País "extra" de sinergia, além da nacionalidade oficial — pra casos tipo o PxS: cidadania
+// americana, mas mora no Brasil, então ganha a sinergia de "mesmo país" com brasileiros também.
+const PLAYER_RESIDENCE = {
+  "pxs":"BR",
 };
 const PLAYER_TEAM = {
   "tenz":["SENTINELS21","SENTINELS24"],
@@ -869,7 +867,11 @@ const COACH_TEAM = {
 // parcial; quem não tem país/time confirmado simplesmente não conta pra essa sinergia.
 function chemistryBonus(roster, coachName){
   if(!roster || roster.length<2) return 0;
-  const countries = roster.map(p=>PLAYER_COUNTRY[p.name.toLowerCase()]).filter(Boolean);
+  function playerCountries(name){
+    const lc = name.toLowerCase();
+    return [PLAYER_COUNTRY[lc], PLAYER_RESIDENCE[lc]].filter(Boolean);
+  }
+  const countryLists = roster.map(p=>playerCountries(p.name));
   const teamLists = roster.map(p=>PLAYER_TEAM[p.name.toLowerCase()] || []);
   function countExtraPairs(list){
     const counts = {};
@@ -878,13 +880,13 @@ function chemistryBonus(roster, coachName){
     Object.values(counts).forEach(n=>{ if(n>=2) extra += (n-1); }); // 2 juntos=+1, 3 juntos=+2, etc.
     return extra;
   }
-  const countryPairs = countExtraPairs(countries);
+  const countryPairs = countExtraPairs(countryLists.flat());
   const teamPairs = countExtraPairs(teamLists.flat());
   let coachBonus = 0;
   if(coachName){
     const cc = COACH_COUNTRY[coachName.toLowerCase()];
     const ct = COACH_TEAM[coachName.toLowerCase()];
-    if(cc) coachBonus += roster.filter(p=>PLAYER_COUNTRY[p.name.toLowerCase()]===cc).length * 0.75;
+    if(cc) coachBonus += roster.filter(p=>playerCountries(p.name).includes(cc)).length * 0.75;
     if(ct) coachBonus += roster.filter(p=>(PLAYER_TEAM[p.name.toLowerCase()]||[]).includes(ct)).length * 1.5;
   }
   return countryPairs*0.75 + teamPairs*1.5 + coachBonus; // já ter jogado junto pesa bem mais que só ser do mesmo país
@@ -980,9 +982,9 @@ function compositionBonus(roster, isSlotted){
   // Duelista + Iniciador do MESMO país, ou que já foram campeões mundiais juntos (mesmo elenco
   // real) -> buff extra geral, em cima do buff normal de tê-los os dois no time.
   if(duelist && initiator){
-    const dCountry = PLAYER_COUNTRY[duelist.name.toLowerCase()];
-    const iCountry = PLAYER_COUNTRY[initiator.name.toLowerCase()];
-    const sameCountry = dCountry && iCountry && dCountry===iCountry;
+    const dCountries = [PLAYER_COUNTRY[duelist.name.toLowerCase()], PLAYER_RESIDENCE[duelist.name.toLowerCase()]].filter(Boolean);
+    const iCountries = [PLAYER_COUNTRY[initiator.name.toLowerCase()], PLAYER_RESIDENCE[initiator.name.toLowerCase()]].filter(Boolean);
+    const sameCountry = dCountries.some(c=>iCountries.includes(c));
     const dTeams = PLAYER_TEAM[duelist.name.toLowerCase()] || [];
     const iTeams = PLAYER_TEAM[initiator.name.toLowerCase()] || [];
     const alreadyChampionsTogether = dTeams.some(tm=>iTeams.includes(tm));
