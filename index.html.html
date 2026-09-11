@@ -1,0 +1,2731 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VALX — Monte e ganhe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-deep:#080F14;
+    --bg-panel:#111920;
+    --bg-panel-2:#19222A;
+    --line:#28323B;
+    --crimson:#FF4655;
+    --crimson-dim:#7A2430;
+    --teal:#33DFC0;
+    --gold:#E8B84B;
+    --text:#F5F5F5;
+    --muted:#6B7280;
+    --glow-a:#17202A;
+    --glow-b:#1B1216;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(1200px 600px at 15% -10%, var(--glow-a) 0%, transparent 60%),
+      radial-gradient(1000px 500px at 110% 10%, var(--glow-b) 0%, transparent 55%),
+      var(--bg-deep);
+    color:var(--text);
+    font-family:'IBM Plex Sans', sans-serif;
+    min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+    transition:background 0.25s ease;
+  }
+  .headline{font-family:'Chakra Petch', sans-serif;}
+  .mono{font-family:'JetBrains Mono', monospace;}
+
+  #app{max-width:680px;margin:0 auto;padding:20px 16px 60px;}
+
+  .angle{
+    clip-path:polygon(14px 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%, 0 14px);
+  }
+  .angle-sm{
+    clip-path:polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
+  }
+
+  /* ---- top bar ---- */
+  .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px;padding-top:6px;}
+  .brand{display:flex;align-items:center;gap:10px;}
+  .brand:active{opacity:0.7;}
+  .brand-mark{width:30px;height:30px;flex:none;color:var(--crimson);}
+  .brand-text{display:flex;flex-direction:column;}
+  .brand-name{font-family:'Chakra Petch';font-weight:700;font-size:19px;letter-spacing:0.5px;line-height:1;}
+  .brand-name span{color:var(--crimson);}
+  .brand-tagline{font-family:'JetBrains Mono';font-size:9px;color:var(--muted);letter-spacing:0.8px;text-transform:uppercase;margin-top:3px;}
+  .phase-tag{font-family:'JetBrains Mono';font-size:11px;color:var(--muted);border:1px solid var(--line);padding:5px 10px;border-radius:2px;}
+  .topbar-right{display:flex;align-items:center;gap:8px;}
+  .lang-switch{display:flex;border:1px solid var(--line);}
+  .lang-btn{
+    font-family:'JetBrains Mono';font-size:10px;color:var(--muted);background:transparent;
+    border:none;padding:6px 8px;cursor:pointer;letter-spacing:0.5px;
+  }
+  .lang-btn + .lang-btn{border-left:1px solid var(--line);}
+  .lang-btn.active{background:var(--crimson);color:#fff;}
+
+  /* ---- generic panel ---- */
+  .panel{background:var(--bg-panel);border:1px solid var(--line);padding:22px;}
+  .panel + .panel{margin-top:14px;}
+
+  h1.hero{font-family:'Chakra Petch';font-size:30px;line-height:1.15;font-weight:700;margin:0 0 10px;}
+  p.lead{color:var(--muted);font-size:15px;line-height:1.55;margin:0 0 20px;}
+
+  .btn{
+    font-family:'Chakra Petch';font-weight:600;font-size:15px;
+    background:var(--crimson);color:#fff;border:none;padding:13px 22px;
+    cursor:pointer;letter-spacing:0.3px;
+  }
+  .btn:active{transform:translateY(1px);}
+  .btn.secondary{background:transparent;border:1px solid var(--line);color:var(--text);}
+  .btn:disabled{opacity:0.35;cursor:not-allowed;}
+  .btn-row{display:flex;gap:10px;flex-wrap:wrap;}
+
+  /* ---- difficulty cards ---- */
+  .diff-grid{display:grid;grid-template-columns:1fr;gap:10px;margin-bottom:8px;}
+  .diff-card{
+    background:var(--bg-panel-2);border:1px solid var(--line);padding:16px;cursor:pointer;
+    text-align:left;color:var(--text);
+  }
+  .diff-card.selected{border-color:var(--crimson);background:#20141A;}
+  .diff-card h3{font-family:'Chakra Petch';margin:0 0 4px;font-size:16px;}
+  .diff-card p{margin:0;color:var(--muted);font-size:13px;line-height:1.4;}
+
+  /* ---- team select ---- */
+  .team-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:18px 0;}
+  .team-option{
+    background:var(--bg-panel-2);border:1px solid var(--line);padding:14px 8px;
+    text-align:center;cursor:pointer;color:var(--text);
+    font-family:'Chakra Petch';font-weight:700;font-size:14px;letter-spacing:0.3px;
+  }
+  .team-option.selected{border-color:var(--crimson);background:#20141A;color:var(--crimson);}
+
+  /* ---- coach select ---- */
+  .coach-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:18px 0;}
+  .coach-option{
+    background:var(--bg-panel-2);border:1px solid var(--line);padding:20px 8px;
+    text-align:center;cursor:pointer;color:var(--text);
+  }
+  .coach-option .coach-name{font-family:'Chakra Petch';font-weight:700;font-size:15px;}
+  .coach-option.selected{border-color:var(--crimson);background:#20141A;color:var(--crimson);}
+
+  /* ---- roster slots ---- */
+  .roster-strip{display:flex;gap:8px;margin-bottom:16px;}
+  .slot{
+    flex:1;min-width:0;height:64px;border:1px dashed var(--line);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    font-family:'JetBrains Mono';font-size:8.5px;color:var(--muted);background:var(--bg-panel);
+    text-align:center;padding:0 3px;letter-spacing:0.2px;text-transform:uppercase;
+  }
+  .slot.filled{border:1px solid var(--teal);background:#0E1F1B;color:var(--text);}
+  .slot .slot-name{font-family:'Chakra Petch';font-size:12px;font-weight:600;text-align:center;padding:0 4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width:100%;}
+  .slot .slot-role{color:var(--teal);margin-top:2px;}
+
+  /* ---- draft candidate card ---- */
+  .candidate{background:var(--bg-panel-2);border:1px solid var(--line);padding:20px;text-align:center;}
+  .candidate-list{display:flex;flex-direction:column;gap:8px;}
+  .candidate-row{
+    display:flex;justify-content:space-between;align-items:center;gap:10px;
+    background:var(--bg-panel-2);border:1px solid var(--line);padding:12px 14px;
+    cursor:pointer;color:var(--text);text-align:left;
+  }
+  .candidate-row:active{border-color:var(--crimson);}
+  .candidate-row .cr-name{font-family:'Chakra Petch';font-weight:700;font-size:15px;}
+  .candidate-row .cr-roles{color:var(--teal);font-family:'JetBrains Mono';font-size:10px;margin-top:2px;}
+  .candidate-row .cr-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:5px;}
+  .candidate-row .cr-tag{
+    background:var(--bg-panel);border:1px solid var(--line);color:var(--muted);
+    font-family:'JetBrains Mono';font-size:9px;padding:2px 6px;text-transform:uppercase;
+  }
+  .candidate-row .cr-ovr{font-size:16px;color:var(--gold);flex:none;}
+  .candidate-row.synergy-highlight, .candidate.synergy-highlight{border-color:var(--teal);background:#0E1F1B;}
+  .cr-synergy{
+    display:flex;align-items:center;gap:4px;margin-top:5px;
+    font-family:'JetBrains Mono';font-size:9.5px;color:var(--teal);
+  }
+  .cand-name{font-family:'Chakra Petch';font-size:24px;font-weight:700;margin:2px 0;}
+  .cand-meta{color:var(--muted);font-size:13px;margin-bottom:14px;display:flex;flex-wrap:wrap;gap:6px;justify-content:center;}
+  .cand-meta .role-pill{color:var(--teal);border:1px solid var(--teal);border-radius:3px;padding:2px 7px;font-family:'JetBrains Mono';font-size:11px;}
+  .tag-chips{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:10px 0 2px;}
+  .tag-chip{
+    background:var(--bg-panel);border:1px solid var(--line);color:var(--text);
+    font-family:'JetBrains Mono';font-size:10px;padding:4px 8px;
+    text-transform:uppercase;letter-spacing:0.3px;
+  }
+  .overall-badge{
+    display:inline-flex;align-items:center;justify-content:center;
+    width:56px;height:56px;border-radius:50%;border:2px solid var(--gold);
+    font-family:'Chakra Petch';font-size:20px;font-weight:700;margin:10px auto 4px;color:var(--gold);
+  }
+  .hidden-stats{color:var(--muted);font-size:13px;font-style:italic;padding:10px 0;}
+
+  /* ---- pool counter ---- */
+  .pool-info{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;color:var(--muted);font-size:13px;font-family:'JetBrains Mono';}
+
+  /* ---- match screen ---- */
+  .vs-row{display:flex;align-items:center;justify-content:space-between;margin:20px 0 10px;}
+  .team-block{flex:1;text-align:center;}
+  .team-name{font-family:'Chakra Petch';font-weight:700;font-size:15px;}
+  .team-sub{color:var(--muted);font-size:11px;margin-top:2px;}
+  .score{font-family:'Chakra Petch';font-size:44px;font-weight:700;letter-spacing:2px;}
+  .score .sep{color:var(--muted);font-size:30px;margin:0 10px;}
+  .vs-x{color:var(--muted);font-family:'JetBrains Mono';font-size:13px;padding:0 14px;}
+  .round-log{
+    font-family:'JetBrains Mono';font-size:11px;color:var(--muted);
+    display:flex;flex-wrap:wrap;gap:4px;margin:16px 0;min-height:24px;
+  }
+  .round-log .r{width:16px;height:16px;display:flex;align-items:center;justify-content:center;border-radius:2px;font-size:10px;}
+  .round-log .r.win{background:var(--crimson-dim);color:#fff;}
+  .round-log .r.loss{background:#26313A;color:var(--muted);}
+
+  /* ---- roster / KDA compare ---- */
+  .roster-compare{display:flex;gap:10px;margin:16px 0;}
+  .roster-col{flex:1;min-width:0;}
+  .roster-col-title{
+    font-family:'JetBrains Mono';font-size:10px;color:var(--muted);
+    text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;text-align:center;
+  }
+  .roster-player{
+    display:flex;justify-content:space-between;align-items:baseline;gap:4px;
+    padding:5px 0;border-bottom:1px solid var(--line);
+  }
+  .roster-player:last-child{border-bottom:none;}
+  .roster-player .pname{
+    font-family:'Chakra Petch';font-size:12px;font-weight:600;
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  }
+  .roster-player .pkda{font-family:'JetBrains Mono';font-size:11px;color:var(--muted);flex:none;}
+
+  .record-banner{
+    background:linear-gradient(135deg, #241405, #1a0f04);
+    border:1px solid var(--gold);color:var(--gold);
+    font-family:'Chakra Petch';font-weight:600;font-size:13px;line-height:1.4;
+    padding:12px 14px;margin:14px 0;text-align:center;
+    box-shadow:0 0 16px rgba(232,184,75,0.25);
+  }
+
+  .result-banner{text-align:center;padding:14px 0;margin-bottom:6px;}
+  .result-banner.win{color:var(--teal);}
+  .result-banner.loss{color:var(--crimson);}
+  .result-banner .label{font-family:'Chakra Petch';font-size:22px;font-weight:700;}
+
+
+  /* ---- trophy screen ---- */
+  .trophy-wrap{text-align:center;padding:20px 0;}
+  .trophy-icon{font-size:64px;margin-bottom:6px;}
+  .trophy-title{font-family:'Chakra Petch';font-size:28px;font-weight:700;color:var(--gold);margin:6px 0;}
+
+  .final-roster{display:flex;flex-direction:column;gap:8px;margin:18px 0;}
+  .fr-item{display:flex;justify-content:space-between;align-items:center;background:var(--bg-panel-2);border:1px solid var(--line);padding:10px 14px;}
+  .fr-item .n{font-family:'Chakra Petch';font-weight:600;font-size:14px;}
+  .fr-item .r{color:var(--muted);font-size:12px;}
+  .fr-item .o{font-family:'JetBrains Mono';color:var(--gold);}
+
+  .mvp-card{
+    background:linear-gradient(135deg, #241405, #1a0f04);
+    border:1px solid var(--gold);padding:16px;text-align:center;margin:18px 0;
+  }
+  .mvp-card .mvp-eyebrow{font-family:'JetBrains Mono';font-size:10px;color:var(--gold);letter-spacing:1px;margin-bottom:6px;}
+  .mvp-card .mvp-name{font-family:'Chakra Petch';font-size:20px;font-weight:700;color:#fff;}
+  .mvp-card .mvp-role{color:var(--muted);font-size:12px;margin:2px 0 8px;}
+  .mvp-card .mvp-kda{font-family:'JetBrains Mono';color:var(--gold);font-size:14px;}
+  .mvp-tag{
+    font-family:'JetBrains Mono';font-size:9px;color:var(--bg-deep);background:var(--gold);
+    padding:2px 5px;margin-left:6px;border-radius:2px;letter-spacing:0.5px;vertical-align:middle;
+  }
+
+  /* ---- share buttons ---- */
+  .share-row{display:flex;gap:10px;justify-content:center;margin-top:14px;flex-wrap:wrap;}
+  .share-btn{
+    display:flex;align-items:center;gap:7px;
+    background:var(--bg-panel-2);border:1px solid var(--line);color:var(--text);
+    font-family:'Chakra Petch';font-weight:600;font-size:13px;padding:10px 16px;
+    cursor:pointer;
+  }
+  .share-btn:active{border-color:var(--crimson);}
+  .share-btn svg{flex:none;}
+
+  /* ---- journey / tournament path table ---- */
+  .journey-table{margin:16px 0;border:1px solid var(--line);}
+  .journey-row{
+    display:flex;align-items:center;gap:8px;padding:9px 10px;
+    border-bottom:1px solid var(--line);font-size:12px;
+  }
+  .journey-row:last-child{border-bottom:none;}
+  .journey-row .jr-stage{flex:1.3;min-width:0;color:var(--muted);font-family:'JetBrains Mono';font-size:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .journey-row .jr-opp{flex:1;min-width:0;font-family:'Chakra Petch';font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .journey-row .jr-score{flex:none;font-family:'JetBrains Mono';color:var(--text);}
+  .journey-row .jr-result{flex:none;width:20px;text-align:center;font-family:'Chakra Petch';font-weight:700;font-size:12px;}
+  .journey-row .jr-result.win{color:var(--teal);}
+  .journey-row .jr-result.loss{color:var(--crimson);}
+
+  .disclaimer{color:var(--muted);font-size:11px;line-height:1.5;margin-top:24px;text-align:center;}
+
+  /* ---- rules screen ---- */
+  .rules-btn-row{text-align:center;margin-top:10px;}
+  .rules-link{
+    background:none;border:none;color:var(--muted);font-family:'JetBrains Mono';
+    font-size:11px;text-decoration:underline;letter-spacing:0.3px;cursor:pointer;padding:6px;
+  }
+  .rules-section{margin-bottom:22px;}
+  .rules-section h3{
+    font-family:'Chakra Petch';color:var(--crimson);font-size:15px;font-weight:700;
+    margin:0 0 8px;padding-bottom:6px;border-bottom:1px solid var(--line);
+    letter-spacing:0.3px;
+  }
+  .rules-section p{color:var(--muted);font-size:13px;line-height:1.6;margin:0 0 8px;}
+  .rules-section ul{color:var(--muted);font-size:13px;line-height:1.6;margin:6px 0;padding-left:20px;}
+  .rules-section li{margin-bottom:5px;}
+  .rules-section strong{color:var(--text);}
+  .rules-good{color:var(--teal);font-family:'JetBrains Mono';font-size:10px;letter-spacing:0.5px;margin:10px 0 4px;}
+  .rules-bad{color:var(--crimson);font-family:'JetBrains Mono';font-size:10px;letter-spacing:0.5px;margin:10px 0 4px;}
+
+  /* ---- country flag (image + graceful text fallback if it fails to load) ---- */
+  .flag-img{display:inline-block;vertical-align:middle;border-radius:1px;}
+  .flag-fallback{
+    display:none;vertical-align:middle;
+    font-family:'JetBrains Mono';font-size:8.5px;font-weight:700;letter-spacing:0.3px;
+    background:var(--bg-panel-2);border:1px solid var(--line);color:var(--muted);
+    padding:1px 3px;border-radius:2px;line-height:1.3;
+  }
+
+  /* ---- campaign history ---- */
+  .history-list{display:flex;flex-direction:column;gap:10px;}
+  .history-item{background:var(--bg-panel-2);border:1px solid var(--line);padding:12px 14px;}
+  .history-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px;}
+  .history-team{font-family:'Chakra Petch';font-weight:700;font-size:14px;}
+  .history-date{color:var(--muted);font-size:10px;}
+  .history-result{font-family:'Chakra Petch';font-weight:600;font-size:13px;margin-bottom:4px;}
+  .history-meta{color:var(--muted);font-size:10.5px;}
+  .footer-social{display:flex;justify-content:center;margin-top:20px;}
+  .social-link{
+    width:44px;height:44px;border-radius:11px;background:#0A0A0A;border:1px solid var(--line);
+    display:flex;align-items:center;justify-content:center;color:#F5F5F5;
+    text-decoration:none;transition:border-color .2s, transform .15s;
+  }
+  .social-link:hover{border-color:var(--crimson);transform:translateY(-1px);}
+</style>
+</head>
+<body>
+<div id="app"></div>
+
+<script>
+/* ---------------- DATA ---------------- */
+
+// Pool de craques — ratings são estimativas de fã para fins de jogo, não estatísticas oficiais.
+const POOL = [
+  {name:"aspas", roles:["duelist"], overall:93, tags:["entry","mm","operator","clutch","campeao_mundial"]},
+  {name:"Boostio", roles:["sentinel"], overall:88, tags:["igl","lurker","utility","campeao_mundial"]},
+  {name:"ANGE1", roles:["flex","controller","initiator"], overall:88, tags:["igl","utility","campeao_mundial"]},
+  {name:"Shao", roles:["flex","initiator","controller","sentinel"], overall:86, tags:["utility","campeao_mundial"]},
+  {name:"FNS", roles:["sentinel"], overall:92, tags:["igl","lurker","utility","campeao_mundial"]},
+  {name:"yay", roles:["flex","duelist","sentinel"], overall:93, tags:["operator","mm","clutch","campeao_mundial"]},
+  {name:"Zellsis", roles:["flex","sentinel"], overall:89, tags:["igl","utility","campeao_mundial"]},
+  {name:"Cryocells", roles:["flex","sentinel","duelist"], overall:89, tags:["mm","operator","clutch","campeao_mundial"]},
+  {name:"Rb", roles:["flex","controller","initiator","duelist"], overall:92, tags:["utility","campeao_mundial"]},
+  {name:"BuZz", roles:["duelist"], overall:93, tags:["operator","entry","mm","clutch","campeao_mundial"]},
+  {name:"MaKo", roles:["controller"], overall:90, tags:["utility","clutch","igl"]},
+  {name:"Marved", roles:["controller"], overall:93, tags:["utility","clutch","campeao_mundial"]},
+  {name:"zekken", roles:["duelist","flex"], overall:93, tags:["entry","mm","clutch","campeao_mundial"]},
+  {name:"saadhak", roles:["flex","sentinel","initiator","controller"], overall:93, tags:["igl","utility","clutch","campeao_mundial"]},
+  {name:"xand", roles:["flex","duelist","initiator","sentinel"], overall:80, tags:["utility","igl"]},
+  {name:"heat", roles:["flex","duelist","sentinel"], overall:83, tags:["mm","clutch"]},
+  {name:"less", roles:["sentinel"], overall:93, tags:["clutch","mm","lurker","campeao_mundial"]},
+  {name:"ScreaM", roles:["duelist"], overall:84, tags:["mm","entry","operator"]},
+  {name:"johnqt", roles:["flex","sentinel","initiator","controller"], overall:92, tags:["igl","utility","clutch","campeao_mundial"]},
+  {name:"C0M", roles:["initiator"], overall:90, tags:["igl utility","clutch","lurker","campeao_mundial"]},
+  {name:"Demon1", roles:["flex","duelist","controller","sentinel"], overall:91, tags:["clutch","mm","entry","campeao_mundial"]},
+  {name:"crashies", roles:["initiator"], overall:92, tags:["utility","clutch","campeao_mundial"]},
+  {name:"mwzera", roles:["initiator"], overall:84, tags:["utility","mm"]},
+  {name:"Derke", roles:["duelist"], overall:93, tags:["entry","mm","operator","clutch","campeao_mundial"]},
+  {name:"Leo", roles:["flex","initiator"], overall:93, tags:["utility","clutch","campeao_mundial"]},
+  {name:"Alfajer", roles:["flex","sentinel"], overall:92, tags:["mm","lurker","clutch","campeao_mundial"]},
+  {name:"ardiis", roles:["flex","initiator","duelist","sentinel"], overall:87, tags:["utility","operator","campeao_mundial"]},
+  {name:"Jinggg", roles:["flex","duelist","controller","sentinel"], overall:93, tags:["mm","utility","clutch","campeao_mundial"]},
+  {name:"f0rsakeN", roles:["flex","duelist","initiator","controller","sentinel"], overall:93, tags:["mm","utility","clutch","campeao_mundial"]},
+  {name:"icy", roles:["sentinel","duelist"], overall:80, tags:[]},
+  {name:"Asuna", roles:["flex","duelist"], overall:89, tags:["mm","utility","clutch","campeao_mundial"]},
+  {name:"bang", roles:["controller"], overall:86, tags:["clutch","utility","campeao_mundial"]},
+  {name:"Sacy", roles:["initiator"], overall:93, tags:["clutch","utility","campeao_mundial"]},
+  {name:"nAts", roles:["sentinel"], overall:93, tags:["igl","lurker","clutch","utility","campeao_mundial"]},
+  {name:"eeiu", roles:["initiator"], overall:86, tags:["clutch","utility"]},
+  {name:"BABYBAY", roles:["sentinel","flex"], overall:85, tags:["utility","lurker"]},
+  {name:"cNed", roles:["duelist","sentinel"], overall:92, tags:["lurker","operator","campeao_mundial"]},
+  {name:"Chronicle", roles:["flex","sentinel","controller","initiator"], overall:92, tags:["clutch","utility","campeao_mundial"]},
+  {name:"Redgar", roles:["flex","controller","initiator"], overall:85, tags:["utility","campeao_mundial"]},
+  {name:"Boaster", roles:["controller"], overall:90, tags:["igl","utility","clutch","campeao_mundial"]},
+  {name:"SUYGETSU", roles:["controller","sentinel"], overall:92, tags:["utility","lurker","campeao_mundial"]},
+  {name:"mindfreak", roles:["controller"], overall:92, tags:["utility","clutch"]},
+  {name:"Ethan", roles:["flex","initiator","sentinel","controller"], overall:92, tags:["utility","igl","campeao_mundial"]},
+  {name:"dgzin", roles:["duelist"], overall:85, tags:["operator","entry","mm","clutch"]},
+  {name:"Lakia", roles:["initiator"], overall:88, tags:["utility","campeao_mundial"]},
+  {name:"t3xture", roles:["duelist"], overall:93, tags:["operator","mm","clutch","entry","campeao_mundial"]},
+  {name:"havoc", roles:["duelist","sentinel"], overall:80, tags:["lurker","entry","operator","mm"]},
+  {name:"Tenz", roles:["flex","controller","duelist"], overall:93, tags:["entry","mm","clutch","campeao_mundial"]},
+  {name:"tex", roles:["sentinel"], overall:86, tags:["lurker","clutch","utility"]},
+  {name:"nzr", roles:["initiator"], overall:86, tags:["utility","igl","clutch"]},
+  {name:"d4v41", roles:["flex","initiator","sentinel"], overall:93, tags:["igl","clutch","utility","lurker","campeao_mundial"]},
+  {name:"trent", roles:["initiator"], overall:89, tags:["utility","clutch"]},
+  {name:"zander", roles:["controller"], overall:82, tags:["clutch","utility"]},
+  {name:"leaf", roles:["flex","sentinel"], overall:90, tags:["clutch","utility","mm","lurker"]},
+  {name:"frz", roles:["flex","initiator","sentinel"], overall:80, tags:["utility","lurker"]},
+  {name:"tuyz", roles:["controller"], overall:87, tags:["clutch","utility"]},
+  {name:"keznit", roles:["duelist"], overall:88, tags:["clutch","mm","operator","entry"]},
+  {name:"bdog", roles:["flex","duelist","controller","sentinel"], overall:81, tags:["lurker","clutch","utility"]},
+  {name:"JonahP", roles:["flex","initiator"], overall:87, tags:["clutch","utility"]},
+  {name:"Munchkin", roles:["flex","sentinel","initiator"], overall:90, tags:["utility","lurker","campeao_mundial"]},
+  {name:"benjyfishy", roles:["sentinel"], overall:88, tags:["lurker","clutch","utility","campeao_mundial"]},
+  {name:"Victor", roles:["flex","duelist","sentinel"], overall:88, tags:["clutch","utility","lurker","campeao_mundial"]},
+  {name:"s0m", roles:["controller"], overall:91, tags:["clutch","mm","utility","campeao_mundial"]},
+  {name:"silentzz", roles:["flex","sentinel","duelist"], overall:82, tags:["clutch","utility","lurker"]},
+  {name:"Jamppi", roles:["initiator","duelist"], overall:84, tags:["clutch","utility","igl"]},
+  {name:"marteen", roles:["duelist"], overall:86, tags:["clutch","mm","entry","operator"]},
+  {name:"Boo", roles:["controller"], overall:85, tags:["clutch","utility","igl","campeao_mundial"]},
+  {name:"bao", roles:["sentinel","controller"], overall:87, tags:["clutch","utility","lurker","mm"]},
+  {name:"Rossy", roles:["flex","controller","sentinel","initiator"], overall:83, tags:["clutch","utility"]},
+  {name:"skuba", roles:["sentinel"], overall:92, tags:["clutch","utility","lurker","campeao_mundial"]},
+  {name:"Xeppaa", roles:["initiator"], overall:83, tags:["clutch","utility"]},
+  {name:"pANcada", roles:["controller"], overall:92, tags:["clutch","mm","utility","campeao_mundial"]},
+  {name:"kiNgg", roles:["flex","controller","sentinel","initiator"], overall:93, tags:["clutch","igl","utility","lurker","campeao_mundial"]},
+  {name:"Zyppan", roles:["flex","controller","duelist"], overall:87, tags:["utility","campeao_mundial"]},
+  {name:"valyn", roles:["controller"], overall:89, tags:["igl","utility","clutch"]},
+  {name:"Meteor", roles:["sentinel","duelist","controller"], overall:89, tags:["clutch","utility","lurker","campeao_mundial"]},
+  {name:"Karon", roles:["controller"], overall:90, tags:["clutch","utility","campeao_mundial"]},
+  {name:"Wo0t", roles:["flex","sentinel","duelist"], overall:88, tags:["mm","utility","clutch","entry","campeao_mundial"]},
+  {name:"lukxo", roles:["sentinel","flex","controller"], overall:91, tags:["mm","utility","operator","clutch","lurker"]},
+  {name:"NaturE", roles:["initiator"], overall:82, tags:["igl","utility"]},
+  {name:"liazzi", roles:["flex","duelist","controller","sentinel"], overall:80, tags:["utility"]},
+  {name:"Tisora", roles:["flex","duelist","initiator","sentinel"], overall:80, tags:["lurker","clutch","utility"]},
+  {name:"Brinks", roles:["controller"], overall:80, tags:["clutch","utility","igl"]},
+  {name:"bezn1", roles:["sentinel","flex"], overall:81, tags:["clutch","utility","lurker"]},
+  {name:"stax", roles:["initiator","controller"], overall:89, tags:["clutch","utility","igl","campeao_mundial"]},
+  {name:"OXY", roles:["duelist"], overall:91, tags:["entry","operator","clutch","mm"]},
+  {name:"nataNk", roles:["flex","sentinel"], overall:82, tags:["utility","lurker"]},
+  {name:"Lysoar", roles:["controller"], overall:84, tags:["clutch","utility"]},
+  {name:"Okeanos", roles:["flex","controller"], overall:83, tags:["utility","mm","clutch"]},
+  {name:"DaviH", roles:["initiator"], overall:85, tags:["utility","clutch"]},
+  {name:"zerona", roles:["flex","duelist","initiator"], overall:82, tags:["utility"]},
+  {name:"LewN", roles:["flex","duelist","sentinel"], overall:84, tags:["utility","clutch","mm","entry"]},
+  {name:"mada", roles:["duelist"], overall:93, tags:["entry","clutch","mm","campeao_mundial"]},
+  {name:"supamen", roles:["controller"], overall:83, tags:["clutch","utility"]},
+  {name:"qck", roles:["flex","duelist","sentinel"], overall:83, tags:["clutch","utility","entry"]},
+  {name:"Khalil", roles:["controller","sentinel"], overall:84, tags:["clutch","utility","lurker"]},
+  {name:"pollo", roles:["flex","sentinel","initiator"], overall:81, tags:[]},
+  {name:"v1nny", roles:["flex","initiator","controller","sentinel"], overall:80, tags:["utility","igl"]},
+  {name:"cauanzin", roles:["initiator"], overall:88, tags:["utility","clutch"]},
+  {name:"Tacolilla", roles:["flex","duelist","sentinel"], overall:83, tags:["utility"]},
+  {name:"koalanoob", roles:["duelist"], overall:84, tags:["operator","utility"]},
+  {name:"jawgemo", roles:["duelist","flex"], overall:93, tags:["operator","utility","clutch","entry","campeao_mundial"]},
+  {name:"Haodong", roles:["controller","sentinel"], overall:88, tags:["utility","clutch"]},
+  {name:"Dantedeu5", roles:["duelist"], overall:87, tags:["entry","utility","clutch"]},
+  {name:"blowz", roles:["initiator"], overall:93, tags:["utility","clutch","mm","campeao_mundial"]},
+  {name:"Virtyy", roles:["duelist"], overall:82, tags:["entry"]},
+  {name:"Darker", roles:["controller","sentinel"], overall:85, tags:["clutch","utility"]},
+  {name:"shion", roles:["flex","initiator","controller"], overall:80, tags:["igl","utility"]},
+  {name:"Jonn", roles:["flex","duelist","initiator"], overall:80, tags:["utility","entry","clutch"]},
+  {name:"brawk", roles:["initiator"], overall:93, tags:["utility","clutch","campeao_mundial"]},
+  {name:"jakee", roles:["flex","controller"], overall:80, tags:["utility","igl"]},
+  {name:"ZmjjKK", roles:["duelist","sentinel"], overall:93, tags:["operator","entry","mm","clutch","campeao_mundial"]},
+  {name:"v1c", roles:["controller"], overall:83, tags:["clutch","utility"]},
+  {name:"xenom", roles:["controller"], overall:83, tags:["clutch","utility"]},
+  {name:"Verno", roles:["initiator"], overall:88, tags:["igl","utility","clutch"]},
+  {name:"happywei", roles:["sentinel","controller"], overall:85, tags:["clutch","utility","lurker"]},
+  {name:"Ash", roles:["flex","initiator","duelist"], overall:83, tags:["utility"]},
+  {name:"Kess", roles:["initiator","flex"], overall:83, tags:["utility","igl"]},
+  {name:"kamo", roles:["flex","duelist","controller"], overall:80, tags:["utility","entry","clutch"]},
+  {name:"murizzz", roles:["initiator","sentinel","controller"], overall:80, tags:["igl","utility"]},
+  {name:"Shyy", roles:["sentinel"], overall:87, tags:["lurker","clutch","utility"]},
+  {name:"runi", roles:["initiator"], overall:80, tags:["utility","igl"]},
+  {name:"paTiTek", roles:["controller"], overall:84, tags:["clutch","utility"]},
+  {name:"adverso", roles:["flex","initiator","sentinel"], overall:82, tags:["igl","utility"]},
+  {name:"Flashback", roles:["sentinel","flex"], overall:83, tags:["utility","lurker"]},
+  {name:"Jieni7", roles:["flex","initiator","controller","sentinel"], overall:84, tags:["utility"]},
+  {name:"Derrek", roles:["flex","initiator"], overall:80, tags:["utility"]},
+  {name:"kon4n", roles:["flex","initiator","controller"], overall:80, tags:["utility","igl"]},
+  {name:"urango", roles:["flex","initiator","duelist"], overall:80, tags:["igl","utility"]},
+  {name:"prozin", roles:["flex","sentinel"], overall:80, tags:["utility","lurker"]},
+  {name:"deNaro", roles:["initiator"], overall:80, tags:["utility"]},
+  {name:"something", roles:["duelist"], overall:93, tags:["entry","operator","clutch","mm","campeao_mundial"]},
+  {name:"Smoggy", roles:["flex","controller"], overall:91, tags:["utility","clutch","campeao_mundial"]},
+  {name:"Melser", roles:["flex","controller","initiator"], overall:84, tags:["utility","igl"]},
+  {name:"AtaKaptan", roles:["controller"], overall:82, tags:["clutch","utility"]},
+  {name:"gobera", roles:["flex","sentinel"], overall:81, tags:["utility","clutch"]},
+  {name:"Kicks", roles:["flex","controller","initiator"], overall:86, tags:["utility","clutch"]},
+  {name:"PatMen", roles:["flex","controller","initiator"], overall:87, tags:["clutch","utility","campeao_mundial"]},
+  {name:"Reduxx", roles:["flex","duelist","controller"], overall:85, tags:["clutch","mm","utility"]},
+  {name:"P0PPIN", roles:["initiator"], overall:83, tags:["utility","clutch"]},
+  {name:"koshmaras", roles:["duelist","controller"], overall:85, tags:["entry","clutch","mm"]},
+  {name:"mazin", roles:["flex","initiator","controller"], overall:81, tags:["utility","igl"]},
+  {name:"NiSMO", roles:["flex"], overall:82, tags:["igl","utility"]},
+  {name:"RieNs", roles:["initiator"], overall:88, tags:["utility","clutch","campeao_mundial"]},
+  {name:"neT", roles:["sentinel","initiator"], overall:83, tags:["lurker","utility"]},
+  {name:"cortezia", roles:["sentinel","controller"], overall:86, tags:["lurker","clutch","mm","utility"]},
+  {name:"kaajak", roles:["duelist"], overall:88, tags:["entry","operator","mm","clutch"]},
+  {name:"Kyu", roles:["initiator"], overall:82, tags:["utility"]},
+  {name:"invy", roles:["initiator","controller"], overall:85, tags:["utility","clutch","mm"]},
+  {name:"Ivy", roles:["sentinel"], overall:89, tags:["lurker","utility","campeao_mundial"]},
+  {name:"erde", roles:["flex","controller","sentinel"], overall:89, tags:["igl","utility","mm","clutch"]},
+  {name:"Dambi", roles:["duelist"], overall:90, tags:["entry","clutch","mm","campeao_mundial"]},
+  {name:"Xross", roles:["flex","initiator","duelist"], overall:88, tags:["utility","entry","mm","campeao_mundial"]},
+  {name:"Mazino", roles:["flex","controller","initiator"], overall:87, tags:["igl","clutch","utility"]},
+  {name:"Cebando", roles:["controller"], overall:80, tags:["utility"]},
+  {name:"MrFaliN", roles:["initiator","controller"], overall:83, tags:["clutch","utility"]},
+  {name:"yetujey", roles:["sentinel","controller"], overall:84, tags:["clutch","utility","lurker"]},
+  {name:"N4RRATE", roles:["flex","duelist","sentinel","initiator"], overall:84, tags:["clutch","utility","mm"]},
+  {name:"S1Mon", roles:["initiator"], overall:85, tags:["igl","utility","clutch","campeao_mundial"]},
+  {name:"Neon", roles:["sentinel","duelist","flex"], overall:93, tags:["mm","clutch","utility","operator","entry","campeao_mundial"]},
+  {name:"alym", roles:["duelist"], overall:84, tags:["mm","clutch","entry"]},
+  {name:"Sayonara", roles:["initiator","flex"], overall:86, tags:["utility","clutch","mm"]},
+  {name:"tkzin", roles:["duelist"], overall:86, tags:["entry","mm","clutch"]},
+  {name:"Francis", roles:["flex","initiator","duelist"], overall:88, tags:["utility","clutch","campeao_mundial"]},
+  {name:"CHICHOO", roles:["sentinel","controller"], overall:92, tags:["utility","clutch","mm","campeao_mundial"]},
+  {name:"raafa", roles:["initiator"], overall:80, tags:["utility","igl"]},
+  {name:"artzin", roles:["flex","duelist","initiator","controller","sentinel"], overall:87, tags:["igl","utility","clutch"]},
+  {name:"pryze", roles:["initiator"], overall:80, tags:["utility"]},
+  {name:"Zap", roles:["sentinel"], overall:80, tags:["igl","utility","lurker"]},
+  {name:"spikezin", roles:["flex","duelist","controller","initiator"], overall:93, tags:["mm","clutch","utility","campeao_mundial"]},
+  {name:"MiniBoo", roles:["duelist"], overall:85, tags:["mm","entry","clutch","operator","campeao_mundial"]},
+  {name:"Timotino", roles:["duelist"], overall:89, tags:["entry","mm","clutch","campeao_mundial"]},
+  {name:"Vora", roles:["initiator"], overall:87, tags:["igl","utility","campeao_mundial"]},
+  {name:"nerve", roles:["flex","controller","sentinel"], overall:82, tags:["clutch","utility","igl"]},
+  {name:"PROFEK", roles:["controller"], overall:83, tags:["clutch","utility"]},
+  {name:"s0pp", roles:["duelist"], overall:89, tags:["mm","operator","clutch","entry"]},
+  {name:"hiro", roles:["sentinel","duelist"], overall:84, tags:["lurker","entry","mm","clutch"]},
+  {name:"penny", roles:["flex","duelist","initiator","sentinel"], overall:80, tags:["utility"]},
+  {name:"nobody", roles:["initiator"], overall:91, tags:["igl","clutch","utility","campeao_mundial"]},
+  {name:"lz", roles:["controller"], overall:80, tags:["igl","clutch","utility"]},
+  {name:"trexx", roles:["initiator","flex"], overall:84, tags:["utility","clutch"]},
+  {name:"Sylvan", roles:["controller","sentinel"], overall:88, tags:["clutch","lurker","utility","campeao_mundial"]},
+  {name:"Sato", roles:["duelist","flex"], overall:93, tags:["entry","clutch","mm","campeao_mundial"]},
+  {name:"keiko", roles:["flex","duelist","controller","sentinel"], overall:91, tags:["operator","entry","utility","clutch","mm"]},
+  {name:"xeus", roles:["flex","duelist","sentinel"], overall:85, tags:["lurker","entry","mm","clutch"]},
+  {name:"basic", roles:["flex","duelist","initiator","controller","sentinel"], overall:86, tags:["clutch","utility","mm"]},
+  {name:"Paincakes", roles:["initiator"], overall:82, tags:["igl","utility"]},
+  {name:"mta", roles:["initiator"], overall:80, tags:["utility"]},
+  {name:"Rarga", roles:["duelist"], overall:84, tags:["mm","operator","entry","clutch"]},
+  {name:"PxS", roles:["flex","initiator","controller","sentinel"], overall:84, tags:["utility","clutch"]},
+  {name:"Sayf", roles:["flex","duelist","sentinel","initiator"], overall:84, tags:["igl","utility","clutch"]},
+  {name:"iZu", roles:["initiator","duelist","controller"], overall:90, tags:["clutch","mm","utility","operator","campeao_mundial"]},
+  {name:"NoMan", roles:["flex","duelist","sentinel"], overall:84, tags:["clutch","utility"]},
+  {name:"moose", roles:["controller","sentinel"], overall:80, tags:["clutch","utility","lurker"]},
+];
+
+// 16 organizações reais — uma é escolhida pelo jogador, as outras 15 viram adversárias.
+const TEAM_NAMES = [
+  {name:"LOUD",      rating:99},
+  {name:"FURIA",     rating:96},
+  {name:"MIBR",      rating:86},
+  {name:"2GAME",     rating:82},
+  {name:"G2",        rating:97},
+  {name:"SENTINELS", rating:98},
+  {name:"100T",      rating:91},
+  {name:"NRG",       rating:93},
+  {name:"OPTIC",     rating:88},
+  {name:"FNATIC",    rating:95},
+  {name:"DRX",       rating:99},
+  {name:"HERETICS",  rating:94},
+  {name:"KRU",       rating:84},
+  {name:"LIQUID",    rating:90},
+  {name:"PAPER REX", rating:99},
+  {name:"LEVIATAN", rating:87},
+];
+
+// Head coaches disponíveis — 1 escolhido pelo jogador, os outros 15 vão pras equipes adversárias.
+const COACHES = ["Nbs","bzkA","Potter","fRoD","mini","Chet","d00mbros","Kaplan","alecks","Romanilly","Stk","Onur","JoshRT","bonkar","shaW","Kamino"];
+// Buff de cada Head Coach: bônus fixo aplicado ao rating do time em todo cálculo de vitória
+// de rodada/partida — vale pra qualquer equipe (sua ou adversária) que tiver esse técnico.
+const COACH_BUFFS = {
+  Nbs:4, bzkA:3, Potter:5, fRoD:4, mini:5, Chet:5, d00mbros:4, Kaplan:4,
+  alecks:4, Romanilly:3, Stk:3, Onur:4, JoshRT:5, bonkar:4, shaW:4, Kamino:3,
+};
+// Fator de amortecimento aplicado à soma de (coach + composição + sinergia) antes de somar ao
+// rating base — evita que os buffs empilhados deixem o jogo fácil demais.
+const BUFF_DAMPING = 0.7;
+// Dados de país e time real — baseados em pesquisa no vlr.gg + conhecimento consolidado do cenário.
+// Cobertura parcial (nem todo o pool de 192 tem dado confirmado); quem não tem, simplesmente não
+// participa dessa sinergia específica.
+const PLAYER_COUNTRY = {
+  "aspas":"BR",
+  "xand":"BR",
+  "heat":"BR",
+  "less":"BR",
+  "mwzera":"BR",
+  "sacy":"BR",
+  "dgzin":"BR",
+  "havoc":"BR",
+  "tuyz":"BR",
+  "silentzz":"BR",
+  "pancada":"BR",
+  "lukxo":"BR",
+  "liazzi":"BR",
+  "tisora":"BR",
+  "brinks":"BR",
+  "bezn1":"BR",
+  "qck":"BR",
+  "pollo":"BR",
+  "v1nny":"BR",
+  "cauanzin":"BR",
+  "tacolilla":"CL",
+  "dantedeu5":"AR",
+  "blowz":"BR",
+  "virtyy":"DO",
+  "shion":"BR",
+  "xenom":"BR",
+  "murizzz":"BR",
+  "kon4n":"BR",
+  "urango":"BR",
+  "prozin":"BR",
+  "denaro":"BR",
+  "gobera":"BR",
+  "mazin":"BR",
+  "cortezia":"BR",
+  "raafa":"BR",
+  "artzin":"BR",
+  "pryze":"BR",
+  "zap":"BR",
+  "spikezin":"BR",
+  "lz":"BR",
+  "sato":"BR",
+  "basic":"BR",
+  "pxs":"BR",
+  "khalil":"BR",
+  "jonn":"BR",
+  "tkzin":"BR",
+  "boostio":"US",
+  "fns":"US",
+  "yay":"US",
+  "zellsis":"US",
+  "marved":"US",
+  "zekken":"US",
+  "c0m":"US",
+  "demon1":"US",
+  "crashies":"US",
+  "ethan":"US",
+  "trent":"US",
+  "leaf":"US",
+  "rossy":"US",
+  "skuba":"US",
+  "xeppaa":"US",
+  "valyn":"US",
+  "brawk":"US",
+  "v1c":"US",
+  "s0m":"US",
+  "icy":"US",
+  "babybay":"US",
+  "bdog":"US",
+  "victor":"US",
+  "zerona":"US",
+  "supamen":"US",
+  "jakee":"US",
+  "verno":"US",
+  "runi":"US",
+  "derrek":"US",
+  "reduxx":"US",
+  "n4rrate":"US",
+  "nerve":"US",
+  "paincakes":"US",
+  "net":"US",
+  "rb":"KR",
+  "buzz":"KR",
+  "mako":"KR",
+  "bang":"US",
+  "lakia":"KR",
+  "t3xture":"KR",
+  "munchkin":"KR",
+  "meteor":"KR",
+  "karon":"KR",
+  "stax":"KR",
+  "smoggy":"KR",
+  "p0ppin":"KR",
+  "ivy":"KR",
+  "dambi":"KR",
+  "xross":"KR",
+  "francis":"KR",
+  "izu":"KR",
+  "ash":"KR",
+  "kess":"KR",
+  "flashback":"KR",
+  "sylvan":"KR",
+  "asuna":"CA",
+  "eeiu":"CA",
+  "tenz":"CA",
+  "zander":"CA",
+  "jonahp":"CA",
+  "mada":"CA",
+  "koalanoob":"CA",
+  "kyu":"CA",
+  "timotino":"CA",
+  "vora":"CA",
+  "penny":"CA",
+  "moose":"CA",
+  "nzr":"AR",
+  "neon":"AR",
+  "saadhak":"AR",
+  "scream":"BE",
+  "ange1":"UA",
+  "suygetsu":"UA",
+  "ardiis":"LV",
+  "cned":"LV",
+  "nats":"RU",
+  "chronicle":"RU",
+  "redgar":"RU",
+  "something":"RU",
+  "trexx":"RU",
+  "rarga":"RU",
+  "alfajer":"TR",
+  "wo0t":"TR",
+  "riens":"TR",
+  "s0pp":"TR",
+  "hiro":"TR",
+  "xeus":"TR",
+  "lewn":"TR",
+  "atakaptan":"TR",
+  "mrfalin":"TR",
+  "yetujey":"TR",
+  "boaster":"GB",
+  "benjyfishy":"GB",
+  "keiko":"GB",
+  "mindfreak":"IN",
+  "derke":"FI",
+  "jamppi":"FI",
+  "jinggg":"SG",
+  "f0rsaken":"ID",
+  "frz":"BR",
+  "kamo":"PL",
+  "patitek":"PL",
+  "profek":"PL",
+  "kaajak":"PL",
+  "keznit":"CL",
+  "kingg":"CL",
+  "erde":"CL",
+  "mazino":"CL",
+  "shyy":"CL",
+  "adverso":"CL",
+  "melser":"CL",
+  "mta":"CL",
+  "marteen":"CZ",
+  "boo":"LT",
+  "koshmaras":"LT",
+  "miniboo":"LT",
+  "zyppan":"SE",
+  "leo":"SE",
+  "sayf":"SE",
+  "cryocells":"US",
+  "nature":"CN",
+  "lysoar":"CN",
+  "haodong":"CN",
+  "zmjjkk":"CN",
+  "happywei":"CN",
+  "chichoo":"CN",
+  "nobody":"CN",
+  "jieni7":"CN",
+  "natank":"FR",
+  "okeanos":"VN",
+  "bao":"VN",
+  "d4v41":"MY",
+  "patmen":"PH",
+  "invy":"PH",
+  "s1mon":"TW",
+  "johnqt":"MA",
+  "davih":"PT",
+  "jawgemo":"KH",
+  "darker":"CO",
+  "nismo":"LB",
+  "alym":"KG",
+  "sayonara":"MD",
+  "kicks":"EE",
+  "noman":"HK",
+  "tex":"DE",
+  "shao":"RU","oxy":"US","cebando":"AR",
+};
+const PLAYER_TEAM = {
+  "tenz":["SENTINELS21","SENTINELS24"],
+  "nats":["GAMBIT21"],"chronicle":["GAMBIT21","FNATIC23"],"redgar":["GAMBIT21"],
+  "cned":["ACEND21"],
+  "ardiis":["FPX22"],"zyppan":["FPX22"],"ange1":["FPX22"],"shao":["FPX22"],"suygetsu":["FPX22"],
+  "crashies":["OPTIC22"],"victor":["OPTIC22"],"marved":["OPTIC22"],"fns":["OPTIC22"],"yay":["OPTIC22"],
+  "saadhak":["LOUD22"],"aspas":["LOUD22"],"sacy":["LOUD22","SENTINELS24"],"pancada":["LOUD22"],"less":["LOUD22"],
+  "boaster":["FNATIC23"],"leo":["FNATIC23"],"derke":["FNATIC23"],"alfajer":["FNATIC23"],
+  "ethan":["EG23","NRG25"],"boostio":["EG23"],"jawgemo":["EG23"],"demon1":["EG23"],"c0m":["EG23"],
+  "lakia":["GENG24"],"munchkin":["GENG24"],"t3xture":["GENG24"],"meteor":["GENG24","T125"],"karon":["GENG24"],
+  "zellsis":["SENTINELS24"],"zekken":["SENTINELS24"],"johnqt":["SENTINELS24"],
+  "nobody":["EDG24"],"zmjjkk":["EDG24"],"smoggy":["EDG24"],"s1mon":["EDG24"],"chichoo":["EDG24"],
+  "stax":["T125"],"buzz":["T125"],"sylvan":["T125"],"izu":["T125"],
+  "jinggg":["PAPERREX25"],"f0rsaken":["PAPERREX25"],"something":["PAPERREX25"],"d4v41":["PAPERREX25"],"patmen":["PAPERREX25"],
+  "s0m":["NRG25"],"mada":["NRG25"],"skuba":["NRG25"],"brawk":["NRG25"],
+  "rb":["NONGSHIM26"],"dambi":["NONGSHIM26"],"francis":["NONGSHIM26"],"ivy":["NONGSHIM26"],"xross":["NONGSHIM26"],
+  "kingg":["LEVIATAN26"],"blowz":["LEVIATAN26"],"sato":["LEVIATAN26"],"neon":["LEVIATAN26"],"spikezin":["LEVIATAN26"],
+  "boo":["HERETICS25"],"riens":["HERETICS25"],"miniboo":["HERETICS25"],"wo0t":["HERETICS25"],"benjyfishy":["HERETICS25"],
+  "cryocells":["100T26"],"asuna":["100T26"],"bang":["100T26"],"timotino":["100T26"],"vora":["100T26"],
+};
+// País e time real dos Head Coaches (pesquisado no vlr.gg) — cobertura parcial, mesma lógica dos craques.
+const COACH_COUNTRY = {
+  "bzka":"BR","frod":"US","onur":"AR","potter":"US","bonkar":"SE","d00mbros":"SE",
+  "joshrt":"US","mini":"GB","nbs":"LT","chet":"US","kaplan":"US","alecks":"FR",
+  "romanilly":"AR","stk":"BR","shaw":"BR","kamino":"BR",
+};
+// Só os técnicos que treinaram um elenco Campeão Mundial de verdade entram aqui — todo técnico
+// presente neste dicionário é, por definição, um "Head Coach Campeão Mundial" (dá buff extra).
+const COACH_TEAM = {
+  "chet":"OPTIC22","bzka":"LOUD22","mini":"FNATIC23","potter":"EG23",
+  "kaplan":"SENTINELS24","alecks":"PAPERREX25","bonkar":"NRG25","onur":"LEVIATAN26",
+  "nbs":"100T26","d00mbros":"100T26",
+};
+
+// Sinergia: quanto mais craques do MESMO time real (vlr.gg) ou do MESMO país estiverem juntos na
+// equipe, maior o buff — e o Head Coach também entra nessa conta (país em comum com os jogadores,
+// ou já ter trabalhado com o mesmo time real que algum craque do elenco). Cobertura de dados é
+// parcial; quem não tem país/time confirmado simplesmente não conta pra essa sinergia.
+function chemistryBonus(roster, coachName){
+  if(!roster || roster.length<2) return 0;
+  const countries = roster.map(p=>PLAYER_COUNTRY[p.name.toLowerCase()]).filter(Boolean);
+  const teamLists = roster.map(p=>PLAYER_TEAM[p.name.toLowerCase()] || []);
+  function countExtraPairs(list){
+    const counts = {};
+    list.forEach(v=>{ counts[v]=(counts[v]||0)+1; });
+    let extra = 0;
+    Object.values(counts).forEach(n=>{ if(n>=2) extra += (n-1); }); // 2 juntos=+1, 3 juntos=+2, etc.
+    return extra;
+  }
+  const countryPairs = countExtraPairs(countries);
+  const teamPairs = countExtraPairs(teamLists.flat());
+  let coachBonus = 0;
+  if(coachName){
+    const cc = COACH_COUNTRY[coachName.toLowerCase()];
+    const ct = COACH_TEAM[coachName.toLowerCase()];
+    if(cc) coachBonus += roster.filter(p=>PLAYER_COUNTRY[p.name.toLowerCase()]===cc).length * 0.75;
+    if(ct) coachBonus += roster.filter(p=>(PLAYER_TEAM[p.name.toLowerCase()]||[]).includes(ct)).length * 1.5;
+  }
+  return countryPairs*0.75 + teamPairs*1.5 + coachBonus; // já ter jogado junto pesa bem mais que só ser do mesmo país
+}
+// Técnico Campeão Mundial (está no COACH_TEAM) dá um bônus extra de +2, além do buff normal dele.
+function coachBuff(coachName){
+  let b = COACH_BUFFS[coachName] || 0;
+  if(coachName && COACH_TEAM[coachName.toLowerCase()]) b += 2;
+  return b;
+}
+// Emoji de bandeira a partir de um código de país (ex: "BR" -> 🇧🇷). Usado só quando temos o dado.
+// Bandeiras desenhadas em SVG embutido (sem depender de internet) — funciona offline em qualquer
+// plataforma (Android, iOS, desktop), diferente de emoji de bandeira (quebra no Windows) ou
+// imagem externa (pode ser bloqueada em alguns previews de app).
+const FLAG_SVG = {
+AR:`<rect width="30" height="20" fill="#74acdf"/><rect y="6.67" width="30" height="6.67" fill="#fff"/><circle cx="15" cy="10" r="2.2" fill="#f6b40e" stroke="#85340a" stroke-width="0.3"/>`,
+BE:`<rect width="10" height="20" fill="#000"/><rect x="10" width="10" height="20" fill="#fae042"/><rect x="20" width="10" height="20" fill="#ed2939"/>`,
+BR:`<rect width="30" height="20" fill="#009b3a"/><polygon points="15,2.5 27.5,10 15,17.5 2.5,10" fill="#fedf00"/><circle cx="15" cy="10" r="4.5" fill="#002776"/>`,
+CA:`<rect width="30" height="20" fill="#fff"/><rect width="7.5" height="20" fill="#ff0000"/><rect x="22.5" width="7.5" height="20" fill="#ff0000"/><path d="M15 5.5l1 2.2 2.3-1.1-.5 2.4 2.4.2-1.8 1.6 1.4 2-2.4-.4.2 2.4-1.6-1.7-1.6 1.7.2-2.4-2.4.4 1.4-2-1.8-1.6 2.4-.2-.5-2.4 2.3 1.1z" fill="#ff0000" stroke="#ff0000" stroke-width="0.3" stroke-linejoin="round"/>`,
+CL:`<rect width="30" height="20" fill="#fff"/><rect y="10" width="30" height="10" fill="#d52b1e"/><rect width="10" height="10" fill="#0039a6"/><path d="M5 3.2l.8 2.4h2.5l-2 1.5.8 2.4-2.1-1.5-2.1 1.5.8-2.4-2-1.5h2.5z" fill="#fff"/>`,
+CN:`<rect width="30" height="20" fill="#de2910"/><path d="M6 3l1.1 3.4h3.6L7.8 8.5 8.9 12 6 9.9 3.1 12l1.1-3.5L1.3 6.4h3.6z" fill="#ffde00"/><circle cx="12.5" cy="2.5" r="0.9" fill="#ffde00"/><circle cx="14.3" cy="4.7" r="0.9" fill="#ffde00"/><circle cx="14.3" cy="7.6" r="0.9" fill="#ffde00"/><circle cx="12.5" cy="9.6" r="0.9" fill="#ffde00"/>`,
+CO:`<rect width="30" height="20" fill="#fcd116"/><rect y="10" width="30" height="5" fill="#003893"/><rect y="15" width="30" height="5" fill="#ce1126"/>`,
+CZ:`<rect width="30" height="20" fill="#fff"/><rect y="10" width="30" height="10" fill="#d7141a"/><polygon points="0,0 15,10 0,20" fill="#11457e"/>`,
+DE:`<rect width="30" height="6.67" fill="#000"/><rect y="6.67" width="30" height="6.67" fill="#dd0000"/><rect y="13.33" width="30" height="6.67" fill="#ffce00"/>`,
+DO:`<rect width="30" height="20" fill="#002d62"/><rect x="15" width="15" height="10" fill="#ce1126"/><rect y="10" width="15" height="10" fill="#ce1126"/><rect x="12" width="6" height="20" fill="#fff"/><rect y="7" width="30" height="6" fill="#fff"/>`,
+EE:`<rect width="30" height="6.67" fill="#0072ce"/><rect y="6.67" width="30" height="6.67" fill="#000"/><rect y="13.33" width="30" height="6.67" fill="#fff"/>`,
+FI:`<rect width="30" height="20" fill="#fff"/><rect x="9" width="4" height="20" fill="#002f6c"/><rect y="8" width="30" height="4" fill="#002f6c"/>`,
+FR:`<rect width="10" height="20" fill="#002395"/><rect x="10" width="10" height="20" fill="#fff"/><rect x="20" width="10" height="20" fill="#ed2939"/>`,
+GB:`<rect width="30" height="20" fill="#012169"/><path d="M0 0L30 20M30 0L0 20" stroke="#fff" stroke-width="3.5"/><path d="M0 0L30 20M30 0L0 20" stroke="#c8102e" stroke-width="1.3"/><path d="M15 0V20M0 10H30" stroke="#fff" stroke-width="5.5"/><path d="M15 0V20M0 10H30" stroke="#c8102e" stroke-width="3.2"/>`,
+HK:`<rect width="30" height="20" fill="#de2910"/><g fill="#fff"><circle cx="15" cy="10" r="4.3"/></g><g fill="#de2910"><path d="M15 6.5l1 3-2.8-1.9h3.6L14 9.5z"/><path d="M18.5 8l-1.4 2.9-1-3.3 3 1.7-3 1.7z"/><path d="M18.5 12l-3-1.7 3.3-.9-1.7 3z"/><path d="M15 13.5l-1-3 2.8 1.9h-3.6l2.8-1.9z"/><path d="M11.5 12l1.4-2.9 1 3.3-3-1.7z"/></g>`,
+ID:`<rect width="30" height="10" fill="#ce1126"/><rect y="10" width="30" height="10" fill="#fff"/>`,
+IN:`<rect width="30" height="6.67" fill="#ff9933"/><rect y="6.67" width="30" height="6.67" fill="#fff"/><rect y="13.33" width="30" height="6.67" fill="#138808"/><circle cx="15" cy="10" r="2.2" fill="none" stroke="#000080" stroke-width="0.5"/>`,
+KG:`<rect width="30" height="20" fill="#e8112d"/><circle cx="15" cy="10" r="4" fill="#fdef00"/><circle cx="15" cy="10" r="1.6" fill="#e8112d"/>`,
+KH:`<rect width="30" height="4" fill="#032ea1"/><rect y="4" width="30" height="12" fill="#e00025"/><rect y="16" width="30" height="4" fill="#032ea1"/><rect x="12" y="7" width="6" height="6" fill="#fff"/>`,
+KR:`<rect width="30" height="20" fill="#fff"/><circle cx="15" cy="10" r="3.5" fill="#c60c30"/><path d="M15 6.5a3.5 3.5 0 010 7 1.75 1.75 0 010-3.5 1.75 1.75 0 000-3.5z" fill="#003478"/>`,
+LB:`<rect width="30" height="5" fill="#ee161f"/><rect y="5" width="30" height="10" fill="#fff"/><rect y="15" width="30" height="5" fill="#ee161f"/><path d="M15 7l1.3 3h3l-2.4 1.9.9 3-2.8-1.9-2.8 1.9.9-3L10.7 10h3z" fill="#00a651"/>`,
+LT:`<rect width="30" height="6.67" fill="#fdb913"/><rect y="6.67" width="30" height="6.67" fill="#006a44"/><rect y="13.33" width="30" height="6.67" fill="#c1272d"/>`,
+LV:`<rect width="30" height="20" fill="#9e3039"/><rect y="8.6" width="30" height="2.8" fill="#fff"/>`,
+MA:`<rect width="30" height="20" fill="#c1272d"/><polygon points="15,6 16.1,8.6 19,8.9 16.8,10.7 17.5,13.5 15,11.9 12.5,13.5 13.2,10.7 11,8.9 13.9,8.6" fill="#006233"/><polygon points="15,7.3 15.7,9 17.4,9.2 16.1,10.3 16.5,12 15,11.1 13.5,12 13.9,10.3 12.6,9.2 14.3,9" fill="#c1272d"/>`,
+MD:`<rect width="10" height="20" fill="#003da5"/><rect x="10" width="10" height="20" fill="#fdd105"/><rect x="20" width="10" height="20" fill="#cc092f"/><circle cx="15" cy="10" r="2.3" fill="#a0522d"/>`,
+MY:`<rect width="30" height="20" fill="#fff"/><rect y="0" width="30" height="1.43" fill="#cc0001"/><rect y="2.86" width="30" height="1.43" fill="#cc0001"/><rect y="5.71" width="30" height="1.43" fill="#cc0001"/><rect y="8.57" width="30" height="1.43" fill="#cc0001"/><rect y="11.43" width="30" height="1.43" fill="#cc0001"/><rect y="14.29" width="30" height="1.43" fill="#cc0001"/><rect y="17.14" width="30" height="1.43" fill="#cc0001"/><rect width="15" height="11.4" fill="#010066"/><circle cx="7" cy="5.7" r="3.2" fill="#fc0"/><circle cx="8.3" cy="5.7" r="2.7" fill="#010066"/><polygon points="9.5,5.7 12.5,4.4 11.5,5.7 12.5,7" fill="#fc0"/>`,
+PH:`<polygon points="0,0 12,10 0,20" fill="#fff"/><rect y="0" width="30" height="10" x="10" fill="#0038a8" transform="translate(0,0)"/><rect x="10" y="0" width="20" height="10" fill="#0038a8"/><rect x="10" y="10" width="20" height="10" fill="#ce1126"/><circle cx="6" cy="10" r="1.8" fill="#fcd116"/>`,
+PL:`<rect width="30" height="10" fill="#fff"/><rect y="10" width="30" height="10" fill="#dc143c"/>`,
+PT:`<rect width="12" height="20" fill="#006600"/><rect x="12" width="18" height="20" fill="#ff0000"/><circle cx="12" cy="10" r="3.2" fill="#ffcc00" stroke="#fff" stroke-width="0.4"/>`,
+RU:`<rect width="30" height="6.67" fill="#fff"/><rect y="6.67" width="30" height="6.67" fill="#0039a6"/><rect y="13.33" width="30" height="6.67" fill="#d52b1e"/>`,
+SE:`<rect width="30" height="20" fill="#006aa7"/><rect x="10" width="4" height="20" fill="#fecc00"/><rect y="8" width="30" height="4" fill="#fecc00"/>`,
+SG:`<rect width="30" height="10" fill="#ed2939"/><rect y="10" width="30" height="10" fill="#fff"/><circle cx="7" cy="5" r="3" fill="#fff"/><circle cx="8.3" cy="5" r="2.5" fill="#ed2939"/><polygon points="10,5 12.5,4.1 11.6,5 12.5,5.9" fill="#fff"/>`,
+TR:`<rect width="30" height="20" fill="#e30a17"/><circle cx="12" cy="10" r="3.4" fill="#fff"/><circle cx="13" cy="10" r="2.8" fill="#e30a17"/><polygon points="16,10 19.5,8.8 17.3,10 19.5,11.2" fill="#fff"/>`,
+TW:`<rect width="30" height="20" fill="#fe0000"/><rect width="15" height="10" fill="#000095"/><circle cx="7.5" cy="5" r="2.6" fill="#fff"/><circle cx="7.5" cy="5" r="1.8" fill="#000095"/>`,
+UA:`<rect width="30" height="10" fill="#0057b7"/><rect y="10" width="30" height="10" fill="#ffd700"/>`,
+US:`<rect width="30" height="20" fill="#fff"/><rect y="0" width="30" height="1.54" fill="#b22234"/><rect y="3.08" width="30" height="1.54" fill="#b22234"/><rect y="6.15" width="30" height="1.54" fill="#b22234"/><rect y="9.23" width="30" height="1.54" fill="#b22234"/><rect y="12.31" width="30" height="1.54" fill="#b22234"/><rect y="15.38" width="30" height="1.54" fill="#b22234"/><rect y="18.46" width="30" height="1.54" fill="#b22234"/><rect width="13" height="10.8" fill="#3c3b6e"/><circle cx="3" cy="2" r="0.5" fill="#fff"/><circle cx="6.5" cy="2" r="0.5" fill="#fff"/><circle cx="10" cy="2" r="0.5" fill="#fff"/><circle cx="3" cy="5" r="0.5" fill="#fff"/><circle cx="6.5" cy="5" r="0.5" fill="#fff"/><circle cx="10" cy="5" r="0.5" fill="#fff"/><circle cx="3" cy="8" r="0.5" fill="#fff"/><circle cx="6.5" cy="8" r="0.5" fill="#fff"/><circle cx="10" cy="8" r="0.5" fill="#fff"/>`,
+VN:`<rect width="30" height="20" fill="#da251d"/><polygon points="15,5.5 16.2,9 20,9 17,11.2 18.1,15 15,12.7 11.9,15 13,11.2 10,9 13.8,9" fill="#ffff00"/>`,
+};
+
+function countryFlag(code){
+  if(!code) return "";
+  const cc = code.toUpperCase();
+  const svg = FLAG_SVG[cc];
+  if(svg){
+    return `<svg viewBox="0 0 30 20" width="16" height="11" class="flag-img" style="vertical-align:middle;border-radius:1px;">${svg}</svg>`;
+  }
+  return `<span class="flag-fallback" style="display:inline-block;">${cc}</span>`;
+}
+
+/* ---------------- COMPOSITION BUFFS/NERFS ---------------- */
+// Acha o jogador que ocupa uma função no time. Se "isSlotted" (nosso próprio time, sempre
+// organizado por SLOT_ORDER), usa a vaga exata; se não (times de IA, sem vaga fixa), pega o
+// primeiro jogador do elenco que consegue jogar naquela função.
+function findRolePlayer(roster, roleKey, isSlotted){
+  if(!roster || !roster.length) return null;
+  if(isSlotted){
+    const idx = SLOT_ORDER.indexOf(roleKey);
+    return roster[idx] || null;
+  }
+  return roster.find(p=>p.roles && p.roles.includes(roleKey)) || null;
+}
+function hasTag(p, tag){ return !!(p && p.tags && p.tags.includes(tag)); }
+
+// Calcula o bônus/penalidade de composição do time, separado em ataque e defesa.
+// Entry empurra mais no ataque; Operator empurra mais na defesa (conforme pedido).
+function compositionBonus(roster, isSlotted){
+  if(!roster || !roster.length) return {attack:0, defense:0};
+  let attack = 0, defense = 0;
+
+  const duelist = findRolePlayer(roster, "duelist", isSlotted);
+  const sentinel = findRolePlayer(roster, "sentinel", isSlotted);
+  const initiator = findRolePlayer(roster, "initiator", isSlotted);
+
+  // Duelista + Iniciador na equipe -> buff de ataque
+  if(duelist && initiator) attack += 2;
+
+  // Operator no Duelista/Sentinela: 1 usuário = buff na defesa; os 2 = nerf na defesa
+  const opUsers = [duelist, sentinel].filter(p=>hasTag(p,"operator")).length;
+  if(opUsers===1) defense += 3;
+  else if(opUsers===2) defense -= 2;
+
+  // 2+ jogadores com clutch = buff geral
+  const clutchCount = roster.filter(p=>hasTag(p,"clutch")).length;
+  if(clutchCount>=2){ attack += 2; defense += 2; }
+
+  // IGL: nenhum ou mais de 1 = nerf; exatamente 1 = neutro
+  const iglCount = roster.filter(p=>hasTag(p,"igl")).length;
+  if(iglCount===0){ attack -= 3; defense -= 3; }
+  else if(iglCount>1){ attack -= 2; defense -= 2; }
+
+  // Cobertura das 5 funções (no nosso sistema de vagas isso é sempre verdade, mas fica a checagem)
+  if(isSlotted && SLOT_ORDER.some((rk,i)=>!roster[i])){ attack -= 4; defense -= 4; }
+
+  // Campeões Mundiais: quanto mais, mais buff
+  const championCount = roster.filter(p=>hasTag(p,"campeao_mundial")).length;
+  attack += championCount*1.5; defense += championCount*1.5;
+
+  // Entry no Duelista: buff se tiver, nerf se não tiver
+  if(duelist){
+    attack += hasTag(duelist,"entry") ? 2 : -2;
+  }
+
+  // Utilidade: buff crescente até 3 jogadores, depois disso um pequeno nerf
+  const utilCount = roster.filter(p=>hasTag(p,"utility")).length;
+  if(utilCount>0){
+    const bonus = Math.min(utilCount,3)*1.5;
+    attack += bonus; defense += bonus;
+    if(utilCount>3){ attack -= 1; defense -= 1; }
+  }
+
+  // Lurker no Sentinela: buff se tiver, nerf se não tiver
+  if(sentinel){
+    if(hasTag(sentinel,"lurker")){ attack += 2; defense += 2; }
+    else { attack -= 1.5; defense -= 1.5; }
+  }
+
+  // Mira Monstra: quanto mais jogadores com a tag, mais buff (sem teto)
+  const mmCount = roster.filter(p=>hasTag(p,"mm")).length;
+  attack += mmCount*1.5; defense += mmCount*1.5;
+
+  return {attack, defense};
+}
+
+// Topologia do chaveamento de playoffs (8 times, dupla eliminação — Upper/Lower).
+const BRACKET_DEF = [
+  {id:"m1",  round:1, aFrom:{seed:0}, bFrom:{seed:7}, labelKey:"ubR1"},
+  {id:"m2",  round:1, aFrom:{seed:3}, bFrom:{seed:4}, labelKey:"ubR1"},
+  {id:"m3",  round:1, aFrom:{seed:2}, bFrom:{seed:5}, labelKey:"ubR1"},
+  {id:"m4",  round:1, aFrom:{seed:1}, bFrom:{seed:6}, labelKey:"ubR1"},
+  {id:"m5",  round:2, aFrom:{m:"m1",res:"w"}, bFrom:{m:"m2",res:"w"}, labelKey:"ubSemi"},
+  {id:"m6",  round:2, aFrom:{m:"m3",res:"w"}, bFrom:{m:"m4",res:"w"}, labelKey:"ubSemi"},
+  {id:"m7",  round:2, aFrom:{m:"m1",res:"l"}, bFrom:{m:"m4",res:"l"}, labelKey:"lbR1"},
+  {id:"m8",  round:2, aFrom:{m:"m2",res:"l"}, bFrom:{m:"m3",res:"l"}, labelKey:"lbR1"},
+  {id:"m9",  round:3, aFrom:{m:"m7",res:"w"}, bFrom:{m:"m6",res:"l"}, labelKey:"lbR2"},
+  {id:"m10", round:3, aFrom:{m:"m8",res:"w"}, bFrom:{m:"m5",res:"l"}, labelKey:"lbR2"},
+  {id:"m11", round:4, aFrom:{m:"m5",res:"w"}, bFrom:{m:"m6",res:"w"}, labelKey:"ubFinal"},
+  {id:"m12", round:4, aFrom:{m:"m9",res:"w"}, bFrom:{m:"m10",res:"w"}, labelKey:"lbSemi"},
+  {id:"m13", round:5, aFrom:{m:"m11",res:"l"}, bFrom:{m:"m12",res:"w"}, labelKey:"lbFinal"},
+  {id:"m14", round:6, aFrom:{m:"m11",res:"w"}, bFrom:{m:"m13",res:"w"}, labelKey:"grandFinal"},
+];
+const LB_KEYS = ["lbR1","lbR2","lbSemi","lbFinal"];
+// Recordes reais de abates no cenário profissional do VALORANT (referência do usuário).
+const RECORDS = { singleMap: 47, md3: 82, md5: 126 };
+
+/* ---------------- I18N ---------------- */
+const I18N = {
+  pt:{
+    phase_intro:"SETUP", phase_rules:"REGRAS", phase_teamselect:"EQUIPE", phase_draft:"DRAFT", phase_match:"PARTIDA", phase_end:"RESULTADO",
+    rulesLink:"📖 Ver regras completas",
+    rulesTitle:"Regras e Mecânicas",
+    rulesBackBtn:"Voltar",
+    historyLink:"📜 Campanhas anteriores",
+    historyTitle:"Suas Campanhas",
+    historyEmpty:"Nenhuma campanha salva ainda. Jogue até o fim pra registrar seu resultado aqui.",
+    tagline:"Monte e ganhe",
+    hero:"Monte seu Super Time e busque o título mundial.",
+    lead:"Escale seus 5 Pro Players e corra atrás do título Mundial.<br>Cada escolha pesa — a diferença entre um super time e um fracasso é mais fina do que parece.<br>E Overall não conta a história toda.",
+    diffClassicoTitle:"Modo Clássico",
+    diffClassicoDesc:"Atributos visíveis",
+    diffSelvaTitle:"Modo Selva",
+    diffSelvaDesc:"Atributos ocultos",
+    startBtn:"Começar o draft",
+    disclaimer:"Nomes de jogadores e organizações profissionais reais são usados de forma homenageante, em um jogo de simulação de fã. Atributos são estimativas fictícias para fins de jogo, não estatísticas oficiais.",
+    teamSelectTitle:"Escolha o nome da sua equipe",
+    teamSelectLead:"Essa será a identidade do seu time durante toda a campanha.",
+    teamSelectContinue:"Continuar para o draft",
+    phase_coachselect:"TÉCNICO",
+    coachSelectTitle:"Escolha o Head Coach",
+    coachSelectLead:"Quatro técnicos foram sorteados — escolha um para liderar sua equipe. Os outros 15 vão para as equipes adversárias.",
+    coachSelectContinue:"Continuar para o draft",
+    headCoachLabel:"HEAD COACH",
+    poolLabel:"Craques no pool:",
+    filledLabel:n=>`${n}/5 escalados`,
+    slot:"VAGA",
+    rosterComplete:"Escalação completa. Overall do time:",
+    toMatchBtn:"Ir para o Mundial",
+    drawLead:"Sorteie os próximos craques disponíveis para avaliar.",
+    drawBtn:"Sortear Players",
+    pickOneLead:"Escolha um craque para escalar:",
+    poolEmpty:"Pool esgotado.",
+    draftBtn:"Escalar",
+    skipBtn:"Pular",
+    skipsLeftLabel:n=>`Pulos restantes: ${n}`,
+    slotTakenNote:role=>`Vaga de ${role} já ocupada — esse craque não pode ser escalado.`,
+    chooseSlotPrompt:name=>`Em qual vaga encaixar ${name}?`,
+    confirmDraftPrompt:name=>`Confirmar escalação de ${name}?`,
+    confirmBtn:"Confirmar",
+    backBtn:"Voltar",
+    alreadyPlayedWith:"Já foi campeão junto",
+    hiddenStats:"Atributos ocultos neste modo — confie no nome.",
+    statAim:"Mira", statUtil:"Utilidade", statIgl:"IGL", statClutch:"Clutch",
+    yourTeam:"SEU TIME", vs:"VS", rostersLabel:"K / D / A",
+    recordSingleMapUs:(name,kills,prevKills,prevHolder)=>`🔥 NOVO RECORDE! ${name} fechou o mapa com ${kills} abates, superando os ${prevKills} de ${prevHolder} — o novo recorde da campanha.`,
+    recordSingleMapThem:(name,kills,prevKills,prevHolder)=>`😮 O ADVERSÁRIO BATEU O RECORDE! ${name}, do time rival, fechou o mapa com ${kills} abates, superando os ${prevKills} de ${prevHolder}. Esse agora é o recorde a bater na sua campanha.`,
+    recordSeriesUs:(name,kills,prevKills,prevHolder,bo)=>`🔥 NOVO RECORDE! ${name} fechou a série com ${kills} abates, superando os ${prevKills} de ${prevHolder} — o recorde de uma série ${bo} na campanha.`,
+    recordSeriesThem:(name,kills,prevKills,prevHolder,bo)=>`😮 O ADVERSÁRIO BATEU O RECORDE! ${name}, do time rival, fechou a série com ${kills} abates, superando os ${prevKills} de ${prevHolder} — novo recorde de série ${bo} na sua campanha.`,
+    simRoundBtn:"Simular próxima rodada",
+    simAllBtn:"Simular mapa inteiro",
+    nextMapBtn:"Próximo mapa",
+    mapsScoreLabel:(a,b)=>`Mapas ${a}-${b}`,
+    sideAttack:"ATAQUE",
+    sideDefense:"DEFESA",
+    resultWin:"VITÓRIA", resultLoss:"DERROTA",
+    continueBtn:"Continuar",
+    championTitle:"CAMPEÃO MUNDIAL",
+    championLead:"Seu superteam venceu todos os confrontos da campanha e levantou o título.",
+    playAgain:"Jogar novamente",
+    mvpLabel:"MVP DA CAMPANHA",
+    journeyLabel:"CAMINHO NA COMPETIÇÃO",
+    tryAgain:"Tentar novamente",
+    roles:{duelist:"Duelista", flex:"Flex", initiator:"Iniciador", sentinel:"Sentinela", controller:"Controlador"},
+    tags:{mm:"Mira Monstra", entry:"Entry", operator:"Operator", clutch:"Clutch", igl:"IGL", lurker:"Lurker", utility:"Utilidade", campeao_mundial:"Campeão Mundial"},
+    noSlotsNote:"Nenhuma vaga compatível com as funções desse craque está disponível.",
+    groupWord:"Grupo",
+    groupStageTag:"FASE DE GRUPOS",
+    playoffsTag:"PLAYOFFS",
+    matchOfLabel:n=>`Jogo ${n}/3`,
+    labels:{
+      ubR1:"Upper Bracket — Rodada 1", ubSemi:"Upper Bracket — Semifinal", ubFinal:"Upper Bracket — Final",
+      groupR1:"Rodada 1", groupUpper:"Upper (classifica)", groupLower:"Lower (eliminação)", groupDecider:"Decisão do grupo",
+      lbR1:"Lower Bracket — Rodada 1", lbR2:"Lower Bracket — Rodada 2", lbSemi:"Lower Bracket — Semifinal", lbFinal:"Lower Bracket — Final",
+      grandFinal:"Grande Final",
+    },
+    groupsEliminatedTitle:"ELIMINADO NA FASE DE GRUPOS",
+    groupsEliminatedLead:"Seu time ficou fora do Top 2 do Grupo e não avançou aos playoffs.",
+    playoffsEliminatedTitle:"ELIMINADO NOS PLAYOFFS",
+    playoffsEliminatedLead:stage=>`Seu time caiu n${stage.toLowerCase().startsWith("upper")||stage.toLowerCase().startsWith("lower")?"a":"o"} ${stage} e foi eliminado do Mundial.`,
+    runnerUpTitle:"VICE-CAMPEÃO MUNDIAL",
+    runnerUpLead:"Seu time chegou à Grande Final mas não conseguiu erguer a taça desta vez.",
+    shareHeadlineChampion:"FUI CAMPEÃO MUNDIAL no VALX 🏆",
+    shareHeadlineRunnerup:"FUI VICE-CAMPEÃO MUNDIAL no VALX 🥈",
+    shareHeadlinePlayoffs:stage=>`FUI ELIMINADO NOS PLAYOFFS (${stage}) no VALX`,
+    shareHeadlineGroups:"FUI ELIMINADO NA FASE DE GRUPOS no VALX",
+    shareModeLabel:"Modo",
+    shareCampaignLabel:"Campanha",
+    shareMapsLabel:"Mapas",
+    shareOverallLabel:"Overall",
+    shareMvpLabel:"MVP",
+    shareTeamMemberLabel:role=>`${role}`,
+    shareCoachLabel:"Coach",
+    shareCta:"Tente ganhar o Mundial você também",
+    shareXBtn:"Compartilhar no X",
+    shareWhatsBtn:"Compartilhar no WhatsApp",
+    rulesSections:[
+      {title:"Equipe e Head Coach", body:`
+        <p>Você escolhe o nome da sua equipe entre 16 organizações reais — as outras 15 viram suas adversárias no Mundial. Em seguida, 4 técnicos são sorteados pra você escolher 1; os outros 15 vão pras equipes rivais. Cada técnico dá um bônus fixo (e escondido) no rating do time — vale pra qualquer equipe que tiver aquele coach. Técnicos que já foram <strong>Campeões Mundiais</strong> dão um bônus extra nesse buff. São considerados títulos mundiais: <strong>Champions, Masters e EWC</strong>.</p>
+      `},
+      {title:"O Draft", body:`
+        <p>O time tem 5 vagas fixas: <strong>Duelista, Flex, Iniciador, Controlador, Sentinela</strong>. Um craque só pode entrar numa vaga cuja função ele joga — muitos jogam mais de uma.</p>
+        <p>A cada sorteio aparecem <strong>5 opções</strong>, e o jogo é inteligente: só mostra craques que têm pelo menos uma vaga aberta compatível. Você pode pular o grupo de 5 no máximo <strong>2 vezes</strong> em todo o draft.</p>
+      `},
+      {title:"Qualidades Táticas", body:`
+        <ul>
+          <li><strong>Mira Monstra (MM):</strong> craque de mira absurda — mais chance de partidas monstruosas.</li>
+          <li><strong>Entry:</strong> agressivo, abre o round — fortalece o ataque, principalmente no Duelista.</li>
+          <li><strong>Operator:</strong> especialista na precisão — fortalece a defesa.</li>
+          <li><strong>Clutch:</strong> fecha rounds sob pressão.</li>
+          <li><strong>IGL:</strong> o cérebro tático do time.</li>
+          <li><strong>Lurker:</strong> joga isolado, flanqueia — importante no Sentinela.</li>
+          <li><strong>Utilidade:</strong> uso de habilidades do time.</li>
+          <li><strong>Campeão Mundial:</strong> já ergueu uma taça antes — experiência que pesa.</li>
+        </ul>
+      `},
+      {title:"Sinergias da Equipe (buffs e nerfs)", body:`
+        <p>A composição do seu elenco afeta silenciosamente o ataque e a defesa em cada rodada — e o time alterna de lado a cada 12 rounds, igual numa partida real.</p>
+        <div class="rules-good">✓ VANTAGENS</div>
+        <ul>
+          <li>Duelista + Iniciador na equipe: buff no ataque.</li>
+          <li>Exatamente 1 jogador com Operator (Duelista ou Sentinela): buff na defesa.</li>
+          <li>2 ou mais jogadores com Clutch: buff geral.</li>
+          <li>Ter Campeões Mundiais no elenco: buff geral, cresce a cada campeão.</li>
+          <li>Duelista com Entry: buff no ataque.</li>
+          <li>Até 3 jogadores com Utilidade: buff geral, cresce a cada um.</li>
+          <li>Sentinela com Lurker: buff geral.</li>
+          <li>Craques com Mira Monstra: buff geral, sem limite.</li>
+        </ul>
+        <div class="rules-bad">✗ DESVANTAGENS</div>
+        <ul>
+          <li>Duelista <em>e</em> Sentinela usando Operator ao mesmo tempo: nerf na defesa.</li>
+          <li>Nenhum jogador com IGL: nerf geral.</li>
+          <li>Mais de 1 jogador com IGL: nerf geral.</li>
+          <li>Duelista sem Entry: nerf no ataque.</li>
+          <li>Mais de 3 jogadores com Utilidade: pequeno nerf.</li>
+          <li>Sentinela sem Lurker: nerf geral.</li>
+        </ul>
+      `},
+      {title:"Química de Elenco (país e time real)", body:`
+        <p>Além das sinergias de composição, existe um bônus extra e silencioso baseado em dados reais do vlr.gg: craques do <strong>mesmo país</strong> ganham um pequeno buff, e craques que <strong>já foram campeões mundiais juntos</strong> — no mesmo elenco que ergueu a taça de verdade — ganham um buff ainda maior. O Head Coach também entra nessa conta, se ele tiver treinado algum desses elencos campeões.</p>
+        <p>Importante: essa parte de "já jogou junto" não vale pra qualquer combinação de craques que passaram pelo mesmo time em épocas diferentes — é específica dos elencos que <strong>foram Campeões Mundiais juntos</strong> (ex: a LOUD de 2022, a Evil Geniuses de 2023). São considerados títulos mundiais: <strong>Champions, Masters e EWC</strong>. A cobertura desse banco de dados é parcial e vai crescendo aos poucos.</p>
+      `},
+      {title:"Formato do Mundial", body:`
+        <p>16 equipes (você + 15 adversárias) divididas em <strong>4 grupos de 4</strong>. Você enfrenta os outros 3 do seu grupo; os demais jogos e grupos são resolvidos automaticamente. O <strong>Top 2</strong> de cada grupo (8 times) avança aos playoffs.</p>
+        <p>Os playoffs são de <strong>dupla eliminação</strong> (Upper/Lower Bracket): perder na Upper te derruba pra Lower (ainda vivo); perder na Lower te elimina. Todas as partidas são <strong>MD3</strong>, exceto a Final da Lower Bracket e a Grande Final, que são <strong>MD5</strong>.</p>
+      `},
+      {title:"Recordes Reais", body:`
+        <p>Existem 3 recordes reais do cenário profissional: <strong>47 abates</strong> num mapa único, <strong>82</strong> numa série MD3 (ambos de aspas) e <strong>126</strong> numa série MD5 (de marteen). Craques com Mira Monstra e overall 95+ têm uma chance rara de superá-los numa partida monstruosa. O recorde "a bater" vale pros dois lados — seu time ou o adversário — e, uma vez quebrado, passa a ser o novo recorde <strong>durante toda a campanha</strong> (inclusive se for a IA quem bater primeiro). No fim da campanha, tudo volta aos valores reais.</p>
+      `},
+      {title:"MVP da Campanha", body:`
+        <p>Só aparece se você for Campeão Mundial: o craque com melhor nota (abates + metade das assistências − mortes) somada ao longo de toda a campanha.</p>
+      `},
+      {title:"Modo Clássico x Modo Selva", body:`
+        <p>No <strong>Clássico</strong>, você vê o overall e as qualidades táticas de cada craque durante o draft. Na <strong>Selva</strong>, tudo isso fica escondido — você recruta só pelo nome e reputação.</p>
+      `},
+    ],
+  },
+  en:{
+    phase_intro:"SETUP", phase_rules:"RULES", phase_teamselect:"TEAM", phase_draft:"DRAFT", phase_match:"MATCH", phase_end:"RESULT",
+    rulesLink:"📖 View full rules",
+    rulesTitle:"Rules & Mechanics",
+    rulesBackBtn:"Back",
+    historyLink:"📜 Past campaigns",
+    historyTitle:"Your Campaigns",
+    historyEmpty:"No saved campaigns yet. Play through to the end to log your result here.",
+    tagline:"Draft & win",
+    hero:"Build your Super Team and chase the world title.",
+    lead:"Draft your 5 pro players and chase the World Championship.<br>Every pick matters — the line between a super team and a disaster is thinner than it looks.<br>And Overall doesn't tell the whole story.",
+    diffClassicoTitle:"Classic Mode",
+    diffClassicoDesc:"Visible attributes",
+    diffSelvaTitle:"Wild Mode",
+    diffSelvaDesc:"Hidden attributes",
+    startBtn:"Start the draft",
+    disclaimer:"Real pro player names and real esports organizations are used respectfully in a fan-made simulation game. Attributes are fictional estimates for gameplay purposes, not official statistics.",
+    teamSelectTitle:"Choose your team name",
+    teamSelectLead:"This will be your team's identity for the whole campaign.",
+    teamSelectContinue:"Continue to the draft",
+    phase_coachselect:"COACH",
+    coachSelectTitle:"Choose your Head Coach",
+    coachSelectLead:"Four coaches were drawn — pick one to lead your team. The other 15 go to your rival teams.",
+    coachSelectContinue:"Continue to the draft",
+    headCoachLabel:"HEAD COACH",
+    poolLabel:"Pros in pool:",
+    filledLabel:n=>`${n}/5 drafted`,
+    slot:"SLOT",
+    rosterComplete:"Roster complete. Team overall:",
+    toMatchBtn:"Go to the World Championship",
+    drawLead:"Draw the next available pros to evaluate.",
+    drawBtn:"Draw players",
+    pickOneLead:"Pick one to draft:",
+    poolEmpty:"Pool exhausted.",
+    draftBtn:"Draft",
+    skipBtn:"Skip",
+    skipsLeftLabel:n=>`Skips left: ${n}`,
+    slotTakenNote:role=>`${role} slot already filled — this pro can't be drafted.`,
+    chooseSlotPrompt:name=>`Which slot should ${name} fill?`,
+    confirmDraftPrompt:name=>`Draft ${name}?`,
+    confirmBtn:"Confirm",
+    backBtn:"Back",
+    alreadyPlayedWith:"Already a champion together",
+    hiddenStats:"Attributes hidden in this mode — trust the name.",
+    statAim:"Aim", statUtil:"Utility", statIgl:"IGL", statClutch:"Clutch",
+    yourTeam:"YOUR TEAM", vs:"VS", rostersLabel:"K / D / A",
+    recordSingleMapUs:(name,kills,prevKills,prevHolder)=>`🔥 NEW RECORD! ${name} closed the map with ${kills} kills, breaking ${prevHolder}'s ${prevKills} — the new campaign record.`,
+    recordSingleMapThem:(name,kills,prevKills,prevHolder)=>`😮 THE OPPONENT BROKE THE RECORD! ${name}, from the rival team, closed the map with ${kills} kills, breaking ${prevHolder}'s ${prevKills}. That's now the record to beat in your campaign.`,
+    recordSeriesUs:(name,kills,prevKills,prevHolder,bo)=>`🔥 NEW RECORD! ${name} closed the series with ${kills} kills, breaking ${prevHolder}'s ${prevKills} — the ${bo} series record for this campaign.`,
+    recordSeriesThem:(name,kills,prevKills,prevHolder,bo)=>`😮 THE OPPONENT BROKE THE RECORD! ${name}, from the rival team, closed the series with ${kills} kills, breaking ${prevHolder}'s ${prevKills} — new ${bo} series record in your campaign.`,
+    simRoundBtn:"Simulate next round",
+    simAllBtn:"Simulate full map",
+    nextMapBtn:"Next map",
+    mapsScoreLabel:(a,b)=>`Maps ${a}-${b}`,
+    sideAttack:"ATTACK",
+    sideDefense:"DEFENSE",
+    resultWin:"VICTORY", resultLoss:"DEFEAT",
+    continueBtn:"Continue",
+    championTitle:"WORLD CHAMPION",
+    championLead:"Your super team won every matchup in the campaign and lifted the title.",
+    playAgain:"Play again",
+    mvpLabel:"CAMPAIGN MVP",
+    journeyLabel:"TOURNAMENT PATH",
+    tryAgain:"Try again",
+    roles:{duelist:"Duelist", flex:"Flex", initiator:"Initiator", sentinel:"Sentinel", controller:"Controller"},
+    tags:{mm:"Monster Aim", entry:"Entry", operator:"Operator", clutch:"Clutch", igl:"IGL", lurker:"Lurker", utility:"Utility", campeao_mundial:"World Champion"},
+    noSlotsNote:"No open slot matches this pro's roles.",
+    groupWord:"Group",
+    groupStageTag:"GROUP STAGE",
+    playoffsTag:"PLAYOFFS",
+    matchOfLabel:n=>`Match ${n}/3`,
+    labels:{
+      ubR1:"Upper Bracket — Round 1", ubSemi:"Upper Bracket — Semifinal", ubFinal:"Upper Bracket — Final",
+      groupR1:"Round 1", groupUpper:"Upper (qualify)", groupLower:"Lower (elimination)", groupDecider:"Group decider",
+      lbR1:"Lower Bracket — Round 1", lbR2:"Lower Bracket — Round 2", lbSemi:"Lower Bracket — Semifinal", lbFinal:"Lower Bracket — Final",
+      grandFinal:"Grand Final",
+    },
+    groupsEliminatedTitle:"ELIMINATED IN THE GROUP STAGE",
+    groupsEliminatedLead:"Your team missed the group's Top 2 and didn't advance to the playoffs.",
+    playoffsEliminatedTitle:"ELIMINATED IN THE PLAYOFFS",
+    playoffsEliminatedLead:stage=>`Your team fell in the ${stage} and was knocked out of the World Championship.`,
+    runnerUpTitle:"WORLD RUNNER-UP",
+    runnerUpLead:"Your team reached the Grand Final but couldn't lift the trophy this time.",
+    shareHeadlineChampion:"I WAS WORLD CHAMPION on VALX 🏆",
+    shareHeadlineRunnerup:"I WAS WORLD RUNNER-UP on VALX 🥈",
+    shareHeadlinePlayoffs:stage=>`I WAS ELIMINATED IN THE PLAYOFFS (${stage}) on VALX`,
+    shareHeadlineGroups:"I WAS ELIMINATED IN THE GROUP STAGE on VALX",
+    shareModeLabel:"Mode",
+    shareCampaignLabel:"Campaign",
+    shareMapsLabel:"Maps",
+    shareOverallLabel:"Overall",
+    shareMvpLabel:"MVP",
+    shareTeamMemberLabel:role=>`${role}`,
+    shareCoachLabel:"Coach",
+    shareCta:"Try to win the World Championship too",
+    shareXBtn:"Share on X",
+    shareWhatsBtn:"Share on WhatsApp",
+    rulesSections:[
+      {title:"Team & Head Coach", body:`
+        <p>You choose your team's name from 16 real organizations — the other 15 become your rivals at the World Championship. Then 4 coaches are drawn for you to pick one; the other 15 go to rival teams. Each coach grants a fixed (hidden) rating bonus — it applies to whichever team has that coach. Coaches who've already been <strong>World Champions</strong> add an extra bonus on top. World titles counted: <strong>Champions, Masters, and EWC</strong>.</p>
+      `},
+      {title:"The Draft", body:`
+        <p>The team has 5 fixed slots: <strong>Duelist, Flex, Initiator, Controller, Sentinel</strong>. A pro can only fill a slot for a role they actually play — many play more than one.</p>
+        <p>Each draw shows <strong>5 options</strong>, and it's smart about it: only pros with at least one matching open slot show up. You can skip the group of 5 at most <strong>2 times</strong> in the whole draft.</p>
+      `},
+      {title:"Tactical Qualities", body:`
+        <ul>
+          <li><strong>Monster Aim (MM):</strong> insane aim — more chance of monster games.</li>
+          <li><strong>Entry:</strong> aggressive, opens the round — boosts attack, especially on the Duelist.</li>
+          <li><strong>Operator:</strong> precision rifle specialist — boosts defense.</li>
+          <li><strong>Clutch:</strong> closes out rounds under pressure.</li>
+          <li><strong>IGL:</strong> the team's tactical brain.</li>
+          <li><strong>Lurker:</strong> plays solo, flanks — important on the Sentinel.</li>
+          <li><strong>Utility:</strong> ability usage.</li>
+          <li><strong>World Champion:</strong> already lifted a trophy — experience that counts.</li>
+        </ul>
+      `},
+      {title:"Team Synergies (buffs & nerfs)", body:`
+        <p>Your roster's composition silently affects attack and defense every round — and the team switches sides every 12 rounds, just like a real map.</p>
+        <div class="rules-good">✓ ADVANTAGES</div>
+        <ul>
+          <li>Duelist + Initiator on the team: attack buff.</li>
+          <li>Exactly 1 Operator user (Duelist or Sentinel): defense buff.</li>
+          <li>2+ players with Clutch: general buff.</li>
+          <li>World Champions on the roster: general buff, grows with each one.</li>
+          <li>Duelist with Entry: attack buff.</li>
+          <li>Up to 3 players with Utility: general buff, grows with each one.</li>
+          <li>Sentinel with Lurker: general buff.</li>
+          <li>Players with Monster Aim: general buff, uncapped.</li>
+        </ul>
+        <div class="rules-bad">✗ DISADVANTAGES</div>
+        <ul>
+          <li>Duelist <em>and</em> Sentinel both using Operator: defense nerf.</li>
+          <li>No player with IGL: general nerf.</li>
+          <li>More than 1 player with IGL: general nerf.</li>
+          <li>Duelist without Entry: attack nerf.</li>
+          <li>More than 3 players with Utility: small nerf.</li>
+          <li>Sentinel without Lurker: general nerf.</li>
+        </ul>
+      `},
+      {title:"Roster Chemistry (country & real team)", body:`
+        <p>On top of composition synergies, there's an extra silent bonus based on real vlr.gg data: pros from the <strong>same country</strong> get a small buff, and pros who <strong>became World Champions together</strong> — on the actual roster that lifted the trophy — get an even bigger buff. Your Head Coach counts too, if they coached one of those championship rosters.</p>
+        <p>Important: this "played together" bonus doesn't apply to any two players who happened to pass through the same org at different times — it's specific to rosters that <strong>won a World Championship together</strong> (e.g. LOUD 2022, Evil Geniuses 2023). World titles counted: <strong>Champions, Masters, and EWC</strong>. Coverage of this database is partial and keeps growing over time.</p>
+      `},
+      {title:"World Championship Format", body:`
+        <p>16 teams (you + 15 rivals) split into <strong>4 groups of 4</strong>. You face the other 3 in your group; the rest is resolved automatically. The <strong>Top 2</strong> from each group (8 teams) advance to the playoffs.</p>
+        <p>The playoffs are <strong>double elimination</strong> (Upper/Lower Bracket): losing in Upper drops you to Lower (still alive); losing in Lower eliminates you. Every match is <strong>Bo3</strong>, except the Lower Bracket Final and the Grand Final, which are <strong>Bo5</strong>.</p>
+      `},
+      {title:"Real-World Records", body:`
+        <p>There are 3 real pro-scene records: <strong>47 kills</strong> in a single map, <strong>82</strong> in a Bo3 series (both by aspas), and <strong>126</strong> in a Bo5 series (by marteen). Players with Monster Aim and 95+ overall have a rare shot at beating them in a monster game. The record "to beat" applies to both sides — your team or the opponent — and once broken, it becomes the new record <strong>for the rest of the campaign</strong> (even if the AI breaks it first). Everything resets to the real marks once the campaign ends.</p>
+      `},
+      {title:"Campaign MVP", body:`
+        <p>Only shown if you become World Champion: the pro with the best score (kills + half the assists − deaths) added up across the whole campaign.</p>
+      `},
+      {title:"Classic Mode vs Wild Mode", body:`
+        <p>In <strong>Classic</strong>, you see each pro's overall and tactical qualities during the draft. In <strong>Wild</strong>, all of that stays hidden — you recruit on name and reputation alone.</p>
+      `},
+    ],
+  },
+  es:{
+    phase_intro:"CONFIG", phase_rules:"REGLAS", phase_teamselect:"EQUIPO", phase_draft:"DRAFT", phase_match:"PARTIDO", phase_end:"RESULTADO",
+    rulesLink:"📖 Ver reglas completas",
+    rulesTitle:"Reglas y Mecánicas",
+    rulesBackBtn:"Volver",
+    historyLink:"📜 Campañas anteriores",
+    historyTitle:"Tus Campañas",
+    historyEmpty:"Todavía no hay campañas guardadas. Juega hasta el final para registrar tu resultado aquí.",
+    tagline:"Arma y gana",
+    hero:"Arma tu Super Equipo y busca el título mundial.",
+    lead:"Arma tus 5 jugadores profesionales y ve tras el título Mundial.<br>Cada elección pesa — la diferencia entre un súper equipo y un fracaso es más fina de lo que parece.<br>Y el Overall no cuenta toda la historia.",
+    diffClassicoTitle:"Modo Clásico",
+    diffClassicoDesc:"Atributos visibles",
+    diffSelvaTitle:"Modo Selva",
+    diffSelvaDesc:"Atributos ocultos",
+    startBtn:"Comenzar el draft",
+    disclaimer:"Los nombres de jugadores profesionales y organizaciones reales de esports se usan de forma respetuosa en un juego de simulación hecho por fans. Los atributos son estimaciones ficticias para el juego, no estadísticas oficiales.",
+    teamSelectTitle:"Elige el nombre de tu equipo",
+    teamSelectLead:"Esta será la identidad de tu equipo durante toda la campaña.",
+    teamSelectContinue:"Continuar al draft",
+    phase_coachselect:"ENTRENADOR",
+    coachSelectTitle:"Elige tu Head Coach",
+    coachSelectLead:"Se sortearon cuatro entrenadores — elige uno para liderar tu equipo. Los otros 15 van a los equipos rivales.",
+    coachSelectContinue:"Continuar al draft",
+    headCoachLabel:"HEAD COACH",
+    poolLabel:"Cracks en el pool:",
+    filledLabel:n=>`${n}/5 reclutados`,
+    slot:"SLOT",
+    rosterComplete:"Plantilla completa. Overall del equipo:",
+    toMatchBtn:"Ir al Mundial",
+    drawLead:"Sortea los próximos cracks disponibles para evaluar.",
+    drawBtn:"Sortear jugadores",
+    pickOneLead:"Elige uno para reclutar:",
+    poolEmpty:"Pool agotado.",
+    draftBtn:"Reclutar",
+    skipBtn:"Saltar",
+    skipsLeftLabel:n=>`Saltos restantes: ${n}`,
+    slotTakenNote:role=>`La vaga de ${role} ya está ocupada — este crack no puede ser reclutado.`,
+    chooseSlotPrompt:name=>`¿En qué vaga encajar a ${name}?`,
+    confirmDraftPrompt:name=>`¿Confirmar el reclutamiento de ${name}?`,
+    confirmBtn:"Confirmar",
+    backBtn:"Volver",
+    alreadyPlayedWith:"Ya fue campeón junto",
+    hiddenStats:"Atributos ocultos en este modo — confía en el nombre.",
+    statAim:"Puntería", statUtil:"Utilidad", statIgl:"IGL", statClutch:"Clutch",
+    yourTeam:"TU EQUIPO", vs:"VS", rostersLabel:"K / D / A",
+    recordSingleMapUs:(name,kills,prevKills,prevHolder)=>`🔥 ¡NUEVO RÉCORD! ${name} cerró el mapa con ${kills} bajas, superando las ${prevKills} de ${prevHolder} — el nuevo récord de la campaña.`,
+    recordSingleMapThem:(name,kills,prevKills,prevHolder)=>`😮 ¡EL RIVAL BATIÓ EL RÉCORD! ${name}, del equipo rival, cerró el mapa con ${kills} bajas, superando las ${prevKills} de ${prevHolder}. Ese es ahora el récord a batir en tu campaña.`,
+    recordSeriesUs:(name,kills,prevKills,prevHolder,bo)=>`🔥 ¡NUEVO RÉCORD! ${name} cerró la serie con ${kills} bajas, superando las ${prevKills} de ${prevHolder} — el récord de una serie ${bo} en la campaña.`,
+    recordSeriesThem:(name,kills,prevKills,prevHolder,bo)=>`😮 ¡EL RIVAL BATIÓ EL RÉCORD! ${name}, del equipo rival, cerró la serie con ${kills} bajas, superando las ${prevKills} de ${prevHolder} — nuevo récord de serie ${bo} en tu campaña.`,
+    simRoundBtn:"Simular próxima ronda",
+    simAllBtn:"Simular mapa completo",
+    nextMapBtn:"Siguiente mapa",
+    mapsScoreLabel:(a,b)=>`Mapas ${a}-${b}`,
+    sideAttack:"ATAQUE",
+    sideDefense:"DEFENSA",
+    resultWin:"VICTORIA", resultLoss:"DERROTA",
+    continueBtn:"Continuar",
+    championTitle:"CAMPEÓN MUNDIAL",
+    championLead:"Tu súper equipo ganó todos los enfrentamientos de la campaña y levantó el título.",
+    playAgain:"Jugar de nuevo",
+    mvpLabel:"MVP DE LA CAMPAÑA",
+    journeyLabel:"CAMINO EN EL TORNEO",
+    tryAgain:"Intentar de nuevo",
+    roles:{duelist:"Duelista", flex:"Flex", initiator:"Iniciador", sentinel:"Centinela", controller:"Controlador"},
+    tags:{mm:"Mira Monstruosa", entry:"Entry", operator:"Operator", clutch:"Clutch", igl:"IGL", lurker:"Lurker", utility:"Utilidad", campeao_mundial:"Campeón Mundial"},
+    noSlotsNote:"Ninguna vaga disponible coincide con las funciones de este crack.",
+    groupWord:"Grupo",
+    groupStageTag:"FASE DE GRUPOS",
+    playoffsTag:"PLAYOFFS",
+    matchOfLabel:n=>`Partido ${n}/3`,
+    labels:{
+      ubR1:"Upper Bracket — Ronda 1", ubSemi:"Upper Bracket — Semifinal", ubFinal:"Upper Bracket — Final",
+      groupR1:"Ronda 1", groupUpper:"Upper (clasifica)", groupLower:"Lower (eliminación)", groupDecider:"Decisión del grupo",
+      lbR1:"Lower Bracket — Ronda 1", lbR2:"Lower Bracket — Ronda 2", lbSemi:"Lower Bracket — Semifinal", lbFinal:"Lower Bracket — Final",
+      grandFinal:"Gran Final",
+    },
+    groupsEliminatedTitle:"ELIMINADO EN LA FASE DE GRUPOS",
+    groupsEliminatedLead:"Tu equipo quedó fuera del Top 2 del Grupo y no avanzó a los playoffs.",
+    playoffsEliminatedTitle:"ELIMINADO EN LOS PLAYOFFS",
+    playoffsEliminatedLead:stage=>`Tu equipo cayó en ${stage} y quedó fuera del Mundial.`,
+    runnerUpTitle:"SUBCAMPEÓN MUNDIAL",
+    runnerUpLead:"Tu equipo llegó a la Gran Final pero no pudo levantar el trofeo esta vez.",
+    shareHeadlineChampion:"FUI CAMPEÓN MUNDIAL en VALX 🏆",
+    shareHeadlineRunnerup:"FUI SUBCAMPEÓN MUNDIAL en VALX 🥈",
+    shareHeadlinePlayoffs:stage=>`FUI ELIMINADO EN LOS PLAYOFFS (${stage}) en VALX`,
+    shareHeadlineGroups:"FUI ELIMINADO EN LA FASE DE GRUPOS en VALX",
+    shareModeLabel:"Modo",
+    shareCampaignLabel:"Campaña",
+    shareMapsLabel:"Mapas",
+    shareOverallLabel:"Overall",
+    shareMvpLabel:"MVP",
+    shareTeamMemberLabel:role=>`${role}`,
+    shareCoachLabel:"Coach",
+    shareCta:"Intenta ganar el Mundial tú también",
+    shareXBtn:"Compartir en X",
+    shareWhatsBtn:"Compartir en WhatsApp",
+    rulesSections:[
+      {title:"Equipo y Head Coach", body:`
+        <p>Eliges el nombre de tu equipo entre 16 organizaciones reales — las otras 15 se convierten en tus rivales en el Mundial. Después se sortean 4 entrenadores para que elijas uno; los otros 15 van a los equipos rivales. Cada entrenador da un bono fijo (oculto) al rating del equipo — vale para cualquier equipo que tenga ese coach. Entrenadores que ya fueron <strong>Campeones Mundiales</strong> suman un bono extra a ese bono. Se consideran títulos mundiales: <strong>Champions, Masters y EWC</strong>.</p>
+      `},
+      {title:"El Draft", body:`
+        <p>El equipo tiene 5 vagas fijas: <strong>Duelista, Flex, Iniciador, Controlador, Centinela</strong>. Un crack solo puede entrar en una vaga cuya función realmente juega — muchos juegan más de una.</p>
+        <p>Cada sorteo muestra <strong>5 opciones</strong>, y es inteligente: solo aparecen cracks con al menos una vaga abierta compatible. Puedes saltar el grupo de 5 como máximo <strong>2 veces</strong> en todo el draft.</p>
+      `},
+      {title:"Cualidades Tácticas", body:`
+        <ul>
+          <li><strong>Mira Monstruosa (MM):</strong> puntería descomunal — más chance de partidos monstruosos.</li>
+          <li><strong>Entry:</strong> agresivo, abre el round — potencia el ataque, sobre todo en el Duelista.</li>
+          <li><strong>Operator:</strong> especialista en precisión — potencia la defensa.</li>
+          <li><strong>Clutch:</strong> cierra rounds bajo presión.</li>
+          <li><strong>IGL:</strong> el cerebro táctico del equipo.</li>
+          <li><strong>Lurker:</strong> juega aislado, flanquea — importante en el Centinela.</li>
+          <li><strong>Utilidad:</strong> uso de habilidades del equipo.</li>
+          <li><strong>Campeón Mundial:</strong> ya levantó un trofeo antes — experiencia que pesa.</li>
+        </ul>
+      `},
+      {title:"Sinergias del Equipo (buffs y nerfs)", body:`
+        <p>La composición de tu plantilla afecta en silencio el ataque y la defensa en cada ronda — y el equipo cambia de lado cada 12 rounds, igual que en un partido real.</p>
+        <div class="rules-good">✓ VENTAJAS</div>
+        <ul>
+          <li>Duelista + Iniciador en el equipo: buff de ataque.</li>
+          <li>Exactamente 1 jugador con Operator (Duelista o Centinela): buff de defensa.</li>
+          <li>2 o más jugadores con Clutch: buff general.</li>
+          <li>Tener Campeones Mundiales en la plantilla: buff general, crece con cada uno.</li>
+          <li>Duelista con Entry: buff de ataque.</li>
+          <li>Hasta 3 jugadores con Utilidad: buff general, crece con cada uno.</li>
+          <li>Centinela con Lurker: buff general.</li>
+          <li>Cracks con Mira Monstruosa: buff general, sin límite.</li>
+        </ul>
+        <div class="rules-bad">✗ DESVENTAJAS</div>
+        <ul>
+          <li>Duelista <em>y</em> Centinela usando Operator al mismo tiempo: nerf de defensa.</li>
+          <li>Ningún jugador con IGL: nerf general.</li>
+          <li>Más de 1 jugador con IGL: nerf general.</li>
+          <li>Duelista sin Entry: nerf de ataque.</li>
+          <li>Más de 3 jugadores con Utilidad: pequeño nerf.</li>
+          <li>Centinela sin Lurker: nerf general.</li>
+        </ul>
+      `},
+      {title:"Química de Plantilla (país y time real)", body:`
+        <p>Además de las sinergias de composición, existe un bono extra y silencioso basado en datos reales del vlr.gg: cracks del <strong>mismo país</strong> ganan un pequeño buff, y cracks que <strong>ya fueron campeones mundiales juntos</strong> — en la misma plantilla que levantó el trofeo de verdad — ganan un buff aún mayor. El Head Coach también cuenta, si entrenó a alguna de esas plantillas campeonas.</p>
+        <p>Importante: esta parte de "ya jugó junto" no aplica a cualquier combinación de cracks que pasaron por el mismo equipo en épocas distintas — es específica de las plantillas que <strong>fueron Campeonas Mundiales juntas</strong> (ej: la LOUD de 2022, la Evil Geniuses de 2023). Se consideran títulos mundiales: <strong>Champions, Masters y EWC</strong>. La cobertura de esta base de datos es parcial y va creciendo de a poco.</p>
+      `},
+      {title:"Formato del Mundial", body:`
+        <p>16 equipos (tú + 15 rivales) divididos en <strong>4 grupos de 4</strong>. Enfrentas a los otros 3 de tu grupo; el resto se resuelve automáticamente. El <strong>Top 2</strong> de cada grupo (8 equipos) avanza a los playoffs.</p>
+        <p>Los playoffs son de <strong>doble eliminación</strong> (Upper/Lower Bracket): perder en Upper te baja a Lower (aún vivo); perder en Lower te elimina. Todos los partidos son <strong>MD3</strong>, excepto la Final de la Lower Bracket y la Gran Final, que son <strong>MD5</strong>.</p>
+      `},
+      {title:"Récords Reales", body:`
+        <p>Existen 3 récords reales del circuito profesional: <strong>47 bajas</strong> en un solo mapa, <strong>82</strong> en una serie MD3 (ambos de aspas) y <strong>126</strong> en una serie MD5 (de marteen). Los cracks con Mira Monstruosa y overall 95+ tienen una chance rara de superarlos en un partido monstruoso. El récord "a batir" vale para ambos lados — tu equipo o el rival — y, una vez roto, pasa a ser el nuevo récord <strong>durante toda la campaña</strong> (incluso si la IA lo rompe primero). Al terminar la campaña, todo vuelve a los valores reales.</p>
+      `},
+      {title:"MVP de la Campaña", body:`
+        <p>Solo aparece si te conviertes en Campeón Mundial: el crack con mejor nota (bajas + mitad de las asistencias − muertes) acumulada durante toda la campaña.</p>
+      `},
+      {title:"Modo Clásico vs Modo Selva", body:`
+        <p>En <strong>Clásico</strong>, ves el overall y las cualidades tácticas de cada crack durante el draft. En <strong>Selva</strong>, todo eso queda oculto — reclutas solo por el nombre y la reputación.</p>
+      `},
+    ],
+  }
+};
+function t(key){
+  const dict = I18N[state.lang] || I18N.pt;
+  return dict[key] !== undefined ? dict[key] : I18N.pt[key];
+}
+function roleLabel(roleKey){ return t("roles")[roleKey] || roleKey; }
+function tagLabel(tagKey){ return t("tags")[tagKey] || tagKey; }
+// Ordem fixa das vagas do time: cada função tem sua vaga; Flex encaixa em qualquer uma.
+const SLOT_ORDER = ["duelist","flex","initiator","controller","sentinel"];
+function bracketLabel(labelKey){ return t("labels")[labelKey] || labelKey; }
+
+/* ---------------- STATE ---------------- */
+let state = {
+  screen: "intro",
+  campaignHistoryList: [],
+  lang: "pt",            // "pt" | "en" | "es"
+  difficulty: null,     // "classico" | "selva"
+  teamName: null,
+  headCoach: null,
+  coachOptions: [],
+  remainingCoaches: [],
+  pool: [],
+  roster: [],
+  pendingSlotChoice: false,
+  skipsUsed: 0,
+  currentCandidate: null,
+  currentCandidates: [],
+  confirmingCandidate: null,
+  matchScore: {us:0, them:0},
+  roundLog: [],
+  mapsToWin: 2,
+  mapsUs: 0,
+  mapsThem: 0,
+  mapHistory: [],
+  matchStats: {us:[], them:[]},
+  seriesStats: {us:[], them:[]},
+  campaignStats: null,
+  journey: [],
+  campaignRecords: {singleMap:{kills:47,holder:"aspas"}, md3:{kills:82,holder:"aspas"}, md5:{kills:126,holder:"marteen"}},
+  tournament: null,
+  endInfo: null, // {type:'champion'|'runnerup'|'groups'|'playoffs', stageLabelKey?}
+};
+
+function overall(p){ return p.overall; }
+function teamOverall(roster){ return Math.round(roster.reduce((s,p)=>s+overall(p),0)/roster.length); }
+function shuffle(arr){ const a=[...arr]; for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]];} return a; }
+// Ordem de sorteio do draft: dá um peso maior pra craques com overall 90+ aparecerem,
+// sem tirar a aleatoriedade — só aumenta um pouco a chance.
+function weightedDrawOrder(arr){
+  function pickIdx(weights){
+    const total = weights.reduce((s,w)=>s+Math.max(0.01,w),0);
+    let r = Math.random()*total;
+    for(let i=0;i<weights.length;i++){
+      r -= Math.max(0.01,weights[i]);
+      if(r<=0) return i;
+    }
+    return weights.length-1;
+  }
+  const remaining = [...arr];
+  const order = [];
+  while(remaining.length){
+    const weights = remaining.map(p=>{
+      let w = 1;
+      if(p.overall>=90) w *= 0.55;
+      if((p.tags||[]).includes("campeao_mundial")) w *= 0.55;
+      return w;
+    });
+    const idx = pickIdx(weights);
+    order.push(remaining.splice(idx,1)[0]);
+  }
+  return order.reverse(); // reverso pois o sorteio consome o array via pop() (do final)
+}
+
+/* ---------------- TOURNAMENT LOGIC ---------------- */
+function decideWinner(teamA, teamB){
+  const compA = compositionBonus(teamA.roster, false);
+  const compB = compositionBonus(teamB.roster, false);
+  const buffA = coachBuff(teamA.coach) + (compA.attack+compA.defense)/2 + chemistryBonus(teamA.roster, teamA.coach);
+  const buffB = coachBuff(teamB.coach) + (compB.attack+compB.defense)/2 + chemistryBonus(teamB.roster, teamB.coach);
+  const ratingA = teamA.rating + buffA*BUFF_DAMPING;
+  const ratingB = teamB.rating + buffB*BUFF_DAMPING;
+  const diff = ratingA - ratingB;
+  const prob = Math.min(0.94, Math.max(0.06, 0.5 + diff/130));
+  return Math.random() < prob ? teamA : teamB;
+}
+
+// Decide uma partida em melhor-de-N mapas (mapsToWin=2 → MD3, mapsToWin=3 → MD5).
+function decideMatchWinner(teamA, teamB, mapsToWin){
+  let wa=0, wb=0;
+  while(wa<mapsToWin && wb<mapsToWin){
+    if(decideWinner(teamA,teamB)===teamA) wa++; else wb++;
+  }
+  return wa>wb ? {winner:teamA, loser:teamB} : {winner:teamB, loser:teamA};
+}
+function matchFormatFor(labelKey){
+  return (labelKey==="lbFinal" || labelKey==="grandFinal") ? 3 : 2;
+}
+
+// Monta um elenco de IA cobrindo as 5 funções de verdade — tira jogadores do pool compartilhado
+// (mutando o array recebido), preferindo sempre alguém que jogue aquela função.
+function buildAIRoster(sharedPool){
+  const roster = [];
+  SLOT_ORDER.forEach(roleKey=>{
+    const idx = sharedPool.findIndex(p=>p.roles.includes(roleKey));
+    if(idx!==-1) roster.push(sharedPool.splice(idx,1)[0]);
+  });
+  while(roster.length<5 && sharedPool.length){ roster.push(sharedPool.pop()); }
+  return roster;
+}
+
+// Topologia do "mini-chaveamento suíço" de cada grupo (4 times: você + 3 da IA).
+// m1/m2 = rodada 1; m3 = Upper (quem vence está classificado, 2-0); m4 = Lower (quem perde é
+// eliminado, 0-2); m5 = decisão entre os dois times 1-1 — vencedor classifica, perdedor cai.
+const GROUP_BRACKET_DEF = [
+  {id:"m1", aFrom:{seed:0}, bFrom:{seed:1}, labelKey:"groupR1"},
+  {id:"m2", aFrom:{seed:2}, bFrom:{seed:3}, labelKey:"groupR1"},
+  {id:"m3", aFrom:{m:"m1",res:"w"}, bFrom:{m:"m2",res:"w"}, labelKey:"groupUpper"},
+  {id:"m4", aFrom:{m:"m1",res:"l"}, bFrom:{m:"m2",res:"l"}, labelKey:"groupLower"},
+  {id:"m5", aFrom:{m:"m3",res:"l"}, bFrom:{m:"m4",res:"w"}, labelKey:"groupDecider"},
+];
+const GROUP_QUALIFY_IDS = ["m3","m5"]; // vencer aqui classifica
+const GROUP_ELIM_IDS = ["m4","m5"];    // perder aqui elimina (2ª derrota)
+
+// Resolve o mini-chaveamento de um grupo 100% controlado pela IA (grupos B/C/D).
+function buildGroupQualifiersAI(teams){
+  const brk = { seeds: teams, matches: {} };
+  GROUP_BRACKET_DEF.forEach(def=>{ brk.matches[def.id] = {winner:null, loser:null}; });
+  GROUP_BRACKET_DEF.forEach(def=>{
+    const teamA = resolveBracketTeam(def.aFrom, brk);
+    const teamB = resolveBracketTeam(def.bFrom, brk);
+    brk.matches[def.id] = decideMatchWinner(teamA, teamB, 2);
+  });
+  return [
+    {...brk.matches.m3.winner, isGroupWinner:true},
+    {...brk.matches.m5.winner, isGroupWinner:false},
+  ];
+}
+
+function setupTournament(){
+  const playerTeam = {id:"player", isPlayer:true, rating: teamOverall(state.roster)};
+  const pool = shuffle(
+    TEAM_NAMES.filter(tm=>tm.name!==state.teamName).map((tm,i)=>({id:"t"+i, name:tm.name, rating:tm.rating}))
+  );
+  const groupATeams = [playerTeam, pool[0], pool[1], pool[2]];
+  const rest = pool.slice(3);
+  const groupB = rest.slice(0,4), groupC = rest.slice(4,8), groupD = rest.slice(8,12);
+
+  // monta um elenco de 5 jogadores para cada equipe adversária — cobrindo as 5 funções
+  // de verdade (igual um draft), em vez de um recorte aleatório do pool.
+  const usedNames = new Set(state.roster.map(p=>p.name));
+  const availablePlayers = shuffle(POOL.filter(p=>!usedNames.has(p.name)));
+  const aiTeams = [...groupATeams.slice(1), ...groupB, ...groupC, ...groupD];
+  aiTeams.forEach((tm,i)=>{
+    tm.roster = buildAIRoster(availablePlayers);
+    tm.coach = state.remainingCoaches[i] || null;
+  });
+
+  const otherGroupsTop2 = {};
+  [["B",groupB],["C",groupC],["D",groupD]].forEach(([letter, teams])=>{
+    otherGroupsTop2[letter] = buildGroupQualifiersAI(teams);
+  });
+
+  const groupBracket = { seeds: groupATeams, matches: {}, pointerIdx: 0, pending: null };
+  GROUP_BRACKET_DEF.forEach(def=>{ groupBracket.matches[def.id] = {winner:null, loser:null}; });
+
+  state.tournament = {
+    stage:"groups",
+    playerTeam,
+    groupATeams,
+    groupBracket,
+    otherGroupsTop2,
+    bracket: null,
+  };
+  state.campaignStats = { us: state.roster.map((p,i)=>({name:p.name, role:SLOT_ORDER[i], k:0, d:0, a:0})) };
+  state.campaignRecords = {singleMap:{kills:RECORDS.singleMap,holder:"aspas"}, md3:{kills:RECORDS.md3,holder:"aspas"}, md5:{kills:RECORDS.md5,holder:"marteen"}};
+  state.journey = [];
+  advanceGroupBracket();
+}
+
+// Verifica se o craque já jogou (mesmo time real, vlr.gg) com alguém já escalado no time,
+// ou se já foi treinado pelo Head Coach escolhido — vale mesmo no primeiro sorteio.
+function teammateSynergyNote(candidate){
+  const ct = PLAYER_TEAM[candidate.name.toLowerCase()] || [];
+  if(ct.length===0) return null;
+  const names = state.roster.filter(Boolean).filter(p=>{
+    const pt = PLAYER_TEAM[p.name.toLowerCase()] || [];
+    return pt.some(t=>ct.includes(t));
+  }).map(p=>p.name);
+  if(state.headCoach){
+    const coachTeam = COACH_TEAM[state.headCoach.toLowerCase()];
+    if(coachTeam && ct.includes(coachTeam)) names.push(state.headCoach);
+  }
+  if(names.length===0) return null;
+  return names.join(", ");
+}
+
+function currentOpponent(){
+  const tr = state.tournament;
+  if(!tr) return null;
+  if(tr.stage==="groups" && tr.groupBracket && tr.groupBracket.pending){
+    const p = tr.groupBracket.pending;
+    return p.teamA.isPlayer ? p.teamB : p.teamA;
+  }
+  if(tr.stage==="playoffs" && tr.bracket && tr.bracket.pending){
+    const p = tr.bracket.pending;
+    return p.teamA.isPlayer ? p.teamB : p.teamA;
+  }
+  return null;
+}
+
+function contextLabel(){
+  const tr = state.tournament;
+  if(!tr) return "";
+  if(tr.stage==="groups"){
+    const roundLabel = tr.groupBracket && tr.groupBracket.pending ? bracketLabel(tr.groupBracket.pending.def.labelKey) : "";
+    return `${t("groupStageTag")} · ${t("groupWord")} A${roundLabel ? " · "+roundLabel : ""}`;
+  }
+  if(tr.stage==="playoffs" && tr.bracket && tr.bracket.pending){
+    return `${t("playoffsTag")} · ${bracketLabel(tr.bracket.pending.def.labelKey)}`;
+  }
+  return t("playoffsTag");
+}
+
+function resolveBracketTeam(fromDef, bracket){
+  if(fromDef.seed!==undefined) return bracket.seeds[fromDef.seed];
+  const m = bracket.matches[fromDef.m];
+  return fromDef.res==="w" ? m.winner : m.loser;
+}
+
+function buildPlayoffBracket(qualifiers){
+  const winners = qualifiers.filter(q=>q.isGroupWinner).sort((a,b)=>b.rating-a.rating);
+  const runnerups = qualifiers.filter(q=>!q.isGroupWinner).sort((a,b)=>b.rating-a.rating);
+  const seeds = [...winners, ...runnerups];
+  const matches = {};
+  BRACKET_DEF.forEach(def=>{ matches[def.id] = {winner:null, loser:null}; });
+  state.tournament.bracket = { seeds, matches, pointerIdx:0, pending:null };
+  state.tournament.stage = "playoffs";
+}
+
+// Processa o mini-chaveamento do grupo automaticamente até chegar numa partida do jogador.
+function advanceGroupBracket(){
+  const tr = state.tournament;
+  if(tr.stage!=="groups") return;
+  const brk = tr.groupBracket;
+  brk.pending = null;
+  while(brk.pointerIdx < GROUP_BRACKET_DEF.length){
+    const def = GROUP_BRACKET_DEF[brk.pointerIdx];
+    const teamA = resolveBracketTeam(def.aFrom, brk);
+    const teamB = resolveBracketTeam(def.bFrom, brk);
+    if(teamA.isPlayer || teamB.isPlayer){
+      brk.pending = {def, teamA, teamB};
+      startMatch(2); // fase de grupos é sempre MD3
+      return;
+    }
+    brk.matches[def.id] = decideMatchWinner(teamA, teamB, 2);
+    brk.pointerIdx++;
+  }
+}
+// Termina de resolver (só IA) o que sobrou do mini-chaveamento do grupo, sem pausar.
+function finishGroupBracketAI(){
+  const brk = state.tournament.groupBracket;
+  while(brk.pointerIdx < GROUP_BRACKET_DEF.length){
+    const def = GROUP_BRACKET_DEF[brk.pointerIdx];
+    const teamA = resolveBracketTeam(def.aFrom, brk);
+    const teamB = resolveBracketTeam(def.bFrom, brk);
+    brk.matches[def.id] = decideMatchWinner(teamA, teamB, 2);
+    brk.pointerIdx++;
+  }
+}
+
+// Processa partidas automaticamente até chegar numa partida do jogador, ou até o torneio terminar.
+function advanceTournament(){
+  const tr = state.tournament;
+  if(tr.stage!=="playoffs") return;
+  const brk = tr.bracket;
+  brk.pending = null;
+  while(brk.pointerIdx < BRACKET_DEF.length){
+    const def = BRACKET_DEF[brk.pointerIdx];
+    const teamA = resolveBracketTeam(def.aFrom, brk);
+    const teamB = resolveBracketTeam(def.bFrom, brk);
+    if(teamA.isPlayer || teamB.isPlayer){
+      brk.pending = {def, teamA, teamB};
+      startMatch(matchFormatFor(def.labelKey));
+      return;
+    }
+    const {winner, loser} = decideMatchWinner(teamA, teamB, matchFormatFor(def.labelKey));
+    brk.matches[def.id] = {winner, loser};
+    brk.pointerIdx++;
+  }
+  // chaveamento concluído sem mais partidas do jogador pendentes
+  const finalMatch = brk.matches["m14"];
+  state.endInfo = finalMatch.winner.isPlayer ? {type:"champion"} : {type:"runnerup"};
+  finalizeCampaign();
+}
+
+/* ---------------- RENDER ---------------- */
+const THEMES = {
+  classico:{ "--crimson":"#FF4655", "--crimson-dim":"#7A2430", "--bg-deep":"#080F14", "--text":"#F5F5F5", "--muted":"#6B7280", "--glow-a":"#17202A", "--glow-b":"#1B1216" },
+  selva:{ "--crimson":"#8B5CF6", "--crimson-dim":"#3E2A6B", "--bg-deep":"#0B0F14", "--text":"#FFFFFF", "--muted":"#64748B", "--glow-a":"#1D1533", "--glow-b":"#241033" }
+};
+function applyTheme(){
+  const vars = THEMES[state.difficulty] || THEMES.classico;
+  const root = document.documentElement;
+  Object.keys(vars).forEach(k => root.style.setProperty(k, vars[k]));
+}
+
+// Reseta tudo e volta pra tela inicial, mantendo só o idioma escolhido.
+function resetToIntro(){
+  const keepLang = state.lang;
+  state = {screen:"intro",lang:keepLang,campaignHistoryList:[],difficulty:null,teamName:null,headCoach:null,coachOptions:[],remainingCoaches:[],pool:[],roster:[],pendingSlotChoice:false,skipsUsed:0,currentCandidate:null,currentCandidates:[],confirmingCandidate:null,matchScore:{us:0,them:0},roundLog:[],mapsToWin:2,mapsUs:0,mapsThem:0,mapHistory:[],matchStats:{us:[],them:[]},seriesStats:{us:[],them:[]},campaignStats:null,journey:[],campaignRecords:{singleMap:{kills:47,holder:"aspas"}, md3:{kills:82,holder:"aspas"}, md5:{kills:126,holder:"marteen"}},tournament:null,endInfo:null};
+}
+
+function render(){
+  applyTheme();
+  const app = document.getElementById("app");
+  app.innerHTML = topbarHTML() + screenHTML();
+  attachHandlers();
+  window.scrollTo(0,0);
+}
+
+function topbarHTML(){
+  const tags = {intro:t("phase_intro"), rules:t("phase_rules"), teamselect:t("phase_teamselect"), coachselect:t("phase_coachselect"), draft:t("phase_draft"), match:t("phase_match"), end:t("phase_end")};
+  const langs = [["pt","PT"],["en","EN"],["es","ES"]];
+  const langBtns = langs.map(([code,label])=>`<button class="lang-btn ${state.lang===code?'active':''}" data-lang="${code}">${label}</button>`).join("");
+  return `
+  <div class="topbar">
+    <div class="brand" id="brand-home-btn" style="cursor:pointer;">
+      <div class="brand-mark">
+        <svg width="30" height="30" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style="filter:drop-shadow(0 0 4px currentColor);">
+          <path d="M10 15 L50 85 L90 15" stroke="currentColor" stroke-width="14" stroke-linejoin="miter" stroke-linecap="square" fill="none"/>
+          <path d="M10 85 L50 15 L90 85" stroke="currentColor" stroke-width="14" stroke-linejoin="miter" stroke-linecap="square" fill="none"/>
+        </svg>
+      </div>
+      <div class="brand-text">
+        <div class="brand-name">VAL<span>X</span></div>
+        <div class="brand-tagline">${t("tagline")}</div>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <div class="lang-switch">${langBtns}</div>
+      <div class="phase-tag">${tags[state.screen]||""}</div>
+    </div>
+  </div>`;
+}
+
+function screenHTML(){
+  if(state.screen==="intro") return introHTML();
+  if(state.screen==="rules") return rulesHTML();
+  if(state.screen==="history") return historyHTML();
+  if(state.screen==="teamselect") return teamSelectHTML();
+  if(state.screen==="coachselect") return coachSelectHTML();
+  if(state.screen==="draft") return draftHTML();
+  if(state.screen==="match") return matchHTML();
+  if(state.screen==="end") return endHTML();
+  return "";
+}
+
+function introHTML(){
+  return `
+  <div class="panel angle">
+    <h1 class="hero">${t("hero")}</h1>
+    <p class="lead">${t("lead")}</p>
+    <div class="diff-grid">
+      <button class="diff-card angle-sm ${state.difficulty==='classico'?'selected':''}" data-diff="classico">
+        <h3>${t("diffClassicoTitle")}</h3>
+        <p>${t("diffClassicoDesc")}</p>
+      </button>
+      <button class="diff-card angle-sm ${state.difficulty==='selva'?'selected':''}" data-diff="selva">
+        <h3>${t("diffSelvaTitle")}</h3>
+        <p>${t("diffSelvaDesc")}</p>
+      </button>
+    </div>
+    <div class="btn-row" style="margin-top:6px;">
+      <button class="btn" id="start-btn" ${state.difficulty?'':'disabled'}>${t("startBtn")}</button>
+    </div>
+    <div class="rules-btn-row">
+      <button class="rules-link" id="rules-btn">${t("rulesLink")}</button>
+      <button class="rules-link" id="history-btn">${t("historyLink")}</button>
+    </div>
+  </div>
+  <p class="disclaimer">${t("disclaimer")}</p>
+  <div class="footer-social">
+    <a class="social-link" href="https://x.com/wasmorf1?s=11" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter) profile">
+      <svg width="20" height="20" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M6 6 L26 26 M26 6 L6 26" stroke="#F5F5F5" stroke-width="4.5" stroke-linecap="square"/>
+      </svg>
+    </a>
+  </div>
+  `;
+}
+
+function rulesHTML(){
+  const sectionsHTML = t("rulesSections").map(sec=>`
+    <div class="rules-section">
+      <h3>${sec.title}</h3>
+      ${sec.body}
+    </div>
+  `).join("");
+  return `
+  <div class="panel angle">
+    <h1 class="hero" style="font-size:22px;">${t("rulesTitle")}</h1>
+    ${sectionsHTML}
+    <div class="btn-row" style="margin-top:6px;">
+      <button class="btn" id="rules-back-btn">${t("rulesBackBtn")}</button>
+    </div>
+  </div>
+  `;
+}
+
+function historyHTML(){
+  const list = state.campaignHistoryList || [];
+  const resultLabel = (rec)=>{
+    if(rec.resultType==="champion") return t("championTitle");
+    if(rec.resultType==="runnerup") return t("runnerUpTitle");
+    if(rec.resultType==="playoffs") return `${t("playoffsEliminatedTitle")} (${bracketLabel(rec.stageLabelKey)})`;
+    return t("groupsEliminatedTitle");
+  };
+  const resultColor = (rec)=> rec.resultType==="champion" ? "var(--gold)" : (rec.resultType==="runnerup" ? "var(--text)" : "var(--crimson)");
+  const rowsHTML = list.length ? list.map(rec=>`
+    <div class="history-item angle-sm">
+      <div class="history-top">
+        <span class="history-team">${rec.teamName || "—"}</span>
+        <span class="history-date mono">${new Date(rec.date).toLocaleDateString()}</span>
+      </div>
+      <div class="history-result" style="color:${resultColor(rec)};">${resultLabel(rec)}</div>
+      <div class="history-meta mono">${t("shareCampaignLabel")}: ${rec.record} · ${t("shareOverallLabel")}: ${rec.overall}${rec.mvpName ? " · MVP: "+rec.mvpName : ""}</div>
+    </div>
+  `).join("") : `<p class="lead" style="text-align:center;">${t("historyEmpty")}</p>`;
+  return `
+  <div class="panel angle">
+    <h1 class="hero" style="font-size:22px;">${t("historyTitle")}</h1>
+    <div class="history-list">${rowsHTML}</div>
+    <div class="btn-row" style="margin-top:14px;">
+      <button class="btn" id="history-back-btn">${t("rulesBackBtn")}</button>
+    </div>
+  </div>
+  `;
+}
+
+function teamSelectHTML(){
+  const optionsHTML = TEAM_NAMES.map(tm=>`
+    <button class="team-option angle-sm ${state.teamName===tm.name?'selected':''}" data-team="${tm.name}">${tm.name}</button>
+  `).join("");
+  return `
+  <div class="panel angle">
+    <h1 class="hero" style="font-size:24px;">${t("teamSelectTitle")}</h1>
+    <p class="lead">${t("teamSelectLead")}</p>
+    <div class="team-grid">${optionsHTML}</div>
+    <div class="btn-row">
+      <button class="btn" id="team-continue-btn" ${state.teamName?'':'disabled'}>${t("teamSelectContinue")}</button>
+    </div>
+  </div>
+  `;
+}
+
+function coachSelectHTML(){
+  const optionsHTML = state.coachOptions.map(name=>`
+    <button class="coach-option angle-sm ${state.headCoach===name?'selected':''}" data-coach="${name}">
+      <div class="coach-name">${name} ${countryFlag(COACH_COUNTRY[name.toLowerCase()])}</div>
+    </button>
+  `).join("");
+  return `
+  <div class="panel angle">
+    <h1 class="hero" style="font-size:24px;">${t("coachSelectTitle")}</h1>
+    <p class="lead">${t("coachSelectLead")}</p>
+    <div class="coach-grid">${optionsHTML}</div>
+    <div class="btn-row">
+      <button class="btn" id="coach-continue-btn" ${state.headCoach?'':'disabled'}>${t("coachSelectContinue")}</button>
+    </div>
+  </div>
+  `;
+}
+
+function draftHTML(){
+  const filled = state.roster.filter(Boolean).length;
+  const slotsHTML = SLOT_ORDER.map((roleKey,i)=>{
+    const p = state.roster[i];
+    if(p){
+      return `<div class="slot filled"><div class="slot-name">${p.name} ${countryFlag(PLAYER_COUNTRY[p.name.toLowerCase()])}</div><div class="slot-role">${roleLabel(roleKey)}</div></div>`;
+    }
+    return `<div class="slot">${roleLabel(roleKey)}</div>`;
+  }).join("");
+
+  let candidateHTML = "";
+  if(filled>=5){
+    candidateHTML = `
+    <div class="panel angle" style="text-align:center;">
+      <p class="lead" style="margin-bottom:14px;">${t("rosterComplete")} <span class="mono" style="color:var(--gold)">${teamOverall(state.roster)}</span></p>
+      <button class="btn" id="to-match-btn">${t("toMatchBtn")}</button>
+    </div>`;
+  } else if(state.pendingSlotChoice && state.currentCandidate){
+    const c = state.currentCandidate;
+    const ov = overall(c);
+    const tagChipsHTML = (c.tags && c.tags.length) ? `
+      <div class="tag-chips">${c.tags.map(tag=>`<span class="tag-chip">${tagLabel(tag)}</span>`).join("")}</div>
+    ` : "";
+    const statsBlock = state.difficulty==="classico" ? `
+      <div class="overall-badge">${ov}</div>
+      ${tagChipsHTML}
+    ` : `<div class="hidden-stats">${t("hiddenStats")}</div>`;
+    const openSlots = SLOT_ORDER.map((roleKey,i)=>({roleKey,i})).filter(s=>!state.roster[s.i] && c.roles.includes(s.roleKey));
+
+    candidateHTML = `
+    <div class="candidate angle">
+      <div class="cand-name">${c.name} ${countryFlag(PLAYER_COUNTRY[c.name.toLowerCase()])}</div>
+      <div class="cand-meta">${c.roles.map(r=>`<span class="role-pill">${roleLabel(r)}</span>`).join(" ")}</div>
+      ${statsBlock}
+      <p class="lead" style="margin:10px 0;">${t("chooseSlotPrompt")(c.name)}</p>
+      <div class="btn-row" style="justify-content:center;flex-wrap:wrap;">
+        ${openSlots.map(s=>`<button class="btn secondary" data-slotidx="${s.i}">${roleLabel(s.roleKey)}</button>`).join("")}
+      </div>
+    </div>`;
+  } else if(state.confirmingCandidate){
+    const c = state.confirmingCandidate;
+    const ov = overall(c);
+    const tagChipsHTML = (c.tags && c.tags.length) ? `
+      <div class="tag-chips">${c.tags.map(tag=>`<span class="tag-chip">${tagLabel(tag)}</span>`).join("")}</div>
+    ` : "";
+    const synergyWith = state.difficulty==="classico" ? teammateSynergyNote(c) : null;
+    const synergyBlock = synergyWith ? `<div class="cr-synergy" style="justify-content:center;margin:8px 0;">🤝 ${t("alreadyPlayedWith")}</div>` : "";
+    const statsBlock = state.difficulty==="classico" ? `
+      <div class="overall-badge">${ov}</div>
+      ${tagChipsHTML}
+      ${synergyBlock}
+    ` : `<div class="hidden-stats">${t("hiddenStats")}</div>`;
+
+    candidateHTML = `
+    <div class="candidate angle ${synergyWith ? 'synergy-highlight' : ''}">
+      <div class="cand-name">${c.name} ${countryFlag(PLAYER_COUNTRY[c.name.toLowerCase()])}</div>
+      <div class="cand-meta">${c.roles.map(r=>`<span class="role-pill">${roleLabel(r)}</span>`).join(" ")}</div>
+      ${statsBlock}
+      <p class="lead" style="margin:10px 0;">${t("confirmDraftPrompt")(c.name)}</p>
+      <div class="btn-row" style="justify-content:center;">
+        <button class="btn" id="confirm-draft-btn">${t("confirmBtn")}</button>
+        <button class="btn secondary" id="back-to-list-btn">${t("backBtn")}</button>
+      </div>
+    </div>`;
+  } else if(state.currentCandidates.length>0){
+    const skipsLeft = 2 - state.skipsUsed;
+    const rowsHTML = state.currentCandidates.map(c=>{
+      const synergyWith = state.difficulty==="classico" ? teammateSynergyNote(c) : null;
+      return `
+      <button class="candidate-row angle-sm ${synergyWith ? 'synergy-highlight' : ''}" data-pick="${c.name}">
+        <div class="cr-info">
+          <div class="cr-name">${c.name} ${countryFlag(PLAYER_COUNTRY[c.name.toLowerCase()])}</div>
+          <div class="cr-roles">${c.roles.map(r=>roleLabel(r)).join(" · ")}</div>
+          ${state.difficulty==="classico" && c.tags && c.tags.length ? `<div class="cr-tags">${c.tags.map(tag=>`<span class="cr-tag">${tagLabel(tag)}</span>`).join("")}</div>` : ''}
+          ${synergyWith ? `<div class="cr-synergy">🤝 ${t("alreadyPlayedWith")}</div>` : ''}
+        </div>
+        ${state.difficulty==="classico" ? `<div class="cr-ovr mono">${overall(c)}</div>` : `<div class="cr-ovr mono">?</div>`}
+      </button>
+    `;
+    }).join("");
+    candidateHTML = `
+    <div class="panel angle">
+      <p class="lead" style="margin-bottom:12px;text-align:center;">${t("pickOneLead")}</p>
+      <div class="candidate-list">${rowsHTML}</div>
+      <p class="lead" style="margin:12px 0 6px;text-align:center;">${t("skipsLeftLabel")(Math.max(0,skipsLeft))}</p>
+      <div class="btn-row" style="justify-content:center;">
+        ${skipsLeft>0 ? `<button class="btn secondary" id="skip-batch-btn">${t("skipBtn")}</button>` : ''}
+      </div>
+    </div>`;
+  } else {
+    candidateHTML = `
+    <div class="panel angle" style="text-align:center;">
+      <p class="lead" style="margin-bottom:16px;">${t("drawLead")}</p>
+      <button class="btn" id="draw-btn" ${state.pool.length===0?'disabled':''}>${t("drawBtn")}</button>
+      ${state.pool.length===0?`<p class="lead" style="margin-top:10px;">${t("poolEmpty")}</p>`:''}
+    </div>`;
+  }
+
+  return `
+  <div class="roster-strip">${slotsHTML}</div>
+  <div class="pool-info"><span>${t("poolLabel")} ${state.pool.length}</span><span>${t("filledLabel")(filled)}</span></div>
+  ${candidateHTML}
+  `;
+}
+
+function matchHTML(){
+  const opp = currentOpponent();
+  const us = teamOverall(state.roster);
+  const roundsHTML = state.roundLog.map(r=>`<div class="r ${r}">${r==='win'?'✓':'·'}</div>`).join("");
+  const bo = state.mapsToWin*2-1;
+  const side = currentSide();
+  const sideLabelHTML = side==="attack"
+    ? `<span style="color:var(--crimson);">${t("sideAttack")}</span>`
+    : `<span style="color:var(--teal);">${t("sideDefense")}</span>`;
+
+  const rosterColHTML = (players, title) => `
+    <div class="roster-col">
+      <div class="roster-col-title">${title}</div>
+      ${players.map(p=>`
+        <div class="roster-player">
+          <span class="pname">${p.name} ${countryFlag(PLAYER_COUNTRY[p.name.toLowerCase()])}</span>
+          <span class="pkda">${p.k}/${p.d}/${p.a}</span>
+        </div>`).join("")}
+    </div>`;
+  const rostersHTML = (state.matchStats.us.length && state.matchStats.them.length) ? `
+    <div class="pool-info" style="justify-content:center;margin-top:14px;"><span class="mono">${t("rostersLabel")}</span></div>
+    <div class="roster-compare">
+      ${rosterColHTML(state.matchStats.us, state.teamName)}
+      ${rosterColHTML(state.matchStats.them, opp.name)}
+    </div>` : "";
+
+  const mapFinished = state.matchScore.us===13 || state.matchScore.them===13;
+  let actionHTML = "";
+  if(!mapFinished){
+    actionHTML = `<div class="btn-row" style="justify-content:center;"><button class="btn" id="sim-round-btn">${t("simRoundBtn")}</button> <button class="btn secondary" id="sim-all-btn">${t("simAllBtn")}</button></div>`;
+  } else {
+    const wonMap = state.matchScore.us===13;
+    const prospUs = state.mapsUs + (wonMap?1:0);
+    const prospThem = state.mapsThem + (wonMap?0:1);
+    const matchDecided = prospUs===state.mapsToWin || prospThem===state.mapsToWin;
+    const rec = checkRecords();
+    const buildRecordParts = ()=>{
+      const parts = [];
+      if(matchDecided && rec.seriesBreak){
+        const b = rec.seriesBreak;
+        const key = b.side==="us" ? "recordSeriesUs" : "recordSeriesThem";
+        parts.push(t(key)(b.name, b.kills, rec.prevSeries.kills, rec.prevSeries.holder, "MD"+(rec.bo==="md5"?5:3)));
+      }
+      if(rec.singleMapBreak){
+        const b = rec.singleMapBreak;
+        const key = b.side==="us" ? "recordSingleMapUs" : "recordSingleMapThem";
+        parts.push(t(key)(b.name, b.kills, rec.prevSingleMap.kills, rec.prevSingleMap.holder));
+      }
+      return parts;
+    };
+    if(matchDecided){
+      const wonMatch = prospUs>prospThem;
+      const parts = buildRecordParts();
+      const recordHTML = parts.length ? `<div class="record-banner">${parts.join("<br><br>")}</div>` : "";
+      actionHTML = `
+      <div class="result-banner ${wonMatch?'win':'loss'}">
+        <div class="label">${wonMatch?t("resultWin"):t("resultLoss")}</div>
+      </div>
+      ${recordHTML}
+      <div class="btn-row" style="justify-content:center;">
+        <button class="btn" id="continue-btn">${t("continueBtn")}</button>
+      </div>`;
+    } else {
+      const parts = rec.singleMapBreak ? [(()=>{
+        const b = rec.singleMapBreak;
+        const key = b.side==="us" ? "recordSingleMapUs" : "recordSingleMapThem";
+        return t(key)(b.name, b.kills, rec.prevSingleMap.kills, rec.prevSingleMap.holder);
+      })()] : [];
+      const recordHTML = parts.length ? `<div class="record-banner">${parts.join("<br><br>")}</div>` : "";
+      actionHTML = `
+      <div class="result-banner ${wonMap?'win':'loss'}">
+        <div class="label">${wonMap?t("resultWin"):t("resultLoss")}</div>
+      </div>
+      ${recordHTML}
+      <div class="btn-row" style="justify-content:center;">
+        <button class="btn" id="next-map-btn">${t("nextMapBtn")}</button>
+      </div>`;
+    }
+  }
+
+  return `
+  <div class="pool-info" style="justify-content:center;"><span class="mono">${contextLabel()}</span></div>
+  <div class="pool-info" style="justify-content:center;"><span class="mono">MD${bo} · ${t("mapsScoreLabel")(state.mapsUs, state.mapsThem)} · ${sideLabelHTML}</span></div>
+  <div class="panel angle">
+    <div class="vs-row">
+      <div class="team-block">
+        <div class="team-name">${state.teamName}</div>
+        <div class="team-sub mono">OVR ${us}</div>
+        <div class="team-sub" style="margin-top:2px;">${state.headCoach} ${countryFlag(COACH_COUNTRY[state.headCoach.toLowerCase()])}</div>
+      </div>
+      <div class="vs-x">${t("vs")}</div>
+      <div class="team-block">
+        <div class="team-name">${opp.name}</div>
+        <div class="team-sub mono">OVR ${opp.rating}</div>
+        ${opp.coach ? `<div class="team-sub" style="margin-top:2px;">${opp.coach} ${countryFlag(COACH_COUNTRY[opp.coach.toLowerCase()])}</div>` : ''}
+      </div>
+    </div>
+    <div style="text-align:center;">
+      <div class="score mono">${state.matchScore.us}<span class="sep">–</span>${state.matchScore.them}</div>
+    </div>
+    <div class="round-log">${roundsHTML}</div>
+    ${rostersHTML}
+    ${actionHTML}
+  </div>
+  `;
+}
+
+function endHTML(){
+  const info = state.endInfo || {type:"groups"};
+  let icon = "🗺️", titleColor = "var(--crimson)", title = "", lead = "";
+  if(info.type==="champion"){
+    icon = "🏆"; titleColor = "var(--gold)";
+    title = t("championTitle"); lead = t("championLead");
+  } else if(info.type==="runnerup"){
+    icon = "🥈"; titleColor = "var(--text)";
+    title = t("runnerUpTitle"); lead = t("runnerUpLead");
+  } else if(info.type==="playoffs"){
+    icon = "🗺️";
+    title = t("playoffsEliminatedTitle"); lead = t("playoffsEliminatedLead")(bracketLabel(info.stageLabelKey));
+  } else {
+    icon = "🗺️";
+    title = t("groupsEliminatedTitle"); lead = t("groupsEliminatedLead");
+  }
+
+  const mvp = info.type==="champion" ? getMVP() : null;
+  const mvpHTML = mvp ? `
+    <div class="mvp-card angle-sm">
+      <div class="mvp-eyebrow">${t("mvpLabel")}</div>
+      <div class="mvp-name">${mvp.name} ${countryFlag(PLAYER_COUNTRY[mvp.name.toLowerCase()])}</div>
+      <div class="mvp-role">${roleLabel(mvp.role)}</div>
+      <div class="mvp-kda">${mvp.k}/${mvp.d}/${mvp.a}</div>
+    </div>` : "";
+
+  const journeyHTML = state.journey.length ? `
+    <div class="pool-info" style="justify-content:center;margin-top:6px;"><span class="mono">${t("journeyLabel")}</span></div>
+    <div class="journey-table">
+      ${state.journey.map(j=>`
+        <div class="journey-row">
+          <div class="jr-stage">${j.stageLabel}</div>
+          <div class="jr-opp">${j.opponent}</div>
+          <div class="jr-score">${j.score}</div>
+          <div class="jr-result ${j.result==='W'?'win':'loss'}">${j.result}</div>
+        </div>`).join("")}
+    </div>` : "";
+
+  return `
+    <div class="panel angle trophy-wrap">
+      <div class="trophy-icon">${icon}</div>
+      <div class="trophy-title" style="color:${titleColor};">${title}</div>
+      <p class="lead">${lead}</p>
+      ${state.headCoach ? `<div class="pool-info" style="justify-content:center;"><span class="mono">${t("headCoachLabel")}: ${state.headCoach} ${countryFlag(COACH_COUNTRY[state.headCoach.toLowerCase()])}</span></div>` : ''}
+      ${mvpHTML}
+      ${journeyHTML}
+      <div class="final-roster">
+        ${state.roster.map((p,i)=>`<div class="fr-item"><div><div class="n">${p.name} ${countryFlag(PLAYER_COUNTRY[p.name.toLowerCase()])}${mvp && mvp.name===p.name ? '<span class="mvp-tag">MVP</span>' : ''}</div><div class="r">${roleLabel(SLOT_ORDER[i])}</div></div><div class="o mono">${overall(p)}</div></div>`).join("")}
+      </div>
+      <button class="btn" id="restart-btn">${info.type==="champion"?t("playAgain"):t("tryAgain")}</button>
+      <div class="share-row">
+        <button class="share-btn" id="share-x-btn">
+          <svg width="15" height="15" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M6 6 L26 26 M26 6 L6 26" stroke="currentColor" stroke-width="4.5" stroke-linecap="square"/>
+          </svg>
+          ${t("shareXBtn")}
+        </button>
+        <button class="share-btn" id="share-whatsapp-btn">
+          <svg width="16" height="16" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M16 4C9.4 4 4 9.4 4 16c0 2.2.6 4.3 1.7 6.2L4 28l5.9-1.6c1.8.9 3.9 1.5 6.1 1.5 6.6 0 12-5.4 12-12S22.6 4 16 4z" stroke="currentColor" stroke-width="2" fill="none"/>
+            <path d="M11 15c1 4 4 7 8 8 1 .3 2-.5 1.5-1.5l-1-1.7c-.3-.5-.9-.7-1.4-.4l-1 .5c-1.5-1-2.8-2.3-3.5-3.8l.5-1c.3-.5.1-1.1-.4-1.4L12 12.5c-1-.5-1.8.4-1.5 1.5z" fill="currentColor"/>
+          </svg>
+          ${t("shareWhatsBtn")}
+        </button>
+      </div>
+    </div>`;
+}
+
+/* ---------------- HANDLERS ---------------- */
+function attachHandlers(){
+  document.querySelectorAll(".lang-btn").forEach(el=>{
+    el.onclick = ()=>{ state.lang = el.dataset.lang; render(); };
+  });
+  document.querySelectorAll(".diff-card").forEach(el=>{
+    el.onclick = ()=>{ state.difficulty = el.dataset.diff; render(); };
+  });
+  const startBtn = document.getElementById("start-btn");
+  if(startBtn) startBtn.onclick = ()=>{
+    state.screen = "teamselect";
+    render();
+  };
+  const rulesBtn = document.getElementById("rules-btn");
+  if(rulesBtn) rulesBtn.onclick = ()=>{
+    state.screen = "rules";
+    render();
+  };
+  const rulesBackBtn = document.getElementById("rules-back-btn");
+  if(rulesBackBtn) rulesBackBtn.onclick = ()=>{
+    state.screen = "intro";
+    render();
+  };
+  const historyBtn = document.getElementById("history-btn");
+  if(historyBtn) historyBtn.onclick = async ()=>{
+    state.campaignHistoryList = await loadCampaignHistory();
+    state.screen = "history";
+    render();
+  };
+  const historyBackBtn = document.getElementById("history-back-btn");
+  if(historyBackBtn) historyBackBtn.onclick = ()=>{
+    state.screen = "intro";
+    render();
+  };
+
+  document.querySelectorAll(".team-option").forEach(el=>{
+    el.onclick = ()=>{ state.teamName = el.dataset.team; render(); };
+  });
+  const teamContinueBtn = document.getElementById("team-continue-btn");
+  if(teamContinueBtn) teamContinueBtn.onclick = ()=>{
+    state.coachOptions = shuffle(COACHES).slice(0,4);
+    state.headCoach = null;
+    state.screen = "coachselect";
+    render();
+  };
+
+  document.querySelectorAll(".coach-option").forEach(el=>{
+    el.onclick = ()=>{ state.headCoach = el.dataset.coach; render(); };
+  });
+  const coachContinueBtn = document.getElementById("coach-continue-btn");
+  if(coachContinueBtn) coachContinueBtn.onclick = ()=>{
+    state.remainingCoaches = shuffle(COACHES.filter(c=>c!==state.headCoach));
+    state.pool = weightedDrawOrder(POOL);
+    state.roster = SLOT_ORDER.map(()=>null);
+    state.currentCandidate = null;
+    state.currentCandidates = [];
+    state.confirmingCandidate = null;
+    state.pendingSlotChoice = false;
+    state.skipsUsed = 0;
+    state.screen = "draft";
+    render();
+  };
+
+  const drawBtn = document.getElementById("draw-btn");
+  if(drawBtn) drawBtn.onclick = ()=>{
+    // sorteio inteligente: só entram candidatos com pelo menos 1 vaga aberta compatível;
+    // quem não tem vaga nenhuma disponível é descartado do pool sem aparecer.
+    const batch = [];
+    while(batch.length<5 && state.pool.length>0){
+      const c = state.pool.pop();
+      const hasOpenSlot = SLOT_ORDER.some((roleKey,i)=>!state.roster[i] && c.roles.includes(roleKey));
+      if(hasOpenSlot) batch.push(c);
+    }
+    state.currentCandidates = batch;
+    render();
+  };
+  document.querySelectorAll("[data-pick]").forEach(el=>{
+    el.onclick = ()=>{
+      const name = el.dataset.pick;
+      const c = state.currentCandidates.find(p=>p.name===name);
+      state.confirmingCandidate = c;
+      render();
+    };
+  });
+  const confirmDraftBtn = document.getElementById("confirm-draft-btn");
+  if(confirmDraftBtn) confirmDraftBtn.onclick = ()=>{
+    const c = state.confirmingCandidate;
+    state.confirmingCandidate = null;
+    state.currentCandidates = [];
+    const openSlots = SLOT_ORDER.map((roleKey,i)=>i).filter(i=>!state.roster[i] && c.roles.includes(SLOT_ORDER[i]));
+    if(openSlots.length===1){
+      state.roster[openSlots[0]] = c;
+      state.currentCandidate = null;
+    } else {
+      state.currentCandidate = c;
+      state.pendingSlotChoice = true;
+    }
+    render();
+  };
+  const backToListBtn = document.getElementById("back-to-list-btn");
+  if(backToListBtn) backToListBtn.onclick = ()=>{
+    state.confirmingCandidate = null;
+    render();
+  };
+  document.querySelectorAll("[data-slotidx]").forEach(el=>{
+    el.onclick = ()=>{
+      const idx = parseInt(el.dataset.slotidx, 10);
+      state.roster[idx] = state.currentCandidate;
+      state.currentCandidate = null;
+      state.pendingSlotChoice = false;
+      render();
+    };
+  });
+  const skipBatchBtn = document.getElementById("skip-batch-btn");
+  if(skipBatchBtn) skipBatchBtn.onclick = ()=>{
+    state.skipsUsed++;
+    state.currentCandidates = [];
+    render();
+  };
+  const toMatchBtn = document.getElementById("to-match-btn");
+  if(toMatchBtn) toMatchBtn.onclick = ()=>{
+    setupTournament();
+    state.screen = "match";
+    render();
+  };
+
+  const simRoundBtn = document.getElementById("sim-round-btn");
+  if(simRoundBtn) simRoundBtn.onclick = ()=>{ simulateRound(); render(); };
+  const simAllBtn = document.getElementById("sim-all-btn");
+  if(simAllBtn) simAllBtn.onclick = ()=>{
+    while(state.matchScore.us<13 && state.matchScore.them<13){ simulateRound(); }
+    render();
+  };
+  const nextMapBtn = document.getElementById("next-map-btn");
+  if(nextMapBtn) nextMapBtn.onclick = ()=>{ finalizeMap(); startNextMap(); render(); };
+  const continueBtn = document.getElementById("continue-btn");
+  if(continueBtn) continueBtn.onclick = ()=>{ finalizeMap(); handleContinue(); render(); };
+
+  const restartBtn = document.getElementById("restart-btn");
+  if(restartBtn) restartBtn.onclick = ()=>{
+    resetToIntro();
+    render();
+  };
+  const brandHomeBtn = document.getElementById("brand-home-btn");
+  if(brandHomeBtn) brandHomeBtn.onclick = ()=>{
+    resetToIntro();
+    render();
+  };
+  const shareXBtn = document.getElementById("share-x-btn");
+  if(shareXBtn) shareXBtn.onclick = ()=>{
+    const text = buildShareText();
+    window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`, "_blank", "noopener");
+  };
+  const shareWhatsBtn = document.getElementById("share-whatsapp-btn");
+  if(shareWhatsBtn) shareWhatsBtn.onclick = ()=>{
+    const text = buildShareText();
+    window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, "_blank", "noopener");
+  };
+}
+
+function handleContinue(){
+  const tr = state.tournament;
+  const won = state.mapsUs === state.mapsToWin;
+
+  if(tr.stage==="groups"){
+    const brk = tr.groupBracket;
+    const pending = brk.pending;
+    const oppTeam = pending.teamA.isPlayer ? pending.teamB : pending.teamA;
+    state.journey.push({
+      stageLabel: `${t("groupStageTag")} · ${t("groupWord")} A · ${bracketLabel(pending.def.labelKey)}`,
+      opponent: oppTeam.name,
+      result: won ? "W" : "L",
+      score: `${state.mapsUs}-${state.mapsThem}`,
+    });
+    const winner = won ? tr.playerTeam : oppTeam;
+    const loser = won ? oppTeam : tr.playerTeam;
+    brk.matches[pending.def.id] = {winner, loser};
+    brk.pointerIdx++;
+
+    const qualified = won && GROUP_QUALIFY_IDS.includes(pending.def.id);
+    const eliminated = !won && GROUP_ELIM_IDS.includes(pending.def.id);
+    if(qualified || eliminated){
+      finishGroupBracketAI(); // resolve o que sobrou do grupo (só IA) pra fechar os classificados
+      if(qualified){
+        const top2 = [
+          {...brk.matches.m3.winner, isGroupWinner:true},
+          {...brk.matches.m5.winner, isGroupWinner:false},
+        ];
+        const qualifiers = [...top2, ...tr.otherGroupsTop2.B, ...tr.otherGroupsTop2.C, ...tr.otherGroupsTop2.D];
+        buildPlayoffBracket(qualifiers);
+        advanceTournament();
+      } else {
+        state.endInfo = {type:"groups"};
+        finalizeCampaign();
+      }
+      return;
+    }
+    // ainda não decidido (1ª rodada) — segue pro próximo confronto do jogador no grupo
+    advanceGroupBracket();
+    return;
+  }
+
+  if(tr.stage==="playoffs"){
+    const brk = tr.bracket;
+    const pending = brk.pending;
+    const oppTeam = pending.teamA.isPlayer ? pending.teamB : pending.teamA;
+    state.journey.push({
+      stageLabel: bracketLabel(pending.def.labelKey),
+      opponent: oppTeam.name,
+      result: won ? "W" : "L",
+      score: `${state.mapsUs}-${state.mapsThem}`,
+    });
+    const winner = won ? tr.playerTeam : oppTeam;
+    const loser = won ? oppTeam : tr.playerTeam;
+    brk.matches[pending.def.id] = {winner, loser};
+    brk.pointerIdx++;
+
+    if(won){
+      advanceTournament();
+      return;
+    }
+    // jogador perdeu
+    if(pending.def.id === "m14"){
+      state.endInfo = {type:"runnerup"};
+      finalizeCampaign();
+      return;
+    }
+    if(LB_KEYS.includes(pending.def.labelKey)){
+      state.endInfo = {type:"playoffs", stageLabelKey: pending.def.labelKey};
+      finalizeCampaign();
+      return;
+    }
+    // derrota no upper bracket: cai para o lower, torneio continua
+    advanceTournament();
+  }
+}
+
+// Inicia uma partida nova (MD3 = mapsToWin 2, MD5 = mapsToWin 3).
+function startMatch(mapsToWin){
+  state.mapsToWin = mapsToWin;
+  state.mapsUs = 0;
+  state.mapsThem = 0;
+  state.mapHistory = [];
+  state.matchScore = {us:0, them:0};
+  state.roundLog = [];
+  initMatchStats();
+  initSeriesStats();
+}
+// Começa o próximo mapa da mesma partida (mantém o placar de mapas e o total de abates da série).
+function startNextMap(){
+  state.matchScore = {us:0, them:0};
+  state.roundLog = [];
+  initMatchStats();
+}
+// Registra o resultado do mapa atual no placar da partida e acumula os abates na série e na campanha.
+function finalizeMap(){
+  const wonMap = state.matchScore.us===13;
+  state.mapHistory.push({us:state.matchScore.us, them:state.matchScore.them});
+  if(wonMap) state.mapsUs++; else state.mapsThem++;
+  state.matchStats.us.forEach((p,i)=>{ if(state.seriesStats.us[i]) state.seriesStats.us[i].k += p.k; });
+  state.matchStats.them.forEach((p,i)=>{ if(state.seriesStats.them[i]) state.seriesStats.them[i].k += p.k; });
+  if(state.campaignStats){
+    state.matchStats.us.forEach((p,i)=>{
+      const cs = state.campaignStats.us[i];
+      if(cs){ cs.k += p.k; cs.d += p.d; cs.a += p.a; }
+    });
+  }
+  // recorde de mapa único da campanha (vale pro seu time E pro adversário)
+  const cr = state.campaignRecords;
+  [...state.matchStats.us, ...state.matchStats.them].forEach(p=>{
+    if(p.k > cr.singleMap.kills) cr.singleMap = {kills:p.k, holder:p.name};
+  });
+  // recorde de série (MD3/MD5) da campanha — soma o que já tinha na série + este mapa
+  const seriesKey = state.mapsToWin===3 ? "md5" : "md3";
+  state.matchStats.us.forEach((p,i)=>{
+    const total = (state.seriesStats.us[i] ? state.seriesStats.us[i].k : 0);
+    if(total > cr[seriesKey].kills) cr[seriesKey] = {kills:total, holder:p.name};
+  });
+  state.matchStats.them.forEach((p,i)=>{
+    const total = (state.seriesStats.them[i] ? state.seriesStats.them[i].k : 0);
+    if(total > cr[seriesKey].kills) cr[seriesKey] = {kills:total, holder:p.name};
+  });
+}
+
+// Melhor jogador da campanha (MVP), baseado numa nota simples de desempenho acumulado.
+function getMVP(){
+  if(!state.campaignStats || !state.campaignStats.us.length) return null;
+  return state.campaignStats.us.reduce((best, p)=>{
+    const score = p.k + p.a*0.5 - p.d*0.3;
+    const bestScore = best ? (best.k + best.a*0.5 - best.d*0.3) : -Infinity;
+    return score > bestScore ? p : best;
+  }, null);
+}
+
+// Monta o texto de compartilhamento (X / WhatsApp) com o resumo da campanha.
+// Marca a campanha como encerrada e salva um registro dela no histórico (armazenamento pessoal).
+function finalizeCampaign(){
+  state.screen = "end";
+  saveCampaignRecord();
+}
+async function saveCampaignRecord(){
+  try{
+    const info = state.endInfo || {type:"groups"};
+    const wins = state.journey.filter(j=>j.result==="W").length;
+    const losses = state.journey.filter(j=>j.result==="L").length;
+    const mvp = info.type==="champion" ? getMVP() : null;
+    const record = {
+      date: new Date().toISOString(),
+      resultType: info.type,
+      stageLabelKey: info.stageLabelKey || null,
+      teamName: state.teamName,
+      headCoach: state.headCoach,
+      difficulty: state.difficulty,
+      overall: teamOverall(state.roster),
+      record: `${wins}V-${losses}D`,
+      roster: state.roster.map((p,i)=>({name:p.name, role:SLOT_ORDER[i]})),
+      mvpName: mvp ? mvp.name : null,
+    };
+    const listRes = await window.storage.get("campaign_history", false).catch(()=>null);
+    const list = listRes ? JSON.parse(listRes.value) : [];
+    list.unshift(record);
+    if(list.length>50) list.length = 50; // guarda só as 50 mais recentes
+    await window.storage.set("campaign_history", JSON.stringify(list), false);
+  } catch(e){ /* armazenamento indisponível — segue o jogo normalmente */ }
+}
+async function loadCampaignHistory(){
+  try{
+    const res = await window.storage.get("campaign_history", false);
+    return res ? JSON.parse(res.value) : [];
+  } catch(e){ return []; }
+}
+
+function buildShareText(){
+  const info = state.endInfo || {type:"groups"};
+  let headline;
+  if(info.type==="champion") headline = t("shareHeadlineChampion");
+  else if(info.type==="runnerup") headline = t("shareHeadlineRunnerup");
+  else if(info.type==="playoffs") headline = t("shareHeadlinePlayoffs")(bracketLabel(info.stageLabelKey));
+  else headline = t("shareHeadlineGroups");
+
+  const modeLabel = state.difficulty==="classico" ? t("diffClassicoTitle") : t("diffSelvaTitle");
+  const wins = state.journey.filter(j=>j.result==="W").length;
+  const losses = state.journey.filter(j=>j.result==="L").length;
+  let mapsWon=0, mapsLost=0;
+  state.journey.forEach(j=>{
+    const parts = j.score.split("-").map(Number);
+    mapsWon += parts[0]||0; mapsLost += parts[1]||0;
+  });
+  const mvp = info.type==="champion" ? getMVP() : null;
+
+  const lines = [headline, ""];
+  lines.push(`${t("shareModeLabel")}: ${modeLabel}`);
+  lines.push(`${t("shareCampaignLabel")}: ${wins}V - ${losses}D`);
+  lines.push(`${t("shareMapsLabel")}: ${mapsWon}-${mapsLost}`);
+  lines.push(`${t("shareOverallLabel")}: ${teamOverall(state.roster)}`);
+  if(mvp) lines.push(`${t("shareMvpLabel")}: ${mvp.name}`);
+  SLOT_ORDER.forEach((roleKey,i)=>{
+    const p = state.roster[i];
+    if(p) lines.push(`${t("shareTeamMemberLabel")(roleLabel(roleKey))}: ${p.name}`);
+  });
+  if(state.headCoach) lines.push(`${t("shareCoachLabel")}: ${state.headCoach}`);
+  lines.push("");
+  lines.push(t("shareCta"));
+  try{
+    const href = window.location.href;
+    if(/^https?:\/\//.test(href)) lines.push(href);
+  }catch(e){}
+  return lines.join("\n");
+}
+
+function initSeriesStats(){
+  state.seriesStats = {
+    us: state.matchStats.us.map(p=>({name:p.name, k:0})),
+    them: state.matchStats.them.map(p=>({name:p.name, k:0})),
+  };
+}
+
+// Verifica (sem alterar o estado) se a partida atual — incluindo o mapa em andamento —
+// já superou o recorde "a bater" desta partida (que pode já ter sido elevado nesta mesma
+// partida por um mapa anterior). Usado para exibir o aviso na tela de resultado.
+// Verifica (sem alterar o estado) se o mapa/série atual — incluindo o que está rolando agora —
+// já superou o recorde "a bater" da CAMPANHA (que pode já ter sido elevado por qualquer um dos
+// dois lados, em qualquer partida anterior desta campanha). Usado para exibir o aviso na tela.
+function checkRecords(){
+  const bo = state.mapsToWin===3 ? "md5" : "md3";
+  const cr = state.campaignRecords;
+
+  function bestBreak(usArr, themArr, currentRecord){
+    let best = null;
+    function consider(p, side){
+      if(p.kills > currentRecord.kills && (!best || p.kills>best.kills)){
+        best = {side, name:p.name, kills:p.kills};
+      }
+    }
+    usArr.forEach(x=>consider(x,"us"));
+    themArr.forEach(x=>consider(x,"them"));
+    return best;
+  }
+
+  const singleMapUs = state.matchStats.us.map(p=>({name:p.name, kills:p.k}));
+  const singleMapThem = state.matchStats.them.map(p=>({name:p.name, kills:p.k}));
+  const singleMapBreak = bestBreak(singleMapUs, singleMapThem, cr.singleMap);
+
+  const seriesUs = state.matchStats.us.map((p,i)=>({name:p.name, kills:(state.seriesStats.us[i]?state.seriesStats.us[i].k:0)+p.k}));
+  const seriesThem = state.matchStats.them.map((p,i)=>({name:p.name, kills:(state.seriesStats.them[i]?state.seriesStats.them[i].k:0)+p.k}));
+  const seriesBreak = bestBreak(seriesUs, seriesThem, cr[bo]);
+
+  return {singleMapBreak, seriesBreak, bo, prevSingleMap:cr.singleMap, prevSeries:cr[bo]};
+}
+
+function initMatchStats(){
+  const opp = currentOpponent();
+  const sideStats = rosterArr => rosterArr.map(p=>({name:p.name, roles:p.roles||[], tags:p.tags||[], overall:p.overall||75, k:0, d:0, a:0}));
+  state.matchStats = {
+    us: sideStats(state.roster),
+    them: sideStats(opp && opp.roster ? opp.roster : []),
+  };
+}
+
+function weightedPick(weights){
+  const total = weights.reduce((s,w)=>s+Math.max(1,w),0);
+  let r = Math.random()*total;
+  for(let i=0;i<weights.length;i++){
+    r -= Math.max(1,weights[i]);
+    if(r<=0) return i;
+  }
+  return weights.length-1;
+}
+function sampleDistinct(n, k){
+  const idx = Array.from({length:n}, (_,i)=>i);
+  const out = [];
+  const count = Math.min(k, n);
+  for(let i=0;i<count;i++){
+    const j = Math.floor(Math.random()*idx.length);
+    out.push(idx.splice(j,1)[0]);
+  }
+  return out;
+}
+// Peso de abate: craques com a tag "mm" (Mira Monstra) e overall 95+ têm chance ampliada de
+// puxar os kills da rodada (mais forte em duelistas), abrindo caminho — nem sempre, só nas
+// partidas monstruosas — para baterem os recordes reais de abates. Entry/Operator dão um empurrão menor.
+// Elegível pra sistema de recorde: é Duelista OU tem Mira Monstra OU tem Clutch (qualquer um dos
+// três já basta, não precisa ser tudo junto). Precisa também ter overall alto — senão fica fácil demais.
+function isRecordCandidate(p){
+  if((p.overall||0) < 89) return false;
+  const roles = p.roles||[];
+  const tags = p.tags||[];
+  return roles.includes("duelist") || tags.includes("mm") || tags.includes("clutch");
+}
+function killWeight(p){
+  let w = 10; // piso: todo mundo tem chance real de abater, mesmo sem destaque nenhum
+  w += (p.overall - 75) * 0.3;
+  const tags = p.tags||[];
+  if(tags.includes("entry")) w += 1.5;
+  if(tags.includes("operator")) w += 1;
+  if(tags.includes("clutch")) w += 1.2;
+  if(isRecordCandidate(p)) w += ((p.roles||[]).includes("duelist") ? 5.5 : 3.2);
+  return w;
+}
+// Peso de assistência: craques com utilidade/IGL/lurker tendem a puxar mais assistências.
+function assistWeight(p){
+  let w = 10;
+  w += (p.overall - 75) * 0.3;
+  const tags = p.tags||[];
+  if(tags.includes("utility")) w += 1.5;
+  if(tags.includes("igl")) w += 1;
+  if(tags.includes("lurker")) w += 0.8;
+  return w;
+}
+function updateMatchStats(weWin){
+  const winSide = weWin ? state.matchStats.us : state.matchStats.them;
+  const loseSide = weWin ? state.matchStats.them : state.matchStats.us;
+  if(!winSide.length || !loseSide.length) return;
+  const killCount = 3 + Math.floor(Math.random()*3); // 3 a 5 baixas na rodada
+  const diedIdx = sampleDistinct(loseSide.length, killCount);
+
+  // rodada de ACE: craques com Mira Monstra (95+) ou Duelistas com Clutch (93+) têm uma chance
+  // bem rara de fechar a rodada sozinhos — é o que permite (raramente) alcançar recordes como o
+  // de 47 abates num mapa único, que exigem dominância extrema em várias rodadas.
+  const aceCandidates = winSide.filter(isRecordCandidate);
+  if(aceCandidates.length && Math.random()<0.22){
+    const acePlayer = aceCandidates[Math.floor(Math.random()*aceCandidates.length)];
+    diedIdx.forEach(idx=>{ loseSide[idx].d++; });
+    acePlayer.k += killCount;
+  } else {
+    diedIdx.forEach(idx=>{
+      loseSide[idx].d++;
+      const killerIdx = weightedPick(winSide.map(killWeight));
+      winSide[killerIdx].k++;
+      if(Math.random()<0.55 && winSide.length>1){
+        let assisterIdx = weightedPick(winSide.map(assistWeight));
+        if(assisterIdx===killerIdx) assisterIdx = (assisterIdx+1)%winSide.length;
+        winSide[assisterIdx].a++;
+      }
+    });
+  }
+  // chance de uma baixa "de troca" do lado perdedor
+  if(Math.random()<0.2){
+    const tradedIdx = weightedPick(loseSide.map(killWeight));
+    loseSide[tradedIdx].k++;
+    const victimIdx = Math.floor(Math.random()*winSide.length);
+    winSide[victimIdx].d++;
+  }
+  // rodada de destaque: craques com Mira Monstra (95+) ou Duelistas com Clutch (93+) têm uma
+  // chance rara de puxar 1 abate extra na rodada.
+  const stars = winSide.filter(isRecordCandidate);
+  if(stars.length && Math.random()<0.09){
+    const idx = winSide.indexOf(stars[Math.floor(Math.random()*stars.length)]);
+    winSide[idx].k++;
+  }
+}
+
+// Lado atual (ataque/defesa) do jogador no mapa em andamento — troca a cada 12 rounds, igual real.
+function currentSide(){
+  const totalRounds = state.matchScore.us + state.matchScore.them;
+  return (Math.floor(totalRounds/12) % 2 === 0) ? "attack" : "defense";
+}
+
+function simulateRound(){
+  const opp = currentOpponent();
+  const ourSide = currentSide();
+  const theirSide = ourSide==="attack" ? "defense" : "attack";
+  const ourComp = compositionBonus(state.roster, true);
+  const theirComp = compositionBonus(opp.roster, false);
+  const ourBuff = coachBuff(state.headCoach) + ourComp[ourSide] + chemistryBonus(state.roster, state.headCoach);
+  const theirBuff = coachBuff(opp.coach) + theirComp[theirSide] + chemistryBonus(opp.roster, opp.coach);
+  const us = teamOverall(state.roster) + ourBuff*BUFF_DAMPING;
+  const oppRating = opp.rating + theirBuff*BUFF_DAMPING;
+  const diff = us - oppRating;
+  const baseProb = 0.5 + diff/130;
+  const prob = Math.min(0.94, Math.max(0.06, baseProb));
+  const weWin = Math.random() < prob;
+  if(weWin){ state.matchScore.us++; state.roundLog.push("win"); }
+  else { state.matchScore.them++; state.roundLog.push("loss"); }
+  updateMatchStats(weWin);
+}
+
+
+
+render();
+</script>
+</body>
+</html>
