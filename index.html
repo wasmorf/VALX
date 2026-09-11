@@ -54,7 +54,6 @@
   .brand-text{display:flex;flex-direction:column;}
   .brand-name{font-family:'Chakra Petch';font-weight:700;font-size:19px;letter-spacing:0.5px;line-height:1;}
   .brand-name span{color:var(--crimson);}
-  .brand-tagline{font-family:'JetBrains Mono';font-size:9px;color:var(--muted);letter-spacing:0.8px;text-transform:uppercase;margin-top:3px;}
   .phase-tag{font-family:'JetBrains Mono';font-size:11px;color:var(--muted);border:1px solid var(--line);padding:5px 10px;border-radius:2px;}
   .topbar-right{display:flex;align-items:center;gap:8px;}
   .lang-switch{display:flex;border:1px solid var(--line);}
@@ -283,6 +282,11 @@
 
   /* ---- country flag (image + graceful text fallback if it fails to load) ---- */
   .flag-img{display:inline-block;vertical-align:middle;border-radius:1px;}
+  .version-badge{
+    position:fixed;bottom:6px;right:8px;
+    font-family:'JetBrains Mono';font-size:9px;color:var(--muted);
+    opacity:0.55;letter-spacing:0.3px;pointer-events:none;z-index:50;
+  }
   .flag-fallback{
     display:none;vertical-align:middle;
     font-family:'JetBrains Mono';font-size:8.5px;font-weight:700;letter-spacing:0.3px;
@@ -309,6 +313,7 @@
 </head>
 <body>
 <div id="app"></div>
+<div class="version-badge">v1.0 · 11/09/2026</div>
 
 <script>
 /* ---------------- DATA ---------------- */
@@ -964,9 +969,8 @@ const I18N = {
     historyLink:"📜 Campanhas anteriores",
     historyTitle:"Suas Campanhas",
     historyEmpty:"Nenhuma campanha salva ainda. Jogue até o fim pra registrar seu resultado aqui.",
-    tagline:"Monte e ganhe",
     hero:"Monte seu Super Time e busque o título mundial.",
-    lead:"Escale seus 5 Pro Players e corra atrás do título Mundial.<br>Cada escolha pesa — a diferença entre um super time e um fracasso é mais fina do que parece.<br>E Overall não conta a história toda.",
+    lead:"Escale seus 5 Pro Players e corra atrás do título Mundial. Cada escolha pesa — a diferença entre um super time e um fracasso é mais fina do que parece. Overall não conta a história toda.",
     diffClassicoTitle:"Modo Clássico",
     diffClassicoDesc:"Atributos visíveis",
     diffSelvaTitle:"Modo Selva",
@@ -1122,7 +1126,6 @@ const I18N = {
     historyLink:"📜 Past campaigns",
     historyTitle:"Your Campaigns",
     historyEmpty:"No saved campaigns yet. Play through to the end to log your result here.",
-    tagline:"Draft & win",
     hero:"Build your Super Team and chase the world title.",
     lead:"Draft your 5 pro players and chase the World Championship.<br>Every pick matters — the line between a super team and a disaster is thinner than it looks.<br>And Overall doesn't tell the whole story.",
     diffClassicoTitle:"Classic Mode",
@@ -1280,7 +1283,6 @@ const I18N = {
     historyLink:"📜 Campañas anteriores",
     historyTitle:"Tus Campañas",
     historyEmpty:"Todavía no hay campañas guardadas. Juega hasta el final para registrar tu resultado aquí.",
-    tagline:"Arma y gana",
     hero:"Arma tu Super Equipo y busca el título mundial.",
     lead:"Arma tus 5 jugadores profesionales y ve tras el título Mundial.<br>Cada elección pesa — la diferencia entre un súper equipo y un fracaso es más fina de lo que parece.<br>Y el Overall no cuenta toda la historia.",
     diffClassicoTitle:"Modo Clásico",
@@ -1765,7 +1767,6 @@ function topbarHTML(){
       </div>
       <div class="brand-text">
         <div class="brand-name">VAL<span>X</span></div>
-        <div class="brand-tagline">${t("tagline")}</div>
       </div>
     </div>
     <div class="topbar-right">
@@ -2467,6 +2468,24 @@ function getMVP(){
 
 // Monta o texto de compartilhamento (X / WhatsApp) com o resumo da campanha.
 // Marca a campanha como encerrada e salva um registro dela no histórico (armazenamento pessoal).
+// Armazenamento com fallback: usa window.storage quando disponível (preview do Claude), e cai
+// pra localStorage quando o site está hospedado de verdade fora daqui (GitHub Pages, etc.) —
+// sem isso, o histórico de campanhas simplesmente não funciona fora do preview do Claude.
+const HAS_ARTIFACT_STORAGE = typeof window!=="undefined" && window.storage && typeof window.storage.get==="function";
+async function storageGetValue(key){
+  if(HAS_ARTIFACT_STORAGE){
+    try{ const res = await window.storage.get(key, false); return res ? res.value : null; }
+    catch(e){ return null; }
+  }
+  try{ return localStorage.getItem(key); }catch(e){ return null; }
+}
+async function storageSetValue(key, value){
+  if(HAS_ARTIFACT_STORAGE){
+    try{ await window.storage.set(key, value, false); return; }catch(e){ /* tenta localStorage abaixo */ }
+  }
+  try{ localStorage.setItem(key, value); }catch(e){ /* armazenamento indisponível — segue o jogo normalmente */ }
+}
+
 function finalizeCampaign(){
   state.screen = "end";
   saveCampaignRecord();
@@ -2489,17 +2508,17 @@ async function saveCampaignRecord(){
       roster: state.roster.map((p,i)=>({name:p.name, role:SLOT_ORDER[i]})),
       mvpName: mvp ? mvp.name : null,
     };
-    const listRes = await window.storage.get("campaign_history", false).catch(()=>null);
-    const list = listRes ? JSON.parse(listRes.value) : [];
+    const raw = await storageGetValue("campaign_history");
+    const list = raw ? JSON.parse(raw) : [];
     list.unshift(record);
     if(list.length>50) list.length = 50; // guarda só as 50 mais recentes
-    await window.storage.set("campaign_history", JSON.stringify(list), false);
+    await storageSetValue("campaign_history", JSON.stringify(list));
   } catch(e){ /* armazenamento indisponível — segue o jogo normalmente */ }
 }
 async function loadCampaignHistory(){
   try{
-    const res = await window.storage.get("campaign_history", false);
-    return res ? JSON.parse(res.value) : [];
+    const raw = await storageGetValue("campaign_history");
+    return raw ? JSON.parse(raw) : [];
   } catch(e){ return []; }
 }
 
