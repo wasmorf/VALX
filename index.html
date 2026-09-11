@@ -165,8 +165,8 @@
 
   /* ---- match screen ---- */
   .vs-row{display:flex;align-items:center;justify-content:space-between;margin:20px 0 10px;}
-  .team-block{flex:1;text-align:center;}
-  .team-name{font-family:'Chakra Petch';font-weight:700;font-size:15px;}
+  .team-block{flex:1;min-width:0;text-align:center;}
+  .team-name{font-family:'Chakra Petch';font-weight:700;font-size:15px;overflow-wrap:break-word;word-break:break-word;line-height:1.2;}
   .team-sub{color:var(--muted);font-size:11px;margin-top:2px;}
   .score{font-family:'Chakra Petch';font-size:44px;font-weight:700;letter-spacing:2px;}
   .score .sep{color:var(--muted);font-size:30px;margin:0 10px;}
@@ -185,6 +185,7 @@
   .roster-col-title{
     font-family:'JetBrains Mono';font-size:10px;color:var(--muted);
     text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;text-align:center;
+    overflow-wrap:break-word;word-break:break-word;line-height:1.3;
   }
   .roster-player{
     display:flex;justify-content:space-between;align-items:baseline;gap:4px;
@@ -322,26 +323,26 @@
 // Pool de craques — ratings são estimativas de fã para fins de jogo, não estatísticas oficiais.
 const POOL = [
   {name:"aspas", roles:["duelist"], overall:93, tags:["entry","mm","operator","clutch","campeao_mundial"]},
-  {name:"Boostio", roles:["sentinel"], overall:88, tags:["igl","lurker","campeao_mundial"]},
+  {name:"Boostio", roles:["sentinel"], overall:86, tags:["igl","lurker","campeao_mundial"]},
   {name:"ANGE1", roles:["flex","controller","initiator"], overall:88, tags:["igl","utility","campeao_mundial"]},
   {name:"Shao", roles:["flex","initiator","controller","sentinel"], overall:86, tags:["utility","campeao_mundial"]},
   {name:"FNS", roles:["sentinel"], overall:92, tags:["igl","lurker","campeao_mundial"]},
   {name:"yay", roles:["flex","duelist","sentinel"], overall:93, tags:["operator","mm","clutch","campeao_mundial"]},
-  {name:"Zellsis", roles:["flex","sentinel"], overall:89, tags:["igl","utility","campeao_mundial"]},
+  {name:"Zellsis", roles:["flex","sentinel"], overall:88, tags:["igl","utility","campeao_mundial"]},
   {name:"Cryocells", roles:["flex","sentinel","duelist"], overall:90, tags:["mm","operator","clutch","campeao_mundial"]},
   {name:"Rb", roles:["flex","controller","initiator","duelist"], overall:92, tags:["clutch","utility","campeao_mundial"]},
   {name:"BuZz", roles:["duelist"], overall:92, tags:["operator","entry","mm","clutch","campeao_mundial"]},
   {name:"MaKo", roles:["controller"], overall:91, tags:["utility","clutch","igl"]},
   {name:"Marved", roles:["controller"], overall:93, tags:["utility","clutch","campeao_mundial"]},
-  {name:"zekken", roles:["duelist","flex"], overall:93, tags:["entry","mm","clutch","campeao_mundial"]},
-  {name:"saadhak", roles:["flex","sentinel","initiator","controller"], overall:93, tags:["igl","utility","clutch","campeao_mundial"]},
+  {name:"zekken", roles:["duelist","flex"], overall:93, tags:["entry","mm","clutch","operator","campeao_mundial"]},
+  {name:"saadhak", roles:["flex","sentinel","initiator","controller"], overall:93, tags:["igl","utility","clutch","mm","campeao_mundial"]},
   {name:"xand", roles:["flex","duelist","initiator","sentinel"], overall:82, tags:["utility","igl"]},
   {name:"heat", roles:["flex","duelist","sentinel"], overall:85, tags:["mm","clutch"]},
   {name:"less", roles:["sentinel"], overall:93, tags:["clutch","mm","lurker","campeao_mundial"]},
   {name:"ScreaM", roles:["duelist"], overall:85, tags:["mm","entry","operator"]},
   {name:"johnqt", roles:["flex","sentinel","initiator","controller"], overall:92, tags:["igl","utility","clutch","campeao_mundial"]},
-  {name:"C0M", roles:["initiator"], overall:90, tags:["igl utility","clutch","lurker","campeao_mundial"]},
-  {name:"Demon1", roles:["flex","duelist","controller","sentinel"], overall:91, tags:["clutch","mm","entry","campeao_mundial"]},
+  {name:"C0M", roles:["initiator"], overall:87, tags:["igl utility","clutch","lurker","campeao_mundial"]},
+  {name:"Demon1", roles:["flex","duelist","controller","sentinel"], overall:87, tags:["clutch","mm","entry","campeao_mundial"]},
   {name:"crashies", roles:["initiator"], overall:92, tags:["utility","clutch","campeao_mundial"]},
   {name:"mwzera", roles:["initiator"], overall:86, tags:["utility","mm"]},
   {name:"Derke", roles:["duelist"], overall:93, tags:["entry","mm","operator","clutch","campeao_mundial"]},
@@ -363,7 +364,7 @@ const POOL = [
   {name:"Boaster", roles:["controller"], overall:92, tags:["igl","utility","clutch","campeao_mundial"]},
   {name:"SUYGETSU", roles:["controller","sentinel"], overall:92, tags:["clutch","lurker","campeao_mundial"]},
   {name:"mindfreak", roles:["controller"], overall:92, tags:["utility","clutch"]},
-  {name:"Ethan", roles:["flex","initiator","sentinel","controller"], overall:92, tags:["clutch","utility","igl","campeao_mundial"]},
+  {name:"Ethan", roles:["flex","initiator","sentinel","controller"], overall:93, tags:["clutch","utility","igl","campeao_mundial"]},
   {name:"dgzin", roles:["duelist"], overall:88, tags:["operator","entry","mm","clutch"]},
   {name:"Lakia", roles:["initiator"], overall:88, tags:["utility","campeao_mundial"]},
   {name:"t3xture", roles:["duelist"], overall:92, tags:["operator","mm","clutch","entry","campeao_mundial"]},
@@ -390,7 +391,7 @@ const POOL = [
   {name:"Boo", roles:["controller"], overall:87, tags:["clutch","utility","igl","campeao_mundial"]},
   {name:"bao", roles:["sentinel","controller","flex"], overall:89, tags:["clutch","lurker","mm"]},
   {name:"Rossy", roles:["flex","controller","sentinel","initiator"], overall:85, tags:["clutch","utility"]},
-  {name:"skuba", roles:["sentinel"], overall:92, tags:["clutch","lurker","campeao_mundial"]},
+  {name:"skuba", roles:["sentinel"], overall:93, tags:["clutch","lurker","campeao_mundial"]},
   {name:"Xeppaa", roles:["initiator"], overall:85, tags:["clutch","utility"]},
   {name:"pANcada", roles:["controller"], overall:93, tags:["clutch","mm","utility","campeao_mundial"]},
   {name:"kiNgg", roles:["flex","controller","sentinel","initiator"], overall:92, tags:["clutch","igl","utility","lurker","campeao_mundial"]},
@@ -427,7 +428,7 @@ const POOL = [
   {name:"blowz", roles:["initiator"], overall:93, tags:["utility","clutch","mm","campeao_mundial"]},
   {name:"Virtyy", roles:["duelist"], overall:85, tags:["entry"]},
   {name:"Darker", roles:["controller","sentinel"], overall:87, tags:["clutch","utility"]},
-  {name:"brawk", roles:["initiator"], overall:93, tags:["utility","clutch","campeao_mundial"]},
+  {name:"brawk", roles:["initiator"], overall:93, tags:["utility","clutch","mm","campeao_mundial"]},
   {name:"jakee", roles:["flex","controller"], overall:84, tags:["utility","igl"]},
   {name:"ZmjjKK", roles:["duelist","sentinel"], overall:93, tags:["operator","entry","mm","clutch","campeao_mundial"]},
   {name:"v1c", roles:["controller"], overall:86, tags:["clutch","utility"]},
@@ -539,6 +540,19 @@ const TEAM_NAMES = [
   {name:"LEVIATAN", rating:87},
 ];
 
+// Organização dos times por região — dado guardado pra uso futuro, NÃO está conectado a
+// nenhuma tela ou lógica do jogo ainda (o jogo continua usando só o TEAM_NAMES acima, com
+// as 16 organizações de sempre). Só 6 desses times já existem no TEAM_NAMES hoje; os outros
+// 50 são times novos que ainda não têm elenco nem entram no draft/torneio.
+const TEAM_REGIONS = {
+  "BR": ["LOUD","FURIA","MIBR","2GAME","Team Solid","Red Canids","INTZ","paiN Gaming","FaZe","FLUXO"],
+  "NA": ["Sentinels","OpTic","G2","100 Thieves","NRG","Evil Geniuses","Envy","Cloud9","M80","TSM"],
+  "LAS": ["Leviatán","KRÜ","9z","Shinden","Bestia","All Knights"],
+  "APAC": ["Paper Rex","Gen.G","T1","DRX","RRQ","ZETA DIVISION","GLOBAL Esports","Nongshim RedForce","Full Sense","Team Secret"],
+  "CHN": ["EDward Gaming","FunPlus Phoenix","JD Gaming","TYLOO","Nova Esports","Trace Esports","Bilibili Gaming","Xi Lai Gaming","All Gamers","Wolves Esports"],
+  "EMEA": ["Karmine Corp","Team Liquid","FUT Esports","FNATIC","BBL Esports","Team Vitality","Team Heretics","Natus Vincere","Gentle Mates","GIANTX"],
+};
+
 // Head coaches disponíveis — 1 escolhido pelo jogador, os outros 15 vão pras equipes adversárias.
 const COACHES = ["Nbs","bzkA","Potter","fRoD","mini","Chet","d00mbros","Kaplan","alecks","Romanilly","Stk","Onur","JoshRT","bonkar","shaW","Kamino","SilKanoN","NaThanD","Stunner","KEY","WKN","Ewok","Engh","PatronW"];
 // Buff de cada Head Coach: bônus fixo aplicado ao rating do time em todo cálculo de vitória
@@ -566,7 +580,7 @@ const WC_SELECOES = {
     coaches: ["NaThanD"],
   },
   "Canada": {
-    players: ["TenZ","FNS","Asuna","JonahP","Kyu","Timotino","Vora","eeiu","koalanoob","mada","moose","penny","zander","marved"],
+    players: ["TenZ","FNS","Asuna","JonahP","Kyu","Timotino","Vora","eeiu","koalanoob","mada","moose","zander","marved"],
     coaches: ["Stunner"],
   },
   "Turkey": {
@@ -1233,7 +1247,7 @@ const I18N = {
       {title:"Copa do Mundo", body:`
         <p>Em vez de escolher uma organização, você escolhe uma <strong>Seleção nacional</strong> — o draft só sorteia craques que jogam por aquele país (algumas Seleções são combinadas entre países menores, tipo Finlândia/Suécia). O Head Coach também vem só da lista daquela Seleção.</p>
         <p>O resto funciona igual ao modo normal: fase de grupos, playoffs, tudo — só que as outras 15 "equipes" adversárias também são Seleções, cada uma com o elenco real dela.</p>
-        <p>Duas diferenças de regra específicas da Copa do Mundo: o nerf de "mais de 1 IGL" não vale aqui (afinal, numa seleção de verdade é normal ter mais de um craque com liderança tática). Em compensação, <strong>Seleções combinadas de vários países</strong> (tipo Finlândia/Suécia) levam um nerf leve — o entrosamento de uma seleção de país único é sempre um pouco melhor.</p>
+        <p>Diferença de regra específica da Copa do Mundo: o nerf de "mais de 1 IGL" não vale aqui (afinal, numa seleção de verdade é normal ter mais de um craque com liderança tática).</p>
       `},
     ],
   },
@@ -1399,7 +1413,7 @@ const I18N = {
       {title:"World Cup", body:`
         <p>Instead of picking an organization, you pick a <strong>national team</strong> — the draft only draws pros who play for that country (some national teams are combined from smaller countries, like Finland/Sweden). The Head Coach also comes only from that national team's own list.</p>
         <p>Everything else works like the normal mode: group stage, playoffs, all of it — except the other 15 rival "teams" are national teams too, each with their own real roster.</p>
-        <p>Two World Cup-specific rule differences: the "more than 1 IGL" nerf doesn't apply here (a real national team having more than one tactical leader is normal). In exchange, <strong>combined national teams</strong> (like Finland/Sweden) take a light nerf — a single-country team's chemistry is always a bit stronger.</p>
+        <p>World Cup-specific rule difference: the "more than 1 IGL" nerf doesn't apply here (a real national team having more than one tactical leader is normal).</p>
       `},
     ],
   },
@@ -1565,7 +1579,7 @@ const I18N = {
       {title:"Copa del Mundo", body:`
         <p>En vez de elegir una organización, eliges una <strong>Selección nacional</strong> — el draft solo sortea cracks que juegan por ese país (algunas Selecciones son combinadas entre países más chicos, como Finlandia/Suecia). El Head Coach también viene solo de la lista de esa Selección.</p>
         <p>El resto funciona igual que el modo normal: fase de grupos, playoffs, todo — solo que los otros 15 "equipos" rivales también son Selecciones, cada una con su elenco real.</p>
-        <p>Dos diferencias de regla específicas de la Copa del Mundo: el nerf de "más de 1 IGL" no aplica acá (una selección real con más de un líder táctico es normal). A cambio, <strong>Selecciones combinadas de varios países</strong> (como Finlandia/Suecia) llevan un nerf leve — el entrosamiento de una selección de un solo país siempre es un poco mejor.</p>
+        <p>Diferencia de regla específica de la Copa del Mundo: el nerf de "más de 1 IGL" no aplica acá (una selección real con más de un líder táctico es normal).</p>
       `},
     ],
   }
@@ -2143,7 +2157,8 @@ const WC_SELECAO_NAMES_I18N = {
 // Traduz o nome de uma Seleção pro idioma atual, pra EXIBIR — nomes de organizações do modo
 // normal (LOUD, Sentinels etc.) não estão nesse dicionário, então voltam sem alteração.
 function selecaoLabel(name){
-  return (WC_SELECAO_NAMES_I18N[state.lang] && WC_SELECAO_NAMES_I18N[state.lang][name]) || name;
+  const label = (WC_SELECAO_NAMES_I18N[state.lang] && WC_SELECAO_NAMES_I18N[state.lang][name]) || name;
+  return label.replace(/\//g, "/<wbr>"); // permite quebra de linha depois da barra, sem forçar
 }
 
 const WC_SELECAO_FLAGS = {
@@ -2705,21 +2720,15 @@ function attachHandlers(){
     const text = buildShareText();
     const webUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
     const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent || "");
-    if(!isMobile){
+    // Usa sempre a URL normal do X — se o app estiver instalado, o próprio celular (iOS/Android)
+    // já abre ele automaticamente a partir desse link (Universal Links), sem precisar de nenhum
+    // truque de esquema customizado (tipo "twitter://"), que é frágil e o Safari bloqueia quando
+    // acionado de forma assíncrona (ex: dentro de um setTimeout), mesmo vindo de um clique real.
+    if(isMobile){
+      window.location.href = webUrl;
+    } else {
       window.open(webUrl, "_blank", "noopener");
-      return;
     }
-    // no celular, tenta abrir o app de verdade primeiro (esquema não-oficial, sem garantia da X);
-    // se em ~800ms a página não perder o foco (sinal de que o app abriu), cai pro site normalmente.
-    const appUrl = `twitter://post?message=${encodeURIComponent(text)}`;
-    let appOpened = false;
-    const onBlur = ()=>{ appOpened = true; };
-    window.addEventListener("blur", onBlur, {once:true});
-    window.location.href = appUrl;
-    setTimeout(()=>{
-      window.removeEventListener("blur", onBlur);
-      if(!appOpened) window.open(webUrl, "_blank", "noopener");
-    }, 800);
   };
 }
 
