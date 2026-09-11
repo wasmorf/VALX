@@ -93,6 +93,7 @@
 
   /* ---- team select ---- */
   .team-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:18px 0;}
+  .selecao-grid{display:grid;grid-template-columns:1fr;gap:8px;margin:18px 0;}
   .team-option{
     background:var(--bg-panel-2);border:1px solid var(--line);padding:14px 8px;
     text-align:center;cursor:pointer;color:var(--text);
@@ -387,7 +388,7 @@ const POOL = [
   {name:"Jamppi", roles:["initiator","duelist"], overall:86, tags:["clutch","utility","igl"]},
   {name:"marteen", roles:["duelist"], overall:88, tags:["clutch","mm","entry","operator"]},
   {name:"Boo", roles:["controller"], overall:87, tags:["clutch","utility","igl","campeao_mundial"]},
-  {name:"bao", roles:["sentinel","controller"], overall:89, tags:["clutch","lurker","mm"]},
+  {name:"bao", roles:["sentinel","controller","flex"], overall:89, tags:["clutch","lurker","mm"]},
   {name:"Rossy", roles:["flex","controller","sentinel","initiator"], overall:85, tags:["clutch","utility"]},
   {name:"skuba", roles:["sentinel"], overall:92, tags:["clutch","lurker","campeao_mundial"]},
   {name:"Xeppaa", roles:["initiator"], overall:85, tags:["clutch","utility"]},
@@ -407,7 +408,7 @@ const POOL = [
   {name:"OXY", roles:["duelist"], overall:92, tags:["entry","operator","clutch","mm"]},
   {name:"nataNk", roles:["flex","sentinel"], overall:85, tags:["utility","lurker"]},
   {name:"Lysoar", roles:["controller"], overall:86, tags:["clutch","utility"]},
-  {name:"Okeanos", roles:["flex","controller"], overall:86, tags:["utility","mm","clutch"]},
+  {name:"Okeanos", roles:["flex","controller","initiator"], overall:86, tags:["utility","mm","clutch"]},
   {name:"DaviH", roles:["initiator"], overall:87, tags:["utility","clutch"]},
   {name:"zerona", roles:["flex","duelist","initiator"], overall:86, tags:["utility"]},
   {name:"LewN", roles:["flex","duelist","sentinel"], overall:86, tags:["utility","clutch","mm","entry"]},
@@ -415,7 +416,7 @@ const POOL = [
   {name:"supamen", roles:["controller"], overall:86, tags:["clutch","utility"]},
   {name:"qck", roles:["flex","duelist","sentinel"], overall:85, tags:["clutch","utility","entry"]},
   {name:"Khalil", roles:["controller","sentinel"], overall:85, tags:["clutch","utility","lurker"]},
-  {name:"pollo", roles:["flex","sentinel","initiator"], overall:84, tags:[]},
+  {name:"pollo", roles:["flex","sentinel","initiator"], overall:84, tags:["utility","lurker","mm"]},
   {name:"v1nny", roles:["flex","initiator","controller","sentinel"], overall:82, tags:["utility","igl"]},
   {name:"cauanzin", roles:["initiator"], overall:89, tags:["utility","clutch"]},
   {name:"Tacolilla", roles:["flex","duelist","sentinel"], overall:85, tags:["utility"]},
@@ -456,7 +457,7 @@ const POOL = [
   {name:"PatMen", roles:["flex","controller","initiator"], overall:88, tags:["clutch","utility","campeao_mundial"]},
   {name:"Reduxx", roles:["flex","duelist","controller"], overall:87, tags:["clutch","mm","utility"]},
   {name:"P0PPIN", roles:["initiator"], overall:84, tags:["utility","clutch"]},
-  {name:"koshmaras", roles:["duelist","controller"], overall:88, tags:["entry","clutch","mm"]},
+  {name:"koshmaras", roles:["duelist","controller","flex"], overall:88, tags:["entry","clutch","mm"]},
   {name:"mazin", roles:["flex","initiator","controller"], overall:84, tags:["utility","igl"]},
   {name:"NiSMO", roles:["flex"], overall:85, tags:["igl","utility"]},
   {name:"RieNs", roles:["initiator"], overall:89, tags:["utility","clutch","campeao_mundial"]},
@@ -489,6 +490,16 @@ const POOL = [
   {name:"MiniBoo", roles:["duelist"], overall:88, tags:["mm","entry","clutch","operator","campeao_mundial"]},
   {name:"Timotino", roles:["duelist"], overall:89, tags:["entry","mm","clutch","campeao_mundial"]},
   {name:"Vora", roles:["initiator"], overall:88, tags:["igl","utility","campeao_mundial"]},
+  {name:"Lar0k", roles:["duelist","flex"], overall:88, tags:["entry"]},
+  {name:"Rubkkoide", roles:["flex","initiator"], overall:85, tags:["utility"]},
+  {name:"ruso", roles:["duelist","flex","sentinel"], overall:84, tags:["entry"]},
+  {name:"Darky", roles:["controller","flex"], overall:84, tags:["utility"]},
+  {name:"jotinha", roles:["initiator","controller"], overall:85, tags:["utility"]},
+  {name:"summoNN", roles:["flex","duelist","initiator","controller","sentinel"], overall:84, tags:["utility"]},
+  {name:"hAwksinho", roles:["flex","duelist","controller"], overall:84, tags:["entry","utility"]},
+  {name:"BreaK", roles:["controller","flex"], overall:84, tags:["utility"]},
+  {name:"roxie", roles:["initiator","controller","sentinel"], overall:84, tags:["utility","lurker"]},
+  {name:"Kajuks", roles:["flex","duelist","initiator","controller","sentinel"], overall:84, tags:["utility"]},
   {name:"nerve", roles:["flex","controller","sentinel"], overall:85, tags:["clutch","utility","igl"]},
   {name:"PROFEK", roles:["controller"], overall:86, tags:["clutch","utility"]},
   {name:"s0pp", roles:["duelist"], overall:89, tags:["mm","operator","clutch","entry"]},
@@ -533,12 +544,83 @@ const TEAM_NAMES = [
 ];
 
 // Head coaches disponíveis — 1 escolhido pelo jogador, os outros 15 vão pras equipes adversárias.
-const COACHES = ["Nbs","bzkA","Potter","fRoD","mini","Chet","d00mbros","Kaplan","alecks","Romanilly","Stk","Onur","JoshRT","bonkar","shaW","Kamino"];
+const COACHES = ["Nbs","bzkA","Potter","fRoD","mini","Chet","d00mbros","Kaplan","alecks","Romanilly","Stk","Onur","JoshRT","bonkar","shaW","Kamino","SilKanoN","NaThanD","Stunner","KEY","WKN","Ewok","Engh","PatronW"];
 // Buff de cada Head Coach: bônus fixo aplicado ao rating do time em todo cálculo de vitória
 // de rodada/partida — vale pra qualquer equipe (sua ou adversária) que tiver esse técnico.
 const COACH_BUFFS = {
   Nbs:4, bzkA:3, Potter:5, fRoD:4, mini:5, Chet:5, d00mbros:4, Kaplan:4,
   alecks:4, Romanilly:3, Stk:3, Onur:4, JoshRT:5, bonkar:4, shaW:4, Kamino:3,
+  SilKanoN:2, NaThanD:2, Stunner:2, KEY:2, WKN:2, Ewok:2, Engh:2, PatronW:2,
+};
+// Elencos das Seleções pro futuro Modo Copa do Mundo — separado do país "real" de cada craque
+// (usado no modo normal) porque aqui alguns jogam por uma seleção diferente da nacionalidade
+// deles (ex: Reduxx é dos EUA mas joga pelo Marrocos). Times sem 5 funções cobertas ainda não
+// entram no modo até o banco crescer mais.
+const WC_SELECOES = {
+  "United States": {
+    players: ["BABYBAY","Boostio","C0M","Cryocells","Demon1","Derrek","Ethan","N4RRATE","OXY","Paincakes","Rossy","Verno","Victor","Xeppaa","Zellsis","bang","bdog","brawk","crashies","icy","jakee","leaf","neT","nerve","runi","s0m","skuba","supamen","trent","v1c","valyn","yay","zekken","zerona"],
+    coaches: ["JoshRT","Potter","Chet","Kaplan","fRoD"],
+  },
+  "South Korea": {
+    players: ["Ash","BuZz","Dambi","Flashback","Francis","Ivy","Karon","Kess","Lakia","MaKo","Meteor","Munchkin","P0PPIN","Rb","Smoggy","Sylvan","Xross","iZu","stax","t3xture"],
+    coaches: ["SilKanoN"],
+  },
+  "China": {
+    players: ["CHICHOO","Haodong","Jieni7","Lysoar","NaturE","ZmjjKK","happywei","nobody"],
+    coaches: ["NaThanD"],
+  },
+  "Canada": {
+    players: ["TenZ","FNS","Asuna","JonahP","Kyu","Timotino","Vora","eeiu","koalanoob","mada","moose","penny","zander","marved"],
+    coaches: ["Stunner"],
+  },
+  "Turkey": {
+    players: ["Alfajer","AtaKaptan","LewN","MrFaliN","RieNs","Wo0t","hiro","s0pp","xeus","yetujey","Lar0k"],
+    coaches: ["KEY"],
+  },
+  "Brazil": {
+    players: ["Brinks","Khalil","PxS","Sacy","Sato","Zap","artzin","aspas","basic","bezn1","blowz","cauanzin","cortezia","dgzin","frz","gobera","havoc","heat","kon4n","less","liazzi","lukxo","lz","mazin","murizzz","mwzera","pANcada","pollo","prozin","pryze","qck","raafa","silentzz","spikezin","tkzin","tuyz","urango","v1nny","xand","xenom"],
+    coaches: ["shaW","bzkA","Stk","Kamino"],
+  },
+  "Argentina": {
+    players: ["saadhak","Neon","Dantedeu5","nzr","Cebando","Rubkkoide","ruso","Darky","jotinha"],
+    coaches: ["Onur","Romanilly"],
+  },
+  "Chile": {
+    players: ["Mazino","Melser","Shyy","Tacolilla","adverso","erde","keznit","kiNgg","mta"],
+    coaches: ["WKN"],
+  },
+  "Morocco": {
+    players: ["Johnqt","Reduxx","summoNN","hAwksinho","BreaK"],
+    coaches: ["Ewok"],
+  },
+  "Lithuania": {
+    players: ["Boo","MiniBoo","koshmaras","roxie","Kajuks"],
+    coaches: ["Nbs"],
+  },
+  "Finland/Sweden": {
+    players: ["Derke","Jamppi","Sayf","Leo","Zyppan"],
+    coaches: ["bonkar"],
+  },
+  "Russia": {
+    players: ["Chronicle","Rarga","Shao","nAts","something","trexx"],
+    coaches: ["Engh"],
+  },
+  "Poland/Ukraine": {
+    players: ["PROFEK","kaajak","kamo","paTiTek","ANGE1","SUYGETSU"],
+    coaches: ["d00mbros"],
+  },
+  "United Kingdom/Vietnam": {
+    players: ["Boaster","benjyfishy","keiko","Okeanos","bao"],
+    coaches: ["mini"],
+  },
+  "Philippines/Singapore/Indonesia/Malaysia/France": {
+    players: ["PatMen","invy","Jinggg","f0rsakeN","mindfreak","d4v41"],
+    coaches: ["alecks"],
+  },
+  "Latvia/Czech Republic/Belgium/Estonia/Moldova": {
+    players: ["ardiis","cNed","ScreaM","marteen","Sayonara","Kicks"],
+    coaches: ["PatronW"],
+  },
 };
 // Fator de amortecimento aplicado à soma de (coach + composição + sinergia) antes de somar ao
 // rating base — evita que os buffs empilhados deixem o jogo fácil demais.
@@ -590,10 +672,10 @@ const PLAYER_COUNTRY = {
   "khalil":"BR",
   "tkzin":"BR",
   "boostio":"US",
-  "fns":"US",
+  "fns":"CA",
   "yay":"US",
   "zellsis":"US",
-  "marved":"US",
+  "marved":"CA",
   "zekken":"US",
   "c0m":"US",
   "demon1":"US",
@@ -654,6 +736,16 @@ const PLAYER_COUNTRY = {
   "kyu":"CA",
   "timotino":"CA",
   "vora":"CA",
+  "lar0k":"TR",
+  "rubkkoide":"AR",
+  "ruso":"AR",
+  "darky":"AR",
+  "jotinha":"AR",
+  "summonn":"MA",
+  "hawksinho":"MA",
+  "break":"MA",
+  "roxie":"LT",
+  "kajuks":"LT",
   "penny":"CA",
   "moose":"CA",
   "nzr":"AR",
@@ -761,6 +853,7 @@ const COACH_COUNTRY = {
   "bzka":"BR","frod":"US","onur":"AR","potter":"US","bonkar":"SE","d00mbros":"SE",
   "joshrt":"US","mini":"GB","nbs":"LT","chet":"US","kaplan":"US","alecks":"FR",
   "romanilly":"AR","stk":"BR","shaw":"BR","kamino":"BR",
+  "silkanon":"KR","nathand":"CN","stunner":"CA","key":"TR","wkn":"CL","ewok":"ZA","engh":"RU",
 };
 // Só os técnicos que treinaram um elenco Campeão Mundial de verdade entram aqui — todo técnico
 // presente neste dicionário é, por definição, um "Head Coach Campeão Mundial" (dá buff extra).
@@ -844,6 +937,7 @@ TW:`<rect width="30" height="20" fill="#fe0000"/><rect width="15" height="10" fi
 UA:`<rect width="30" height="10" fill="#0057b7"/><rect y="10" width="30" height="10" fill="#ffd700"/>`,
 US:`<rect width="30" height="20" fill="#fff"/><rect y="0" width="30" height="1.54" fill="#b22234"/><rect y="3.08" width="30" height="1.54" fill="#b22234"/><rect y="6.15" width="30" height="1.54" fill="#b22234"/><rect y="9.23" width="30" height="1.54" fill="#b22234"/><rect y="12.31" width="30" height="1.54" fill="#b22234"/><rect y="15.38" width="30" height="1.54" fill="#b22234"/><rect y="18.46" width="30" height="1.54" fill="#b22234"/><rect width="13" height="10.8" fill="#3c3b6e"/><circle cx="3" cy="2" r="0.5" fill="#fff"/><circle cx="6.5" cy="2" r="0.5" fill="#fff"/><circle cx="10" cy="2" r="0.5" fill="#fff"/><circle cx="3" cy="5" r="0.5" fill="#fff"/><circle cx="6.5" cy="5" r="0.5" fill="#fff"/><circle cx="10" cy="5" r="0.5" fill="#fff"/><circle cx="3" cy="8" r="0.5" fill="#fff"/><circle cx="6.5" cy="8" r="0.5" fill="#fff"/><circle cx="10" cy="8" r="0.5" fill="#fff"/>`,
 VN:`<rect width="30" height="20" fill="#da251d"/><polygon points="15,5.5 16.2,9 20,9 17,11.2 18.1,15 15,12.7 11.9,15 13,11.2 10,9 13.8,9" fill="#ffff00"/>`,
+ZA:`<rect width="30" height="20" fill="#fff"/><polygon points="0,0 30,0 30,7.5 13,10 30,12.5 30,20 0,20" fill="#007a4d"/><polygon points="0,1.7 30,0.9 30,5.6 12.5,10 30,14.4 30,19.1 0,18.3 0,14.6 17.3,10 0,5.4" fill="#fff"/><polygon points="0,3.3 30,1.7 30,6.7 15,10 30,13.3 30,18.3 0,16.7 0,13.3 20,10 0,6.7" fill="#ffb612"/><polygon points="0,4.6 30,0 30,4.6 11.5,10" fill="#de3831"/><polygon points="0,15.4 30,20 30,15.4 11.5,10" fill="#002395"/><polygon points="0,0 12,10 0,20" fill="#000"/>`,
 };
 
 function countryFlag(code){
@@ -980,16 +1074,22 @@ const I18N = {
     lead:"Escale seus 5 Pro Players e corra atrás do título Mundial. Cada escolha pesa — a diferença entre um super time e um fracasso é mais fina do que parece. Overall não conta a história toda.",
     diffClassicoTitle:"Modo Clássico",
     diffClassicoDesc:"Atributos visíveis",
+    diffCopaTitle:"Copa do Mundo",
+    diffCopaDesc:"Jogue por uma Seleção",
     diffSelvaTitle:"Modo Selva",
     diffSelvaDesc:"Atributos ocultos",
     startBtn:"Começar o draft",
     disclaimer:"Nomes de jogadores e organizações profissionais reais são usados de forma homenageante, em um jogo de simulação de fã. Atributos são estimativas fictícias para fins de jogo, não estatísticas oficiais.",
     teamSelectTitle:"Escolha o nome da sua equipe",
     teamSelectLead:"Essa será a identidade do seu time durante toda a campanha.",
+    selecaoSelectTitle:"Escolha sua Seleção",
+    selecaoSelectLead:"Essa vai ser sua Seleção nacional durante toda a Copa do Mundo.",
+    copaNotReady:(n,names)=>`O Modo Copa do Mundo ainda não está pronto — precisa de 16 Seleções completas pra fechar o formato do torneio, e hoje só ${n} conseguem fechar time de 5. Falta reforço em: ${names}.`,
     teamSelectContinue:"Continuar para o draft",
     phase_coachselect:"TÉCNICO",
     coachSelectTitle:"Escolha o Head Coach",
-    coachSelectLead:"Quatro técnicos foram sorteados — escolha um para liderar sua equipe. Os outros 15 vão para as equipes adversárias.",
+    coachSelectLead:n=>`${n} técnicos foram sorteados — escolha um para liderar sua equipe. Os outros 15 vão para as equipes adversárias.`,
+    coachSelectLeadCopa:"Esses são os técnicos disponíveis pra sua Seleção — escolha um pra liderar o time.",
     coachSelectContinue:"Continuar para o draft",
     headCoachLabel:"HEAD COACH",
     poolLabel:"Craques no pool:",
@@ -1119,6 +1219,10 @@ const I18N = {
       {title:"Modo Clássico x Modo Selva", body:`
         <p>No <strong>Clássico</strong>, você vê o overall e as qualidades táticas de cada craque durante o draft. Na <strong>Selva</strong>, tudo isso fica escondido — você recruta só pelo nome e reputação.</p>
       `},
+      {title:"Copa do Mundo", body:`
+        <p>Em vez de escolher uma organização, você escolhe uma <strong>Seleção nacional</strong> — o draft só sorteia craques que jogam por aquele país (algumas Seleções são combinadas entre países menores, tipo Finlândia/Suécia). O Head Coach também vem só da lista daquela Seleção.</p>
+        <p>O resto funciona igual ao modo normal: fase de grupos, playoffs, tudo — só que as outras 15 "equipes" adversárias também são Seleções, cada uma com o elenco real dela.</p>
+      `},
     ],
   },
   en:{
@@ -1135,16 +1239,22 @@ const I18N = {
     lead:"Draft your 5 pro players and chase the World Championship.<br>Every pick matters — the line between a super team and a disaster is thinner than it looks.<br>And Overall doesn't tell the whole story.",
     diffClassicoTitle:"Classic Mode",
     diffClassicoDesc:"Visible attributes",
+    diffCopaTitle:"World Cup",
+    diffCopaDesc:"Play for a National Team",
     diffSelvaTitle:"Wild Mode",
     diffSelvaDesc:"Hidden attributes",
     startBtn:"Start the draft",
     disclaimer:"Real pro player names and real esports organizations are used respectfully in a fan-made simulation game. Attributes are fictional estimates for gameplay purposes, not official statistics.",
     teamSelectTitle:"Choose your team name",
     teamSelectLead:"This will be your team's identity for the whole campaign.",
+    selecaoSelectTitle:"Choose your National Team",
+    selecaoSelectLead:"This will be your national team for the whole World Cup.",
+    copaNotReady:(n,names)=>`World Cup Mode isn't ready yet — the tournament format needs 16 complete national teams, and right now only ${n} can field a full 5-player squad. Still needs reinforcements for: ${names}.`,
     teamSelectContinue:"Continue to the draft",
     phase_coachselect:"COACH",
     coachSelectTitle:"Choose your Head Coach",
-    coachSelectLead:"Four coaches were drawn — pick one to lead your team. The other 15 go to your rival teams.",
+    coachSelectLead:n=>`${n} coaches were drawn — pick one to lead your team. The other 15 go to your rival teams.`,
+    coachSelectLeadCopa:"These are the coaches available for your National Team — pick one to lead the squad.",
     coachSelectContinue:"Continue to the draft",
     headCoachLabel:"HEAD COACH",
     poolLabel:"Pros in pool:",
@@ -1274,6 +1384,10 @@ const I18N = {
       {title:"Classic Mode vs Wild Mode", body:`
         <p>In <strong>Classic</strong>, you see each pro's overall and tactical qualities during the draft. In <strong>Wild</strong>, all of that stays hidden — you recruit on name and reputation alone.</p>
       `},
+      {title:"World Cup", body:`
+        <p>Instead of picking an organization, you pick a <strong>national team</strong> — the draft only draws pros who play for that country (some national teams are combined from smaller countries, like Finland/Sweden). The Head Coach also comes only from that national team's own list.</p>
+        <p>Everything else works like the normal mode: group stage, playoffs, all of it — except the other 15 rival "teams" are national teams too, each with their own real roster.</p>
+      `},
     ],
   },
   es:{
@@ -1290,16 +1404,22 @@ const I18N = {
     lead:"Arma tus 5 jugadores profesionales y ve tras el título Mundial.<br>Cada elección pesa — la diferencia entre un súper equipo y un fracaso es más fina de lo que parece.<br>Y el Overall no cuenta toda la historia.",
     diffClassicoTitle:"Modo Clásico",
     diffClassicoDesc:"Atributos visibles",
+    diffCopaTitle:"Copa del Mundo",
+    diffCopaDesc:"Juega por una Selección",
     diffSelvaTitle:"Modo Selva",
     diffSelvaDesc:"Atributos ocultos",
     startBtn:"Comenzar el draft",
     disclaimer:"Los nombres de jugadores profesionales y organizaciones reales de esports se usan de forma respetuosa en un juego de simulación hecho por fans. Los atributos son estimaciones ficticias para el juego, no estadísticas oficiales.",
     teamSelectTitle:"Elige el nombre de tu equipo",
     teamSelectLead:"Esta será la identidad de tu equipo durante toda la campaña.",
+    selecaoSelectTitle:"Elige tu Selección",
+    selecaoSelectLead:"Esta será tu Selección nacional durante todo el Mundial.",
+    copaNotReady:(n,names)=>`El Modo Copa del Mundo todavía no está listo — el formato del torneo necesita 16 Selecciones completas, y hoy solo ${n} pueden armar un equipo completo de 5. Todavía falta refuerzo en: ${names}.`,
     teamSelectContinue:"Continuar al draft",
     phase_coachselect:"ENTRENADOR",
     coachSelectTitle:"Elige tu Head Coach",
-    coachSelectLead:"Se sortearon cuatro entrenadores — elige uno para liderar tu equipo. Los otros 15 van a los equipos rivales.",
+    coachSelectLead:n=>`Se sortearon ${n} entrenadores — elige uno para liderar tu equipo. Los otros 15 van a los equipos rivales.`,
+    coachSelectLeadCopa:"Estos son los entrenadores disponibles para tu Selección — elige uno para liderar el equipo.",
     coachSelectContinue:"Continuar al draft",
     headCoachLabel:"HEAD COACH",
     poolLabel:"Cracks en el pool:",
@@ -1429,6 +1549,10 @@ const I18N = {
       {title:"Modo Clásico vs Modo Selva", body:`
         <p>En <strong>Clásico</strong>, ves el overall y las cualidades tácticas de cada crack durante el draft. En <strong>Selva</strong>, todo eso queda oculto — reclutas solo por el nombre y la reputación.</p>
       `},
+      {title:"Copa del Mundo", body:`
+        <p>En vez de elegir una organización, eliges una <strong>Selección nacional</strong> — el draft solo sortea cracks que juegan por ese país (algunas Selecciones son combinadas entre países más chicos, como Finlandia/Suecia). El Head Coach también viene solo de la lista de esa Selección.</p>
+        <p>El resto funciona igual que el modo normal: fase de grupos, playoffs, todo — solo que los otros 15 "equipos" rivales también son Selecciones, cada una con su elenco real.</p>
+      `},
     ],
   }
 };
@@ -1449,6 +1573,7 @@ let state = {
   lang: "pt",            // "pt" | "en" | "es"
   difficulty: null,     // "classico" | "selva"
   teamName: null,
+  selecao: null,
   headCoach: null,
   coachOptions: [],
   remainingCoaches: [],
@@ -1529,8 +1654,55 @@ function matchFormatFor(labelKey){
   return (labelKey==="lbFinal" || labelKey==="grandFinal") ? 3 : 2;
 }
 
+// Converte a lista de nomes de uma Seleção em objetos de jogador de verdade (do POOL).
+function selecaoPlayerObjects(selecaoName){
+  const names = new Set(WC_SELECOES[selecaoName].players.map(n=>n.toLowerCase()));
+  return POOL.filter(p=>names.has(p.name.toLowerCase()));
+}
+
 // Monta um elenco de IA cobrindo as 5 funções de verdade — tira jogadores do pool compartilhado
 // (mutando o array recebido), preferindo sempre alguém que jogue aquela função.
+// Casamento bipartido (algoritmo de Kuhn) — usado só no Modo Copa do Mundo, onde os elencos das
+// Seleções são pequenos e um sorteio ingênuo pode travar (alguém que só serve pra 1 vaga já foi
+// escalado em outra). Garante que sempre existe uma forma válida de fechar as 5 vagas.
+function canCompleteRoster(openRoles, availablePlayers){
+  const matchRole = {};
+  function tryAssign(roleKey, visited){
+    for(const p of availablePlayers){
+      if(!p.roles.includes(roleKey) || visited.has(p.name)) continue;
+      visited.add(p.name);
+      if(!matchRole[p.name] || tryAssign(matchRole[p.name], visited)){
+        matchRole[p.name] = roleKey;
+        return true;
+      }
+    }
+    return false;
+  }
+  return openRoles.every(r=>tryAssign(r, new Set()));
+}
+// Monta um elenco válido garantido (usa casamento bipartido) — para Seleções pequenas da Copa,
+// em vez do preenchimento guloso simples usado no modo normal.
+function buildValidRoster(players){
+  const roster = [null,null,null,null,null];
+  const matchRole = {}; // nome do jogador -> indice de slot que ele ocupa
+  function tryAssign(slotIdx, visited){
+    for(const p of players){
+      if(!p.roles.includes(SLOT_ORDER[slotIdx]) || visited.has(p.name)) continue;
+      visited.add(p.name);
+      if(!(p.name in matchRole) || tryAssign(matchRole[p.name], visited)){
+        matchRole[p.name] = slotIdx;
+        return true;
+      }
+    }
+    return false;
+  }
+  SLOT_ORDER.forEach((rk,i)=>tryAssign(i, new Set()));
+  Object.entries(matchRole).forEach(([name, slotIdx])=>{
+    roster[slotIdx] = players.find(p=>p.name===name);
+  });
+  return roster;
+}
+
 function buildAIRoster(sharedPool){
   const roster = [];
   SLOT_ORDER.forEach(roleKey=>{
@@ -1571,22 +1743,40 @@ function buildGroupQualifiersAI(teams){
 
 function setupTournament(){
   const playerTeam = {id:"player", isPlayer:true, rating: teamOverall(state.roster)};
-  const pool = shuffle(
-    TEAM_NAMES.filter(tm=>tm.name!==state.teamName).map((tm,i)=>({id:"t"+i, name:tm.name, rating:tm.rating}))
-  );
+  let pool;
+  if(state.difficulty==="copa"){
+    const rolesNeeded = ["duelist","flex","initiator","controller","sentinel"];
+    const otherSelecoes = Object.keys(WC_SELECOES).filter(n=>n!==state.selecao && canCompleteRoster(rolesNeeded, selecaoPlayerObjects(n)));
+    pool = shuffle(otherSelecoes.map((name,i)=>({id:"t"+i, name, rating:0})));
+  } else {
+    pool = shuffle(
+      TEAM_NAMES.filter(tm=>tm.name!==state.teamName).map((tm,i)=>({id:"t"+i, name:tm.name, rating:tm.rating}))
+    );
+  }
   const groupATeams = [playerTeam, pool[0], pool[1], pool[2]];
   const rest = pool.slice(3);
   const groupB = rest.slice(0,4), groupC = rest.slice(4,8), groupD = rest.slice(8,12);
-
-  // monta um elenco de 5 jogadores para cada equipe adversária — cobrindo as 5 funções
-  // de verdade (igual um draft), em vez de um recorte aleatório do pool.
-  const usedNames = new Set(state.roster.map(p=>p.name));
-  const availablePlayers = shuffle(POOL.filter(p=>!usedNames.has(p.name)));
   const aiTeams = [...groupATeams.slice(1), ...groupB, ...groupC, ...groupD];
-  aiTeams.forEach((tm,i)=>{
-    tm.roster = buildAIRoster(availablePlayers);
-    tm.coach = state.remainingCoaches[i] || null;
-  });
+
+  if(state.difficulty==="copa"){
+    // cada Seleção adversária monta o elenco só com os craques dela mesma, e o coach vem
+    // da lista de técnicos daquela Seleção especificamente (não do sorteio do modo normal).
+    aiTeams.forEach(tm=>{
+      tm.roster = buildValidRoster(shuffle(selecaoPlayerObjects(tm.name)));
+      tm.rating = teamOverall(tm.roster);
+      const coaches = WC_SELECOES[tm.name].coaches;
+      tm.coach = coaches[Math.floor(Math.random()*coaches.length)];
+    });
+  } else {
+    // monta um elenco de 5 jogadores para cada equipe adversária — cobrindo as 5 funções
+    // de verdade (igual um draft), em vez de um recorte aleatório do pool.
+    const usedNames = new Set(state.roster.map(p=>p.name));
+    const availablePlayers = shuffle(POOL.filter(p=>!usedNames.has(p.name)));
+    aiTeams.forEach((tm,i)=>{
+      tm.roster = buildAIRoster(availablePlayers);
+      tm.coach = state.remainingCoaches[i] || null;
+    });
+  }
 
   const otherGroupsTop2 = {};
   [["B",groupB],["C",groupC],["D",groupD]].forEach(([letter, teams])=>{
@@ -1740,7 +1930,7 @@ function applyTheme(){
 // Reseta tudo e volta pra tela inicial, mantendo só o idioma escolhido.
 function resetToIntro(){
   const keepLang = state.lang;
-  state = {screen:"intro",lang:keepLang,campaignHistoryList:[],difficulty:null,teamName:null,headCoach:null,coachOptions:[],remainingCoaches:[],pool:[],roster:[],pendingSlotChoice:false,skipsUsed:0,currentCandidate:null,currentCandidates:[],confirmingCandidate:null,matchScore:{us:0,them:0},roundLog:[],mapsToWin:2,mapsUs:0,mapsThem:0,mapHistory:[],matchStats:{us:[],them:[]},seriesStats:{us:[],them:[]},campaignStats:null,journey:[],campaignRecords:{singleMap:{kills:47,holder:"aspas"}, md3:{kills:82,holder:"aspas"}, md5:{kills:126,holder:"marteen"}},tournament:null,endInfo:null};
+  state = {screen:"intro",lang:keepLang,campaignHistoryList:[],difficulty:null,teamName:null,selecao:null,headCoach:null,coachOptions:[],remainingCoaches:[],pool:[],roster:[],pendingSlotChoice:false,skipsUsed:0,currentCandidate:null,currentCandidates:[],confirmingCandidate:null,matchScore:{us:0,them:0},roundLog:[],mapsToWin:2,mapsUs:0,mapsThem:0,mapHistory:[],matchStats:{us:[],them:[]},seriesStats:{us:[],them:[]},campaignStats:null,journey:[],campaignRecords:{singleMap:{kills:47,holder:"aspas"}, md3:{kills:82,holder:"aspas"}, md5:{kills:126,holder:"marteen"}},tournament:null,endInfo:null};
 }
 
 function render(){
@@ -1781,6 +1971,7 @@ function screenHTML(){
   if(state.screen==="history") return historyHTML();
   if(state.screen==="creator") return creatorHTML();
   if(state.screen==="teamselect") return teamSelectHTML();
+  if(state.screen==="selecaoselect") return selecaoSelectHTML();
   if(state.screen==="coachselect") return coachSelectHTML();
   if(state.screen==="draft") return draftHTML();
   if(state.screen==="match") return matchHTML();
@@ -1801,6 +1992,10 @@ function introHTML(){
       <button class="diff-card angle-sm ${state.difficulty==='selva'?'selected':''}" data-diff="selva">
         <h3>${t("diffSelvaTitle")}</h3>
         <p>${t("diffSelvaDesc")}</p>
+      </button>
+      <button class="diff-card angle-sm ${state.difficulty==='copa'?'selected':''}" data-diff="copa">
+        <h3>${t("diffCopaTitle")}</h3>
+        <p>${t("diffCopaDesc")}</p>
       </button>
     </div>
     <div class="btn-row" style="margin-top:6px;">
@@ -1853,7 +2048,7 @@ function historyHTML(){
   const rowsHTML = list.length ? list.map(rec=>`
     <div class="history-item angle-sm">
       <div class="history-top">
-        <span class="history-team">${rec.teamName || "—"}</span>
+        <span class="history-team">${selecaoLabel(rec.teamName) || "—"}</span>
         <span class="history-date mono">${new Date(rec.date).toLocaleDateString()}</span>
       </div>
       <div class="history-result" style="color:${resultColor(rec)};">${resultLabel(rec)}</div>
@@ -1888,6 +2083,79 @@ function creatorHTML(){
   `;
 }
 
+// Códigos de bandeira pra cada Seleção (mostra mais de uma quando é combinada).
+// Nomes das Seleções traduzidos — a CHAVE em inglês (a mesma do WC_SELECOES) nunca muda, porque
+// é usada pra buscar os dados de verdade; só o texto exibido pro jogador muda com o idioma.
+const WC_SELECAO_NAMES_I18N = {
+  pt:{
+    "United States":"Estados Unidos", "South Korea":"Coreia do Sul", "China":"China", "Canada":"Canadá",
+    "Turkey":"Turquia", "Brazil":"Brasil", "Argentina":"Argentina", "Chile":"Chile", "Morocco":"Marrocos",
+    "Lithuania":"Lituânia", "Finland/Sweden":"Finlândia/Suécia", "Russia":"Rússia",
+    "Poland/Ukraine":"Polônia/Ucrânia", "United Kingdom/Vietnam":"Reino Unido/Vietnã",
+    "Philippines/Singapore/Indonesia/Malaysia/France":"Filipinas/Cingapura/Indonésia/Malásia/França",
+    "Latvia/Czech Republic/Belgium/Estonia/Moldova":"Letônia/Rep. Checa/Bélgica/Estônia/Moldávia",
+  },
+  en:{
+    "United States":"United States", "South Korea":"South Korea", "China":"China", "Canada":"Canada",
+    "Turkey":"Turkey", "Brazil":"Brazil", "Argentina":"Argentina", "Chile":"Chile", "Morocco":"Morocco",
+    "Lithuania":"Lithuania", "Finland/Sweden":"Finland/Sweden", "Russia":"Russia",
+    "Poland/Ukraine":"Poland/Ukraine", "United Kingdom/Vietnam":"United Kingdom/Vietnam",
+    "Philippines/Singapore/Indonesia/Malaysia/France":"Philippines/Singapore/Indonesia/Malaysia/France",
+    "Latvia/Czech Republic/Belgium/Estonia/Moldova":"Latvia/Czech Republic/Belgium/Estonia/Moldova",
+  },
+  es:{
+    "United States":"Estados Unidos", "South Korea":"Corea del Sur", "China":"China", "Canada":"Canadá",
+    "Turkey":"Turquía", "Brazil":"Brasil", "Argentina":"Argentina", "Chile":"Chile", "Morocco":"Marruecos",
+    "Lithuania":"Lituania", "Finland/Sweden":"Finlandia/Suecia", "Russia":"Rusia",
+    "Poland/Ukraine":"Polonia/Ucrania", "United Kingdom/Vietnam":"Reino Unido/Vietnam",
+    "Philippines/Singapore/Indonesia/Malaysia/France":"Filipinas/Singapur/Indonesia/Malasia/Francia",
+    "Latvia/Czech Republic/Belgium/Estonia/Moldova":"Letonia/Rep. Checa/Bélgica/Estonia/Moldavia",
+  },
+};
+// Traduz o nome de uma Seleção pro idioma atual, pra EXIBIR — nomes de organizações do modo
+// normal (LOUD, Sentinels etc.) não estão nesse dicionário, então voltam sem alteração.
+function selecaoLabel(name){
+  return (WC_SELECAO_NAMES_I18N[state.lang] && WC_SELECAO_NAMES_I18N[state.lang][name]) || name;
+}
+
+const WC_SELECAO_FLAGS = {
+  "United States":["US"], "South Korea":["KR"], "China":["CN"], "Canada":["CA"], "Turkey":["TR"],
+  "Brazil":["BR"], "Argentina":["AR"], "Chile":["CL"], "Morocco":["MA"], "Lithuania":["LT"],
+  "Finland/Sweden":["FI","SE"], "Russia":["RU"], "Poland/Ukraine":["PL","UA"],
+  "United Kingdom/Vietnam":["GB","VN"], "Philippines/Singapore/Indonesia/Malaysia/France":["PH","SG","ID","MY","FR"],
+  "Latvia/Czech Republic/Belgium/Estonia/Moldova":["LV","CZ","BE","EE","MD"],
+};
+function selecaoSelectHTML(){
+  const roles = ["duelist","flex","initiator","controller","sentinel"];
+  const names = Object.keys(WC_SELECOES).filter(name=>canCompleteRoster(roles, selecaoPlayerObjects(name)));
+  if(names.length < 16){
+    const unavailable = Object.keys(WC_SELECOES).filter(n=>!names.includes(n));
+    return `
+    <div class="panel angle" style="text-align:center;">
+      <h1 class="hero" style="font-size:24px;">${t("selecaoSelectTitle")}</h1>
+      <p class="lead" style="margin-top:10px;">${t("copaNotReady")(names.length, unavailable.map(selecaoLabel).join(", "))}</p>
+      <div class="btn-row" style="justify-content:center;margin-top:16px;">
+        <button class="btn secondary" id="selecao-back-btn">${t("rulesBackBtn")}</button>
+      </div>
+    </div>
+    `;
+  }
+  const optionsHTML = names.map(name=>{
+    const flags = (WC_SELECAO_FLAGS[name]||[]).map(code=>countryFlag(code)).join(" ");
+    return `<button class="team-option angle-sm ${state.selecao===name?'selected':''}" data-selecao="${name}">${flags} ${selecaoLabel(name)}</button>`;
+  }).join("");
+  return `
+  <div class="panel angle">
+    <h1 class="hero" style="font-size:24px;">${t("selecaoSelectTitle")}</h1>
+    <p class="lead">${t("selecaoSelectLead")}</p>
+    <div class="selecao-grid">${optionsHTML}</div>
+    <div class="btn-row">
+      <button class="btn" id="selecao-continue-btn" ${state.selecao?'':'disabled'}>${t("teamSelectContinue")}</button>
+    </div>
+  </div>
+  `;
+}
+
 function teamSelectHTML(){
   const optionsHTML = TEAM_NAMES.map(tm=>`
     <button class="team-option angle-sm ${state.teamName===tm.name?'selected':''}" data-team="${tm.name}">${tm.name}</button>
@@ -1913,7 +2181,7 @@ function coachSelectHTML(){
   return `
   <div class="panel angle">
     <h1 class="hero" style="font-size:24px;">${t("coachSelectTitle")}</h1>
-    <p class="lead">${t("coachSelectLead")}</p>
+    <p class="lead">${state.difficulty==="copa" ? t("coachSelectLeadCopa") : t("coachSelectLead")(state.coachOptions.length)}</p>
     <div class="coach-grid">${optionsHTML}</div>
     <div class="btn-row">
       <button class="btn" id="coach-continue-btn" ${state.headCoach?'':'disabled'}>${t("coachSelectContinue")}</button>
@@ -1945,11 +2213,19 @@ function draftHTML(){
     const tagChipsHTML = (c.tags && c.tags.length) ? `
       <div class="tag-chips">${c.tags.map(tag=>`<span class="tag-chip">${tagLabel(tag)}</span>`).join("")}</div>
     ` : "";
-    const statsBlock = state.difficulty==="classico" ? `
+    const statsBlock = state.difficulty!=="selva" ? `
       <div class="overall-badge">${ov}</div>
       ${tagChipsHTML}
     ` : `<div class="hidden-stats">${t("hiddenStats")}</div>`;
-    const openSlots = SLOT_ORDER.map((roleKey,i)=>({roleKey,i})).filter(s=>!state.roster[s.i] && c.roles.includes(s.roleKey));
+    let openSlots = SLOT_ORDER.map((roleKey,i)=>({roleKey,i})).filter(s=>!state.roster[s.i] && c.roles.includes(s.roleKey));
+    if(state.difficulty==="copa"){
+      const draftedNames = new Set(state.roster.filter(Boolean).map(p=>p.name));
+      const selecaoPlayers = selecaoPlayerObjects(state.selecao).filter(p=>!draftedNames.has(p.name) && p.name!==c.name);
+      openSlots = openSlots.filter(s=>{
+        const remainingRoles = SLOT_ORDER.filter((rk,idx)=>!state.roster[idx] && idx!==s.i);
+        return canCompleteRoster(remainingRoles, selecaoPlayers);
+      });
+    }
 
     candidateHTML = `
     <div class="candidate angle">
@@ -1967,9 +2243,9 @@ function draftHTML(){
     const tagChipsHTML = (c.tags && c.tags.length) ? `
       <div class="tag-chips">${c.tags.map(tag=>`<span class="tag-chip">${tagLabel(tag)}</span>`).join("")}</div>
     ` : "";
-    const synergyWith = state.difficulty==="classico" ? teammateSynergyNote(c) : null;
+    const synergyWith = state.difficulty!=="selva" ? teammateSynergyNote(c) : null;
     const synergyBlock = synergyWith ? `<div class="cr-synergy" style="justify-content:center;margin:8px 0;">🤝 ${t("alreadyPlayedWith")}</div>` : "";
-    const statsBlock = state.difficulty==="classico" ? `
+    const statsBlock = state.difficulty!=="selva" ? `
       <div class="overall-badge">${ov}</div>
       ${tagChipsHTML}
       ${synergyBlock}
@@ -1989,16 +2265,16 @@ function draftHTML(){
   } else if(state.currentCandidates.length>0){
     const skipsLeft = 2 - state.skipsUsed;
     const rowsHTML = state.currentCandidates.map(c=>{
-      const synergyWith = state.difficulty==="classico" ? teammateSynergyNote(c) : null;
+      const synergyWith = state.difficulty!=="selva" ? teammateSynergyNote(c) : null;
       return `
       <button class="candidate-row angle-sm ${synergyWith ? 'synergy-highlight' : ''}" data-pick="${c.name}">
         <div class="cr-info">
           <div class="cr-name">${c.name} ${countryFlag(PLAYER_COUNTRY[c.name.toLowerCase()])}</div>
           <div class="cr-roles">${c.roles.map(r=>roleLabel(r)).join(" · ")}</div>
-          ${state.difficulty==="classico" && c.tags && c.tags.length ? `<div class="cr-tags">${c.tags.map(tag=>`<span class="cr-tag">${tagLabel(tag)}</span>`).join("")}</div>` : ''}
+          ${state.difficulty!=="selva" && c.tags && c.tags.length ? `<div class="cr-tags">${c.tags.map(tag=>`<span class="cr-tag">${tagLabel(tag)}</span>`).join("")}</div>` : ''}
           ${synergyWith ? `<div class="cr-synergy">🤝 ${t("alreadyPlayedWith")}</div>` : ''}
         </div>
-        ${state.difficulty==="classico" ? `<div class="cr-ovr mono">${overall(c)}</div>` : `<div class="cr-ovr mono">?</div>`}
+        ${state.difficulty!=="selva" ? `<div class="cr-ovr mono">${overall(c)}</div>` : `<div class="cr-ovr mono">?</div>`}
       </button>
     `;
     }).join("");
@@ -2049,8 +2325,8 @@ function matchHTML(){
   const rostersHTML = (state.matchStats.us.length && state.matchStats.them.length) ? `
     <div class="pool-info" style="justify-content:center;margin-top:14px;"><span class="mono">${t("rostersLabel")}</span></div>
     <div class="roster-compare">
-      ${rosterColHTML(state.matchStats.us, state.teamName)}
-      ${rosterColHTML(state.matchStats.them, opp.name)}
+      ${rosterColHTML(state.matchStats.us, selecaoLabel(state.teamName))}
+      ${rosterColHTML(state.matchStats.them, selecaoLabel(opp.name))}
     </div>` : "";
 
   const mapFinished = isMapDecided(state.matchScore.us, state.matchScore.them);
@@ -2113,13 +2389,13 @@ function matchHTML(){
   <div class="panel angle">
     <div class="vs-row">
       <div class="team-block">
-        <div class="team-name">${state.teamName}</div>
+        <div class="team-name">${selecaoLabel(state.teamName)}</div>
         <div class="team-sub mono">OVR ${us}</div>
         <div class="team-sub" style="margin-top:2px;">${state.headCoach} ${countryFlag(COACH_COUNTRY[state.headCoach.toLowerCase()])}</div>
       </div>
       <div class="vs-x">${t("vs")}</div>
       <div class="team-block">
-        <div class="team-name">${opp.name}</div>
+        <div class="team-name">${selecaoLabel(opp.name)}</div>
         <div class="team-sub mono">OVR ${opp.rating}</div>
         ${opp.coach ? `<div class="team-sub" style="margin-top:2px;">${opp.coach} ${countryFlag(COACH_COUNTRY[opp.coach.toLowerCase()])}</div>` : ''}
       </div>
@@ -2205,7 +2481,7 @@ function attachHandlers(){
   });
   const startBtn = document.getElementById("start-btn");
   if(startBtn) startBtn.onclick = ()=>{
-    state.screen = "teamselect";
+    state.screen = state.difficulty==="copa" ? "selecaoselect" : "teamselect";
     render();
   };
   const rulesBtn = document.getElementById("rules-btn");
@@ -2240,12 +2516,29 @@ function attachHandlers(){
     render();
   };
 
-  document.querySelectorAll(".team-option").forEach(el=>{
+  document.querySelectorAll(".team-option[data-selecao]").forEach(el=>{
+    el.onclick = ()=>{ state.selecao = el.dataset.selecao; render(); };
+  });
+  const selecaoContinueBtn = document.getElementById("selecao-continue-btn");
+  if(selecaoContinueBtn) selecaoContinueBtn.onclick = ()=>{
+    state.teamName = state.selecao;
+    state.coachOptions = WC_SELECOES[state.selecao].coaches;
+    state.headCoach = null;
+    state.screen = "coachselect";
+    render();
+  };
+  const selecaoBackBtn = document.getElementById("selecao-back-btn");
+  if(selecaoBackBtn) selecaoBackBtn.onclick = ()=>{
+    state.screen = "intro";
+    render();
+  };
+
+  document.querySelectorAll(".team-option[data-team]").forEach(el=>{
     el.onclick = ()=>{ state.teamName = el.dataset.team; render(); };
   });
   const teamContinueBtn = document.getElementById("team-continue-btn");
   if(teamContinueBtn) teamContinueBtn.onclick = ()=>{
-    state.coachOptions = shuffle(COACHES).slice(0,4);
+    state.coachOptions = shuffle(COACHES).slice(0, state.difficulty==="classico" ? 6 : 4);
     state.headCoach = null;
     state.screen = "coachselect";
     render();
@@ -2256,8 +2549,13 @@ function attachHandlers(){
   });
   const coachContinueBtn = document.getElementById("coach-continue-btn");
   if(coachContinueBtn) coachContinueBtn.onclick = ()=>{
-    state.remainingCoaches = shuffle(COACHES.filter(c=>c!==state.headCoach));
-    state.pool = weightedDrawOrder(POOL);
+    if(state.difficulty==="copa"){
+      state.remainingCoaches = WC_SELECOES[state.selecao].coaches.filter(c=>c!==state.headCoach);
+      state.pool = weightedDrawOrder(selecaoPlayerObjects(state.selecao));
+    } else {
+      state.remainingCoaches = shuffle(COACHES.filter(c=>c!==state.headCoach));
+      state.pool = weightedDrawOrder(POOL);
+    }
     state.roster = SLOT_ORDER.map(()=>null);
     state.currentCandidate = null;
     state.currentCandidates = [];
@@ -2270,13 +2568,25 @@ function attachHandlers(){
 
   const drawBtn = document.getElementById("draw-btn");
   if(drawBtn) drawBtn.onclick = ()=>{
-    // sorteio inteligente: só entram candidatos com pelo menos 1 vaga aberta compatível;
-    // quem não tem vaga nenhuma disponível é descartado do pool sem aparecer.
-    const batch = [];
-    while(batch.length<5 && state.pool.length>0){
-      const c = state.pool.pop();
-      const hasOpenSlot = SLOT_ORDER.some((roleKey,i)=>!state.roster[i] && c.roles.includes(roleKey));
-      if(hasOpenSlot) batch.push(c);
+    let batch;
+    if(state.difficulty==="copa"){
+      // Seleções são pequenas — nunca "perde" ninguém de vista: recalcula do zero quem ainda
+      // não foi escalado e tem vaga aberta compatível, em vez de consumir o pool aos poucos.
+      const draftedNames = new Set(state.roster.filter(Boolean).map(p=>p.name));
+      const stillAvailable = selecaoPlayerObjects(state.selecao).filter(c=>{
+        if(draftedNames.has(c.name)) return false;
+        return SLOT_ORDER.some((roleKey,i)=>!state.roster[i] && c.roles.includes(roleKey));
+      });
+      batch = shuffle(stillAvailable).slice(0,5);
+    } else {
+      // sorteio inteligente: só entram candidatos com pelo menos 1 vaga aberta compatível;
+      // quem não tem vaga nenhuma disponível é descartado do pool sem aparecer.
+      batch = [];
+      while(batch.length<5 && state.pool.length>0){
+        const c = state.pool.pop();
+        const hasOpenSlot = SLOT_ORDER.some((roleKey,i)=>!state.roster[i] && c.roles.includes(roleKey));
+        if(hasOpenSlot) batch.push(c);
+      }
     }
     state.currentCandidates = batch;
     render();
@@ -2294,7 +2604,16 @@ function attachHandlers(){
     const c = state.confirmingCandidate;
     state.confirmingCandidate = null;
     state.currentCandidates = [];
-    const openSlots = SLOT_ORDER.map((roleKey,i)=>i).filter(i=>!state.roster[i] && c.roles.includes(SLOT_ORDER[i]));
+    let openSlots = SLOT_ORDER.map((roleKey,i)=>i).filter(i=>!state.roster[i] && c.roles.includes(SLOT_ORDER[i]));
+    if(state.difficulty==="copa" && openSlots.length>1){
+      // Seleções são pequenas — só oferece vagas que não travem o resto do draft depois.
+      const draftedNames = new Set(state.roster.filter(Boolean).map(p=>p.name));
+      const selecaoPlayers = selecaoPlayerObjects(state.selecao).filter(p=>!draftedNames.has(p.name) && p.name!==c.name);
+      openSlots = openSlots.filter(i=>{
+        const remainingRoles = SLOT_ORDER.filter((rk,idx)=>!state.roster[idx] && idx!==i);
+        return canCompleteRoster(remainingRoles, selecaoPlayers);
+      });
+    }
     if(openSlots.length===1){
       state.roster[openSlots[0]] = c;
       state.currentCandidate = null;
@@ -2574,7 +2893,7 @@ function buildShareText(){
   else if(info.type==="playoffs") headline = t("shareHeadlinePlayoffs")(bracketLabel(info.stageLabelKey));
   else headline = t("shareHeadlineGroups");
 
-  const modeLabel = state.difficulty==="classico" ? t("diffClassicoTitle") : t("diffSelvaTitle");
+  const modeLabel = state.difficulty==="classico" ? t("diffClassicoTitle") : state.difficulty==="copa" ? t("diffCopaTitle") : t("diffSelvaTitle");
   const wins = state.journey.filter(j=>j.result==="W").length;
   const losses = state.journey.filter(j=>j.result==="L").length;
   let mapsWon=0, mapsLost=0;
