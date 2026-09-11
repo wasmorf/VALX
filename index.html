@@ -306,14 +306,14 @@
   .social-link{
     width:44px;height:44px;border-radius:11px;background:#0A0A0A;border:1px solid var(--line);
     display:flex;align-items:center;justify-content:center;color:#F5F5F5;
-    text-decoration:none;transition:border-color .2s, transform .15s;
+    text-decoration:none;transition:border-color .2s, transform .15s;cursor:pointer;
   }
   .social-link:hover{border-color:var(--crimson);transform:translateY(-1px);}
 </style>
 </head>
 <body>
 <div id="app"></div>
-<div class="version-badge">v1.0 · 11/09/2026</div>
+<div class="version-badge">Beta · 11/09/2026</div>
 
 <script>
 /* ---------------- DATA ---------------- */
@@ -321,14 +321,14 @@
 // Pool de craques — ratings são estimativas de fã para fins de jogo, não estatísticas oficiais.
 const POOL = [
   {name:"aspas", roles:["duelist"], overall:93, tags:["entry","mm","operator","clutch","campeao_mundial"]},
-  {name:"Boostio", roles:["sentinel"], overall:88, tags:["igl","lurker","utility","campeao_mundial"]},
+  {name:"Boostio", roles:["sentinel"], overall:88, tags:["igl","lurker","campeao_mundial"]},
   {name:"ANGE1", roles:["flex","controller","initiator"], overall:88, tags:["igl","utility","campeao_mundial"]},
   {name:"Shao", roles:["flex","initiator","controller","sentinel"], overall:86, tags:["utility","campeao_mundial"]},
-  {name:"FNS", roles:["sentinel"], overall:92, tags:["igl","lurker","utility","campeao_mundial"]},
+  {name:"FNS", roles:["sentinel"], overall:92, tags:["igl","lurker","campeao_mundial"]},
   {name:"yay", roles:["flex","duelist","sentinel"], overall:93, tags:["operator","mm","clutch","campeao_mundial"]},
   {name:"Zellsis", roles:["flex","sentinel"], overall:89, tags:["igl","utility","campeao_mundial"]},
   {name:"Cryocells", roles:["flex","sentinel","duelist"], overall:89, tags:["mm","operator","clutch","campeao_mundial"]},
-  {name:"Rb", roles:["flex","controller","initiator","duelist"], overall:92, tags:["utility","campeao_mundial"]},
+  {name:"Rb", roles:["flex","controller","initiator","duelist"], overall:92, tags:["clutch","utility","campeao_mundial"]},
   {name:"BuZz", roles:["duelist"], overall:93, tags:["operator","entry","mm","clutch","campeao_mundial"]},
   {name:"MaKo", roles:["controller"], overall:90, tags:["utility","clutch","igl"]},
   {name:"Marved", roles:["controller"], overall:93, tags:["utility","clutch","campeao_mundial"]},
@@ -355,20 +355,20 @@ const POOL = [
   {name:"Sacy", roles:["initiator"], overall:93, tags:["clutch","utility","campeao_mundial"]},
   {name:"nAts", roles:["sentinel"], overall:93, tags:["igl","lurker","clutch","utility","campeao_mundial"]},
   {name:"eeiu", roles:["initiator"], overall:86, tags:["clutch","utility"]},
-  {name:"BABYBAY", roles:["sentinel","flex"], overall:85, tags:["utility","lurker"]},
+  {name:"BABYBAY", roles:["sentinel","flex"], overall:85, tags:["lurker"]},
   {name:"cNed", roles:["duelist","sentinel"], overall:92, tags:["lurker","operator","campeao_mundial"]},
   {name:"Chronicle", roles:["flex","sentinel","controller","initiator"], overall:92, tags:["clutch","utility","campeao_mundial"]},
   {name:"Redgar", roles:["flex","controller","initiator"], overall:85, tags:["utility","campeao_mundial"]},
   {name:"Boaster", roles:["controller"], overall:90, tags:["igl","utility","clutch","campeao_mundial"]},
-  {name:"SUYGETSU", roles:["controller","sentinel"], overall:92, tags:["utility","lurker","campeao_mundial"]},
+  {name:"SUYGETSU", roles:["controller","sentinel"], overall:92, tags:["clutch","lurker","campeao_mundial"]},
   {name:"mindfreak", roles:["controller"], overall:92, tags:["utility","clutch"]},
-  {name:"Ethan", roles:["flex","initiator","sentinel","controller"], overall:92, tags:["utility","igl","campeao_mundial"]},
+  {name:"Ethan", roles:["flex","initiator","sentinel","controller"], overall:92, tags:["clutch","utility","igl","campeao_mundial"]},
   {name:"dgzin", roles:["duelist"], overall:85, tags:["operator","entry","mm","clutch"]},
   {name:"Lakia", roles:["initiator"], overall:88, tags:["utility","campeao_mundial"]},
   {name:"t3xture", roles:["duelist"], overall:93, tags:["operator","mm","clutch","entry","campeao_mundial"]},
   {name:"havoc", roles:["duelist","sentinel"], overall:80, tags:["lurker","entry","operator","mm"]},
   {name:"Tenz", roles:["flex","controller","duelist"], overall:93, tags:["entry","mm","clutch","campeao_mundial"]},
-  {name:"tex", roles:["sentinel"], overall:86, tags:["lurker","clutch","utility"]},
+  {name:"tex", roles:["sentinel"], overall:86, tags:["lurker","clutch"]},
   {name:"nzr", roles:["initiator"], overall:86, tags:["utility","igl","clutch"]},
   {name:"d4v41", roles:["flex","initiator","sentinel"], overall:93, tags:["igl","clutch","utility","lurker","campeao_mundial"]},
   {name:"trent", roles:["initiator"], overall:89, tags:["utility","clutch"]},
@@ -380,16 +380,16 @@ const POOL = [
   {name:"bdog", roles:["flex","duelist","controller","sentinel"], overall:81, tags:["lurker","clutch","utility"]},
   {name:"JonahP", roles:["flex","initiator"], overall:87, tags:["clutch","utility"]},
   {name:"Munchkin", roles:["flex","sentinel","initiator"], overall:90, tags:["utility","lurker","campeao_mundial"]},
-  {name:"benjyfishy", roles:["sentinel"], overall:88, tags:["lurker","clutch","utility","campeao_mundial"]},
+  {name:"benjyfishy", roles:["sentinel"], overall:88, tags:["lurker","clutch","campeao_mundial"]},
   {name:"Victor", roles:["flex","duelist","sentinel"], overall:88, tags:["clutch","utility","lurker","campeao_mundial"]},
   {name:"s0m", roles:["controller"], overall:91, tags:["clutch","mm","utility","campeao_mundial"]},
   {name:"silentzz", roles:["flex","sentinel","duelist"], overall:82, tags:["clutch","utility","lurker"]},
   {name:"Jamppi", roles:["initiator","duelist"], overall:84, tags:["clutch","utility","igl"]},
   {name:"marteen", roles:["duelist"], overall:86, tags:["clutch","mm","entry","operator"]},
   {name:"Boo", roles:["controller"], overall:85, tags:["clutch","utility","igl","campeao_mundial"]},
-  {name:"bao", roles:["sentinel","controller"], overall:87, tags:["clutch","utility","lurker","mm"]},
+  {name:"bao", roles:["sentinel","controller"], overall:87, tags:["clutch","lurker","mm"]},
   {name:"Rossy", roles:["flex","controller","sentinel","initiator"], overall:83, tags:["clutch","utility"]},
-  {name:"skuba", roles:["sentinel"], overall:92, tags:["clutch","utility","lurker","campeao_mundial"]},
+  {name:"skuba", roles:["sentinel"], overall:92, tags:["clutch","lurker","campeao_mundial"]},
   {name:"Xeppaa", roles:["initiator"], overall:83, tags:["clutch","utility"]},
   {name:"pANcada", roles:["controller"], overall:92, tags:["clutch","mm","utility","campeao_mundial"]},
   {name:"kiNgg", roles:["flex","controller","sentinel","initiator"], overall:93, tags:["clutch","igl","utility","lurker","campeao_mundial"]},
@@ -398,7 +398,7 @@ const POOL = [
   {name:"Meteor", roles:["sentinel","duelist","controller"], overall:89, tags:["clutch","utility","lurker","campeao_mundial"]},
   {name:"Karon", roles:["controller"], overall:90, tags:["clutch","utility","campeao_mundial"]},
   {name:"Wo0t", roles:["flex","sentinel","duelist"], overall:88, tags:["mm","utility","clutch","entry","campeao_mundial"]},
-  {name:"lukxo", roles:["sentinel","flex","controller"], overall:91, tags:["mm","utility","operator","clutch","lurker"]},
+  {name:"lukxo", roles:["sentinel","flex","controller"], overall:91, tags:["mm","operator","clutch","lurker"]},
   {name:"NaturE", roles:["initiator"], overall:82, tags:["igl","utility"]},
   {name:"liazzi", roles:["flex","duelist","controller","sentinel"], overall:80, tags:["utility"]},
   {name:"Tisora", roles:["flex","duelist","initiator","sentinel"], overall:80, tags:["lurker","clutch","utility"]},
@@ -437,10 +437,10 @@ const POOL = [
   {name:"Verno", roles:["initiator"], overall:88, tags:["igl","utility","clutch"]},
   {name:"happywei", roles:["sentinel","controller"], overall:85, tags:["clutch","utility","lurker"]},
   {name:"Ash", roles:["flex","initiator","duelist"], overall:83, tags:["utility"]},
-  {name:"Kess", roles:["initiator","flex"], overall:83, tags:["utility","igl"]},
+  {name:"Kess", roles:["initiator","flex"], overall:83, tags:["utility"]},
   {name:"kamo", roles:["flex","duelist","controller"], overall:80, tags:["utility","entry","clutch"]},
   {name:"murizzz", roles:["initiator","sentinel","controller"], overall:80, tags:["igl","utility"]},
-  {name:"Shyy", roles:["sentinel"], overall:87, tags:["lurker","clutch","utility"]},
+  {name:"Shyy", roles:["sentinel"], overall:87, tags:["lurker","clutch"]},
   {name:"runi", roles:["initiator"], overall:80, tags:["utility","igl"]},
   {name:"paTiTek", roles:["controller"], overall:84, tags:["clutch","utility"]},
   {name:"adverso", roles:["flex","initiator","sentinel"], overall:82, tags:["igl","utility"]},
@@ -465,7 +465,7 @@ const POOL = [
   {name:"NiSMO", roles:["flex"], overall:82, tags:["igl","utility"]},
   {name:"RieNs", roles:["initiator"], overall:88, tags:["utility","clutch","campeao_mundial"]},
   {name:"neT", roles:["sentinel","initiator"], overall:83, tags:["lurker","utility"]},
-  {name:"cortezia", roles:["sentinel","controller"], overall:86, tags:["lurker","clutch","mm","utility"]},
+  {name:"cortezia", roles:["sentinel","controller"], overall:86, tags:["lurker","clutch","mm"]},
   {name:"kaajak", roles:["duelist"], overall:88, tags:["entry","operator","mm","clutch"]},
   {name:"Kyu", roles:["initiator"], overall:82, tags:["utility"]},
   {name:"invy", roles:["initiator","controller"], overall:85, tags:["utility","clutch","mm"]},
@@ -479,7 +479,7 @@ const POOL = [
   {name:"yetujey", roles:["sentinel","controller"], overall:84, tags:["clutch","utility","lurker"]},
   {name:"N4RRATE", roles:["flex","duelist","sentinel","initiator"], overall:84, tags:["clutch","utility","mm"]},
   {name:"S1Mon", roles:["initiator"], overall:85, tags:["igl","utility","clutch","campeao_mundial"]},
-  {name:"Neon", roles:["sentinel","duelist","flex"], overall:93, tags:["mm","clutch","utility","operator","entry","campeao_mundial"]},
+  {name:"Neon", roles:["sentinel","duelist","flex"], overall:93, tags:["mm","clutch","operator","entry","campeao_mundial"]},
   {name:"alym", roles:["duelist"], overall:84, tags:["mm","clutch","entry"]},
   {name:"Sayonara", roles:["initiator","flex"], overall:86, tags:["utility","clutch","mm"]},
   {name:"tkzin", roles:["duelist"], overall:86, tags:["entry","mm","clutch"]},
@@ -510,7 +510,7 @@ const POOL = [
   {name:"mta", roles:["initiator"], overall:80, tags:["utility"]},
   {name:"Rarga", roles:["duelist"], overall:84, tags:["mm","operator","entry","clutch"]},
   {name:"PxS", roles:["flex","initiator","controller","sentinel"], overall:84, tags:["utility","clutch"]},
-  {name:"Sayf", roles:["flex","duelist","sentinel","initiator"], overall:84, tags:["igl","utility","clutch"]},
+  {name:"Sayf", roles:["flex","duelist","sentinel","initiator"], overall:84, tags:["utility","clutch"]},
   {name:"iZu", roles:["initiator","duelist","controller"], overall:90, tags:["clutch","mm","utility","operator","campeao_mundial"]},
   {name:"NoMan", roles:["flex","duelist","sentinel"], overall:84, tags:["clutch","utility"]},
   {name:"moose", roles:["controller","sentinel"], overall:80, tags:["clutch","utility","lurker"]},
@@ -891,10 +891,10 @@ function compositionBonus(roster, isSlotted){
   // Duelista + Iniciador na equipe -> buff de ataque
   if(duelist && initiator) attack += 2;
 
-  // Operator no Duelista/Sentinela: 1 usuário = buff na defesa; os 2 = nerf na defesa
+  // Operator no Duelista/Sentinela: 1 usuário = buff na defesa; os 2 ao mesmo tempo = nerf geral
   const opUsers = [duelist, sentinel].filter(p=>hasTag(p,"operator")).length;
   if(opUsers===1) defense += 3;
-  else if(opUsers===2) defense -= 2;
+  else if(opUsers===2){ attack -= 2; defense -= 2; }
 
   // 2+ jogadores com clutch = buff geral
   const clutchCount = roster.filter(p=>hasTag(p,"clutch")).length;
@@ -969,6 +969,8 @@ const I18N = {
     historyLink:"📜 Campanhas anteriores",
     historyTitle:"Suas Campanhas",
     historyEmpty:"Nenhuma campanha salva ainda. Jogue até o fim pra registrar seu resultado aqui.",
+    creatorTitle:"Sobre o Criador",
+    creatorBody:"Meu nome é Wasmorf. Sou estudante de Análise e Desenvolvimento de Sistemas (ADS), e o VALX foi um projeto que fiz com muito carinho por conta própria. Estou muito feliz com o resultado até aqui, e espero de coração que dê certo. Obrigado por jogar!",
     hero:"Monte seu Super Time e busque o título mundial.",
     lead:"Escale seus 5 Pro Players e corra atrás do título Mundial. Cada escolha pesa — a diferença entre um super time e um fracasso é mais fina do que parece. Overall não conta a história toda.",
     diffClassicoTitle:"Modo Clássico",
@@ -987,25 +989,21 @@ const I18N = {
     headCoachLabel:"HEAD COACH",
     poolLabel:"Craques no pool:",
     filledLabel:n=>`${n}/5 escalados`,
-    slot:"VAGA",
     rosterComplete:"Escalação completa. Overall do time:",
     toMatchBtn:"Ir para o Mundial",
     drawLead:"Sorteie os próximos craques disponíveis para avaliar.",
     drawBtn:"Sortear Players",
     pickOneLead:"Escolha um craque para escalar:",
     poolEmpty:"Pool esgotado.",
-    draftBtn:"Escalar",
     skipBtn:"Pular",
     skipsLeftLabel:n=>`Pulos restantes: ${n}`,
-    slotTakenNote:role=>`Vaga de ${role} já ocupada — esse craque não pode ser escalado.`,
     chooseSlotPrompt:name=>`Em qual vaga encaixar ${name}?`,
     confirmDraftPrompt:name=>`Confirmar escalação de ${name}?`,
     confirmBtn:"Confirmar",
     backBtn:"Voltar",
     alreadyPlayedWith:"Já foi campeão junto",
     hiddenStats:"Atributos ocultos neste modo — confie no nome.",
-    statAim:"Mira", statUtil:"Utilidade", statIgl:"IGL", statClutch:"Clutch",
-    yourTeam:"SEU TIME", vs:"VS", rostersLabel:"K / D / A",
+    vs:"VS", rostersLabel:"K / D / A",
     recordSingleMapUs:(name,kills,prevKills,prevHolder)=>`🔥 NOVO RECORDE! ${name} fechou o mapa com ${kills} abates, superando os ${prevKills} de ${prevHolder} — o novo recorde da campanha.`,
     recordSingleMapThem:(name,kills,prevKills,prevHolder)=>`😮 O ADVERSÁRIO BATEU O RECORDE! ${name}, do time rival, fechou o mapa com ${kills} abates, superando os ${prevKills} de ${prevHolder}. Esse agora é o recorde a bater na sua campanha.`,
     recordSeriesUs:(name,kills,prevKills,prevHolder,bo)=>`🔥 NOVO RECORDE! ${name} fechou a série com ${kills} abates, superando os ${prevKills} de ${prevHolder} — o recorde de uma série ${bo} na campanha.`,
@@ -1026,11 +1024,9 @@ const I18N = {
     tryAgain:"Tentar novamente",
     roles:{duelist:"Duelista", flex:"Flex", initiator:"Iniciador", sentinel:"Sentinela", controller:"Controlador"},
     tags:{mm:"Mira Monstra", entry:"Entry", operator:"Operator", clutch:"Clutch", igl:"IGL", lurker:"Lurker", utility:"Utilidade", campeao_mundial:"Campeão Mundial"},
-    noSlotsNote:"Nenhuma vaga compatível com as funções desse craque está disponível.",
     groupWord:"Grupo",
     groupStageTag:"FASE DE GRUPOS",
     playoffsTag:"PLAYOFFS",
-    matchOfLabel:n=>`Jogo ${n}/3`,
     labels:{
       ubR1:"Upper Bracket — Rodada 1", ubSemi:"Upper Bracket — Semifinal", ubFinal:"Upper Bracket — Final",
       groupR1:"Rodada 1", groupUpper:"Upper (classifica)", groupLower:"Lower (eliminação)", groupDecider:"Decisão do grupo",
@@ -1091,7 +1087,7 @@ const I18N = {
         </ul>
         <div class="rules-bad">✗ DESVANTAGENS</div>
         <ul>
-          <li>Duelista <em>e</em> Sentinela usando Operator ao mesmo tempo: nerf na defesa.</li>
+          <li>Duelista <em>e</em> Sentinela usando Operator ao mesmo tempo: nerf geral.</li>
           <li>Nenhum jogador com IGL: nerf geral.</li>
           <li>Mais de 1 jogador com IGL: nerf geral.</li>
           <li>Duelista sem Entry: nerf no ataque.</li>
@@ -1106,6 +1102,7 @@ const I18N = {
       {title:"Formato do Mundial", body:`
         <p>16 equipes (você + 15 adversárias) divididas em <strong>4 grupos de 4</strong>. Você enfrenta os outros 3 do seu grupo; os demais jogos e grupos são resolvidos automaticamente. O <strong>Top 2</strong> de cada grupo (8 times) avança aos playoffs.</p>
         <p>Os playoffs são de <strong>dupla eliminação</strong> (Upper/Lower Bracket): perder na Upper te derruba pra Lower (ainda vivo); perder na Lower te elimina. Todas as partidas são <strong>MD3</strong>, exceto a Final da Lower Bracket e a Grande Final, que são <strong>MD5</strong>.</p>
+        <p>Cada mapa vai até <strong>13 rounds</strong> — mas se empatar em <strong>12-12</strong>, vai pra <strong>prorrogação</strong>: ninguém fecha o mapa só chegando em 13, precisa abrir <strong>2 rounds de vantagem</strong> (13-12 não é suficiente; só fecha em 14-12, ou 15-13, e assim por diante), igual no jogo de verdade.</p>
       `},
       {title:"Recordes Reais", body:`
         <p>Existem 3 recordes reais do cenário profissional: <strong>47 abates</strong> num mapa único, <strong>82</strong> numa série MD3 (ambos de aspas) e <strong>126</strong> numa série MD5 (de marteen). Craques com Mira Monstra e overall 95+ têm uma chance rara de superá-los numa partida monstruosa. O recorde "a bater" vale pros dois lados — seu time ou o adversário — e, uma vez quebrado, passa a ser o novo recorde <strong>durante toda a campanha</strong> (inclusive se for a IA quem bater primeiro). No fim da campanha, tudo volta aos valores reais.</p>
@@ -1126,6 +1123,8 @@ const I18N = {
     historyLink:"📜 Past campaigns",
     historyTitle:"Your Campaigns",
     historyEmpty:"No saved campaigns yet. Play through to the end to log your result here.",
+    creatorTitle:"About the Creator",
+    creatorBody:"My name is Wasmorf. I'm a Systems Analysis and Development (ADS) student, and VALX was a project I built on my own with a lot of care. I'm really happy with how it's turned out so far, and I genuinely hope it does well. Thanks for playing!",
     hero:"Build your Super Team and chase the world title.",
     lead:"Draft your 5 pro players and chase the World Championship.<br>Every pick matters — the line between a super team and a disaster is thinner than it looks.<br>And Overall doesn't tell the whole story.",
     diffClassicoTitle:"Classic Mode",
@@ -1144,25 +1143,21 @@ const I18N = {
     headCoachLabel:"HEAD COACH",
     poolLabel:"Pros in pool:",
     filledLabel:n=>`${n}/5 drafted`,
-    slot:"SLOT",
     rosterComplete:"Roster complete. Team overall:",
     toMatchBtn:"Go to the World Championship",
     drawLead:"Draw the next available pros to evaluate.",
     drawBtn:"Draw players",
     pickOneLead:"Pick one to draft:",
     poolEmpty:"Pool exhausted.",
-    draftBtn:"Draft",
     skipBtn:"Skip",
     skipsLeftLabel:n=>`Skips left: ${n}`,
-    slotTakenNote:role=>`${role} slot already filled — this pro can't be drafted.`,
     chooseSlotPrompt:name=>`Which slot should ${name} fill?`,
     confirmDraftPrompt:name=>`Draft ${name}?`,
     confirmBtn:"Confirm",
     backBtn:"Back",
     alreadyPlayedWith:"Already a champion together",
     hiddenStats:"Attributes hidden in this mode — trust the name.",
-    statAim:"Aim", statUtil:"Utility", statIgl:"IGL", statClutch:"Clutch",
-    yourTeam:"YOUR TEAM", vs:"VS", rostersLabel:"K / D / A",
+    vs:"VS", rostersLabel:"K / D / A",
     recordSingleMapUs:(name,kills,prevKills,prevHolder)=>`🔥 NEW RECORD! ${name} closed the map with ${kills} kills, breaking ${prevHolder}'s ${prevKills} — the new campaign record.`,
     recordSingleMapThem:(name,kills,prevKills,prevHolder)=>`😮 THE OPPONENT BROKE THE RECORD! ${name}, from the rival team, closed the map with ${kills} kills, breaking ${prevHolder}'s ${prevKills}. That's now the record to beat in your campaign.`,
     recordSeriesUs:(name,kills,prevKills,prevHolder,bo)=>`🔥 NEW RECORD! ${name} closed the series with ${kills} kills, breaking ${prevHolder}'s ${prevKills} — the ${bo} series record for this campaign.`,
@@ -1183,11 +1178,9 @@ const I18N = {
     tryAgain:"Try again",
     roles:{duelist:"Duelist", flex:"Flex", initiator:"Initiator", sentinel:"Sentinel", controller:"Controller"},
     tags:{mm:"Monster Aim", entry:"Entry", operator:"Operator", clutch:"Clutch", igl:"IGL", lurker:"Lurker", utility:"Utility", campeao_mundial:"World Champion"},
-    noSlotsNote:"No open slot matches this pro's roles.",
     groupWord:"Group",
     groupStageTag:"GROUP STAGE",
     playoffsTag:"PLAYOFFS",
-    matchOfLabel:n=>`Match ${n}/3`,
     labels:{
       ubR1:"Upper Bracket — Round 1", ubSemi:"Upper Bracket — Semifinal", ubFinal:"Upper Bracket — Final",
       groupR1:"Round 1", groupUpper:"Upper (qualify)", groupLower:"Lower (elimination)", groupDecider:"Group decider",
@@ -1248,7 +1241,7 @@ const I18N = {
         </ul>
         <div class="rules-bad">✗ DISADVANTAGES</div>
         <ul>
-          <li>Duelist <em>and</em> Sentinel both using Operator: defense nerf.</li>
+          <li>Duelist <em>and</em> Sentinel both using Operator: general nerf.</li>
           <li>No player with IGL: general nerf.</li>
           <li>More than 1 player with IGL: general nerf.</li>
           <li>Duelist without Entry: attack nerf.</li>
@@ -1263,6 +1256,7 @@ const I18N = {
       {title:"World Championship Format", body:`
         <p>16 teams (you + 15 rivals) split into <strong>4 groups of 4</strong>. You face the other 3 in your group; the rest is resolved automatically. The <strong>Top 2</strong> from each group (8 teams) advance to the playoffs.</p>
         <p>The playoffs are <strong>double elimination</strong> (Upper/Lower Bracket): losing in Upper drops you to Lower (still alive); losing in Lower eliminates you. Every match is <strong>Bo3</strong>, except the Lower Bracket Final and the Grand Final, which are <strong>Bo5</strong>.</p>
+        <p>Each map goes to <strong>13 rounds</strong> — but if it ties <strong>12-12</strong>, it goes to <strong>overtime</strong>: hitting 13 alone doesn't close the map, you need a <strong>2-round lead</strong> (13-12 isn't enough; it only ends at 14-12, or 15-13, and so on), just like the real game.</p>
       `},
       {title:"Real-World Records", body:`
         <p>There are 3 real pro-scene records: <strong>47 kills</strong> in a single map, <strong>82</strong> in a Bo3 series (both by aspas), and <strong>126</strong> in a Bo5 series (by marteen). Players with Monster Aim and 95+ overall have a rare shot at beating them in a monster game. The record "to beat" applies to both sides — your team or the opponent — and once broken, it becomes the new record <strong>for the rest of the campaign</strong> (even if the AI breaks it first). Everything resets to the real marks once the campaign ends.</p>
@@ -1283,6 +1277,8 @@ const I18N = {
     historyLink:"📜 Campañas anteriores",
     historyTitle:"Tus Campañas",
     historyEmpty:"Todavía no hay campañas guardadas. Juega hasta el final para registrar tu resultado aquí.",
+    creatorTitle:"Sobre el Creador",
+    creatorBody:"Mi nombre es Wasmorf. Soy estudiante de Análisis y Desarrollo de Sistemas (ADS), y VALX fue un proyecto que hice por mi cuenta con mucho cariño. Estoy muy feliz con el resultado hasta ahora, y espero de corazón que le vaya bien. ¡Gracias por jugar!",
     hero:"Arma tu Super Equipo y busca el título mundial.",
     lead:"Arma tus 5 jugadores profesionales y ve tras el título Mundial.<br>Cada elección pesa — la diferencia entre un súper equipo y un fracaso es más fina de lo que parece.<br>Y el Overall no cuenta toda la historia.",
     diffClassicoTitle:"Modo Clásico",
@@ -1301,25 +1297,21 @@ const I18N = {
     headCoachLabel:"HEAD COACH",
     poolLabel:"Cracks en el pool:",
     filledLabel:n=>`${n}/5 reclutados`,
-    slot:"SLOT",
     rosterComplete:"Plantilla completa. Overall del equipo:",
     toMatchBtn:"Ir al Mundial",
     drawLead:"Sortea los próximos cracks disponibles para evaluar.",
     drawBtn:"Sortear jugadores",
     pickOneLead:"Elige uno para reclutar:",
     poolEmpty:"Pool agotado.",
-    draftBtn:"Reclutar",
     skipBtn:"Saltar",
     skipsLeftLabel:n=>`Saltos restantes: ${n}`,
-    slotTakenNote:role=>`La vaga de ${role} ya está ocupada — este crack no puede ser reclutado.`,
     chooseSlotPrompt:name=>`¿En qué vaga encajar a ${name}?`,
     confirmDraftPrompt:name=>`¿Confirmar el reclutamiento de ${name}?`,
     confirmBtn:"Confirmar",
     backBtn:"Volver",
     alreadyPlayedWith:"Ya fue campeón junto",
     hiddenStats:"Atributos ocultos en este modo — confía en el nombre.",
-    statAim:"Puntería", statUtil:"Utilidad", statIgl:"IGL", statClutch:"Clutch",
-    yourTeam:"TU EQUIPO", vs:"VS", rostersLabel:"K / D / A",
+    vs:"VS", rostersLabel:"K / D / A",
     recordSingleMapUs:(name,kills,prevKills,prevHolder)=>`🔥 ¡NUEVO RÉCORD! ${name} cerró el mapa con ${kills} bajas, superando las ${prevKills} de ${prevHolder} — el nuevo récord de la campaña.`,
     recordSingleMapThem:(name,kills,prevKills,prevHolder)=>`😮 ¡EL RIVAL BATIÓ EL RÉCORD! ${name}, del equipo rival, cerró el mapa con ${kills} bajas, superando las ${prevKills} de ${prevHolder}. Ese es ahora el récord a batir en tu campaña.`,
     recordSeriesUs:(name,kills,prevKills,prevHolder,bo)=>`🔥 ¡NUEVO RÉCORD! ${name} cerró la serie con ${kills} bajas, superando las ${prevKills} de ${prevHolder} — el récord de una serie ${bo} en la campaña.`,
@@ -1340,11 +1332,9 @@ const I18N = {
     tryAgain:"Intentar de nuevo",
     roles:{duelist:"Duelista", flex:"Flex", initiator:"Iniciador", sentinel:"Centinela", controller:"Controlador"},
     tags:{mm:"Mira Monstruosa", entry:"Entry", operator:"Operator", clutch:"Clutch", igl:"IGL", lurker:"Lurker", utility:"Utilidad", campeao_mundial:"Campeón Mundial"},
-    noSlotsNote:"Ninguna vaga disponible coincide con las funciones de este crack.",
     groupWord:"Grupo",
     groupStageTag:"FASE DE GRUPOS",
     playoffsTag:"PLAYOFFS",
-    matchOfLabel:n=>`Partido ${n}/3`,
     labels:{
       ubR1:"Upper Bracket — Ronda 1", ubSemi:"Upper Bracket — Semifinal", ubFinal:"Upper Bracket — Final",
       groupR1:"Ronda 1", groupUpper:"Upper (clasifica)", groupLower:"Lower (eliminación)", groupDecider:"Decisión del grupo",
@@ -1405,7 +1395,7 @@ const I18N = {
         </ul>
         <div class="rules-bad">✗ DESVENTAJAS</div>
         <ul>
-          <li>Duelista <em>y</em> Centinela usando Operator al mismo tiempo: nerf de defensa.</li>
+          <li>Duelista <em>y</em> Centinela usando Operator al mismo tiempo: nerf general.</li>
           <li>Ningún jugador con IGL: nerf general.</li>
           <li>Más de 1 jugador con IGL: nerf general.</li>
           <li>Duelista sin Entry: nerf de ataque.</li>
@@ -1420,6 +1410,7 @@ const I18N = {
       {title:"Formato del Mundial", body:`
         <p>16 equipos (tú + 15 rivales) divididos en <strong>4 grupos de 4</strong>. Enfrentas a los otros 3 de tu grupo; el resto se resuelve automáticamente. El <strong>Top 2</strong> de cada grupo (8 equipos) avanza a los playoffs.</p>
         <p>Los playoffs son de <strong>doble eliminación</strong> (Upper/Lower Bracket): perder en Upper te baja a Lower (aún vivo); perder en Lower te elimina. Todos los partidos son <strong>MD3</strong>, excepto la Final de la Lower Bracket y la Gran Final, que son <strong>MD5</strong>.</p>
+        <p>Cada mapa llega hasta los <strong>13 rounds</strong> — pero si empata <strong>12-12</strong>, va a <strong>prórroga</strong>: llegar a 13 solo no cierra el mapa, hace falta abrir <strong>2 rounds de ventaja</strong> (13-12 no alcanza; recién cierra en 14-12, o 15-13, y así sucesivamente), igual que en el juego real.</p>
       `},
       {title:"Récords Reales", body:`
         <p>Existen 3 récords reales del circuito profesional: <strong>47 bajas</strong> en un solo mapa, <strong>82</strong> en una serie MD3 (ambos de aspas) y <strong>126</strong> en una serie MD5 (de marteen). Los cracks con Mira Monstruosa y overall 95+ tienen una chance rara de superarlos en un partido monstruoso. El récord "a batir" vale para ambos lados — tu equipo o el rival — y, una vez roto, pasa a ser el nuevo récord <strong>durante toda la campaña</strong> (incluso si la IA lo rompe primero). Al terminar la campaña, todo vuelve a los valores reales.</p>
@@ -1753,7 +1744,7 @@ function render(){
 }
 
 function topbarHTML(){
-  const tags = {intro:t("phase_intro"), rules:t("phase_rules"), teamselect:t("phase_teamselect"), coachselect:t("phase_coachselect"), draft:t("phase_draft"), match:t("phase_match"), end:t("phase_end")};
+  const tags = {intro:t("phase_intro"), rules:t("phase_rules"), history:t("historyTitle"), creator:t("creatorTitle"), teamselect:t("phase_teamselect"), coachselect:t("phase_coachselect"), draft:t("phase_draft"), match:t("phase_match"), end:t("phase_end")};
   const langs = [["pt","PT"],["en","EN"],["es","ES"]];
   const langBtns = langs.map(([code,label])=>`<button class="lang-btn ${state.lang===code?'active':''}" data-lang="${code}">${label}</button>`).join("");
   return `
@@ -1780,6 +1771,7 @@ function screenHTML(){
   if(state.screen==="intro") return introHTML();
   if(state.screen==="rules") return rulesHTML();
   if(state.screen==="history") return historyHTML();
+  if(state.screen==="creator") return creatorHTML();
   if(state.screen==="teamselect") return teamSelectHTML();
   if(state.screen==="coachselect") return coachSelectHTML();
   if(state.screen==="draft") return draftHTML();
@@ -1813,11 +1805,12 @@ function introHTML(){
   </div>
   <p class="disclaimer">${t("disclaimer")}</p>
   <div class="footer-social">
-    <a class="social-link" href="https://x.com/wasmorf1?s=11" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter) profile">
-      <svg width="20" height="20" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M6 6 L26 26 M26 6 L6 26" stroke="#F5F5F5" stroke-width="4.5" stroke-linecap="square"/>
+    <button class="social-link" id="creator-btn" aria-label="Sobre o criador">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="12" cy="8" r="3.5" stroke="#F5F5F5" stroke-width="1.8"/>
+        <path d="M4.5 20c1.2-4 4-6 7.5-6s6.3 2 7.5 6" stroke="#F5F5F5" stroke-width="1.8" stroke-linecap="round"/>
       </svg>
-    </a>
+    </button>
   </div>
   `;
 }
@@ -1865,6 +1858,23 @@ function historyHTML(){
     <div class="history-list">${rowsHTML}</div>
     <div class="btn-row" style="margin-top:14px;">
       <button class="btn" id="history-back-btn">${t("rulesBackBtn")}</button>
+    </div>
+  </div>
+  `;
+}
+
+function creatorHTML(){
+  return `
+  <div class="panel angle" style="text-align:center;">
+    <h1 class="hero" style="font-size:22px;">${t("creatorTitle")}</h1>
+    <p class="lead" style="margin-top:10px;">${t("creatorBody")}</p>
+    <a class="social-link" href="https://x.com/wasmorf1?s=11" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter) profile" style="margin:18px auto 0;">
+      <svg width="20" height="20" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M6 6 L26 26 M26 6 L6 26" stroke="#F5F5F5" stroke-width="4.5" stroke-linecap="square"/>
+      </svg>
+    </a>
+    <div class="btn-row" style="justify-content:center;margin-top:18px;">
+      <button class="btn" id="creator-back-btn">${t("rulesBackBtn")}</button>
     </div>
   </div>
   `;
@@ -2035,12 +2045,12 @@ function matchHTML(){
       ${rosterColHTML(state.matchStats.them, opp.name)}
     </div>` : "";
 
-  const mapFinished = state.matchScore.us===13 || state.matchScore.them===13;
+  const mapFinished = isMapDecided(state.matchScore.us, state.matchScore.them);
   let actionHTML = "";
   if(!mapFinished){
     actionHTML = `<div class="btn-row" style="justify-content:center;"><button class="btn" id="sim-round-btn">${t("simRoundBtn")}</button> <button class="btn secondary" id="sim-all-btn">${t("simAllBtn")}</button></div>`;
   } else {
-    const wonMap = state.matchScore.us===13;
+    const wonMap = state.matchScore.us > state.matchScore.them;
     const prospUs = state.mapsUs + (wonMap?1:0);
     const prospThem = state.mapsThem + (wonMap?0:1);
     const matchDecided = prospUs===state.mapsToWin || prospThem===state.mapsToWin;
@@ -2211,6 +2221,16 @@ function attachHandlers(){
     state.screen = "intro";
     render();
   };
+  const creatorBtn = document.getElementById("creator-btn");
+  if(creatorBtn) creatorBtn.onclick = ()=>{
+    state.screen = "creator";
+    render();
+  };
+  const creatorBackBtn = document.getElementById("creator-back-btn");
+  if(creatorBackBtn) creatorBackBtn.onclick = ()=>{
+    state.screen = "intro";
+    render();
+  };
 
   document.querySelectorAll(".team-option").forEach(el=>{
     el.onclick = ()=>{ state.teamName = el.dataset.team; render(); };
@@ -2307,7 +2327,7 @@ function attachHandlers(){
   if(simRoundBtn) simRoundBtn.onclick = ()=>{ simulateRound(); render(); };
   const simAllBtn = document.getElementById("sim-all-btn");
   if(simAllBtn) simAllBtn.onclick = ()=>{
-    while(state.matchScore.us<13 && state.matchScore.them<13){ simulateRound(); }
+    while(!isMapDecided(state.matchScore.us, state.matchScore.them)){ simulateRound(); }
     render();
   };
   const nextMapBtn = document.getElementById("next-map-btn");
@@ -2328,7 +2348,23 @@ function attachHandlers(){
   const shareXBtn = document.getElementById("share-x-btn");
   if(shareXBtn) shareXBtn.onclick = ()=>{
     const text = buildShareText();
-    window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`, "_blank", "noopener");
+    const webUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
+    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent || "");
+    if(!isMobile){
+      window.open(webUrl, "_blank", "noopener");
+      return;
+    }
+    // no celular, tenta abrir o app de verdade primeiro (esquema não-oficial, sem garantia da X);
+    // se em ~800ms a página não perder o foco (sinal de que o app abriu), cai pro site normalmente.
+    const appUrl = `twitter://post?message=${encodeURIComponent(text)}`;
+    let appOpened = false;
+    const onBlur = ()=>{ appOpened = true; };
+    window.addEventListener("blur", onBlur, {once:true});
+    window.location.href = appUrl;
+    setTimeout(()=>{
+      window.removeEventListener("blur", onBlur);
+      if(!appOpened) window.open(webUrl, "_blank", "noopener");
+    }, 800);
   };
 }
 
@@ -2428,7 +2464,7 @@ function startNextMap(){
 }
 // Registra o resultado do mapa atual no placar da partida e acumula os abates na série e na campanha.
 function finalizeMap(){
-  const wonMap = state.matchScore.us===13;
+  const wonMap = state.matchScore.us > state.matchScore.them;
   state.mapHistory.push({us:state.matchScore.us, them:state.matchScore.them});
   if(wonMap) state.mapsUs++; else state.mapsThem++;
   state.matchStats.us.forEach((p,i)=>{ if(state.seriesStats.us[i]) state.seriesStats.us[i].k += p.k; });
@@ -2598,6 +2634,14 @@ function checkRecords(){
   const seriesBreak = bestBreak(seriesUs, seriesThem, cr[bo]);
 
   return {singleMapBreak, seriesBreak, bo, prevSingleMap:cr.singleMap, prevSeries:cr[bo]};
+}
+
+// Decide se o mapa acabou: precisa de pelo menos 13 rounds E vantagem de 2 — em prorrogação
+// (12-12 pra frente), continua até alguém abrir 2 de diferença, igual na vida real.
+function isMapDecided(us, them){
+  const leader = Math.max(us, them);
+  const diff = Math.abs(us-them);
+  return leader>=13 && diff>=2;
 }
 
 function initMatchStats(){
