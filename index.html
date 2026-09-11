@@ -1052,7 +1052,6 @@ const I18N = {
     shareCoachLabel:"Coach",
     shareCta:"Tente ganhar o Mundial você também",
     shareXBtn:"Compartilhar no X",
-    shareWhatsBtn:"Compartilhar no WhatsApp",
     rulesSections:[
       {title:"Equipe e Head Coach", body:`
         <p>Você escolhe o nome da sua equipe entre 16 organizações reais — as outras 15 viram suas adversárias no Mundial. Em seguida, 4 técnicos são sorteados pra você escolher 1; os outros 15 vão pras equipes rivais. Cada técnico dá um bônus fixo (e escondido) no rating do time — vale pra qualquer equipe que tiver aquele coach. Técnicos que já foram <strong>Campeões Mundiais</strong> dão um bônus extra nesse buff. São considerados títulos mundiais: <strong>Champions, Masters e EWC</strong>.</p>
@@ -1211,7 +1210,6 @@ const I18N = {
     shareCoachLabel:"Coach",
     shareCta:"Try to win the World Championship too",
     shareXBtn:"Share on X",
-    shareWhatsBtn:"Share on WhatsApp",
     rulesSections:[
       {title:"Team & Head Coach", body:`
         <p>You choose your team's name from 16 real organizations — the other 15 become your rivals at the World Championship. Then 4 coaches are drawn for you to pick one; the other 15 go to rival teams. Each coach grants a fixed (hidden) rating bonus — it applies to whichever team has that coach. Coaches who've already been <strong>World Champions</strong> add an extra bonus on top. World titles counted: <strong>Champions, Masters, and EWC</strong>.</p>
@@ -1370,7 +1368,6 @@ const I18N = {
     shareCoachLabel:"Coach",
     shareCta:"Intenta ganar el Mundial tú también",
     shareXBtn:"Compartir en X",
-    shareWhatsBtn:"Compartir en WhatsApp",
     rulesSections:[
       {title:"Equipo y Head Coach", body:`
         <p>Eliges el nombre de tu equipo entre 16 organizaciones reales — las otras 15 se convierten en tus rivales en el Mundial. Después se sortean 4 entrenadores para que elijas uno; los otros 15 van a los equipos rivales. Cada entrenador da un bono fijo (oculto) al rating del equipo — vale para cualquier equipo que tenga ese coach. Entrenadores que ya fueron <strong>Campeones Mundiales</strong> suman un bono extra a ese bono. Se consideran títulos mundiales: <strong>Champions, Masters y EWC</strong>.</p>
@@ -2175,13 +2172,6 @@ function endHTML(){
           </svg>
           ${t("shareXBtn")}
         </button>
-        <button class="share-btn" id="share-whatsapp-btn">
-          <svg width="16" height="16" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M16 4C9.4 4 4 9.4 4 16c0 2.2.6 4.3 1.7 6.2L4 28l5.9-1.6c1.8.9 3.9 1.5 6.1 1.5 6.6 0 12-5.4 12-12S22.6 4 16 4z" stroke="currentColor" stroke-width="2" fill="none"/>
-            <path d="M11 15c1 4 4 7 8 8 1 .3 2-.5 1.5-1.5l-1-1.7c-.3-.5-.9-.7-1.4-.4l-1 .5c-1.5-1-2.8-2.3-3.5-3.8l.5-1c.3-.5.1-1.1-.4-1.4L12 12.5c-1-.5-1.8.4-1.5 1.5z" fill="currentColor"/>
-          </svg>
-          ${t("shareWhatsBtn")}
-        </button>
       </div>
     </div>`;
 }
@@ -2338,11 +2328,6 @@ function attachHandlers(){
   if(shareXBtn) shareXBtn.onclick = ()=>{
     const text = buildShareText();
     window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`, "_blank", "noopener");
-  };
-  const shareWhatsBtn = document.getElementById("share-whatsapp-btn");
-  if(shareWhatsBtn) shareWhatsBtn.onclick = ()=>{
-    const text = buildShareText();
-    window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, "_blank", "noopener");
   };
 }
 
@@ -2704,6 +2689,9 @@ function currentSide(){
   return (Math.floor(totalRounds/12) % 2 === 0) ? "attack" : "defense";
 }
 
+const DEFENSE_EDGE = 1.5; // defesa tem uma vantagem estatística pequena sobre o ataque, sempre
+const PISTOL_ECON_BONUS = 3; // quem vence a pistola (rodada 1 ou 13) leva vantagem só na rodada seguinte
+
 function simulateRound(){
   const opp = currentOpponent();
   const ourSide = currentSide();
@@ -2712,8 +2700,22 @@ function simulateRound(){
   const theirComp = compositionBonus(opp.roster, false);
   const ourBuff = coachBuff(state.headCoach) + ourComp[ourSide] + chemistryBonus(state.roster, state.headCoach);
   const theirBuff = coachBuff(opp.coach) + theirComp[theirSide] + chemistryBonus(opp.roster, opp.coach);
-  const us = teamOverall(state.roster) + ourBuff*BUFF_DAMPING;
-  const oppRating = opp.rating + theirBuff*BUFF_DAMPING;
+
+  // vantagem estatística da defesa (independente de composição/química)
+  const ourDefenseEdge = ourSide==="defense" ? DEFENSE_EDGE : 0;
+  const theirDefenseEdge = theirSide==="defense" ? DEFENSE_EDGE : 0;
+
+  // economia de pistola: só vale na rodada IMEDIATAMENTE seguinte à rodada 1 ou à rodada 13
+  const roundsPlayed = state.matchScore.us + state.matchScore.them;
+  let ourPistolBonus = 0, theirPistolBonus = 0;
+  if(roundsPlayed===1 || roundsPlayed===13){
+    const pistolWinnerIdx = roundsPlayed===1 ? 0 : 12;
+    if(state.roundLog[pistolWinnerIdx]==="win") ourPistolBonus = PISTOL_ECON_BONUS;
+    else theirPistolBonus = PISTOL_ECON_BONUS;
+  }
+
+  const us = teamOverall(state.roster) + ourBuff*BUFF_DAMPING + ourDefenseEdge + ourPistolBonus;
+  const oppRating = opp.rating + theirBuff*BUFF_DAMPING + theirDefenseEdge + theirPistolBonus;
   const diff = us - oppRating;
   const baseProb = 0.5 + diff/130;
   const prob = Math.min(0.94, Math.max(0.06, baseProb));
