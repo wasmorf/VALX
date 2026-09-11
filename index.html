@@ -423,7 +423,7 @@ const POOL = [
   {name:"koalanoob", roles:["duelist"], overall:86, tags:["operator","utility"]},
   {name:"jawgemo", roles:["duelist","flex"], overall:92, tags:["operator","utility","clutch","entry","campeao_mundial"]},
   {name:"Haodong", roles:["controller","sentinel"], overall:88, tags:["utility","clutch"]},
-  {name:"Dantedeu5", roles:["duelist"], overall:88, tags:["entry","utility","clutch"]},
+  {name:"Dantedeu5", roles:["duelist"], overall:88, tags:["entry","clutch","mm"]},
   {name:"blowz", roles:["initiator"], overall:93, tags:["utility","clutch","mm","campeao_mundial"]},
   {name:"Virtyy", roles:["duelist"], overall:85, tags:["entry"]},
   {name:"Darker", roles:["controller","sentinel"], overall:87, tags:["clutch","utility"]},
@@ -475,7 +475,7 @@ const POOL = [
   {name:"yetujey", roles:["sentinel","controller"], overall:86, tags:["clutch","utility","lurker"]},
   {name:"N4RRATE", roles:["flex","duelist","sentinel","initiator"], overall:87, tags:["clutch","utility","mm"]},
   {name:"S1Mon", roles:["initiator"], overall:87, tags:["igl","utility","clutch","campeao_mundial"]},
-  {name:"Neon", roles:["sentinel","duelist","flex"], overall:93, tags:["mm","clutch","operator","entry","campeao_mundial"]},
+  {name:"Neon", roles:["sentinel","duelist","flex"], overall:93, tags:["mm","clutch","operator","entry","lurker","campeao_mundial"]},
   {name:"alym", roles:["duelist"], overall:87, tags:["mm","clutch","entry"]},
   {name:"Sayonara", roles:["initiator","flex"], overall:87, tags:["utility","clutch","mm"]},
   {name:"tkzin", roles:["duelist"], overall:88, tags:["entry","mm","clutch"]},
@@ -582,7 +582,7 @@ const WC_SELECOES = {
     coaches: ["Onur","Romanilly"],
   },
   "Chile": {
-    players: ["Mazino","Melser","Shyy","Tacolilla","adverso","erde","keznit","kiNgg","mta"],
+    players: ["Mazino","Melser","Shyy","adverso","erde","keznit","kiNgg"],
     coaches: ["WKN"],
   },
   "Morocco": {
@@ -1001,10 +1001,15 @@ function compositionBonus(roster, isSlotted){
   const clutchCount = roster.filter(p=>hasTag(p,"clutch")).length;
   if(clutchCount>=2){ attack += 2; defense += 2; }
 
-  // IGL: nenhum ou mais de 1 = nerf; exatamente 1 = neutro
+  // IGL: nenhum = nerf sempre; mais de 1 = nerf, EXCETO em Seleções da Copa do Mundo (lá não pune)
   const iglCount = roster.filter(p=>hasTag(p,"igl")).length;
+  const selecaoKey = rosterSelecaoKey(roster);
   if(iglCount===0){ attack -= 3; defense -= 3; }
-  else if(iglCount>1){ attack -= 2; defense -= 2; }
+  else if(iglCount>1 && !selecaoKey){ attack -= 2; defense -= 2; }
+
+  // Seleção "mista" (combinada de vários países, tipo Finlândia/Suécia) leva um nerf leve —
+  // o entrosamento de uma seleção de país único é sempre um pouco melhor.
+  if(selecaoKey && selecaoKey.includes("/")){ attack -= 1.5; defense -= 1.5; }
 
   // Cobertura das 5 funções (no nosso sistema de vagas isso é sempre verdade, mas fica a checagem)
   if(isSlotted && SLOT_ORDER.some((rk,i)=>!roster[i])){ attack -= 4; defense -= 4; }
@@ -1031,6 +1036,10 @@ function compositionBonus(roster, isSlotted){
     if(hasTag(sentinel,"lurker")){ attack += 2; defense += 2; }
     else { attack -= 1.5; defense -= 1.5; }
   }
+  // Exceção: C0M dá o buff de Lurker mesmo fora da Sentinela (não depende da função dele).
+  const lurkerExceptionNames = ["c0m"];
+  const lurkerException = roster.find(p=>p!==sentinel && lurkerExceptionNames.includes(p.name.toLowerCase()) && hasTag(p,"lurker"));
+  if(lurkerException){ attack += 2; defense += 2; }
 
   // Mira Monstra: quanto mais jogadores com a tag, mais buff (sem teto)
   const mmCount = roster.filter(p=>hasTag(p,"mm")).length;
@@ -1197,7 +1206,7 @@ const I18N = {
         <ul>
           <li>Duelista <em>e</em> Sentinela usando Operator ao mesmo tempo: nerf geral.</li>
           <li>Nenhum jogador com IGL: nerf geral.</li>
-          <li>Mais de 1 jogador com IGL: nerf geral.</li>
+          <li>Mais de 1 jogador com IGL: nerf geral (não vale nas Seleções da Copa do Mundo).</li>
           <li>Duelista sem Entry: nerf no ataque.</li>
           <li>Mais de 3 jogadores com Utilidade: pequeno nerf.</li>
           <li>Sentinela sem Lurker: nerf geral.</li>
@@ -1224,6 +1233,7 @@ const I18N = {
       {title:"Copa do Mundo", body:`
         <p>Em vez de escolher uma organização, você escolhe uma <strong>Seleção nacional</strong> — o draft só sorteia craques que jogam por aquele país (algumas Seleções são combinadas entre países menores, tipo Finlândia/Suécia). O Head Coach também vem só da lista daquela Seleção.</p>
         <p>O resto funciona igual ao modo normal: fase de grupos, playoffs, tudo — só que as outras 15 "equipes" adversárias também são Seleções, cada uma com o elenco real dela.</p>
+        <p>Duas diferenças de regra específicas da Copa do Mundo: o nerf de "mais de 1 IGL" não vale aqui (afinal, numa seleção de verdade é normal ter mais de um craque com liderança tática). Em compensação, <strong>Seleções combinadas de vários países</strong> (tipo Finlândia/Suécia) levam um nerf leve — o entrosamento de uma seleção de país único é sempre um pouco melhor.</p>
       `},
     ],
   },
@@ -1362,7 +1372,7 @@ const I18N = {
         <ul>
           <li>Duelist <em>and</em> Sentinel both using Operator: general nerf.</li>
           <li>No player with IGL: general nerf.</li>
-          <li>More than 1 player with IGL: general nerf.</li>
+          <li>More than 1 player with IGL: general nerf (doesn't apply to World Cup national teams).</li>
           <li>Duelist without Entry: attack nerf.</li>
           <li>More than 3 players with Utility: small nerf.</li>
           <li>Sentinel without Lurker: general nerf.</li>
@@ -1389,6 +1399,7 @@ const I18N = {
       {title:"World Cup", body:`
         <p>Instead of picking an organization, you pick a <strong>national team</strong> — the draft only draws pros who play for that country (some national teams are combined from smaller countries, like Finland/Sweden). The Head Coach also comes only from that national team's own list.</p>
         <p>Everything else works like the normal mode: group stage, playoffs, all of it — except the other 15 rival "teams" are national teams too, each with their own real roster.</p>
+        <p>Two World Cup-specific rule differences: the "more than 1 IGL" nerf doesn't apply here (a real national team having more than one tactical leader is normal). In exchange, <strong>combined national teams</strong> (like Finland/Sweden) take a light nerf — a single-country team's chemistry is always a bit stronger.</p>
       `},
     ],
   },
@@ -1527,7 +1538,7 @@ const I18N = {
         <ul>
           <li>Duelista <em>y</em> Centinela usando Operator al mismo tiempo: nerf general.</li>
           <li>Ningún jugador con IGL: nerf general.</li>
-          <li>Más de 1 jugador con IGL: nerf general.</li>
+          <li>Más de 1 jugador con IGL: nerf general (no aplica en las Selecciones de la Copa del Mundo).</li>
           <li>Duelista sin Entry: nerf de ataque.</li>
           <li>Más de 3 jugadores con Utilidad: pequeño nerf.</li>
           <li>Centinela sin Lurker: nerf general.</li>
@@ -1554,6 +1565,7 @@ const I18N = {
       {title:"Copa del Mundo", body:`
         <p>En vez de elegir una organización, eliges una <strong>Selección nacional</strong> — el draft solo sortea cracks que juegan por ese país (algunas Selecciones son combinadas entre países más chicos, como Finlandia/Suecia). El Head Coach también viene solo de la lista de esa Selección.</p>
         <p>El resto funciona igual que el modo normal: fase de grupos, playoffs, todo — solo que los otros 15 "equipos" rivales también son Selecciones, cada una con su elenco real.</p>
+        <p>Dos diferencias de regla específicas de la Copa del Mundo: el nerf de "más de 1 IGL" no aplica acá (una selección real con más de un líder táctico es normal). A cambio, <strong>Selecciones combinadas de varios países</strong> (como Finlandia/Suecia) llevan un nerf leve — el entrosamiento de una selección de un solo país siempre es un poco mejor.</p>
       `},
     ],
   }
@@ -1657,6 +1669,20 @@ function matchFormatFor(labelKey){
 }
 
 // Converte a lista de nomes de uma Seleção em objetos de jogador de verdade (do POOL).
+// Mapa reverso: nome do craque (minusculo) -> chave da Seleção dele. Usado pra saber, só olhando
+// o elenco, se estamos no Modo Copa do Mundo e se a Seleção é "mista" (combinada de vários países).
+const PLAYER_TO_SELECAO_KEY = {};
+Object.entries(WC_SELECOES).forEach(([key, data])=>{
+  data.players.forEach(n=>{ PLAYER_TO_SELECAO_KEY[n.toLowerCase()] = key; });
+});
+// Dado um elenco, acha a Seleção dele (se for um time de Copa do Mundo) — null se não for.
+function rosterSelecaoKey(roster){
+  if(!roster || !roster.length) return null;
+  const p = roster.find(Boolean);
+  if(!p) return null;
+  return PLAYER_TO_SELECAO_KEY[p.name.toLowerCase()] || null;
+}
+
 function selecaoPlayerObjects(selecaoName){
   const names = new Set(WC_SELECOES[selecaoName].players.map(n=>n.toLowerCase()));
   return POOL.filter(p=>names.has(p.name.toLowerCase()));
