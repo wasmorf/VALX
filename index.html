@@ -714,7 +714,7 @@ function teamRegionRating(name){
 const ASCENSAO_TEAM_ROSTERS = {
   // ===== BR =====
   "LOUD": {players:["tkzin","erde","DaviH","Darker","lukxo"], coach:"romanilly"},
-  "MIBR": {players:["aspas","zekken","Verno","Mazino","tex"], coach:"frod"},
+  "MIBR": {players:["aspas","Mazino",null,null,null], coach:"frod"},
   "FURIA": {players:["koalanoob","basic","C0M","artzin","Shyy"], coach:"shaw"},
   "2GAME": {players:["qck","gobera","frz","Brinks","xenom"], coach:"gaabxx"},
   "Team Solid": {players:["havoc","liazzi","raafa","GuhRVN","nevoy"], coach:"peu"},
@@ -983,7 +983,7 @@ function simulateRegionalTransfers(regiao, excludeOrg, usadosGlobalmente){
     let pontos = overallDe(nomeCandidato);
     if(!p) return pontos;
     const paisesCandidato = playerCountries(p.name);
-    const regiaoDoPais = paisesCandidato.map(pc=>COUNTRY_TO_REGION[pc]).find(Boolean);
+    const regiaoDoPais = freeAgentRegion(p.name.toLowerCase());
     if(regiaoDoPais===regiao) pontos += 2;
     else if((ASCENSAO_REGION_PROXIMITY[regiao]||[]).includes(regiaoDoPais)) pontos += 1;
     const sinergia = restanteDoElenco.filter(nomeColega=>{
@@ -993,6 +993,20 @@ function simulateRegionalTransfers(regiao, excludeOrg, usadosGlobalmente){
     pontos += sinergia * 1.5;
     return pontos;
   }
+  // Preenche vagas em aberto (time com "null" no elenco fixo do banco) ANTES do mercado normal
+  // rodar — simula o time contratando às pressas assim que a temporada/carreira começa, usando
+  // a mesma pontuação de nacionalidade/proximidade/sinergia dos reforços normais.
+  orgs.forEach(org=>{
+    if(!rosterCopies[org].includes(null)) return;
+    const jaEmAlgumTimeNoJogo = new Set(Object.values(ASCENSAO_TEAM_ROSTERS).flatMap(d=>d.players.filter(Boolean).map(n=>n.toLowerCase())));
+    if(usadosGlobalmente) usadosGlobalmente.forEach(n=>jaEmAlgumTimeNoJogo.add(n.toLowerCase()));
+    const fixos = rosterCopies[org].filter(Boolean).map(n=>POOL.find(p=>p.name.toLowerCase()===n.toLowerCase())).filter(Boolean);
+    const nomesFixos = new Set(fixos.map(f=>f.name.toLowerCase()));
+    const candidatosOrdenados = POOL.filter(p=>!jaEmAlgumTimeNoJogo.has(p.name.toLowerCase()) && !ASCENSAO_EXCLUDED_PLAYERS.has(p.name.toLowerCase()) && !nomesFixos.has(p.name.toLowerCase()))
+      .sort((a,b)=>pontuaCandidato(b.name, fixos.map(f=>f.name))-pontuaCandidato(a.name, fixos.map(f=>f.name)));
+    const completo = buildValidRoster([...fixos, ...candidatosOrdenados]);
+    if(completo.every(Boolean)) rosterCopies[org] = completo.map(p=>p.name);
+  });
   // Agentes livres — craques do banco que hoje não estão escalados em nenhum time — também
   // entram no mercado como opção de contratação. Recalculado a cada rodada (ver abaixo) pra
   // não oferecer de novo quem já foi contratado numa rodada anterior dessa mesma simulação.
@@ -1005,13 +1019,12 @@ function simulateRegionalTransfers(regiao, excludeOrg, usadosGlobalmente){
     // Agentes livres de verdade — craques do banco que não estão em NENHUM elenco fixo do jogo,
     // atribuídos a essa região pela nacionalidade deles (playerRegionKey não serve aqui, porque
     // ele só reconhece quem já tem time — por definição, um agente livre nunca teria região).
-    const todosOsEscaladosNoJogo = new Set(Object.values(ASCENSAO_TEAM_ROSTERS).flatMap(d=>d.players.map(n=>n.toLowerCase())));
+    const todosOsEscaladosNoJogo = new Set(Object.values(ASCENSAO_TEAM_ROSTERS).flatMap(d=>d.players.filter(Boolean).map(n=>n.toLowerCase())));
     const agentesLivresDaRegiao = POOL.filter(p=>{
       if(todosOsEscaladosNoJogo.has(p.name.toLowerCase())) return false;
       if(jaEmAlgumTimeAgora.has(p.name.toLowerCase())) return false;
       if(ASCENSAO_EXCLUDED_PLAYERS.has(p.name.toLowerCase())) return false;
-      const pais = PLAYER_COUNTRY[p.name.toLowerCase()];
-      return COUNTRY_TO_REGION[pais] === regiao;
+      return freeAgentRegion(p.name.toLowerCase()) === regiao;
     }).map(p=>p.name);
     // Passo 1: TODO time tira o craque mais fraco do próprio elenco ao mesmo tempo — fica uma
     // vaga temporária, e o craque vai pro mercado compartilhado (isso já resolve o "ninguém
@@ -1059,7 +1072,7 @@ function simulateRegionalTransfers(regiao, excludeOrg, usadosGlobalmente){
         // (na região, excluindo quem já está escalado em qualquer time) pra não ficar com
         // buraco nem duplicar o craque que já foi embora de verdade.
         const jaEscalados = new Set(Object.values(rosterCopies).flat().filter(Boolean).map(n=>n.toLowerCase()));
-        if(excludeOrg && ASCENSAO_TEAM_ROSTERS[excludeOrg]) ASCENSAO_TEAM_ROSTERS[excludeOrg].players.forEach(n=>jaEscalados.add(n.toLowerCase()));
+        if(excludeOrg && ASCENSAO_TEAM_ROSTERS[excludeOrg]) ASCENSAO_TEAM_ROSTERS[excludeOrg].players.filter(Boolean).forEach(n=>jaEscalados.add(n.toLowerCase()));
         if(usadosGlobalmente) usadosGlobalmente.forEach(n=>jaEscalados.add(n.toLowerCase()));
         ASCENSAO_EXCLUDED_PLAYERS.forEach(n=>jaEscalados.add(n));
         const emergencia = shuffle(POOL.filter(p=>!jaEscalados.has(p.name.toLowerCase())))
@@ -1499,7 +1512,7 @@ const PLAYER_TEAM = {
   "asuna":["100T26","100T24","100T2_26"],
   "au1":["AG26"],
   "avez":["KC2_26"],
-  "babybay":["G22_25"],
+  "babybay":["G22_25","G225"],
   "bang":["100T26","100T24","100T2_26"],
   "benjyfishy":["HERETICS25","HERETICS26"],
   "beyn":["DRX25"],
@@ -1635,7 +1648,7 @@ const COACH_TEAM = {
   "chet":"OPTIC22","bzka":"LOUD22","mini":"FNATIC23","potter":"EG23",
   "kaplan":"SENTINELS24","alecks":"PAPERREX25","bonkar":"NRG25","onur":"LEVIATAN26",
   "nbs":"100T26","d00mbros":"100T26",
-  "engh":"GAMBIT21","scuttt":"FNATIC24","solo":"GENG24","autumn":"T125",
+  "engh":"GAMBIT21","scuttt":"FNC24","solo":"GENG24","autumn":"T125",
 };
 // Craques que já foram Campeões Regionais DE VERDADE (fora da campanha do Ascensão) — mesma
 // ideia do COACH_TEAM acima, mas pro lado dos jogadores. Dá o mesmo bônus de "Campeão
@@ -1675,7 +1688,7 @@ const COACH_REGIONAL_CHAMPION = {
   "alecks": "PAPERREX25",
   "mini": "FNATIC23",
   "bzka": "LOUD22",
-  "scuttt": "FNATIC25",
+  "scuttt": "FNC2_24",
   "solo": "GENG24",
   "autumn": "T125",
   "ewok": "RRQ25",
@@ -2936,7 +2949,7 @@ function selecaoPlayerObjects(selecaoName){
 function playerRegionKey(playerName){
   const nameLower = playerName.toLowerCase();
   for(const [time, dados] of Object.entries(ASCENSAO_TEAM_ROSTERS)){
-    if(dados.players.some(p=>p.toLowerCase()===nameLower)){
+    if(dados.players.some(p=>p && p.toLowerCase()===nameLower)){
       for(const [regiao, times] of Object.entries(TEAM_REGIONS)){
         if(times.includes(time)) return regiao;
       }
@@ -2944,8 +2957,22 @@ function playerRegionKey(playerName){
   }
   return null;
 }
+// Região de um craque (pra fins de mercado/agente livre) — prioriza país de RESIDÊNCIA sobre
+// nacionalidade quando os dois existem, já que quem mora em outro país tende a competir por lá.
+function freeAgentRegion(nomeMinusculo){
+  const residencia = PLAYER_RESIDENCE[nomeMinusculo];
+  if(residencia && COUNTRY_TO_REGION[residencia]) return COUNTRY_TO_REGION[residencia];
+  return COUNTRY_TO_REGION[PLAYER_COUNTRY[nomeMinusculo]];
+}
 function regionalPlayerObjects(regiao){
-  return POOL.filter(p=>playerRegionKey(p.name)===regiao);
+  return POOL.filter(p=>{
+    const regiaoDoTime = playerRegionKey(p.name);
+    if(regiaoDoTime) return regiaoDoTime===regiao;
+    // sem time nenhum (ex: saiu de um elenco e não foi realocado) — conta pela nacionalidade,
+    // senão a região perde opções toda vez que alguém tira um craque de um time sem repor.
+    if(ASCENSAO_EXCLUDED_PLAYERS.has(p.name.toLowerCase())) return false;
+    return freeAgentRegion(p.name.toLowerCase()) === regiao;
+  });
 }
 // Mesma lógica, mas pros técnicos: só entram no sorteio do modo Regional os HC cujo time
 // de verdade (no Rumo à Ascensão) está naquela região.
@@ -5433,7 +5460,7 @@ const COUNTRY_TO_REGION = {
   KR:"APAC", VN:"APAC", PH:"APAC", SG:"APAC", ID:"APAC", MY:"APAC", TH:"APAC",
   CN:"CHN",
   TR:"EMEA", RU:"EMEA", PL:"EMEA", UA:"EMEA", GB:"EMEA", FR:"EMEA", MA:"EMEA", DK:"EMEA", NL:"EMEA",
-  LT:"EMEA", FI:"EMEA", SE:"EMEA", LV:"EMEA", CZ:"EMEA", BE:"EMEA", EE:"EMEA", MD:"EMEA",
+  LT:"EMEA", FI:"EMEA", SE:"EMEA", LV:"EMEA", CZ:"EMEA", BE:"EMEA", EE:"EMEA", MD:"EMEA", DE:"EMEA",
 };
 const ASCENSAO_REGION_PROXIMITY = {
   BR: ["LAS"], LAS: ["BR"],
