@@ -740,15 +740,22 @@ const ASCENSAO_TEAM_ROSTERS = {
 // Craques que já foram campeões Mundiais ou da Copa do Mundo NESSA campanha do Ascensão
 // ganham um bônus de overall até o fim das 16 temporadas — representa o "peso" de já ter
 // sido campeão. Não mexe no objeto original do banco (POOL), só numa cópia pro time atual.
+// Campeão Regional dá um bônus menor que Campeão Mundial — quem ganhou os dois soma os dois.
 const ASCENSAO_CHAMPION_BONUS = 3;
+const ASCENSAO_REGIONAL_CHAMPION_BONUS = 1.5;
 function ascensaoApplyChampionBonus(roster){
   const c = state.carreira;
-  if(!c || !c.campeoesMundiais || c.campeoesMundiais.length===0) return roster;
-  const campeoes = new Set(c.campeoesMundiais.map(n=>n.toLowerCase()));
+  if(!c) return roster;
+  const mundiais = new Set((c.campeoesMundiais||[]).map(n=>n.toLowerCase()));
+  const regionais = new Set((c.campeoesRegionais||[]).map(n=>n.toLowerCase()));
+  if(mundiais.size===0 && regionais.size===0) return roster;
   return roster.map(p=>{
-    if(p && campeoes.has(p.name.toLowerCase())){
-      return {...p, overall: Math.min(99, p.overall + ASCENSAO_CHAMPION_BONUS)};
-    }
+    if(!p) return p;
+    let bonus = 0;
+    const nomeLower = p.name.toLowerCase();
+    if(mundiais.has(nomeLower)) bonus += ASCENSAO_CHAMPION_BONUS;
+    if(regionais.has(nomeLower)) bonus += ASCENSAO_REGIONAL_CHAMPION_BONUS;
+    if(bonus>0) return {...p, overall: Math.min(99, p.overall + bonus)};
     return p;
   });
 }
@@ -1484,6 +1491,11 @@ function chemistryBonus(roster, coachName){
 function coachBuff(coachName){
   let b = COACH_BUFFS[coachName] || 0;
   if(coachName && COACH_TEAM[coachName.toLowerCase()]) b += 2;
+  if(state.difficulty==="ascensao" && state.carreira && coachName){
+    const nomeLower = coachName.toLowerCase();
+    if((state.carreira.campeoesMundiaisCoach||[]).some(n=>n.toLowerCase()===nomeLower)) b += ASCENSAO_CHAMPION_BONUS;
+    if((state.carreira.campeoesRegionaisCoach||[]).some(n=>n.toLowerCase()===nomeLower)) b += ASCENSAO_REGIONAL_CHAMPION_BONUS;
+  }
   return b;
 }
 // Emoji de bandeira a partir de um código de país (ex: "BR" -> 🇧🇷). Usado só quando temos o dado.
@@ -4219,7 +4231,7 @@ function attachHandlers(){
         state.difficulty = "copa";
         state.screen = "selecaoselect";
       } else if(mode==="ascensao"){
-        state.carreira = {nome:"", funcao:null, funcoesSecundarias:[], qualidades:[], regiao:null, nacao:null, nacionalidade:null, time:null, temporada:1, historico:[], campeoesMundiais:[]};
+        state.carreira = {nome:"", funcao:null, funcoesSecundarias:[], qualidades:[], regiao:null, nacao:null, nacionalidade:null, time:null, temporada:1, historico:[], campeoesMundiais:[], campeoesMundiaisCoach:[], campeoesRegionais:[], campeoesRegionaisCoach:[]};
         state.screen = "ascensaoCreate";
       } else if(mode==="regional"){
         state.regionalRegiao = null;
@@ -4831,9 +4843,29 @@ function ascensaoQualifiesFromPlayoffs(qualifyCount, endInfo){
 function ascensaoRegisterChampions(mvp){
   const c = state.carreira;
   if(!c.campeoesMundiais) c.campeoesMundiais = [];
+  if(!c.campeoesMundiaisCoach) c.campeoesMundiaisCoach = [];
   state.roster.filter(Boolean).forEach(p=>{
     if(!c.campeoesMundiais.some(n=>n.toLowerCase()===p.name.toLowerCase())) c.campeoesMundiais.push(p.name);
   });
+  if(state.headCoach && !c.campeoesMundiaisCoach.some(n=>n.toLowerCase()===state.headCoach.toLowerCase())){
+    c.campeoesMundiaisCoach.push(state.headCoach);
+  }
+  if(mvp && mvp.isCharacter){
+    c.mvpCount = (c.mvpCount||0) + 1;
+  }
+}
+// Igual acima, mas pro título Regional (bônus menor) — jogadores e o técnico do time que
+// ganhou o Regional entram nessa lista separada.
+function ascensaoRegisterRegionalChampions(mvp){
+  const c = state.carreira;
+  if(!c.campeoesRegionais) c.campeoesRegionais = [];
+  if(!c.campeoesRegionaisCoach) c.campeoesRegionaisCoach = [];
+  state.roster.filter(Boolean).forEach(p=>{
+    if(!c.campeoesRegionais.some(n=>n.toLowerCase()===p.name.toLowerCase())) c.campeoesRegionais.push(p.name);
+  });
+  if(state.headCoach && !c.campeoesRegionaisCoach.some(n=>n.toLowerCase()===state.headCoach.toLowerCase())){
+    c.campeoesRegionaisCoach.push(state.headCoach);
+  }
   if(mvp && mvp.isCharacter){
     c.mvpCount = (c.mvpCount||0) + 1;
   }
@@ -4856,6 +4888,7 @@ function ascensaoHandleStageEnd(endInfo){
     }
     tr.ascensaoRegionalPlacement = regionalPlacement;
     const mvpRegional = endInfo.type==="champion" ? getMVP() : null;
+    if(endInfo.type==="champion") ascensaoRegisterRegionalChampions(mvpRegional);
     if(qualificou){
       ascensaoShowStageSummary(t("ascensaoRegionalLabel"), regionalPlacement, null, {type:"mundial"}, true, mvpRegional);
       return;
