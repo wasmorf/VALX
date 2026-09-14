@@ -3370,7 +3370,8 @@ function teammateSynergyNote(candidate){
   }).map(p=>p.name);
   if(state.headCoach){
     const coachTeam = COACH_TEAM[state.headCoach.toLowerCase()];
-    if(coachTeam && ct.includes(coachTeam)) names.push(state.headCoach);
+    const coachTeamRegional = COACH_REGIONAL_CHAMPION[state.headCoach.toLowerCase()];
+    if((coachTeam && ct.includes(coachTeam)) || (coachTeamRegional && ct.includes(coachTeamRegional))) names.push(state.headCoach);
   }
   if(names.length===0) return null;
   return names.join(", ");
