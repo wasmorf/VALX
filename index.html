@@ -362,7 +362,6 @@
 // Pool de craques — ratings são estimativas de fã para fins de jogo, não estatísticas oficiais.
 const POOL = [
   // KRU Blaze 23, BBL Queens 23, Liquid BR GC 23, G2 Gozen 24, Shopify Gold 25 — Campeãs Regionais
-  {name:"shyz", roles:["flex","initiator","sentinel"], overall:86, tags:["igl","utility","lurker"]},
   {name:"conir", roles:["controller"], overall:86, tags:["clutch","utility"]},
   {name:"Vania", roles:["controller","flex"], overall:86, tags:["utility","clutch"]},
   {name:"bstrdd", roles:["duelist","flex","sentinel"], overall:89, tags:["entry","mm","lurker","utility","clutch"]},
@@ -460,7 +459,7 @@ const POOL = [
   {name:"Meteor", roles:["sentinel","duelist","controller","flex"], overall:89, tags:["clutch","utility","lurker","campeao_mundial","entry"]},
   {name:"Karon", roles:["controller"], overall:90, tags:["clutch","utility","campeao_mundial"]},
   {name:"Wo0t", roles:["flex","sentinel","duelist"], overall:91, tags:["mm","utility","clutch","entry","campeao_mundial","lurker"]},
-  {name:"lukxo", roles:["sentinel","flex","controller"], overall:93, tags:["mm","operator","clutch","lurker","utility"]},
+  {name:"lukxo", roles:["sentinel","controller"], overall:93, tags:["mm","operator","clutch","lurker","utility"]},
   {name:"NaturE", roles:["initiator"], overall:86, tags:["igl","utility"]},
   {name:"liazzi", roles:["flex","duelist","controller","sentinel"], overall:86, tags:["utility","lurker","entry"]},
   {name:"Brinks", roles:["controller"], overall:86, tags:["clutch","utility","igl"]},
@@ -734,7 +733,7 @@ const ASCENSAO_TEAM_ROSTERS = {
   "Cloud9": {players:["OXY","Zellsis","Jackk","v1c","FireBallOps"], coach:"Veer"},
   "M80": {players:["Boni","NiSMO","Kyu","Spaz","alvin"], coach:"kaplan"},
   "TSM": {players:["Demon1","bdog","runi","moose","neT"], coach:"d00mbros"},
-  "OpTic": {players:["yay","Victor","crashies","Marved","FNS"], coach:"Chet"},
+  "OpTic": {players:["penny","Victor","crashies","Marved","FNS"], coach:"Chet"},
   // ===== LAS =====
   "Leviatán": {players:["Sato","spikezin","blowz","kiNgg","Neon"], coach:"onur"},
   "KRÜ": {players:["Dantedeu5","heat","mwzera","saadhak","less"], coach:"ZONYK"},
@@ -771,6 +770,9 @@ const ASCENSAO_TEAM_ROSTERS = {
 // ganham um bônus de overall até o fim das 16 temporadas — representa o "peso" de já ter
 // sido campeão. Não mexe no objeto original do banco (POOL), só numa cópia pro time atual.
 // Campeão Regional dá um bônus menor que Campeão Mundial — quem ganhou os dois soma os dois.
+// Craques que NUNCA devem aparecer no Rumo à Ascensão (nem escalados em time, nem como agente
+// livre no mercado) — mesmo continuando disponíveis normalmente nos outros modos.
+const ASCENSAO_EXCLUDED_PLAYERS = new Set(["sacy","yay","tenz"]);
 const ASCENSAO_CHAMPION_BONUS = 3;
 const ASCENSAO_REGIONAL_CHAMPION_BONUS = 1.5;
 function ascensaoApplyChampionBonus(roster){
@@ -1002,6 +1004,7 @@ function simulateRegionalTransfers(regiao, excludeOrg, usadosGlobalmente){
     const agentesLivresDaRegiao = POOL.filter(p=>{
       if(todosOsEscaladosNoJogo.has(p.name.toLowerCase())) return false;
       if(jaEmAlgumTimeAgora.has(p.name.toLowerCase())) return false;
+      if(ASCENSAO_EXCLUDED_PLAYERS.has(p.name.toLowerCase())) return false;
       const pais = PLAYER_COUNTRY[p.name.toLowerCase()];
       return COUNTRY_TO_REGION[pais] === regiao;
     }).map(p=>p.name);
@@ -1053,6 +1056,7 @@ function simulateRegionalTransfers(regiao, excludeOrg, usadosGlobalmente){
         const jaEscalados = new Set(Object.values(rosterCopies).flat().filter(Boolean).map(n=>n.toLowerCase()));
         if(excludeOrg && ASCENSAO_TEAM_ROSTERS[excludeOrg]) ASCENSAO_TEAM_ROSTERS[excludeOrg].players.forEach(n=>jaEscalados.add(n.toLowerCase()));
         if(usadosGlobalmente) usadosGlobalmente.forEach(n=>jaEscalados.add(n.toLowerCase()));
+        ASCENSAO_EXCLUDED_PLAYERS.forEach(n=>jaEscalados.add(n));
         const emergencia = shuffle(POOL.filter(p=>!jaEscalados.has(p.name.toLowerCase())))
           .sort((a,b)=>pontuaCandidato(b.name, restanteDoElenco)-pontuaCandidato(a.name, restanteDoElenco));
         for(const cand of emergencia){
@@ -1172,7 +1176,6 @@ const PLAYER_COUNTRY = {
   "rezq":"TR",
   "amy":"NL",
   "dodonut":"TH",
-  "shyz":"BR",
   "conir":"CL",
   "bstrdd":"CL",
   "daiki":"BR",
@@ -1477,7 +1480,7 @@ const COACH_RESIDENCE = {
 const PLAYER_TEAM = {
   "mel":["SHOPIFYGOLD2324","SHOPIFYGOLD24","SHOPIFYGOLD25"],"florescent":["SHOPIFYGOLD2324","SHOPIFYGOLD24"],"alexis":["SHOPIFYGOLD2324","SHOPIFYGOLD24","SHOPIFYGOLD25"],"sarahcat":["SHOPIFYGOLD2324","SHOPIFYGOLD24","SHOPIFYGOLD25"],"noia":["SHOPIFYGOLD2324","SHOPIFYGOLD24","SHOPIFYGOLD25"],
   "daiki":["LIQUIDBRGC25","LIQUIDBRGC23"],"bizerra":["LIQUIDBRGC25","LIQUIDBRGC23"],"isaa":["LIQUIDBRGC25","LIQUIDBRGC23"],"joojina":["LIQUIDBRGC25","LIQUIDBRGC23"],"jelly":["LIQUIDBRGC25"],
-  "shyz":["KRUBLAZE23"],"conir":["KRUBLAZE23"],
+  "conir":["KRUBLAZE23"],
   "vania":["BBLQUEENS23","G2GOZEN24"],
   "bstrdd":["LIQUIDBRGC23"],
   "petra":["G2GOZEN24"],"mimi":["G2GOZEN24"],"rezq":["G2GOZEN24"],"amy":["G2GOZEN24"],
@@ -1633,7 +1636,7 @@ const COACH_TEAM = {
 // ideia do COACH_TEAM acima, mas pro lado dos jogadores. Dá o mesmo bônus de "Campeão
 // Regional" que se ganha jogando uma campanha, só que permanente (não precisa reconquistar).
 const PLAYER_REGIONAL_CHAMPION = new Set([
-  "shyz","conir","vania","bstrdd","petra","mimi","rezq","amy","dodonut",
+  "conir","vania","bstrdd","petra","mimi","rezq","amy","dodonut",
   "mel","florescent","alexis","sarahcat","noia","daiki","bizerra","isaa","joojina",
   "alfajer","asuna","au1","babybay","beyn","boaster","boo","boostio",
   "c0m","chichoo","chronicle","crewen","cryocells","dambi","derke","flashback",
