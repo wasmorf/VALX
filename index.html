@@ -872,8 +872,13 @@ function buildTeamWithCharacter(realPlayers){
   }
   return buildValidRoster(realPlayers); // não coube em nenhuma função — joga só com o time real
 }
+// Igual selecaoPlayerObjects, mas tirando quem está na lista de excluídos do Ascensão — usado
+// só nas telas do Ascensão, a Copa do Mundo isolada continua podendo escalar esses craques.
+function ascensaoSelecaoPlayerObjects(nacao){
+  return selecaoPlayerObjects(nacao).filter(p=>!ASCENSAO_EXCLUDED_PLAYERS.has(p.name.toLowerCase()));
+}
 function buildAscensaoNationalTeam(){
-  const jogadoresOrdenados = [...selecaoPlayerObjects(state.carreira.nacao)].sort((a,b)=>b.overall-a.overall);
+  const jogadoresOrdenados = [...ascensaoSelecaoPlayerObjects(state.carreira.nacao)].sort((a,b)=>b.overall-a.overall);
   return ascensaoApplyChampionBonus(buildTeamWithCharacter(jogadoresOrdenados));
 }
 function buildAscensaoOrgTeam(name, insertCharacter, overridePlayers, overrideCoach){
@@ -5378,7 +5383,7 @@ function setupAscensaoWorldCupStage(regionalPlacement, qualificou, mundialResult
   state.headCoach = playerTeam.coach;
   const outrasNacoes = Object.keys(WC_SELECOES).filter(n=>n!==c.nacao);
   const aiTeams = outrasNacoes.map(nacao=>{
-    const roster = ascensaoApplyChampionBonus(buildBestRoster(selecaoPlayerObjects(nacao)));
+    const roster = ascensaoApplyChampionBonus(buildBestRoster(ascensaoSelecaoPlayerObjects(nacao)));
     return {id:nacao, name:nacao, roster, coach:WC_SELECOES[nacao].coaches[0], rating:teamOverall(roster)};
   });
   const allTeams = shuffle([playerTeam, ...aiTeams]);
