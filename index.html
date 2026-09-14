@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>VALX — Monte e ganhe</title>
 <style>
   :root{
@@ -3214,12 +3214,16 @@ function resetToIntro(){
   state = {screen:"intro",lang:keepLang,campaignHistoryList:[],difficulty:null,teamName:null,selecao:null,carreira:null,regionalRegiao:null,regionalSelva:false,headCoach:null,coachOptions:[],remainingCoaches:[],pool:[],poolSource:[],roster:[],pendingSlotChoice:false,skipsUsed:0,currentCandidate:null,currentCandidates:[],confirmingCandidate:null,matchScore:{us:0,them:0},roundLog:[],mapsToWin:2,mapsUs:0,mapsThem:0,mapHistory:[],matchStats:{us:[],them:[]},seriesStats:{us:[],them:[]},campaignStats:null,journey:[],campaignRecords:{singleMap:{kills:47,holder:"aspas"}, md3:{kills:82,holder:"aspas"}, md5:{kills:126,holder:"marteen"}},tournament:null,endInfo:null};
 }
 
+let lastRenderedScreen = null;
 function render(){
   applyTheme();
   const app = document.getElementById("app");
   app.innerHTML = topbarHTML() + screenHTML();
   attachHandlers();
-  window.scrollTo(0,0);
+  if(state.screen !== lastRenderedScreen){
+    window.scrollTo(0,0);
+    lastRenderedScreen = state.screen;
+  }
 }
 
 function topbarHTML(){
@@ -3347,7 +3351,7 @@ function historyHTML(){
       return `
     <div class="history-item angle-sm">
       <div class="history-top">
-        <span class="history-team">${countryFlag(rec.ascensaoNacionalidade)} ${rec.ascensaoNome} — ${rec.teamName}</span>
+        <span class="history-team">${countryFlag(rec.ascensaoNacionalidade)} ${rec.ascensaoNome}</span>
         <span class="history-date mono">${new Date(rec.date).toLocaleDateString()}</span>
       </div>
       <div class="history-result" style="color:${resultColor(rec)};">${resultLabel(rec)}</div>
