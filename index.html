@@ -20,7 +20,7 @@
     --glow-b:#1B1216;
   }
   *{box-sizing:border-box;}
-  html,body{margin:0;padding:0;}
+  html,body{margin:0;padding:0;touch-action:manipulation;}
   body{
     background:
       radial-gradient(1200px 600px at 15% -10%, var(--glow-a) 0%, transparent 60%),
@@ -31,6 +31,7 @@
     min-height:100vh;
     -webkit-font-smoothing:antialiased;
     transition:background 0.25s ease;
+    touch-action:manipulation;
   }
   .headline{font-family:'Chakra Petch', sans-serif;}
   .mono{font-family:'JetBrains Mono', monospace;}
@@ -69,6 +70,7 @@
   h1.hero{font-family:'Chakra Petch';font-size:30px;line-height:1.15;font-weight:700;margin:0 0 10px;}
   p.lead{color:var(--muted);font-size:15px;line-height:1.55;margin:0 0 20px;}
 
+  button, .btn, .team-option, .diff-card, .mode-card, .history-item, a{touch-action:manipulation;}
   .btn{
     font-family:'Chakra Petch';font-weight:600;font-size:15px;
     background:var(--crimson);color:#fff;border:none;padding:13px 22px;
