@@ -864,22 +864,58 @@ function buildAscensaoOrgTeam(name, insertCharacter, overridePlayers, overrideCo
 // Igual o mercado de craques, só que pra técnicos: cada time só troca de HC se aparecer
 // alguém melhor no mercado (usando o buff do técnico como "qualidade") — o técnico antigo só
 // vira opção pros próximos times depois que o meu já foi substituído de verdade.
-function simulateRegionalCoachTransfers(regiao, excludeOrg){
+function simulateRegionalCoachTransfers(regiao, excludeOrg, transferenciasDeJogadores, usadosGlobalmenteCoach){
   const orgs = TEAM_REGIONS[regiao].filter(o=>o!==excludeOrg && ASCENSAO_TEAM_ROSTERS[o]);
   const coachCopies = {};
   orgs.forEach(org=>{ coachCopies[org] = ASCENSAO_TEAM_ROSTERS[org].coach; });
-  function buffDe(nomeCoach){ return nomeCoach ? coachBuff(nomeCoach) : -Infinity; }
+  function buffDe(nomeCoach){ return nomeCoach ? coachBuff(nomeCoach) : -1; }
+  // Pontua um técnico candidato pra um time: o buff é a base, mas pesa também se o país dele
+  // bate com a região do time (ou é vizinho), e sinergia com o elenco de jogadores do time.
+  function pontuaCandidatoCoach(nomeCoach, orgAlvo){
+    if(!nomeCoach) return -1;
+    let pontos = buffDe(nomeCoach);
+    const paisCoach = COACH_COUNTRY[nomeCoach.toLowerCase()];
+    if(paisCoach){
+      const regiaoDoPais = COUNTRY_TO_REGION[paisCoach];
+      if(regiaoDoPais===regiao) pontos += 2;
+      else if((ASCENSAO_REGION_PROXIMITY[regiao]||[]).includes(regiaoDoPais)) pontos += 1;
+      const rosterDoTime = transferenciasDeJogadores && transferenciasDeJogadores[orgAlvo];
+      if(rosterDoTime){
+        const sinergia = rosterDoTime.filter(nomeJogador=>PLAYER_COUNTRY[nomeJogador.toLowerCase()]===paisCoach).length;
+        pontos += sinergia;
+      }
+    }
+    return pontos;
+  }
   const RODADAS_DE_MERCADO = 3;
   for(let rodada=0; rodada<RODADAS_DE_MERCADO; rodada++){
-    let mercado = [];
+    // Técnicos sem time (nunca escalados em nenhuma organização do jogo) também entram no
+    // mercado como opção, igual os agentes livres de jogador.
+    const jaEmAlgumTimeNoJogo = new Set(Object.values(ASCENSAO_TEAM_ROSTERS).filter(d=>d.coach).map(d=>d.coach.toLowerCase()));
+    if(usadosGlobalmenteCoach) usadosGlobalmenteCoach.forEach(n=>jaEmAlgumTimeNoJogo.add(n.toLowerCase()));
+    const agentesLivres = Object.keys(COACH_COUNTRY).filter(c=>!jaEmAlgumTimeNoJogo.has(c));
+    // Todo time libera o próprio técnico ao mesmo tempo — o mercado já nasce com opção pra
+    // todo time, sem depender de ninguém trocar primeiro.
+    const meuOriginal = {};
+    orgs.forEach(org=>{ meuOriginal[org] = coachCopies[org]; });
+    let mercado = [...orgs.map(org=>meuOriginal[org]).filter(Boolean), ...agentesLivres];
     shuffle(orgs).forEach(org=>{
-      const meuCoach = coachCopies[org];
-      const opcoes = shuffle(mercado).sort((a,b)=>buffDe(b)-buffDe(a));
-      const melhorOpcao = opcoes.find(c=>buffDe(c) > buffDe(meuCoach));
-      if(melhorOpcao){
-        coachCopies[org] = melhorOpcao;
-        mercado = mercado.filter(c=>c!==melhorOpcao);
-        if(meuCoach) mercado.push(meuCoach);
+      const meuAntigo = meuOriginal[org];
+      const opcoes = shuffle(mercado.filter(c=>c!==meuAntigo)).sort((a,b)=>pontuaCandidatoCoach(b,org)-pontuaCandidatoCoach(a,org));
+      const contratado = opcoes.find(c=>pontuaCandidatoCoach(c,org) > pontuaCandidatoCoach(meuAntigo,org)) || null;
+      if(contratado){
+        coachCopies[org] = contratado;
+        mercado = mercado.filter(c=>c!==contratado);
+      } else if(mercado.includes(meuAntigo)){
+        // ninguém levou meu técnico ainda — fica com o mesmo, sem risco.
+        coachCopies[org] = meuAntigo;
+        mercado = mercado.filter(c=>c!==meuAntigo);
+      } else {
+        // meu técnico original já foi levado por outro time antes de mim, e eu não achei
+        // ninguém melhor — fico com quem sobrou no mercado (ou sem técnico, em último caso).
+        const sobra = mercado[0] || null;
+        coachCopies[org] = sobra;
+        if(sobra) mercado = mercado.filter(c=>c!==sobra);
       }
     });
   }
@@ -1721,7 +1757,6 @@ const I18N = {
     diffCopaDesc:"Jogue por uma Seleção",
     diffSelvaTitle:"Modo Selva",
     diffSelvaDesc:"Atributos ocultos",
-    startBtn:"Começar o draft",
     disclaimer:"Nomes de jogadores e organizações profissionais reais são usados de forma homenageante, em um jogo de simulação de fã. Atributos são estimativas fictícias para fins de jogo, não estatísticas oficiais.",
     teamSelectTitle:"Escolha o nome da sua equipe",
     teamSelectLead:"Essa será a identidade do seu time durante toda a campanha.",
@@ -1773,7 +1808,6 @@ const I18N = {
     ascensaoStartSeasonBtn:"Começar Temporada 1",
     ascensaoSeasonLabel:n=>`Temporada ${n}`,
     ascensaoContinueSameBtn:time=>`Continuar na ${time}`,
-    ascensaoTransferBtn:"Trocar de time",
     ascensaoOfferTitle:"Oferta de Transferência!",
     ascensaoOfferLead:n=>`Você recebeu ${n} oferta${n===1?"":"s"} de transferência! Escolha uma pra aceitar:`,
     ascensaoOfferAcceptBtn:"Aceitar oferta",
@@ -1782,9 +1816,7 @@ const I18N = {
     ascensaoStageContinueBtn:"Continuar",
     ascensaoWorldCupLabel:"Copa do Mundo",
     ascensaoFinalTitle:"Fim de Carreira",
-    ascensaoFinalLead:(nome,titulos)=>`${nome} encerrou a carreira de 16 temporadas com ${titulos} título${titulos===1?' mundial':'s mundiais'}.`,
-    ascensaoRegionalTitlesLabel:n=>`+ ${n} título${n===1?"":"s"} ${n===1?"regional":"regionais"}`,
-    ascensaoCopaTitlesLabel:n=>`+ ${n} título${n===1?"":"s"} de Copa do Mundo`,
+    ascensaoFinalLead:(nome)=>`${nome} encerrou a carreira de 16 temporadas.`,
     ascensaoShareHeadline:nome=>`${nome} encerrou a carreira no Rumo à Ascensão!`,
     ascensaoShareFuncoesLabel:"Funções",
     ascensaoShareMundialLabel:"Títulos Mundiais",
@@ -1872,6 +1904,9 @@ const I18N = {
     shareTeamMemberLabel:role=>`${role}`,
     shareCoachLabel:"Coach",
     shareCta:"Tente ganhar o Mundial você também",
+    shareCtaRegional:"Tente ganhar o Regional você também",
+    shareCtaCopa:"Tente ganhar a Copa do Mundo você também",
+    ascensaoShareCta:"Faça sua História também",
     shareXBtn:"Compartilhar no X",
     rulesSections:[
       {title:"Equipe e Head Coach", body:`
@@ -1966,7 +2001,6 @@ const I18N = {
     diffCopaDesc:"Play for a National Team",
     diffSelvaTitle:"Wild Mode",
     diffSelvaDesc:"Hidden attributes",
-    startBtn:"Start the draft",
     disclaimer:"Real pro player names and real esports organizations are used respectfully in a fan-made simulation game. Attributes are fictional estimates for gameplay purposes, not official statistics.",
     teamSelectTitle:"Choose your team name",
     teamSelectLead:"This will be your team's identity for the whole campaign.",
@@ -2018,7 +2052,6 @@ const I18N = {
     ascensaoStartSeasonBtn:"Start Season 1",
     ascensaoSeasonLabel:n=>`Season ${n}`,
     ascensaoContinueSameBtn:time=>`Stay with ${time}`,
-    ascensaoTransferBtn:"Transfer teams",
     ascensaoOfferTitle:"Transfer Offer!",
     ascensaoOfferLead:n=>`You received ${n} transfer offer${n===1?"":"s"}! Pick one to accept:`,
     ascensaoOfferAcceptBtn:"Accept offer",
@@ -2027,9 +2060,7 @@ const I18N = {
     ascensaoWorldCupLabel:"World Cup",
     ascensaoStageContinueBtn:"Continue",
     ascensaoFinalTitle:"Career Over",
-    ascensaoFinalLead:(nome,titulos)=>`${nome} finished a 16-season career with ${titulos} world title${titulos===1?'':'s'}.`,
-    ascensaoRegionalTitlesLabel:n=>`+ ${n} regional title${n===1?"":"s"}`,
-    ascensaoCopaTitlesLabel:n=>`+ ${n} World Cup title${n===1?"":"s"}`,
+    ascensaoFinalLead:(nome)=>`${nome} finished a 16-season career.`,
     ascensaoShareHeadline:nome=>`${nome} finished their Road to the Top career!`,
     ascensaoShareFuncoesLabel:"Roles",
     ascensaoShareMundialLabel:"World Titles",
@@ -2117,6 +2148,9 @@ const I18N = {
     shareTeamMemberLabel:role=>`${role}`,
     shareCoachLabel:"Coach",
     shareCta:"Try to win the World Championship too",
+    shareCtaRegional:"Try to win the Regional too",
+    shareCtaCopa:"Try to win the World Cup too",
+    ascensaoShareCta:"Make your own story too",
     shareXBtn:"Share on X",
     rulesSections:[
       {title:"Team & Head Coach", body:`
@@ -2211,7 +2245,6 @@ const I18N = {
     diffCopaDesc:"Juega por una Selección",
     diffSelvaTitle:"Modo Selva",
     diffSelvaDesc:"Atributos ocultos",
-    startBtn:"Comenzar el draft",
     disclaimer:"Los nombres de jugadores profesionales y organizaciones reales de esports se usan de forma respetuosa en un juego de simulación hecho por fans. Los atributos son estimaciones ficticias para el juego, no estadísticas oficiales.",
     teamSelectTitle:"Elige el nombre de tu equipo",
     teamSelectLead:"Esta será la identidad de tu equipo durante toda la campaña.",
@@ -2263,7 +2296,6 @@ const I18N = {
     ascensaoStartSeasonBtn:"Comenzar Temporada 1",
     ascensaoSeasonLabel:n=>`Temporada ${n}`,
     ascensaoContinueSameBtn:time=>`Continuar en ${time}`,
-    ascensaoTransferBtn:"Cambiar de equipo",
     ascensaoOfferTitle:"¡Oferta de Transferencia!",
     ascensaoOfferLead:n=>`¡Recibiste ${n} oferta${n===1?"":"s"} de transferencia! Elige una para aceptar:`,
     ascensaoOfferAcceptBtn:"Aceptar oferta",
@@ -2272,9 +2304,7 @@ const I18N = {
     ascensaoWorldCupLabel:"Copa del Mundo",
     ascensaoStageContinueBtn:"Continuar",
     ascensaoFinalTitle:"Fin de Carrera",
-    ascensaoFinalLead:(nome,titulos)=>`${nome} terminó una carrera de 16 temporadas con ${titulos} título${titulos===1?'':'s'} mundial${titulos===1?'':'es'}.`,
-    ascensaoRegionalTitlesLabel:n=>`+ ${n} título${n===1?"":"s"} regional${n===1?"":"es"}`,
-    ascensaoCopaTitlesLabel:n=>`+ ${n} título${n===1?"":"s"} de Copa del Mundo`,
+    ascensaoFinalLead:(nome)=>`${nome} terminó una carrera de 16 temporadas.`,
     ascensaoShareHeadline:nome=>`¡${nome} terminó su carrera en Rumbo a la Cima!`,
     ascensaoShareFuncoesLabel:"Funciones",
     ascensaoShareMundialLabel:"Títulos Mundiales",
@@ -2362,6 +2392,9 @@ const I18N = {
     shareTeamMemberLabel:role=>`${role}`,
     shareCoachLabel:"Coach",
     shareCta:"Intenta ganar el Mundial tú también",
+    shareCtaRegional:"Intenta ganar el Regional tú también",
+    shareCtaCopa:"Intenta ganar la Copa del Mundo tú también",
+    ascensaoShareCta:"Haz tu propia historia también",
     shareXBtn:"Compartir en X",
     rulesSections:[
       {title:"Equipo y Head Coach", body:`
@@ -2800,7 +2833,7 @@ function setupAscensaoRegionalStage(){
   // simula o mercado da região inteira ANTES, incluindo o time do próprio jogador — craques
   // bons recebem ofertas de fora mesmo em time campeão, então ninguém fica de fora do mercado.
   const transferencias = simulateRegionalTransfers(regiao, null);
-  const transferenciasCoach = simulateRegionalCoachTransfers(regiao, null);
+  const transferenciasCoach = simulateRegionalCoachTransfers(regiao, null, transferencias);
   const playerOrgTeam = buildAscensaoOrgTeam(c.time, true, transferencias[c.time], transferenciasCoach[c.time]);
   playerOrgTeam.isPlayer = true;
   state.roster = playerOrgTeam.roster;
@@ -2810,7 +2843,11 @@ function setupAscensaoRegionalStage(){
   const aiTeams = otherOrgs.map(org=>buildAscensaoOrgTeam(org, false, transferencias[org], transferenciasCoach[org]));
 
   state.campaignStats = { us: state.roster.map((p,i)=>({name:p.name, role:SLOT_ORDER[i], isCharacter:p.isCharacter, country:p.country, k:0, d:0, a:0})) };
-  state.campaignRecords = {singleMap:{kills:RECORDS.singleMap,holder:"aspas"}, md3:{kills:RECORDS.md3,holder:"aspas"}, md5:{kills:RECORDS.md5,holder:"marteen"}};
+  // os recordes só voltam ao valor real na temporada 1 (carreira nova) — depois disso, ficam
+  // valendo o que foi quebrado durante a campanha, até o fim das 16 temporadas.
+  if(c.temporada===1 || !state.campaignRecords){
+    state.campaignRecords = {singleMap:{kills:RECORDS.singleMap,holder:"aspas"}, md3:{kills:RECORDS.md3,holder:"aspas"}, md5:{kills:RECORDS.md5,holder:"marteen"}};
+  }
   state.journey = [];
   state.journeyStageStart = 0;
   state.screen = "match";
@@ -3298,13 +3335,27 @@ function rulesHTML(){
 function historyHTML(){
   const list = state.campaignHistoryList || [];
   const resultLabel = (rec)=>{
+    if(rec.resultType==="ascensao") return t("ascensaoModeBtn");
     if(rec.resultType==="champion") return t("championTitle");
     if(rec.resultType==="runnerup") return t("runnerUpTitle");
     if(rec.resultType==="playoffs") return `${t("playoffsEliminatedTitle")} (${bracketLabel(rec.stageLabelKey)})`;
     return t("groupsEliminatedTitle");
   };
-  const resultColor = (rec)=> rec.resultType==="champion" ? "var(--gold)" : (rec.resultType==="runnerup" ? "var(--text)" : "var(--crimson)");
-  const rowsHTML = list.length ? list.map(rec=>`
+  const resultColor = (rec)=> rec.resultType==="ascensao" ? "var(--gold)" : rec.resultType==="champion" ? "var(--gold)" : (rec.resultType==="runnerup" ? "var(--text)" : "var(--crimson)");
+  const rowsHTML = list.length ? list.map(rec=>{
+    if(rec.resultType==="ascensao"){
+      return `
+    <div class="history-item angle-sm">
+      <div class="history-top">
+        <span class="history-team">${countryFlag(rec.ascensaoNacionalidade)} ${rec.ascensaoNome} — ${rec.teamName}</span>
+        <span class="history-date mono">${new Date(rec.date).toLocaleDateString()}</span>
+      </div>
+      <div class="history-result" style="color:${resultColor(rec)};">${resultLabel(rec)}</div>
+      <div class="history-meta mono">${t("ascensaoMundialLabel")}: ${rec.ascensaoMundialTitles} · ${t("ascensaoRegionalLabel")}: ${rec.ascensaoRegionalTitles} · ${t("ascensaoWorldCupLabel")}: ${rec.ascensaoCopaTitles}${rec.ascensaoMvpCount ? " · MVP: "+rec.ascensaoMvpCount : ""}</div>
+    </div>
+  `;
+    }
+    return `
     <div class="history-item angle-sm">
       <div class="history-top">
         <span class="history-team">${selecaoLabel(rec.teamName) || "—"}</span>
@@ -3313,7 +3364,8 @@ function historyHTML(){
       <div class="history-result" style="color:${resultColor(rec)};">${resultLabel(rec)}</div>
       <div class="history-meta mono">${t("shareCampaignLabel")}: ${rec.record} · ${t("shareOverallLabel")}: ${rec.overall}${rec.mvpName ? " · MVP: "+rec.mvpName : ""}</div>
     </div>
-  `).join("") : `<p class="lead" style="text-align:center;">${t("historyEmpty")}</p>`;
+  `;
+  }).join("") : `<p class="lead" style="text-align:center;">${t("historyEmpty")}</p>`;
   return `
   <div class="panel angle">
     <h1 class="hero" style="font-size:22px;">${t("historyTitle")}</h1>
@@ -3794,9 +3846,12 @@ function ascensaoFinalHTML(){
   return `
   <div class="panel angle" style="text-align:center;">
     <h1 class="hero" style="font-size:22px;">${t("ascensaoFinalTitle")}</h1>
-    <p class="lead" style="margin-top:8px;">${countryFlag(c.nacionalidade)} ${t("ascensaoFinalLead")(c.nome, mundialTitles)}</p>
-    ${regionalTitles>0 ? `<p style="font-family:'Chakra Petch';font-weight:700;font-size:14px;color:var(--muted);margin:-4px 0 4px;">${t("ascensaoRegionalTitlesLabel")(regionalTitles)}</p>` : ''}
-    ${copaTitles>0 ? `<p style="font-family:'Chakra Petch';font-weight:700;font-size:14px;color:var(--gold);margin:-4px 0 4px;">${t("ascensaoCopaTitlesLabel")(copaTitles)}</p>` : ''}
+    <p class="lead" style="margin-top:8px;">${countryFlag(c.nacionalidade)} ${t("ascensaoFinalLead")(c.nome)}</p>
+    <div class="test-stats" style="margin:14px 0;">
+      <div class="test-stat-row"><span>${t("ascensaoMundialLabel")}</span><span class="mono" style="color:var(--gold);">${mundialTitles}</span></div>
+      <div class="test-stat-row"><span>${t("ascensaoRegionalLabel")}</span><span class="mono" style="color:var(--gold);">${regionalTitles}</span></div>
+      <div class="test-stat-row"><span>${t("ascensaoWorldCupLabel")}</span><span class="mono" style="color:var(--gold);">${copaTitles}</span></div>
+    </div>
     <div class="history-list" style="text-align:left;margin-top:18px;max-height:340px;overflow-y:auto;">${historicoHTML}</div>
     <div class="btn-row" style="justify-content:center;margin-top:18px;">
       <button class="btn" id="ascensao-restart-btn">${t("playAgain")}</button>
@@ -4362,6 +4417,7 @@ function attachHandlers(){
   const ascensaoFinishBtn = document.getElementById("ascensao-finish-btn");
   if(ascensaoFinishBtn) ascensaoFinishBtn.onclick = ()=>{
     state.screen = "ascensaoFinal";
+    saveAscensaoCareerRecord();
     render();
   };
   const ascensaoRestartBtn = document.getElementById("ascensao-restart-btn");
@@ -4874,13 +4930,14 @@ function setupAscensaoMundialStage(){
   state.campaignStats = { us: playerOrgTeam.roster.map((p,i)=>({name:p.name, role:SLOT_ORDER[i], isCharacter:p.isCharacter, country:p.country, k:0, d:0, a:0})) };
   const worldQualifiers = [playerOrgTeam];
   const usadosGlobalmente = new Set(playerOrgTeam.roster.filter(Boolean).map(p=>p.name));
+  const usadosGlobalmenteCoach = new Set([playerOrgTeam.coach].filter(Boolean));
   Object.keys(TEAM_REGIONS).forEach(r=>{
     const n = REGIONAL_MUNDIAL_QUALIFY_COUNT[r];
     // pra minha própria região, reaproveita o resultado REAL da fase Regional (já rodou o
     // mercado de verdade) em vez de simular de novo — evita craque duplicado entre o meu
     // time e outro time da mesma região que participaram do mesmo mercado.
     const transferencias = (r===c.regiao && snapshotDaMinhaRegiao) ? snapshotDaMinhaRegiao : simulateRegionalTransfers(r, r===c.regiao ? c.time : null, usadosGlobalmente);
-    const transferenciasCoach = (r===c.regiao && snapshotDeCoachDaMinhaRegiao) ? snapshotDeCoachDaMinhaRegiao : simulateRegionalCoachTransfers(r, r===c.regiao ? c.time : null);
+    const transferenciasCoach = (r===c.regiao && snapshotDeCoachDaMinhaRegiao) ? snapshotDeCoachDaMinhaRegiao : simulateRegionalCoachTransfers(r, r===c.regiao ? c.time : null, transferencias, usadosGlobalmenteCoach);
     let selecionados;
     if(r===c.regiao){
       const outrosDaRegiao = TEAM_REGIONS[r].filter(org=>org!==c.time);
@@ -4892,6 +4949,7 @@ function setupAscensaoMundialStage(){
       const time = buildAscensaoOrgTeam(org, false, transferencias[org], transferenciasCoach[org]);
       worldQualifiers.push(time);
       time.roster.filter(Boolean).forEach(p=>usadosGlobalmente.add(p.name));
+      if(time.coach) usadosGlobalmenteCoach.add(time.coach);
     });
   });
   state.roster = playerOrgTeam.roster;
@@ -5105,6 +5163,38 @@ async function saveCampaignRecord(){
     await storageSetValue("campaign_history", JSON.stringify(list));
   } catch(e){ /* armazenamento indisponível — segue o jogo normalmente */ }
 }
+// Salva o resumo de uma carreira COMPLETA do Rumo à Ascensão em "Campanhas Anteriores" —
+// mesmo histórico compartilhado dos outros modos, só que com um formato de registro próprio.
+async function saveAscensaoCareerRecord(){
+  try{
+    const c = state.carreira;
+    const regionalTitles = c.historico.filter(h=>h.regionalPlacement && h.regionalPlacement.type==="champion").length;
+    const mundialTitles = c.historico.filter(h=>h.mundialResultado==="champion").length;
+    const copaTitles = c.historico.filter(h=>h.copaResultado==="champion").length;
+    const record = {
+      date: new Date().toISOString(),
+      resultType: "ascensao",
+      difficulty: "ascensao",
+      teamName: c.time,
+      headCoach: null,
+      overall: ascensaoCharacterOverall(),
+      record: `16 temporadas`,
+      roster: null,
+      mvpName: null,
+      ascensaoNome: c.nome,
+      ascensaoNacionalidade: c.nacionalidade,
+      ascensaoMundialTitles: mundialTitles,
+      ascensaoRegionalTitles: regionalTitles,
+      ascensaoCopaTitles: copaTitles,
+      ascensaoMvpCount: c.mvpCount || 0,
+    };
+    const raw = await storageGetValue("campaign_history");
+    const list = raw ? JSON.parse(raw) : [];
+    list.unshift(record);
+    if(list.length>50) list.length = 50;
+    await storageSetValue("campaign_history", JSON.stringify(list));
+  } catch(e){ /* armazenamento indisponível — segue o jogo normalmente */ }
+}
 async function loadCampaignHistory(){
   try{
     const raw = await storageGetValue("campaign_history");
@@ -5127,12 +5217,18 @@ function buildAscensaoShareText(){
   lines.push(`${t("ascensaoShareCopaLabel")}: ${copaTitles}`);
   if(c.mvpCount) lines.push(`${t("shareMvpLabel")}: ${c.mvpCount}`);
   lines.push("");
-  lines.push(t("shareCta"));
+  lines.push(t("ascensaoShareCta"));
   try{
     const href = window.location.href;
     if(/^https?:\/\//.test(href)) lines.push(href);
   }catch(e){}
   return lines.join("\n");
+}
+// Escolhe a frase de call-to-action certa pro compartilhamento, de acordo com o modo atual.
+function shareCtaText(){
+  if(state.difficulty==="copa") return t("shareCtaCopa");
+  if(state.difficulty==="regional") return t("shareCtaRegional");
+  return t("shareCta");
 }
 function buildShareText(){
   const info = state.endInfo || {type:"groups"};
@@ -5164,7 +5260,7 @@ function buildShareText(){
   });
   if(state.headCoach) lines.push(`${t("shareCoachLabel")}: ${state.headCoach}`);
   lines.push("");
-  lines.push(t("shareCta"));
+  lines.push(shareCtaText());
   try{
     const href = window.location.href;
     if(/^https?:\/\//.test(href)) lines.push(href);
