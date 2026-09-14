@@ -3,7 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>VALX — Monte e ganhe</title>
+<title>VALX — Simulador de VALORANT: Monte seu Super Time</title>
+<meta name="description" content="VALX é um jogo de simulação de fantasy esports de VALORANT — monte seu Super Time com craques profissionais reais, jogue o Mundial, o Regional, a Copa do Mundo ou crie sua carreira no Rumo à Ascensão.">
+<meta property="og:title" content="VALX — Simulador de VALORANT">
+<meta property="og:description" content="Monte seu Super Time com craques profissionais de VALORANT e corra atrás do título Mundial, Regional ou da Copa do Mundo.">
+<meta property="og:type" content="website">
+<meta name="keywords" content="VALX, valx, VALORANT, simulador, fantasy esports, craques, mundial, regional, copa do mundo">
 <style>
   :root{
     --bg-deep:#080F14;
@@ -843,7 +848,8 @@ function buildTeamWithCharacter(realPlayers){
   return buildValidRoster(realPlayers); // não coube em nenhuma função — joga só com o time real
 }
 function buildAscensaoNationalTeam(){
-  return ascensaoApplyChampionBonus(buildTeamWithCharacter(selecaoPlayerObjects(state.carreira.nacao)));
+  const jogadoresOrdenados = [...selecaoPlayerObjects(state.carreira.nacao)].sort((a,b)=>b.overall-a.overall);
+  return ascensaoApplyChampionBonus(buildTeamWithCharacter(jogadoresOrdenados));
 }
 function buildAscensaoOrgTeam(name, insertCharacter, overridePlayers, overrideCoach){
   const real = ASCENSAO_TEAM_ROSTERS[name];
@@ -2718,6 +2724,31 @@ function buildValidRoster(players){
     roster[slotIdx] = players.find(p=>p.name===name);
   });
   return roster;
+}
+// Pontua um craque considerando não só o overall dele, mas a sinergia com o resto do grupo de
+// candidatos — craques que jogaram no mesmo time de verdade juntos, ou que têm país em comum
+// (incluindo país de residência), pontuam mais alto, já que tendem a fechar um time mais coeso.
+function scoreComSinergia(jogador, pool){
+  let pontos = jogador.overall;
+  const timesDoJogador = PLAYER_TEAM[jogador.name.toLowerCase()] || [];
+  const paisesDoJogador = playerCountries(jogador.name);
+  pool.forEach(outro=>{
+    if(outro.name===jogador.name) return;
+    const timesDoOutro = PLAYER_TEAM[outro.name.toLowerCase()] || [];
+    if(timesDoJogador.some(t=>timesDoOutro.includes(t))) pontos += 0.75;
+    const paisesDoOutro = playerCountries(outro.name);
+    if(paisesDoJogador.some(p=>paisesDoOutro.includes(p))) pontos += 0.3;
+  });
+  return pontos;
+}
+// Igual buildValidRoster, mas ordena os craques por overall + sinergia antes de montar — assim
+// o casamento de funções sempre prioriza o craque mais forte E mais encaixado no grupo
+// disponível pra cada posição, montando o melhor time possível em vez de qualquer combinação
+// válida.
+function buildBestRoster(players){
+  const pontuados = players.map(p=>({p, score: scoreComSinergia(p, players)}));
+  pontuados.sort((a,b)=>b.score-a.score);
+  return buildValidRoster(pontuados.map(x=>x.p));
 }
 
 function buildAIRoster(sharedPool){
@@ -5037,7 +5068,7 @@ function setupAscensaoWorldCupStage(regionalPlacement, qualificou, mundialResult
   state.headCoach = playerTeam.coach;
   const outrasNacoes = Object.keys(WC_SELECOES).filter(n=>n!==c.nacao);
   const aiTeams = outrasNacoes.map(nacao=>{
-    const roster = ascensaoApplyChampionBonus(buildValidRoster(selecaoPlayerObjects(nacao)));
+    const roster = ascensaoApplyChampionBonus(buildBestRoster(selecaoPlayerObjects(nacao)));
     return {id:nacao, name:nacao, roster, coach:WC_SELECOES[nacao].coaches[0], rating:teamOverall(roster)};
   });
   const allTeams = shuffle([playerTeam, ...aiTeams]);
