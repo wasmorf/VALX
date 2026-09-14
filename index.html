@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23080F14'/%3E%3Cpath d='M10 15 L50 85 L90 15' stroke='%23FF4655' stroke-width='14' stroke-linejoin='miter' stroke-linecap='square' fill='none'/%3E%3Cpath d='M10 85 L50 15 L90 85' stroke='%23FF4655' stroke-width='14' stroke-linejoin='miter' stroke-linecap='square' fill='none'/%3E%3C/svg%3E">
 <title>VALX — Simulador de VALORANT: Monte seu Super Time</title>
 <meta name="description" content="VALX é um jogo de simulação de fantasy esports de VALORANT — monte seu Super Time com craques profissionais reais, jogue o Mundial, o Regional, a Copa do Mundo ou crie sua carreira no Rumo à Ascensão.">
 <meta property="og:title" content="VALX — Simulador de VALORANT">
@@ -305,9 +306,10 @@
   /* ---- country flag (image + graceful text fallback if it fails to load) ---- */
   .flag-img{display:inline-block;vertical-align:middle;border-radius:1px;}
   .version-badge{
-    position:fixed;bottom:6px;right:8px;
-    font-family:'JetBrains Mono';font-size:9px;color:var(--muted);
-    opacity:0.55;letter-spacing:0.3px;pointer-events:none;z-index:50;
+    position:fixed;bottom:8px;right:10px;
+    font-family:'JetBrains Mono';font-size:12px;font-weight:700;color:var(--crimson);
+    opacity:0.9;letter-spacing:0.4px;pointer-events:none;z-index:50;
+    background:var(--bg-panel);border:1px solid var(--line);padding:3px 8px;border-radius:3px;
   }
   .flag-fallback{
     display:none;vertical-align:middle;
@@ -351,7 +353,7 @@
 </head>
 <body>
 <div id="app"></div>
-<div class="version-badge">Beta · 11/09/2026</div>
+<div class="version-badge">Beta v2 · 14/09/2026</div>
 
 <script>
 /* ---------------- DATA ---------------- */
