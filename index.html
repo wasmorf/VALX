@@ -874,6 +874,29 @@ function buildTeamWithCharacter(realPlayers){
   }
   return buildValidRoster(realPlayers); // não coube em nenhuma função — joga só com o time real
 }
+// Igual buildTeamWithCharacter, mas em vez de parar na primeira função que der certo (que
+// quase sempre é a principal), testa TODAS as funções do craque (principal + secundárias) e
+// sorteia entre as que realmente cabem — assim ofertas de transferência têm chance real de
+// vir pra alguma função secundária também, não só sempre a principal.
+function buildTeamWithCharacterRandomRole(realPlayers){
+  const c = state.carreira;
+  const characterRoles = [c.funcao, ...c.funcoesSecundarias];
+  const characterOverall = ascensaoCharacterOverall();
+  const characterPlayer = {name:c.nome, roles:characterRoles, overall:characterOverall, tags:c.qualidades, isCharacter:true, country:c.nacionalidade};
+  const opcoesValidas = [];
+  for(const myRole of characterRoles){
+    const remainingRoles = SLOT_ORDER.filter(rk=>rk!==myRole);
+    const assigned = assignRolesFrom(remainingRoles, realPlayers);
+    if(assigned){
+      opcoesValidas.push(SLOT_ORDER.map(rk=>{
+        if(rk===myRole) return characterPlayer;
+        return assigned[remainingRoles.indexOf(rk)];
+      }));
+    }
+  }
+  if(opcoesValidas.length===0) return buildValidRoster(realPlayers);
+  return opcoesValidas[Math.floor(Math.random()*opcoesValidas.length)];
+}
 // Igual selecaoPlayerObjects, mas tirando quem está na lista de excluídos do Ascensão — usado
 // só nas telas do Ascensão, a Copa do Mundo isolada continua podendo escalar esses craques.
 function ascensaoSelecaoPlayerObjects(nacao){
@@ -5534,7 +5557,7 @@ function ascensaoRollTransferOffer(){
     if(!transferenciasPorRegiao[o.regiao]) transferenciasPorRegiao[o.regiao] = simulateRegionalTransfers(o.regiao, o.regiao===c.regiao ? c.time : null);
     const jogadores = transferenciasPorRegiao[o.regiao][o.org] || ASCENSAO_TEAM_ROSTERS[o.org].players;
     const realPlayers = jogadores.map(n=>POOL.find(p=>p.name.toLowerCase()===n.toLowerCase())).filter(Boolean);
-    const rosterComPersonagem = buildTeamWithCharacter(realPlayers);
+    const rosterComPersonagem = buildTeamWithCharacterRandomRole(realPlayers);
     const personagemNoTime = rosterComPersonagem.find(p=>p && p.isCharacter);
     if(!personagemNoTime) continue; // não coube em nenhuma função que o craque escolheu — não oferece
     const funcaoNaOferta = SLOT_ORDER[rosterComPersonagem.indexOf(personagemNoTime)];
