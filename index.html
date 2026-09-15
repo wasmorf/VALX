@@ -859,7 +859,12 @@ function ascensaoCharacterOverall(){
 }
 function buildTeamWithCharacter(realPlayers){
   const c = state.carreira;
-  const characterRoles = [c.funcao, ...c.funcoesSecundarias];
+  let characterRoles = [c.funcao, ...c.funcoesSecundarias];
+  // Se aceitou uma oferta pra jogar numa função específica, tenta ESSA primeiro — senão o time
+  // sempre monta na função principal e ignora o que foi combinado na oferta.
+  if(c.funcaoAtual && characterRoles.includes(c.funcaoAtual)){
+    characterRoles = [c.funcaoAtual, ...characterRoles.filter(r=>r!==c.funcaoAtual)];
+  }
   const characterOverall = ascensaoCharacterOverall();
   const characterPlayer = {name:c.nome, roles:characterRoles, overall:characterOverall, tags:c.qualidades, isCharacter:true, country:c.nacionalidade};
   for(const myRole of characterRoles){
@@ -4833,6 +4838,7 @@ function attachHandlers(){
       const oferta = state.carreira.ofertas[parseInt(el.dataset.ascoferta,10)];
       state.carreira.time = oferta.org;
       state.carreira.regiao = oferta.regiao;
+      state.carreira.funcaoAtual = oferta.funcao;
       state.carreira.ofertas = null;
       setupAscensaoRegionalStage();
       render();
