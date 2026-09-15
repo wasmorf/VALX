@@ -714,7 +714,7 @@ function teamRegionRating(name){
 const ASCENSAO_TEAM_ROSTERS = {
   // ===== BR =====
   "LOUD": {players:["tkzin","erde","DaviH","Darker","lukxo"], coach:"romanilly"},
-  "MIBR": {players:["aspas","Mazino",null,null,null], coach:"frod"},
+  "MIBR": {players:["aspas","Mazino","Sacy",null,null], coach:"frod"},
   "FURIA": {players:["koalanoob","basic","C0M","artzin","Shyy"], coach:"shaw"},
   "2GAME": {players:["qck","gobera","frz","Brinks","xenom"], coach:"gaabxx"},
   "Team Solid": {players:["havoc","liazzi","raafa","GuhRVN","nevoy"], coach:"peu"},
@@ -772,9 +772,9 @@ const ASCENSAO_TEAM_ROSTERS = {
 // Campeão Regional dá um bônus menor que Campeão Mundial — quem ganhou os dois soma os dois.
 // Craques que NUNCA devem aparecer no Rumo à Ascensão (nem escalados em time, nem como agente
 // livre no mercado) — mesmo continuando disponíveis normalmente nos outros modos.
-const ASCENSAO_EXCLUDED_PLAYERS = new Set(["sacy","yay","tenz"]);
+const ASCENSAO_EXCLUDED_PLAYERS = new Set(["yay","tenz"]);
 // Igual acima, mas pra técnicos — nunca aparecem escalados nem como agente livre no Ascensão.
-const ASCENSAO_EXCLUDED_COACHES = new Set(["bzka"]);
+const ASCENSAO_EXCLUDED_COACHES = new Set([]);
 const ASCENSAO_CHAMPION_BONUS = 3;
 const ASCENSAO_REGIONAL_CHAMPION_BONUS = 1.5;
 function ascensaoApplyChampionBonus(roster){
