@@ -740,7 +740,7 @@ const ASCENSAO_TEAM_ROSTERS = {
   "All Knights": {players:["keznit","mta","Melser","david","Tacolilla"], coach:"Itopata"},
   "Bestia": {players:["seven","phc","jotinha","chubizin","mont1"], coach:"phonics"},
   "9z": {players:["Tuli","Kimbo","M1key","skyppervz","MiradaNinja"], coach:"pule"},
-  "Shinden": {players:["adverso","xand","pollo","pANcada","bezn1"], coach:"bzka"},
+  "Shinden": {players:["adverso","xand","pollo","pANcada","bezn1"], coach:"Rojo"},
   // ===== CHN =====
   "EDward Gaming": {players:["ZmjjKK","Jieni7","nobody","Smoggy","CHICHOO"], coach:"Autumn"},
   "Wolves Esports": {players:["Juicy","Lysoar","SiufatBB","spring","Yuicaw"], coach:"alexRr"},
@@ -773,6 +773,8 @@ const ASCENSAO_TEAM_ROSTERS = {
 // Craques que NUNCA devem aparecer no Rumo à Ascensão (nem escalados em time, nem como agente
 // livre no mercado) — mesmo continuando disponíveis normalmente nos outros modos.
 const ASCENSAO_EXCLUDED_PLAYERS = new Set(["sacy","yay","tenz"]);
+// Igual acima, mas pra técnicos — nunca aparecem escalados nem como agente livre no Ascensão.
+const ASCENSAO_EXCLUDED_COACHES = new Set(["bzka"]);
 const ASCENSAO_CHAMPION_BONUS = 3;
 const ASCENSAO_REGIONAL_CHAMPION_BONUS = 1.5;
 function ascensaoApplyChampionBonus(roster){
@@ -922,8 +924,8 @@ function simulateRegionalCoachTransfers(regiao, excludeOrg, transferenciasDeJoga
     const paisCoach = COACH_COUNTRY[nomeCoach.toLowerCase()];
     if(paisCoach){
       const regiaoDoPais = COUNTRY_TO_REGION[paisCoach];
-      if(regiaoDoPais===regiao) pontos += 2;
-      else if((ASCENSAO_REGION_PROXIMITY[regiao]||[]).includes(regiaoDoPais)) pontos += 1;
+      if(regiaoDoPais===regiao) pontos += 15;
+      else if((ASCENSAO_REGION_PROXIMITY[regiao]||[]).includes(regiaoDoPais)) pontos += 6;
       const rosterDoTime = transferenciasDeJogadores && transferenciasDeJogadores[orgAlvo];
       if(rosterDoTime){
         const sinergia = rosterDoTime.filter(nomeJogador=>PLAYER_COUNTRY[nomeJogador.toLowerCase()]===paisCoach).length;
@@ -938,13 +940,16 @@ function simulateRegionalCoachTransfers(regiao, excludeOrg, transferenciasDeJoga
     // mercado como opção, igual os agentes livres de jogador.
     const jaEmAlgumTimeNoJogo = new Set(Object.values(ASCENSAO_TEAM_ROSTERS).filter(d=>d.coach).map(d=>d.coach.toLowerCase()));
     if(usadosGlobalmenteCoach) usadosGlobalmenteCoach.forEach(n=>jaEmAlgumTimeNoJogo.add(n.toLowerCase()));
-    const agentesLivres = Object.keys(COACH_COUNTRY).filter(c=>!jaEmAlgumTimeNoJogo.has(c));
+    const agentesLivres = Object.keys(COACH_COUNTRY).filter(c=>!jaEmAlgumTimeNoJogo.has(c) && !ASCENSAO_EXCLUDED_COACHES.has(c));
     // Todo time libera o próprio técnico ao mesmo tempo — o mercado já nasce com opção pra
-    // todo time, sem depender de ninguém trocar primeiro.
+    // todo time, sem depender de ninguém trocar primeiro. Só uma parte dos times participa
+    // de fato a cada temporada, igual o mercado de jogadores — reduz o volume de trocas.
+    const CHANCE_PARTICIPAR_DO_MERCADO_COACH = 0.17;
+    const orgsParticipandoCoach = orgs.filter(()=>Math.random()<CHANCE_PARTICIPAR_DO_MERCADO_COACH);
     const meuOriginal = {};
-    orgs.forEach(org=>{ meuOriginal[org] = coachCopies[org]; });
-    let mercado = [...orgs.map(org=>meuOriginal[org]).filter(Boolean), ...agentesLivres];
-    shuffle(orgs).forEach(org=>{
+    orgsParticipandoCoach.forEach(org=>{ meuOriginal[org] = coachCopies[org]; });
+    let mercado = [...orgsParticipandoCoach.map(org=>meuOriginal[org]).filter(Boolean), ...agentesLivres];
+    shuffle(orgsParticipandoCoach).forEach(org=>{
       const meuAntigo = meuOriginal[org];
       const opcoes = shuffle(mercado.filter(c=>c!==meuAntigo)).sort((a,b)=>pontuaCandidatoCoach(b,org)-pontuaCandidatoCoach(a,org));
       const contratado = opcoes.find(c=>pontuaCandidatoCoach(c,org) > pontuaCandidatoCoach(meuAntigo,org)) || null;
@@ -984,8 +989,8 @@ function simulateRegionalTransfers(regiao, excludeOrg, usadosGlobalmente){
     if(!p) return pontos;
     const paisesCandidato = playerCountries(p.name);
     const regiaoDoPais = freeAgentRegion(p.name.toLowerCase());
-    if(regiaoDoPais===regiao) pontos += 2;
-    else if((ASCENSAO_REGION_PROXIMITY[regiao]||[]).includes(regiaoDoPais)) pontos += 1;
+    if(regiaoDoPais===regiao) pontos += 15;
+    else if((ASCENSAO_REGION_PROXIMITY[regiao]||[]).includes(regiaoDoPais)) pontos += 6;
     const sinergia = restanteDoElenco.filter(nomeColega=>{
       const pColega = POOL.find(x=>x.name.toLowerCase()===nomeColega.toLowerCase());
       return pColega && playerCountries(pColega.name).some(pc=>paisesCandidato.includes(pc));
@@ -1032,13 +1037,18 @@ function simulateRegionalTransfers(regiao, excludeOrg, usadosGlobalmente){
     const vaga = {};
     let pool = [...agentesLivresDaRegiao];
     const CHANCE_LIBERAR_ALEATORIO = 0.2;
-    orgs.forEach(org=>{
+    const CHANCE_PARTICIPAR_DO_MERCADO = 0.65;
+    const orgsParticipando = orgs.filter(()=>Math.random()<CHANCE_PARTICIPAR_DO_MERCADO);
+    orgsParticipando.forEach(org=>{
       const elenco = rosterCopies[org].map((nome,idx)=>({nome, idx, overall:overallDe(nome)}));
       elenco.sort((a,b)=>a.overall-b.overall);
       // normalmente libera o craque mais fraco do time, mas às vezes (chance pequena) libera
-      // um craque aleatório do elenco — assim até os craques mais fortes têm chance de trocar
-      // de vez em quando, em vez de ficarem travados no mesmo time pra sempre.
-      const liberado = Math.random() < CHANCE_LIBERAR_ALEATORIO ? elenco[Math.floor(Math.random()*elenco.length)] : elenco[0];
+      // um craque aleatório do elenco — exceto o MELHOR, pra não correr o risco dele ser
+      // roubado e o time cair pra um reforço de emergência pior (troca sem sentido).
+      const candidatosParaLiberar = elenco.slice(0, -1); // tira o melhor (ultimo, ja que esta ordenado crescente)
+      const liberado = (Math.random() < CHANCE_LIBERAR_ALEATORIO && candidatosParaLiberar.length>0)
+        ? candidatosParaLiberar[Math.floor(Math.random()*candidatosParaLiberar.length)]
+        : elenco[0];
       vaga[org] = liberado;
       pool.push(liberado.nome);
       rosterCopies[org][vaga[org].idx] = null; // vaga temporária
@@ -1046,7 +1056,7 @@ function simulateRegionalTransfers(regiao, excludeOrg, usadosGlobalmente){
     // Passo 2: cada time (ordem aleatória) tenta contratar o MELHOR disponível no mercado
     // (de qualquer outro time ou agente livre), pesando nacionalidade/proximidade/sinergia.
     // Se não achar ninguém que sirva, o próprio craque volta pro time de origem.
-    shuffle(orgs).forEach(org=>{
+    shuffle(orgsParticipando).forEach(org=>{
       const restanteDoElenco = rosterCopies[org].filter(Boolean);
       const opcoes = shuffle(pool.filter(n=>n!==vaga[org].nome)).sort((a,b)=>pontuaCandidato(b,restanteDoElenco)-pontuaCandidato(a,restanteDoElenco));
       let contratado = null;
@@ -1095,10 +1105,11 @@ function simulateRegionalTransfers(regiao, excludeOrg, usadosGlobalmente){
 const REGIONAL_MUNDIAL_QUALIFY_COUNT = {BR:4, NA:4, EMEA:4, LAS:2, APAC:1, CHN:1};
 
 // Head coaches disponíveis — 1 escolhido pelo jogador, os outros 15 vão pras equipes adversárias.
-const COACHES = ["Nbs","bzkA","Potter","frod","mini","Chet","d00mbros","Kaplan","alecks","Romanilly","Stk","Onur","JoshRT","bonkar","shaW","Kamino","SilKanoN","NaThanD","Stunner","KEY","WKN","Ewok","Engh","PatronW","gaabxx","Veer","phonics","ZONYK","solo","neilzinho","ANGE1","peu","DragziKW","Carlao","ryotzz","Negaral","Itopata","pule","Autumn","alexRr","LEGIJA","LohaN","Vlad","ZE1SH","Scuttt","glow","KDG"];
+const COACHES = ["Rojo","Nbs","bzkA","Potter","frod","mini","Chet","d00mbros","Kaplan","alecks","Romanilly","Stk","Onur","JoshRT","bonkar","shaW","Kamino","SilKanoN","NaThanD","Stunner","KEY","WKN","Ewok","Engh","PatronW","gaabxx","Veer","phonics","ZONYK","solo","neilzinho","ANGE1","peu","DragziKW","Carlao","ryotzz","Negaral","Itopata","pule","Autumn","alexRr","LEGIJA","LohaN","Vlad","ZE1SH","Scuttt","glow","KDG"];
 // Buff de cada Head Coach: bônus fixo aplicado ao rating do time em todo cálculo de vitória
 // de rodada/partida — vale pra qualquer equipe (sua ou adversária) que tiver esse técnico.
 const COACH_BUFFS = {
+  Rojo:5,
   Nbs:5, bzka:5, Potter:7, frod:5, mini:5, Chet:4, d00mbros:5, kaplan:5,
   alecks:5, romanilly:5, Stk:5, onur:5, JoshRT:8, bonkar:5, shaw:5, Kamino:5,
   SilKanoN:5, nathand:5, Stunner:5, KEY:5, WKN:5, Ewok:5, ENGH:5, PatronW:5,
@@ -1493,6 +1504,7 @@ const PLAYER_RESIDENCE = {
 };
 // País "extra" de sinergia pra técnicos, igual o PLAYER_RESIDENCE mas pra HC.
 const COACH_RESIDENCE = {
+  "rojo":["AR","CL"],
   "frod":"BR",
 };
 const PLAYER_TEAM = {
@@ -1633,6 +1645,7 @@ const PLAYER_TEAM = {
 };
 // País e time real dos Head Coaches (pesquisado no vlr.gg) — cobertura parcial, mesma lógica dos craques.
 const COACH_COUNTRY = {
+  "rojo":"ES",
   "bzka":"BR","frod":"US","onur":"AR","potter":"US","bonkar":"SE","d00mbros":"SE",
   "joshrt":"US","mini":"GB","nbs":"LT","chet":"US","kaplan":"US","alecks":"FR",
   "romanilly":"AR","stk":"BR","shaw":"BR","kamino":"BR",
@@ -1733,7 +1746,9 @@ function chemistryBonus(roster, coachName){
   const teamPairs = countExtraPairs(teamLists.flat());
   let coachBonus = 0;
   if(coachName){
-    const ccList = [COACH_COUNTRY[coachName.toLowerCase()], COACH_RESIDENCE[coachName.toLowerCase()]].filter(Boolean).map(normalizeSynergyCountry);
+    const residenciaCoach = COACH_RESIDENCE[coachName.toLowerCase()];
+    const residenciasCoach = Array.isArray(residenciaCoach) ? residenciaCoach : [residenciaCoach];
+    const ccList = [COACH_COUNTRY[coachName.toLowerCase()], ...residenciasCoach].filter(Boolean).map(normalizeSynergyCountry);
     const ct = COACH_TEAM[coachName.toLowerCase()];
     const ctRegional = COACH_REGIONAL_CHAMPION[coachName.toLowerCase()];
     if(ccList.length) coachBonus += roster.filter(p=>playerCountries(p.name).map(normalizeSynergyCountry).some(c=>ccList.includes(c))).length * 0.75;
@@ -1773,6 +1788,7 @@ DE:`<rect width="30" height="6.67" fill="#000"/><rect y="6.67" width="30" height
 DK:`<rect width="30" height="20" fill="#c60c30"/><rect x="9" width="4" height="20" fill="#fff"/><rect y="8" width="30" height="4" fill="#fff"/>`,
 DO:`<rect width="30" height="20" fill="#002d62"/><rect x="15" width="15" height="10" fill="#ce1126"/><rect y="10" width="15" height="10" fill="#ce1126"/><rect x="12" width="6" height="20" fill="#fff"/><rect y="7" width="30" height="6" fill="#fff"/>`,
 EE:`<rect width="30" height="6.67" fill="#0072ce"/><rect y="6.67" width="30" height="6.67" fill="#000"/><rect y="13.33" width="30" height="6.67" fill="#fff"/>`,
+ES:`<rect width="30" height="20" fill="#aa151b"/><rect y="5" width="30" height="10" fill="#f1bf00"/>`,
 FI:`<rect width="30" height="20" fill="#fff"/><rect x="9" width="4" height="20" fill="#002f6c"/><rect y="8" width="30" height="4" fill="#002f6c"/>`,
 FR:`<rect width="10" height="20" fill="#002395"/><rect x="10" width="10" height="20" fill="#fff"/><rect x="20" width="10" height="20" fill="#ed2939"/>`,
 GB:`<rect width="30" height="20" fill="#012169"/><path d="M0 0L30 20M30 0L0 20" stroke="#fff" stroke-width="3.5"/><path d="M0 0L30 20M30 0L0 20" stroke="#c8102e" stroke-width="1.3"/><path d="M15 0V20M0 10H30" stroke="#fff" stroke-width="5.5"/><path d="M15 0V20M0 10H30" stroke="#c8102e" stroke-width="3.2"/>`,
@@ -2087,6 +2103,7 @@ const I18N = {
     ascensaoOfferTitle:"Oferta de Transferência!",
     ascensaoOfferLead:n=>`Você recebeu ${n} oferta${n===1?"":"s"} de transferência! Escolha uma pra aceitar:`,
     ascensaoOfferAcceptBtn:"Aceitar oferta",
+    ascensaoOfferRoleLabel:"Você jogaria de",
     ascensaoOfferDeclineBtn:"Recusar",
     ascensaoSeeFinalBtn:"Ver resumo da carreira",
     ascensaoStageContinueBtn:"Continuar",
@@ -2342,6 +2359,7 @@ const I18N = {
     ascensaoOfferTitle:"Transfer Offer!",
     ascensaoOfferLead:n=>`You received ${n} transfer offer${n===1?"":"s"}! Pick one to accept:`,
     ascensaoOfferAcceptBtn:"Accept offer",
+    ascensaoOfferRoleLabel:"You would play",
     ascensaoOfferDeclineBtn:"Decline",
     ascensaoSeeFinalBtn:"See career summary",
     ascensaoWorldCupLabel:"World Cup",
@@ -2597,6 +2615,7 @@ const I18N = {
     ascensaoOfferTitle:"¡Oferta de Transferencia!",
     ascensaoOfferLead:n=>`¡Recibiste ${n} oferta${n===1?"":"s"} de transferencia! Elige una para aceptar:`,
     ascensaoOfferAcceptBtn:"Aceptar oferta",
+    ascensaoOfferRoleLabel:"Jugarías de",
     ascensaoOfferDeclineBtn:"Rechazar",
     ascensaoSeeFinalBtn:"Ver resumen de carrera",
     ascensaoWorldCupLabel:"Copa del Mundo",
@@ -3838,9 +3857,9 @@ function countryName(code){
 const WC_SELECAO_FLAGS = {
   "United States":["US"], "South Korea":["KR"], "China":["CN"], "Canada":["CA"], "Turkey":["TR"],
   "Brazil":["BR"], "Argentina":["AR"], "Chile":["CL"], "Morocco":["MA"], "Lithuania":["LT"],
-  "Finland/Sweden":["FI","SE","DK"], "Russia":["RU"], "Poland/Ukraine":["PL","UA"],
-  "United Kingdom/Vietnam":["GB","VN"], "Philippines/Singapore/Indonesia/Malaysia/France":["PH","SG","ID","MY","FR","TH"],
-  "Latvia/Czech Republic/Belgium/Estonia/Moldova":["LV","CZ","BE","EE","MD","NL"],
+  "Finland/Sweden":["FI","SE"], "Russia":["RU"], "Poland/Ukraine":["PL","UA"],
+  "United Kingdom/Vietnam":["GB","VN"], "Philippines/Singapore/Indonesia/Malaysia/France":["PH","SG","ID","MY","FR"],
+  "Latvia/Czech Republic/Belgium/Estonia/Moldova":["LV","CZ","BE","EE","MD"],
 };
 Object.entries(WC_SELECAO_FLAGS).forEach(([selecao, codes])=>{
   codes.forEach(code=>{ WC_COUNTRY_TO_SELECAO[code] = selecao; });
@@ -4054,6 +4073,7 @@ function ascensaoOfferHTML(){
     return `
     <div class="history-item" style="margin-bottom:14px;text-align:left;">
       <h3 style="font-family:'Chakra Petch';margin:0 0 6px;">${oferta.org} <span class="mono" style="color:var(--muted);font-size:12px;">(${oferta.regiao})</span></h3>
+      <p style="font-family:'Chakra Petch';font-weight:700;color:var(--crimson);margin:0 0 8px;font-size:13px;">${t("ascensaoOfferRoleLabel")}: ${roleLabel(oferta.funcao)}</p>
       <div class="test-stats">${jogadoresHTML}</div>
       <div class="btn-row" style="margin-top:10px;">
         <button class="btn" data-ascoferta="${i}">${t("ascensaoOfferAcceptBtn")}</button>
@@ -5461,7 +5481,7 @@ const COUNTRY_TO_REGION = {
   KR:"APAC", VN:"APAC", PH:"APAC", SG:"APAC", ID:"APAC", MY:"APAC", TH:"APAC",
   CN:"CHN",
   TR:"EMEA", RU:"EMEA", PL:"EMEA", UA:"EMEA", GB:"EMEA", FR:"EMEA", MA:"EMEA", DK:"EMEA", NL:"EMEA",
-  LT:"EMEA", FI:"EMEA", SE:"EMEA", LV:"EMEA", CZ:"EMEA", BE:"EMEA", EE:"EMEA", MD:"EMEA", DE:"EMEA",
+  LT:"EMEA", FI:"EMEA", SE:"EMEA", LV:"EMEA", CZ:"EMEA", BE:"EMEA", EE:"EMEA", MD:"EMEA", DE:"EMEA", ES:"EMEA",
 };
 const ASCENSAO_REGION_PROXIMITY = {
   BR: ["LAS"], LAS: ["BR"],
@@ -5494,22 +5514,34 @@ function weightedSampleWithoutReplacement(items, weights, count){
 }
 function ascensaoRollTransferOffer(){
   const c = state.carreira;
-  if(Math.random()>=0.85) return false;
+  if(Math.random()>=0.75) return false;
   const candidatos = Object.entries(TEAM_REGIONS).flatMap(([regiao,orgs])=>orgs.map(org=>({org,regiao})))
     .filter(o=>o.org!==c.time && ASCENSAO_TEAM_ROSTERS[o.org]);
   if(candidatos.length===0) return false;
-  const quantidade = Math.min(candidatos.length, Math.floor(Math.random()*5)); // 0 a 4
+  const quantidade = Math.min(candidatos.length, Math.floor(Math.random()*4)); // 0 a 3
   if(quantidade===0) return false;
   const minhaRegiaoDeCasa = COUNTRY_TO_REGION[c.nacionalidade];
   const pesos = candidatos.map(o=>ascensaoOrgOfferWeight(o.regiao, c.regiao, minhaRegiaoDeCasa));
-  const escolhidos = weightedSampleWithoutReplacement(candidatos, pesos, quantidade);
+  // sorteia bem mais candidatos do que precisa, porque alguns vão ser descartados por não
+  // terem vaga pra nenhuma função que o craque escolheu (principal ou secundária).
+  const sorteados = weightedSampleWithoutReplacement(candidatos, pesos, Math.min(candidatos.length, quantidade*3));
   // usa o elenco ATUAL (depois das transferências dessa temporada), não o elenco original —
   // simula uma vez por região dos escolhidos e reaproveita.
   const transferenciasPorRegiao = {};
-  c.ofertas = escolhidos.map(o=>{
+  const ofertasComFuncao = [];
+  for(const o of sorteados){
+    if(ofertasComFuncao.length>=quantidade) break;
     if(!transferenciasPorRegiao[o.regiao]) transferenciasPorRegiao[o.regiao] = simulateRegionalTransfers(o.regiao, o.regiao===c.regiao ? c.time : null);
-    return { org: o.org, regiao: o.regiao, jogadores: transferenciasPorRegiao[o.regiao][o.org] || ASCENSAO_TEAM_ROSTERS[o.org].players };
-  });
+    const jogadores = transferenciasPorRegiao[o.regiao][o.org] || ASCENSAO_TEAM_ROSTERS[o.org].players;
+    const realPlayers = jogadores.map(n=>POOL.find(p=>p.name.toLowerCase()===n.toLowerCase())).filter(Boolean);
+    const rosterComPersonagem = buildTeamWithCharacter(realPlayers);
+    const personagemNoTime = rosterComPersonagem.find(p=>p && p.isCharacter);
+    if(!personagemNoTime) continue; // não coube em nenhuma função que o craque escolheu — não oferece
+    const funcaoNaOferta = SLOT_ORDER[rosterComPersonagem.indexOf(personagemNoTime)];
+    ofertasComFuncao.push({ org: o.org, regiao: o.regiao, jogadores, funcao: funcaoNaOferta });
+  }
+  if(ofertasComFuncao.length===0) return false;
+  c.ofertas = ofertasComFuncao;
   return true;
 }
 // Atualiza a "forma" de cada organização com base no retrospecto REAL dela na temporada
