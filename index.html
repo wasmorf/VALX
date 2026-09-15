@@ -3107,13 +3107,25 @@ function buildBestRoster(players){
 }
 
 function buildAIRoster(sharedPool){
-  const roster = [];
+  // Ordena por overall + sinergia antes de casar as funções — assim o time da IA sempre monta
+  // a MELHOR combinação possível com quem sobrou no pool, não só a primeira que encaixar.
+  const ordenados = [...sharedPool].sort((a,b)=>scoreComSinergia(b,sharedPool)-scoreComSinergia(a,sharedPool));
+  const roster = buildValidRoster(ordenados);
+  if(roster.every(Boolean)){
+    roster.forEach(p=>{
+      const idx = sharedPool.findIndex(x=>x.name===p.name);
+      if(idx!==-1) sharedPool.splice(idx,1);
+    });
+    return roster;
+  }
+  // sobra insuficiente pra fechar as 5 funções — fallback pro método antigo (pega o que der)
+  const fallback = [];
   SLOT_ORDER.forEach(roleKey=>{
     const idx = sharedPool.findIndex(p=>p.roles.includes(roleKey));
-    if(idx!==-1) roster.push(sharedPool.splice(idx,1)[0]);
+    if(idx!==-1) fallback.push(sharedPool.splice(idx,1)[0]);
   });
-  while(roster.length<5 && sharedPool.length){ roster.push(sharedPool.pop()); }
-  return roster;
+  while(fallback.length<5 && sharedPool.length){ fallback.push(sharedPool.pop()); }
+  return fallback;
 }
 
 // Topologia do "mini-chaveamento suíço" de cada grupo (4 times: você + 3 da IA).
