@@ -916,19 +916,27 @@ function buildTeamWithCharacterRandomRole(realPlayers){
   const characterRoles = [c.funcao, ...c.funcoesSecundarias];
   const characterOverall = ascensaoCharacterOverall();
   const characterPlayer = {name:c.nome, roles:characterRoles, overall:characterOverall, tags:c.qualidades, isCharacter:true, country:c.nacionalidade};
-  const opcoesValidas = [];
+  const opcoesValidas = []; // cada item: {roster, peso}
   for(const myRole of characterRoles){
     const remainingRoles = SLOT_ORDER.filter(rk=>rk!==myRole);
     const assigned = assignRolesFrom(remainingRoles, realPlayers);
     if(assigned){
-      opcoesValidas.push(SLOT_ORDER.map(rk=>{
+      const roster = SLOT_ORDER.map(rk=>{
         if(rk===myRole) return characterPlayer;
         return assigned[remainingRoles.indexOf(rk)];
-      }));
+      });
+      // a função principal pesa o dobro de CADA secundária — assim ela continua sendo a mais
+      // provável mesmo quando o craque escolheu várias funções secundárias (senão elas juntas
+      // ficam mais prováveis só por serem mais opções, mesmo pesando igual uma por uma).
+      opcoesValidas.push({roster, peso: myRole===c.funcao ? 2 : 1});
     }
   }
   if(opcoesValidas.length===0) return buildValidRoster(realPlayers);
-  return opcoesValidas[Math.floor(Math.random()*opcoesValidas.length)];
+  const totalPeso = opcoesValidas.reduce((s,o)=>s+o.peso,0);
+  let sorteio = Math.random()*totalPeso;
+  let idx = 0;
+  while(idx<opcoesValidas.length-1 && sorteio>opcoesValidas[idx].peso){ sorteio -= opcoesValidas[idx].peso; idx++; }
+  return opcoesValidas[idx].roster;
 }
 // Igual selecaoPlayerObjects, mas tirando quem está na lista de excluídos do Ascensão — usado
 // só nas telas do Ascensão, a Copa do Mundo isolada continua podendo escalar esses craques.
