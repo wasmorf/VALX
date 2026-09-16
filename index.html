@@ -715,7 +715,7 @@ const ASCENSAO_TEAM_ROSTERS = {
   // ===== BR =====
   "LOUD": {players:["tkzin","erde","DaviH","Darker","lukxo"], coach:"romanilly"},
   "MIBR": {players:["aspas","Mazino","Sacy",null,null], coach:"frod"},
-  "FURIA": {players:["koalanoob","basic","C0M","artzin","Shyy"], coach:"shaw"},
+  "FURIA": {players:["basic","artzin","Shyy",null,null], coach:"shaw"},
   "2GAME": {players:["qck","gobera","frz","Brinks","xenom"], coach:"gaabxx"},
   "Team Solid": {players:["havoc","liazzi","raafa","GuhRVN","nevoy"], coach:"peu"},
   "Red Canids": {players:["forbanz","prozin","urango","RgLM","sw"], coach:"DragziKW"},
@@ -761,6 +761,34 @@ const ASCENSAO_TEAM_ROSTERS = {
   "DRX": {players:["HYUNMIN","freeing","BeYN","MaKo","yong"], coach:"glow"},
   "T1": {players:["BuZz","Meteor","iZu","stax","DH"], coach:"KDG"},
 };
+// Cria uma cópia independente dos elencos/técnicos originais — usada uma vez no início de cada
+// carreira do Ascensão. As trocas de mercado atualizam ESSA cópia, não o banco original, e cada
+// temporada nova continua de onde a anterior parou (em vez de resetar sempre pro mesmo ponto de
+// partida) — isso é o que faz os times evoluírem de verdade ao longo da carreira.
+function ascensaoBuildFreshSnapshot(){
+  const snapshot = {};
+  Object.entries(ASCENSAO_TEAM_ROSTERS).forEach(([org, dados])=>{
+    snapshot[org] = {players: [...dados.players], coach: dados.coach};
+  });
+  return snapshot;
+}
+// Depois de atualizar o snapshot com o resultado do mercado de uma região, garante que nenhum
+// craque continue "preso" no elenco de um time de OUTRA região de uma temporada anterior —
+// tira ele de lá (vira vaga em aberto, preenchida normalmente na próxima vez que aquele time
+// jogar) em vez de deixar o mesmo craque escalado em dois times ao mesmo tempo.
+function ascensaoDedupeSnapshot(snapshot, orgsAutoritativos){
+  const usadosAgora = new Set();
+  orgsAutoritativos.forEach(org=>{
+    if(snapshot[org]) snapshot[org].players.filter(Boolean).forEach(n=>usadosAgora.add(n.toLowerCase()));
+  });
+  Object.keys(snapshot).forEach(org=>{
+    if(orgsAutoritativos.includes(org)) return;
+    snapshot[org].players = snapshot[org].players.map(n=>{
+      if(n && usadosAgora.has(n.toLowerCase())) return null;
+      return n;
+    });
+  });
+}
 // Calcula a força de um time pra "Rumo à Ascensão": usa o elenco real + composição/química
 // quando já pesquisamos esse time; senão cai pra força genérica (teamRegionRating).
 // Monta o time completo (elenco+coach) de uma organização do Rumo à Ascensão — usa o elenco
@@ -912,7 +940,8 @@ function buildAscensaoNationalTeam(){
   return ascensaoApplyChampionBonus(buildTeamWithCharacter(jogadoresOrdenados));
 }
 function buildAscensaoOrgTeam(name, insertCharacter, overridePlayers, overrideCoach){
-  const real = ASCENSAO_TEAM_ROSTERS[name];
+  const baseRosters = (state.carreira && state.carreira.orgRostersSnapshot) || ASCENSAO_TEAM_ROSTERS;
+  const real = baseRosters[name];
   const playerNames = overridePlayers || (real && real.players);
   const coachFinal = overrideCoach!==undefined ? overrideCoach : (real && real.coach);
   if(playerNames){
@@ -940,9 +969,10 @@ function buildAscensaoOrgTeam(name, insertCharacter, overridePlayers, overrideCo
 // alguém melhor no mercado (usando o buff do técnico como "qualidade") — o técnico antigo só
 // vira opção pros próximos times depois que o meu já foi substituído de verdade.
 function simulateRegionalCoachTransfers(regiao, excludeOrg, transferenciasDeJogadores, usadosGlobalmenteCoach){
-  const orgs = TEAM_REGIONS[regiao].filter(o=>o!==excludeOrg && ASCENSAO_TEAM_ROSTERS[o]);
+  const baseRosters = (state.carreira && state.carreira.orgRostersSnapshot) || ASCENSAO_TEAM_ROSTERS;
+  const orgs = TEAM_REGIONS[regiao].filter(o=>o!==excludeOrg && baseRosters[o]);
   const coachCopies = {};
-  orgs.forEach(org=>{ coachCopies[org] = ASCENSAO_TEAM_ROSTERS[org].coach; });
+  orgs.forEach(org=>{ coachCopies[org] = baseRosters[org].coach; });
   function buffDe(nomeCoach){ return nomeCoach ? coachBuff(nomeCoach) : -1; }
   // Pontua um técnico candidato pra um time: o buff é a base, mas pesa também se o país dele
   // bate com a região do time (ou é vizinho), e sinergia com o elenco de jogadores do time.
@@ -966,7 +996,7 @@ function simulateRegionalCoachTransfers(regiao, excludeOrg, transferenciasDeJoga
   for(let rodada=0; rodada<RODADAS_DE_MERCADO; rodada++){
     // Técnicos sem time (nunca escalados em nenhuma organização do jogo) também entram no
     // mercado como opção, igual os agentes livres de jogador.
-    const jaEmAlgumTimeNoJogo = new Set(Object.values(ASCENSAO_TEAM_ROSTERS).filter(d=>d.coach).map(d=>d.coach.toLowerCase()));
+    const jaEmAlgumTimeNoJogo = new Set(Object.values(baseRosters).filter(d=>d.coach).map(d=>d.coach.toLowerCase()));
     if(usadosGlobalmenteCoach) usadosGlobalmenteCoach.forEach(n=>jaEmAlgumTimeNoJogo.add(n.toLowerCase()));
     const agentesLivres = Object.keys(COACH_COUNTRY).filter(c=>!jaEmAlgumTimeNoJogo.has(c) && !ASCENSAO_EXCLUDED_COACHES.has(c));
     // Todo time libera o próprio técnico ao mesmo tempo — o mercado já nasce com opção pra
@@ -980,10 +1010,10 @@ function simulateRegionalCoachTransfers(regiao, excludeOrg, transferenciasDeJoga
     shuffle(orgsParticipandoCoach).forEach(org=>{
       const meuAntigo = meuOriginal[org];
       const opcoes = shuffle(mercado.filter(c=>c!==meuAntigo)).sort((a,b)=>pontuaCandidatoCoach(b,org)-pontuaCandidatoCoach(a,org));
-      const qualificados = opcoes.filter(c=>pontuaCandidatoCoach(c,org) > pontuaCandidatoCoach(meuAntigo,org)).slice(0,5);
+      const qualificados = opcoes.filter(c=>pontuaCandidatoCoach(c,org) > pontuaCandidatoCoach(meuAntigo,org)).slice(0,10);
       let contratado = null;
       if(qualificados.length>0){
-        const pesos = qualificados.map((_,i)=>qualificados.length-i);
+        const pesos = qualificados.map((_,i)=>Math.sqrt(qualificados.length-i));
         const totalPeso = pesos.reduce((a,b)=>a+b,0);
         let sorteio = Math.random()*totalPeso;
         let idx = 0;
@@ -1009,9 +1039,10 @@ function simulateRegionalCoachTransfers(regiao, excludeOrg, transferenciasDeJoga
   return coachCopies;
 }
 function simulateRegionalTransfers(regiao, excludeOrg, usadosGlobalmente){
-  const orgs = TEAM_REGIONS[regiao].filter(o=>o!==excludeOrg && ASCENSAO_TEAM_ROSTERS[o]);
+  const baseRosters = (state.carreira && state.carreira.orgRostersSnapshot) || ASCENSAO_TEAM_ROSTERS;
+  const orgs = TEAM_REGIONS[regiao].filter(o=>o!==excludeOrg && baseRosters[o]);
   const rosterCopies = {};
-  orgs.forEach(org=>{ rosterCopies[org] = [...ASCENSAO_TEAM_ROSTERS[org].players]; });
+  orgs.forEach(org=>{ rosterCopies[org] = [...baseRosters[org].players]; });
   const roles = ["duelist","flex","initiator","controller","sentinel"];
   function overallDe(nome){
     if(!nome) return -1;
@@ -1040,7 +1071,7 @@ function simulateRegionalTransfers(regiao, excludeOrg, usadosGlobalmente){
   // a mesma pontuação de nacionalidade/proximidade/sinergia dos reforços normais.
   orgs.forEach(org=>{
     if(!rosterCopies[org].includes(null)) return;
-    const jaEmAlgumTimeNoJogo = new Set(Object.values(ASCENSAO_TEAM_ROSTERS).flatMap(d=>d.players.filter(Boolean).map(n=>n.toLowerCase())));
+    const jaEmAlgumTimeNoJogo = new Set(Object.values(rosterCopies).flatMap(r=>r.filter(Boolean).map(n=>n.toLowerCase())));
     if(usadosGlobalmente) usadosGlobalmente.forEach(n=>jaEmAlgumTimeNoJogo.add(n.toLowerCase()));
     const fixos = rosterCopies[org].filter(Boolean).map(n=>POOL.find(p=>p.name.toLowerCase()===n.toLowerCase())).filter(Boolean);
     const nomesFixos = new Set(fixos.map(f=>f.name.toLowerCase()));
@@ -1066,7 +1097,7 @@ function simulateRegionalTransfers(regiao, excludeOrg, usadosGlobalmente){
     // Agentes livres de verdade — craques do banco que não estão em NENHUM elenco fixo do jogo,
     // atribuídos a essa região pela nacionalidade deles (playerRegionKey não serve aqui, porque
     // ele só reconhece quem já tem time — por definição, um agente livre nunca teria região).
-    const todosOsEscaladosNoJogo = new Set(Object.values(ASCENSAO_TEAM_ROSTERS).flatMap(d=>d.players.filter(Boolean).map(n=>n.toLowerCase())));
+    const todosOsEscaladosNoJogo = new Set(Object.values(baseRosters).flatMap(d=>d.players.filter(Boolean).map(n=>n.toLowerCase())));
     const agentesLivresDaRegiao = POOL.filter(p=>{
       if(todosOsEscaladosNoJogo.has(p.name.toLowerCase())) return false;
       if(jaEmAlgumTimeAgora.has(p.name.toLowerCase())) return false;
@@ -1088,9 +1119,21 @@ function simulateRegionalTransfers(regiao, excludeOrg, usadosGlobalmente){
       // um craque aleatório do elenco — exceto o MELHOR, pra não correr o risco dele ser
       // roubado e o time cair pra um reforço de emergência pior (troca sem sentido).
       const candidatosParaLiberar = elenco.slice(0, -1); // tira o melhor (ultimo, ja que esta ordenado crescente)
-      const liberado = (Math.random() < CHANCE_LIBERAR_ALEATORIO && candidatosParaLiberar.length>0)
-        ? candidatosParaLiberar[Math.floor(Math.random()*candidatosParaLiberar.length)]
-        : elenco[0];
+      // Craque "fora de lugar" (nacionalidade de uma região, jogando em time de outra) tem
+      // prioridade alta pra ser liberado — representa ele querendo voltar a jogar mais perto
+      // de casa. Não é garantido (senão o time nunca teria opção), só bem mais provável.
+      const foraDeLugar = candidatosParaLiberar.filter(c=>{
+        const regiaoDoCraque = freeAgentRegion(c.nome.toLowerCase());
+        return regiaoDoCraque && regiaoDoCraque!==regiao;
+      });
+      let liberado;
+      if(foraDeLugar.length>0 && Math.random()<0.7){
+        liberado = foraDeLugar[Math.floor(Math.random()*foraDeLugar.length)];
+      } else {
+        liberado = (Math.random() < CHANCE_LIBERAR_ALEATORIO && candidatosParaLiberar.length>0)
+          ? candidatosParaLiberar[Math.floor(Math.random()*candidatosParaLiberar.length)]
+          : elenco[0];
+      }
       vaga[org] = liberado;
       pool.push(liberado.nome);
       rosterCopies[org][vaga[org].idx] = null; // vaga temporária
@@ -1112,12 +1155,12 @@ function simulateRegionalTransfers(regiao, excludeOrg, usadosGlobalmente){
         const rosterObjs = tentativa.map(n=>n && POOL.find(p=>p.name.toLowerCase()===n.toLowerCase())).filter(Boolean);
         if(rosterObjs.length===5 && canCompleteRoster(roles, rosterObjs)){
           validos.push(candidato);
-          if(validos.length>=6) break;
+          if(validos.length>=10) break;
         }
       }
       let contratado = null;
       if(validos.length>0){
-        const pesos = validos.map((_,i)=>validos.length-i);
+        const pesos = validos.map((_,i)=>Math.sqrt(validos.length-i));
         const totalPeso = pesos.reduce((a,b)=>a+b,0);
         let sorteio = Math.random()*totalPeso;
         let idx = 0;
@@ -1137,7 +1180,7 @@ function simulateRegionalTransfers(regiao, excludeOrg, usadosGlobalmente){
         // (na região, excluindo quem já está escalado em qualquer time) pra não ficar com
         // buraco nem duplicar o craque que já foi embora de verdade.
         const jaEscalados = new Set(Object.values(rosterCopies).flat().filter(Boolean).map(n=>n.toLowerCase()));
-        if(excludeOrg && ASCENSAO_TEAM_ROSTERS[excludeOrg]) ASCENSAO_TEAM_ROSTERS[excludeOrg].players.filter(Boolean).forEach(n=>jaEscalados.add(n.toLowerCase()));
+        if(excludeOrg && baseRosters[excludeOrg]) baseRosters[excludeOrg].players.filter(Boolean).forEach(n=>jaEscalados.add(n.toLowerCase()));
         if(usadosGlobalmente) usadosGlobalmente.forEach(n=>jaEscalados.add(n.toLowerCase()));
         ASCENSAO_EXCLUDED_PLAYERS.forEach(n=>jaEscalados.add(n));
         const emergencia = shuffle(POOL.filter(p=>!jaEscalados.has(p.name.toLowerCase())))
@@ -1149,11 +1192,11 @@ function simulateRegionalTransfers(regiao, excludeOrg, usadosGlobalmente){
           const rosterObjs = tentativa.map(n=>n && POOL.find(p=>p.name.toLowerCase()===n.toLowerCase())).filter(Boolean);
           if(rosterObjs.length===5 && canCompleteRoster(roles, rosterObjs)){
             validosEmergencia.push(cand.name);
-            if(validosEmergencia.length>=6) break;
+            if(validosEmergencia.length>=10) break;
           }
         }
         if(validosEmergencia.length>0){
-          const pesos = validosEmergencia.map((_,i)=>validosEmergencia.length-i);
+          const pesos = validosEmergencia.map((_,i)=>Math.sqrt(validosEmergencia.length-i));
           const totalPeso = pesos.reduce((a,b)=>a+b,0);
           let sorteio = Math.random()*totalPeso;
           let idx = 0;
@@ -3287,6 +3330,12 @@ function setupAscensaoRegionalStage(){
   // bons recebem ofertas de fora mesmo em time campeão, então ninguém fica de fora do mercado.
   const transferencias = simulateRegionalTransfers(regiao, null);
   const transferenciasCoach = simulateRegionalCoachTransfers(regiao, null, transferencias);
+  // salva o resultado dessa temporada no snapshot da carreira — a próxima temporada continua
+  // dessas escalações, em vez de recalcular sempre a partir do banco original do zero.
+  TEAM_REGIONS[regiao].forEach(org=>{
+    if(transferencias[org]) c.orgRostersSnapshot[org] = {players: transferencias[org], coach: transferenciasCoach[org] || c.orgRostersSnapshot[org].coach};
+  });
+  ascensaoDedupeSnapshot(c.orgRostersSnapshot, TEAM_REGIONS[regiao]);
   const playerOrgTeam = buildAscensaoOrgTeam(c.time, true, transferencias[c.time], transferenciasCoach[c.time]);
   playerOrgTeam.isPlayer = true;
   state.roster = playerOrgTeam.roster;
@@ -4696,7 +4745,7 @@ function attachHandlers(){
         state.difficulty = "copa";
         state.screen = "selecaoselect";
       } else if(mode==="ascensao"){
-        state.carreira = {nome:"", funcao:null, funcoesSecundarias:[], qualidades:[], regiao:null, nacao:null, nacionalidade:null, time:null, temporada:1, historico:[], campeoesMundiais:[], campeoesMundiaisCoach:[], campeoesRegionais:[], campeoesRegionaisCoach:[]};
+        state.carreira = {nome:"", funcao:null, funcoesSecundarias:[], qualidades:[], regiao:null, nacao:null, nacionalidade:null, time:null, temporada:1, historico:[], campeoesMundiais:[], campeoesMundiaisCoach:[], campeoesRegionais:[], campeoesRegionaisCoach:[], orgRostersSnapshot: ascensaoBuildFreshSnapshot()};
         state.screen = "ascensaoCreate";
       } else if(mode==="regional"){
         state.regionalRegiao = null;
@@ -5453,6 +5502,12 @@ function setupAscensaoMundialStage(){
     // time e outro time da mesma região que participaram do mesmo mercado.
     const transferencias = (r===c.regiao && snapshotDaMinhaRegiao) ? snapshotDaMinhaRegiao : simulateRegionalTransfers(r, r===c.regiao ? c.time : null, usadosGlobalmente);
     const transferenciasCoach = (r===c.regiao && snapshotDeCoachDaMinhaRegiao) ? snapshotDeCoachDaMinhaRegiao : simulateRegionalCoachTransfers(r, r===c.regiao ? c.time : null, transferencias, usadosGlobalmenteCoach);
+    if(r!==c.regiao){
+      TEAM_REGIONS[r].forEach(org=>{
+        if(transferencias[org]) c.orgRostersSnapshot[org] = {players: transferencias[org], coach: transferenciasCoach[org] || c.orgRostersSnapshot[org].coach};
+      });
+      ascensaoDedupeSnapshot(c.orgRostersSnapshot, TEAM_REGIONS[r]);
+    }
     let selecionados;
     if(r===c.regiao){
       const outrosDaRegiao = TEAM_REGIONS[r].filter(org=>org!==c.time);
@@ -5596,9 +5651,10 @@ function weightedSampleWithoutReplacement(items, weights, count){
 }
 function ascensaoRollTransferOffer(){
   const c = state.carreira;
+  const baseRosters = c.orgRostersSnapshot || ASCENSAO_TEAM_ROSTERS;
   if(Math.random()>=0.75) return false;
   const candidatos = Object.entries(TEAM_REGIONS).flatMap(([regiao,orgs])=>orgs.map(org=>({org,regiao})))
-    .filter(o=>o.org!==c.time && ASCENSAO_TEAM_ROSTERS[o.org]);
+    .filter(o=>o.org!==c.time && baseRosters[o.org]);
   if(candidatos.length===0) return false;
   const quantidade = Math.min(candidatos.length, Math.floor(Math.random()*4)); // 0 a 3
   if(quantidade===0) return false;
@@ -5614,7 +5670,7 @@ function ascensaoRollTransferOffer(){
   for(const o of sorteados){
     if(ofertasComFuncao.length>=quantidade) break;
     if(!transferenciasPorRegiao[o.regiao]) transferenciasPorRegiao[o.regiao] = simulateRegionalTransfers(o.regiao, o.regiao===c.regiao ? c.time : null);
-    const jogadores = transferenciasPorRegiao[o.regiao][o.org] || ASCENSAO_TEAM_ROSTERS[o.org].players;
+    const jogadores = transferenciasPorRegiao[o.regiao][o.org] || baseRosters[o.org].players;
     const realPlayers = jogadores.map(n=>POOL.find(p=>p.name.toLowerCase()===n.toLowerCase())).filter(Boolean);
     const rosterComPersonagem = buildTeamWithCharacterRandomRole(realPlayers);
     const personagemNoTime = rosterComPersonagem.find(p=>p && p.isCharacter);
