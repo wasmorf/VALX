@@ -2248,6 +2248,7 @@ const I18N = {
     ascensaoOfferLead:n=>`Você recebeu ${n} oferta${n===1?"":"s"} de transferência! Escolha uma pra aceitar:`,
     ascensaoOfferAcceptBtn:"Aceitar oferta",
     ascensaoOfferRoleLabel:"Você jogaria de",
+    ascensaoOfferCoachLabel:"Técnico atual",
     ascensaoRoleSwitchTitle:"Troca de função?",
     ascensaoRoleSwitchBody:(atual,nova)=>`Com a contratação dessa temporada, o time ficaria melhor com você jogando de ${nova} em vez de ${atual}. Quer trocar?`,
     ascensaoRoleSwitchYesBtn:(nova)=>`Jogar de ${nova}`,
@@ -2509,6 +2510,7 @@ const I18N = {
     ascensaoOfferLead:n=>`You received ${n} transfer offer${n===1?"":"s"}! Pick one to accept:`,
     ascensaoOfferAcceptBtn:"Accept offer",
     ascensaoOfferRoleLabel:"You would play",
+    ascensaoOfferCoachLabel:"Current coach",
     ascensaoRoleSwitchTitle:"Switch role?",
     ascensaoRoleSwitchBody:(atual,nova)=>`With this season's signing, the team would be better off with you playing ${nova} instead of ${atual}. Want to switch?`,
     ascensaoRoleSwitchYesBtn:(nova)=>`Play ${nova}`,
@@ -2770,6 +2772,7 @@ const I18N = {
     ascensaoOfferLead:n=>`¡Recibiste ${n} oferta${n===1?"":"s"} de transferencia! Elige una para aceptar:`,
     ascensaoOfferAcceptBtn:"Aceptar oferta",
     ascensaoOfferRoleLabel:"Jugarías de",
+    ascensaoOfferCoachLabel:"Entrenador actual",
     ascensaoRoleSwitchTitle:"¿Cambiar de función?",
     ascensaoRoleSwitchBody:(atual,nova)=>`Con la contratación de esta temporada, el equipo estaría mejor con vos jugando de ${nova} en vez de ${atual}. ¿Querés cambiar?`,
     ascensaoRoleSwitchYesBtn:(nova)=>`Jugar de ${nova}`,
@@ -4282,6 +4285,7 @@ function ascensaoOfferHTML(){
     <div class="history-item" style="margin-bottom:14px;text-align:left;">
       <h3 style="font-family:'Chakra Petch';margin:0 0 6px;">${oferta.org} <span class="mono" style="color:var(--muted);font-size:12px;">(${oferta.regiao})</span></h3>
       <p style="font-family:'Chakra Petch';font-weight:700;color:var(--crimson);margin:0 0 8px;font-size:13px;">${t("ascensaoOfferRoleLabel")}: ${roleLabel(oferta.funcao)}</p>
+      <p style="font-family:'Chakra Petch';color:var(--text);margin:0 0 10px;font-size:13px;">${t("ascensaoOfferCoachLabel")}: ${oferta.coach||"—"} ${oferta.coach?countryFlag(COACH_COUNTRY[oferta.coach.toLowerCase()]):''}</p>
       <div class="test-stats">${jogadoresHTML}</div>
       <div class="btn-row" style="margin-top:10px;">
         <button class="btn" data-ascoferta="${i}">${t("ascensaoOfferAcceptBtn")}</button>
@@ -5761,17 +5765,22 @@ function ascensaoRollTransferOffer(){
   // usa o elenco ATUAL (depois das transferências dessa temporada), não o elenco original —
   // simula uma vez por região dos escolhidos e reaproveita.
   const transferenciasPorRegiao = {};
+  const transferenciasCoachPorRegiao = {};
   const ofertasComFuncao = [];
   for(const o of sorteados){
     if(ofertasComFuncao.length>=quantidade) break;
-    if(!transferenciasPorRegiao[o.regiao]) transferenciasPorRegiao[o.regiao] = simulateRegionalTransfers(o.regiao, o.regiao===c.regiao ? c.time : null);
+    if(!transferenciasPorRegiao[o.regiao]){
+      transferenciasPorRegiao[o.regiao] = simulateRegionalTransfers(o.regiao, o.regiao===c.regiao ? c.time : null);
+      transferenciasCoachPorRegiao[o.regiao] = simulateRegionalCoachTransfers(o.regiao, o.regiao===c.regiao ? c.time : null, transferenciasPorRegiao[o.regiao]);
+    }
     const jogadores = transferenciasPorRegiao[o.regiao][o.org] || baseRosters[o.org].players;
+    const coach = transferenciasCoachPorRegiao[o.regiao][o.org] || baseRosters[o.org].coach;
     const realPlayers = jogadores.map(n=>POOL.find(p=>p.name.toLowerCase()===n.toLowerCase())).filter(Boolean);
     const rosterComPersonagem = buildTeamWithCharacterRandomRole(realPlayers);
     const personagemNoTime = rosterComPersonagem.find(p=>p && p.isCharacter);
     if(!personagemNoTime) continue; // não coube em nenhuma função que o craque escolheu — não oferece
     const funcaoNaOferta = SLOT_ORDER[rosterComPersonagem.indexOf(personagemNoTime)];
-    ofertasComFuncao.push({ org: o.org, regiao: o.regiao, jogadores, funcao: funcaoNaOferta });
+    ofertasComFuncao.push({ org: o.org, regiao: o.regiao, jogadores, coach, funcao: funcaoNaOferta });
   }
   if(ofertasComFuncao.length===0) return false;
   c.ofertas = ofertasComFuncao;
