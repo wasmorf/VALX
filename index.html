@@ -980,7 +980,16 @@ function simulateRegionalCoachTransfers(regiao, excludeOrg, transferenciasDeJoga
     shuffle(orgsParticipandoCoach).forEach(org=>{
       const meuAntigo = meuOriginal[org];
       const opcoes = shuffle(mercado.filter(c=>c!==meuAntigo)).sort((a,b)=>pontuaCandidatoCoach(b,org)-pontuaCandidatoCoach(a,org));
-      const contratado = opcoes.find(c=>pontuaCandidatoCoach(c,org) > pontuaCandidatoCoach(meuAntigo,org)) || null;
+      const qualificados = opcoes.filter(c=>pontuaCandidatoCoach(c,org) > pontuaCandidatoCoach(meuAntigo,org)).slice(0,5);
+      let contratado = null;
+      if(qualificados.length>0){
+        const pesos = qualificados.map((_,i)=>qualificados.length-i);
+        const totalPeso = pesos.reduce((a,b)=>a+b,0);
+        let sorteio = Math.random()*totalPeso;
+        let idx = 0;
+        while(idx<pesos.length-1 && sorteio>pesos[idx]){ sorteio -= pesos[idx]; idx++; }
+        contratado = qualificados[idx];
+      }
       if(contratado){
         coachCopies[org] = contratado;
         mercado = mercado.filter(c=>c!==contratado);
@@ -1035,8 +1044,13 @@ function simulateRegionalTransfers(regiao, excludeOrg, usadosGlobalmente){
     if(usadosGlobalmente) usadosGlobalmente.forEach(n=>jaEmAlgumTimeNoJogo.add(n.toLowerCase()));
     const fixos = rosterCopies[org].filter(Boolean).map(n=>POOL.find(p=>p.name.toLowerCase()===n.toLowerCase())).filter(Boolean);
     const nomesFixos = new Set(fixos.map(f=>f.name.toLowerCase()));
-    const candidatosOrdenados = POOL.filter(p=>!jaEmAlgumTimeNoJogo.has(p.name.toLowerCase()) && !ASCENSAO_EXCLUDED_PLAYERS.has(p.name.toLowerCase()) && !nomesFixos.has(p.name.toLowerCase()))
+    const candidatosPontuados = POOL.filter(p=>!jaEmAlgumTimeNoJogo.has(p.name.toLowerCase()) && !ASCENSAO_EXCLUDED_PLAYERS.has(p.name.toLowerCase()) && !nomesFixos.has(p.name.toLowerCase()))
       .sort((a,b)=>pontuaCandidato(b.name, fixos.map(f=>f.name))-pontuaCandidato(a.name, fixos.map(f=>f.name)));
+    // embaralha só dentro do grupo dos melhores (top ~12) — mantém a prioridade geral por
+    // nacionalidade/proximidade/sinergia, mas sem sempre montar a combinação idêntica.
+    const topCandidatos = shuffle(candidatosPontuados.slice(0,12));
+    const restoCandidatos = candidatosPontuados.slice(12);
+    const candidatosOrdenados = [...topCandidatos, ...restoCandidatos];
     const completo = buildValidRoster([...fixos, ...candidatosOrdenados]);
     if(completo.every(Boolean)) rosterCopies[org] = completo.map(p=>p.name);
   });
@@ -1087,16 +1101,29 @@ function simulateRegionalTransfers(regiao, excludeOrg, usadosGlobalmente){
     shuffle(orgsParticipando).forEach(org=>{
       const restanteDoElenco = rosterCopies[org].filter(Boolean);
       const opcoes = shuffle(pool.filter(n=>n!==vaga[org].nome)).sort((a,b)=>pontuaCandidato(b,restanteDoElenco)-pontuaCandidato(a,restanteDoElenco));
-      let contratado = null;
+      // Junta os primeiros candidatos que REALMENTE fecham o time (cobrem as 5 funções) e
+      // sorteia entre eles com peso maior pros melhores — assim o mercado ainda respeita
+      // nacionalidade/proximidade/sinergia (quem pontua mais tem mais chance), mas não repete
+      // sempre o mesmo "candidato perfeito" toda vez que rodar de novo.
+      const validos = [];
       for(const candidato of opcoes){
         const tentativa = [...rosterCopies[org]];
         tentativa[vaga[org].idx] = candidato;
         const rosterObjs = tentativa.map(n=>n && POOL.find(p=>p.name.toLowerCase()===n.toLowerCase())).filter(Boolean);
         if(rosterObjs.length===5 && canCompleteRoster(roles, rosterObjs)){
-          rosterCopies[org] = tentativa;
-          contratado = candidato;
-          break;
+          validos.push(candidato);
+          if(validos.length>=6) break;
         }
+      }
+      let contratado = null;
+      if(validos.length>0){
+        const pesos = validos.map((_,i)=>validos.length-i);
+        const totalPeso = pesos.reduce((a,b)=>a+b,0);
+        let sorteio = Math.random()*totalPeso;
+        let idx = 0;
+        while(idx<pesos.length-1 && sorteio>pesos[idx]){ sorteio -= pesos[idx]; idx++; }
+        contratado = validos[idx];
+        rosterCopies[org][vaga[org].idx] = contratado;
       }
       if(contratado){
         pool = pool.filter(n=>n!==contratado);
@@ -1115,14 +1142,23 @@ function simulateRegionalTransfers(regiao, excludeOrg, usadosGlobalmente){
         ASCENSAO_EXCLUDED_PLAYERS.forEach(n=>jaEscalados.add(n));
         const emergencia = shuffle(POOL.filter(p=>!jaEscalados.has(p.name.toLowerCase())))
           .sort((a,b)=>pontuaCandidato(b.name, restanteDoElenco)-pontuaCandidato(a.name, restanteDoElenco));
+        const validosEmergencia = [];
         for(const cand of emergencia){
           const tentativa = [...rosterCopies[org]];
           tentativa[vaga[org].idx] = cand.name;
           const rosterObjs = tentativa.map(n=>n && POOL.find(p=>p.name.toLowerCase()===n.toLowerCase())).filter(Boolean);
           if(rosterObjs.length===5 && canCompleteRoster(roles, rosterObjs)){
-            rosterCopies[org] = tentativa;
-            break;
+            validosEmergencia.push(cand.name);
+            if(validosEmergencia.length>=6) break;
           }
+        }
+        if(validosEmergencia.length>0){
+          const pesos = validosEmergencia.map((_,i)=>validosEmergencia.length-i);
+          const totalPeso = pesos.reduce((a,b)=>a+b,0);
+          let sorteio = Math.random()*totalPeso;
+          let idx = 0;
+          while(idx<pesos.length-1 && sorteio>pesos[idx]){ sorteio -= pesos[idx]; idx++; }
+          rosterCopies[org][vaga[org].idx] = validosEmergencia[idx];
         }
       }
     });
@@ -1921,11 +1957,13 @@ function compositionBonus(roster, isSlotted){
   const clutchCount = roster.filter(p=>hasTag(p,"clutch")).length;
   if(clutchCount>=2){ attack += 2; defense += 2; }
 
-  // IGL: nenhum = nerf sempre; mais de 1 = nerf, EXCETO em Seleções da Copa do Mundo (lá não pune)
+  // IGL: nenhum = nerf sempre; 1 ou 2 = buff (time bem liderado); 3+ = nerf (líderes demais
+  // atrapalhando um ao outro), EXCETO em Seleções da Copa do Mundo (lá não pune o excesso).
   const iglCount = roster.filter(p=>hasTag(p,"igl")).length;
   const selecaoKey = rosterSelecaoKey(roster);
   if(iglCount===0){ attack -= 3; defense -= 3; }
-  else if(iglCount>1 && !selecaoKey){ attack -= 2; defense -= 2; }
+  else if(iglCount===1 || iglCount===2){ attack += 2; defense += 2; }
+  else if(iglCount>=3 && !selecaoKey){ attack -= 2; defense -= 2; }
 
   // Seleção "mista" (combinada de vários países, tipo Finlândia/Suécia) leva um nerf leve —
   // o entrosamento de uma seleção de país único é sempre um pouco melhor.
@@ -2267,7 +2305,8 @@ const I18N = {
         <ul>
           <li>Duelista <em>e</em> Sentinela usando Operator ao mesmo tempo: nerf geral.</li>
           <li>Nenhum jogador com IGL: nerf geral.</li>
-          <li>Mais de 1 jogador com IGL: nerf geral (não vale nas Seleções da Copa do Mundo).</li>
+          <li>1 ou 2 jogadores com IGL: buff geral (time bem liderado).</li>
+          <li>3 ou mais jogadores com IGL: nerf geral (não vale nas Seleções da Copa do Mundo).</li>
           <li>Duelista sem Entry: nerf no ataque.</li>
           <li>Sentinela sem Lurker: nerf geral.</li>
         </ul>
@@ -2293,7 +2332,7 @@ const I18N = {
       {title:"Copa do Mundo", body:`
         <p>Em vez de escolher uma organização, você escolhe uma <strong>Seleção nacional</strong> — o draft só sorteia craques que jogam por aquele país (algumas Seleções são combinadas entre países menores, tipo Finlândia/Suécia). O Head Coach também vem só da lista daquela Seleção.</p>
         <p>O resto funciona igual ao modo normal: fase de grupos, playoffs, tudo — só que as outras 15 "equipes" adversárias também são Seleções, cada uma com o elenco real dela.</p>
-        <p>Diferença de regra específica da Copa do Mundo: o nerf de "mais de 1 IGL" não vale aqui (afinal, numa seleção de verdade é normal ter mais de um craque com liderança tática).</p>
+        <p>Diferença de regra específica da Copa do Mundo: o nerf de "3 ou mais IGL" não vale aqui (afinal, numa seleção de verdade é normal ter vários craques com liderança tática).</p>
       `},
       {title:"Modo Regional", body:`
         <p>Escolha uma região (BR, NA, LAS, EMEA, APAC ou CHN) e um time de verdade de lá — o draft só sorteia craques que jogam nessa região. Regiões maiores passam por fase de grupos antes dos playoffs; as menores vão direto pro chaveamento.</p>
@@ -2304,7 +2343,7 @@ const I18N = {
       `},
     ],
     changelogSections:[
-      {title:"v 1.0", body:`
+      {title:"Beta → v 1.0", body:`
         <p><strong>Rumo à Ascensão</strong> — modo de carreira completo: crie seu craque, jogue 16 temporadas passando por Regional, Mundial e Copa do Mundo, receba ofertas de outros times e acompanhe sua história até o fim.</p>
         <p><strong>Mercado de transferências</strong> — times reais trocam craques e técnicos entre si a cada temporada, levando em conta nacionalidade, proximidade de região e sinergia. Agentes livres também entram no mercado.</p>
         <p><strong>Temas visuais</strong> — o Modo Selva ganhou um visual vermelho escuro e denso, e a Copa do Mundo muda de cor de acordo com a Seleção escolhida.</p>
@@ -2523,7 +2562,8 @@ const I18N = {
         <ul>
           <li>Duelist <em>and</em> Sentinel both using Operator: general nerf.</li>
           <li>No player with IGL: general nerf.</li>
-          <li>More than 1 player with IGL: general nerf (doesn't apply to World Cup national teams).</li>
+          <li>1 or 2 players with IGL: general buff (well-led team).</li>
+          <li>3 or more players with IGL: general nerf (doesn't apply to World Cup national teams).</li>
           <li>Duelist without Entry: attack nerf.</li>
           <li>Sentinel without Lurker: general nerf.</li>
         </ul>
@@ -2549,7 +2589,7 @@ const I18N = {
       {title:"World Cup", body:`
         <p>Instead of picking an organization, you pick a <strong>national team</strong> — the draft only draws pros who play for that country (some national teams are combined from smaller countries, like Finland/Sweden). The Head Coach also comes only from that national team's own list.</p>
         <p>Everything else works like the normal mode: group stage, playoffs, all of it — except the other 15 rival "teams" are national teams too, each with their own real roster.</p>
-        <p>World Cup-specific rule difference: the "more than 1 IGL" nerf doesn't apply here (a real national team having more than one tactical leader is normal).</p>
+        <p>World Cup-specific rule difference: the "3 or more IGL" nerf doesn't apply here (a real national team having several tactical leaders is normal).</p>
       `},
       {title:"Regional Mode", body:`
         <p>Pick a region (BR, NA, LAS, EMEA, APAC or CHN) and a real team from there — the draft only draws pros who actually play in that region. Bigger regions go through a group stage before playoffs; smaller ones go straight to the bracket.</p>
@@ -2560,7 +2600,7 @@ const I18N = {
       `},
     ],
     changelogSections:[
-      {title:"v 1.0", body:`
+      {title:"Beta → v 1.0", body:`
         <p><strong>Road to the Top</strong> — full career mode: create your pro, play 16 seasons through Regional, Worlds, and the World Cup, receive offers from other teams, and follow your story to the end.</p>
         <p><strong>Transfer market</strong> — real teams trade players and coaches among themselves every season, factoring in nationality, region proximity, and synergy. Free agents also join the market.</p>
         <p><strong>Visual themes</strong> — Selva Mode got a dark, dense red look, and the World Cup changes color based on the national team you pick.</p>
@@ -2779,7 +2819,8 @@ const I18N = {
         <ul>
           <li>Duelista <em>y</em> Centinela usando Operator al mismo tiempo: nerf general.</li>
           <li>Ningún jugador con IGL: nerf general.</li>
-          <li>Más de 1 jugador con IGL: nerf general (no aplica en las Selecciones de la Copa del Mundo).</li>
+          <li>1 o 2 jugadores con IGL: buff general (equipo bien liderado).</li>
+          <li>3 o más jugadores con IGL: nerf general (no aplica en las Selecciones de la Copa del Mundo).</li>
           <li>Duelista sin Entry: nerf de ataque.</li>
           <li>Centinela sin Lurker: nerf general.</li>
         </ul>
@@ -2805,7 +2846,7 @@ const I18N = {
       {title:"Copa del Mundo", body:`
         <p>En vez de elegir una organización, eliges una <strong>Selección nacional</strong> — el draft solo sortea cracks que juegan por ese país (algunas Selecciones son combinadas entre países más chicos, como Finlandia/Suecia). El Head Coach también viene solo de la lista de esa Selección.</p>
         <p>El resto funciona igual que el modo normal: fase de grupos, playoffs, todo — solo que los otros 15 "equipos" rivales también son Selecciones, cada una con su elenco real.</p>
-        <p>Diferencia de regla específica de la Copa del Mundo: el nerf de "más de 1 IGL" no aplica acá (una selección real con más de un líder táctico es normal).</p>
+        <p>Diferencia de regla específica de la Copa del Mundo: el nerf de "3 o más IGL" no aplica acá (una selección real con varios líderes tácticos es normal).</p>
       `},
       {title:"Modo Regional", body:`
         <p>Elige una región (BR, NA, LAS, EMEA, APAC o CHN) y un equipo real de ahí — el draft solo sortea cracks que juegan de verdad en esa región. Las regiones más grandes tienen fase de grupos antes de los playoffs; las más chicas van directo al cuadro.</p>
@@ -2816,7 +2857,7 @@ const I18N = {
       `},
     ],
     changelogSections:[
-      {title:"v 1.0", body:`
+      {title:"Beta → v 1.0", body:`
         <p><strong>Rumbo a la Cima</strong> — modo de carrera completo: creá tu crack, jugá 16 temporadas pasando por el Regional, el Mundial y la Copa del Mundo, recibí ofertas de otros equipos y seguí tu historia hasta el final.</p>
         <p><strong>Mercado de transferencias</strong> — los equipos reales intercambian jugadores y técnicos entre ellos cada temporada, considerando nacionalidad, proximidad de región y sinergia. Los agentes libres también entran al mercado.</p>
         <p><strong>Temas visuales</strong> — el Modo Selva tiene ahora un look rojo oscuro y denso, y la Copa del Mundo cambia de color según la Selección elegida.</p>
