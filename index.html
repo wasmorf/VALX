@@ -885,12 +885,13 @@ function ascensaoCharacterOverall(){
   overall += c.funcoesSecundarias.length * 1.5;
   return Math.min(93, Math.round(overall));
 }
-function buildTeamWithCharacter(realPlayers){
+function buildTeamWithCharacter(realPlayers, ignoreFuncaoAtual){
   const c = state.carreira;
   let characterRoles = [c.funcao, ...c.funcoesSecundarias];
   // Se aceitou uma oferta pra jogar numa função específica, tenta ESSA primeiro — senão o time
-  // sempre monta na função principal e ignora o que foi combinado na oferta.
-  if(c.funcaoAtual && characterRoles.includes(c.funcaoAtual)){
+  // sempre monta na função principal e ignora o que foi combinado na oferta. A Seleção da Copa
+  // do Mundo é exceção: lá é sempre a função principal, não importa onde o craque jogue no time.
+  if(!ignoreFuncaoAtual && c.funcaoAtual && characterRoles.includes(c.funcaoAtual)){
     characterRoles = [c.funcaoAtual, ...characterRoles.filter(r=>r!==c.funcaoAtual)];
   }
   const characterOverall = ascensaoCharacterOverall();
@@ -911,6 +912,34 @@ function buildTeamWithCharacter(realPlayers){
 // quase sempre é a principal), testa TODAS as funções do craque (principal + secundárias) e
 // sorteia entre as que realmente cabem — assim ofertas de transferência têm chance real de
 // vir pra alguma função secundária também, não só sempre a principal.
+// Verifica se, com o elenco NOVO da temporada, alguma função escolhida (principal ou
+// secundária) diferente da que o craque está jogando agora deixaria o time melhor — se sim,
+// retorna qual e o quanto melhora, pra perguntar antes de fechar a temporada.
+function ascensaoCheckRoleSwitchOpportunity(realPlayers){
+  const c = state.carreira;
+  const characterRoles = [c.funcao, ...c.funcoesSecundarias];
+  if(characterRoles.length<2) return null; // sem funcao alternativa pra oferecer
+  const funcaoAtual = (c.funcaoAtual && characterRoles.includes(c.funcaoAtual)) ? c.funcaoAtual : c.funcao;
+  const characterOverall = ascensaoCharacterOverall();
+  const characterPlayer = {name:c.nome, roles:characterRoles, overall:characterOverall, tags:c.qualidades, isCharacter:true, country:c.nacionalidade};
+  let melhorFuncao = null, melhorScore = -1, scoreAtual = -1;
+  for(const myRole of characterRoles){
+    const remainingRoles = SLOT_ORDER.filter(rk=>rk!==myRole);
+    const assigned = assignRolesFrom(remainingRoles, realPlayers);
+    if(!assigned) continue;
+    const roster = SLOT_ORDER.map(rk=>{
+      if(rk===myRole) return characterPlayer;
+      return assigned[remainingRoles.indexOf(rk)];
+    });
+    const score = teamOverall(roster);
+    if(myRole===funcaoAtual) scoreAtual = score;
+    if(score>melhorScore){ melhorScore = score; melhorFuncao = myRole; }
+  }
+  if(melhorFuncao && melhorFuncao!==funcaoAtual && scoreAtual>=0 && melhorScore-scoreAtual>=1){
+    return {funcao: melhorFuncao, diff: melhorScore-scoreAtual};
+  }
+  return null;
+}
 function buildTeamWithCharacterRandomRole(realPlayers){
   const c = state.carreira;
   const characterRoles = [c.funcao, ...c.funcoesSecundarias];
@@ -945,7 +974,7 @@ function ascensaoSelecaoPlayerObjects(nacao){
 }
 function buildAscensaoNationalTeam(){
   const jogadoresOrdenados = [...ascensaoSelecaoPlayerObjects(state.carreira.nacao)].sort((a,b)=>b.overall-a.overall);
-  return ascensaoApplyChampionBonus(buildTeamWithCharacter(jogadoresOrdenados));
+  return ascensaoApplyChampionBonus(buildTeamWithCharacter(jogadoresOrdenados, true));
 }
 function buildAscensaoOrgTeam(name, insertCharacter, overridePlayers, overrideCoach){
   const baseRosters = (state.carreira && state.carreira.orgRostersSnapshot) || ASCENSAO_TEAM_ROSTERS;
@@ -2221,6 +2250,10 @@ const I18N = {
     ascensaoOfferLead:n=>`Você recebeu ${n} oferta${n===1?"":"s"} de transferência! Escolha uma pra aceitar:`,
     ascensaoOfferAcceptBtn:"Aceitar oferta",
     ascensaoOfferRoleLabel:"Você jogaria de",
+    ascensaoRoleSwitchTitle:"Troca de função?",
+    ascensaoRoleSwitchBody:(atual,nova)=>`Com a contratação dessa temporada, o time ficaria melhor com você jogando de ${nova} em vez de ${atual}. Quer trocar?`,
+    ascensaoRoleSwitchYesBtn:(nova)=>`Jogar de ${nova}`,
+    ascensaoRoleSwitchNoBtn:(atual)=>`Continuar de ${atual}`,
     ascensaoOfferDeclineBtn:"Recusar",
     ascensaoSeeFinalBtn:"Ver resumo da carreira",
     ascensaoStageContinueBtn:"Continuar",
@@ -2478,6 +2511,10 @@ const I18N = {
     ascensaoOfferLead:n=>`You received ${n} transfer offer${n===1?"":"s"}! Pick one to accept:`,
     ascensaoOfferAcceptBtn:"Accept offer",
     ascensaoOfferRoleLabel:"You would play",
+    ascensaoRoleSwitchTitle:"Switch role?",
+    ascensaoRoleSwitchBody:(atual,nova)=>`With this season's signing, the team would be better off with you playing ${nova} instead of ${atual}. Want to switch?`,
+    ascensaoRoleSwitchYesBtn:(nova)=>`Play ${nova}`,
+    ascensaoRoleSwitchNoBtn:(atual)=>`Stay on ${atual}`,
     ascensaoOfferDeclineBtn:"Decline",
     ascensaoSeeFinalBtn:"See career summary",
     ascensaoWorldCupLabel:"World Cup",
@@ -2735,6 +2772,10 @@ const I18N = {
     ascensaoOfferLead:n=>`¡Recibiste ${n} oferta${n===1?"":"s"} de transferencia! Elige una para aceptar:`,
     ascensaoOfferAcceptBtn:"Aceptar oferta",
     ascensaoOfferRoleLabel:"Jugarías de",
+    ascensaoRoleSwitchTitle:"¿Cambiar de función?",
+    ascensaoRoleSwitchBody:(atual,nova)=>`Con la contratación de esta temporada, el equipo estaría mejor con vos jugando de ${nova} en vez de ${atual}. ¿Querés cambiar?`,
+    ascensaoRoleSwitchYesBtn:(nova)=>`Jugar de ${nova}`,
+    ascensaoRoleSwitchNoBtn:(atual)=>`Seguir de ${atual}`,
     ascensaoOfferDeclineBtn:"Rechazar",
     ascensaoSeeFinalBtn:"Ver resumen de carrera",
     ascensaoWorldCupLabel:"Copa del Mundo",
@@ -3329,21 +3370,36 @@ function rankRegionalGroup(standings){
 }
 
 // Monta e começa a fase Regional AO VIVO do Rumo à Ascensão — o jogador joga cada partida.
-function setupAscensaoRegionalStage(){
+function setupAscensaoRegionalStage(precomputado){
   const c = state.carreira;
   const regiao = c.regiao;
   const format = REGIONAL_FORMAT[regiao];
   state.difficulty = "ascensao";
-  // simula o mercado da região inteira ANTES, incluindo o time do próprio jogador — craques
-  // bons recebem ofertas de fora mesmo em time campeão, então ninguém fica de fora do mercado.
-  const transferencias = simulateRegionalTransfers(regiao, null);
-  const transferenciasCoach = simulateRegionalCoachTransfers(regiao, null, transferencias);
-  // salva o resultado dessa temporada no snapshot da carreira — a próxima temporada continua
-  // dessas escalações, em vez de recalcular sempre a partir do banco original do zero.
-  TEAM_REGIONS[regiao].forEach(org=>{
-    if(transferencias[org]) c.orgRostersSnapshot[org] = {players: transferencias[org], coach: transferenciasCoach[org] || c.orgRostersSnapshot[org].coach};
-  });
-  ascensaoDedupeSnapshot(c.orgRostersSnapshot, TEAM_REGIONS[regiao]);
+  let transferencias, transferenciasCoach;
+  if(precomputado){
+    transferencias = precomputado.transferencias;
+    transferenciasCoach = precomputado.transferenciasCoach;
+  } else {
+    // simula o mercado da região inteira ANTES, incluindo o time do próprio jogador — craques
+    // bons recebem ofertas de fora mesmo em time campeão, então ninguém fica de fora do mercado.
+    transferencias = simulateRegionalTransfers(regiao, null);
+    transferenciasCoach = simulateRegionalCoachTransfers(regiao, null, transferencias);
+    // salva o resultado dessa temporada no snapshot da carreira — a próxima temporada continua
+    // dessas escalações, em vez de recalcular sempre a partir do banco original do zero.
+    TEAM_REGIONS[regiao].forEach(org=>{
+      if(transferencias[org]) c.orgRostersSnapshot[org] = {players: transferencias[org], coach: transferenciasCoach[org] || c.orgRostersSnapshot[org].coach};
+    });
+    ascensaoDedupeSnapshot(c.orgRostersSnapshot, TEAM_REGIONS[regiao]);
+    // Antes de fechar o time, verifica se essa contratação nova deixaria melhor jogar em outra
+    // das funções escolhidas — se sim, pergunta antes de continuar, em vez de trocar sozinho.
+    const realPlayersDoMeuTime = (transferencias[c.time]||[]).map(n=>POOL.find(p=>p.name.toLowerCase()===n.toLowerCase())).filter(Boolean);
+    const oportunidade = ascensaoCheckRoleSwitchOpportunity(realPlayersDoMeuTime);
+    if(oportunidade){
+      c.pendingRoleSwitchData = {transferencias, transferenciasCoach, novaFuncao: oportunidade.funcao};
+      state.screen = "ascensaoRoleSwitch";
+      return;
+    }
+  }
   const playerOrgTeam = buildAscensaoOrgTeam(c.time, true, transferencias[c.time], transferenciasCoach[c.time]);
   playerOrgTeam.isPlayer = true;
   state.roster = playerOrgTeam.roster;
@@ -3779,6 +3835,7 @@ function screenHTML(){
   if(state.screen==="ascensaoSeason") return ascensaoSeasonHTML();
   if(state.screen==="ascensaoStageSummary") return ascensaoStageSummaryHTML();
   if(state.screen==="ascensaoOffer") return ascensaoOfferHTML();
+  if(state.screen==="ascensaoRoleSwitch") return ascensaoRoleSwitchHTML();
   if(state.screen==="ascensaoFinal") return ascensaoFinalHTML();
   if(state.screen==="coachselect") return coachSelectHTML();
   if(state.screen==="draft") return draftHTML();
@@ -4200,6 +4257,21 @@ function ascensaoResultLabel(resultado){
     eliminatedPlayoffs: t("ascensaoRegionalPlayoffsTitle"),
     qualified: t("ascensaoQualifiedTitle"),
   }[resultado];
+}
+function ascensaoRoleSwitchHTML(){
+  const c = state.carreira;
+  const funcaoAtual = (c.funcaoAtual && [c.funcao, ...c.funcoesSecundarias].includes(c.funcaoAtual)) ? c.funcaoAtual : c.funcao;
+  const novaFuncao = c.pendingRoleSwitchData.novaFuncao;
+  return `
+  <div class="panel angle">
+    <h1 class="hero" style="font-size:20px;">${t("ascensaoRoleSwitchTitle")}</h1>
+    <p style="color:var(--muted);margin:6px 0 16px;">${t("ascensaoRoleSwitchBody")(roleLabel(funcaoAtual), roleLabel(novaFuncao))}</p>
+    <div class="btn-row">
+      <button class="btn" id="ascensao-roleswitch-yes">${t("ascensaoRoleSwitchYesBtn")(roleLabel(novaFuncao))}</button>
+      <button class="btn" id="ascensao-roleswitch-no">${t("ascensaoRoleSwitchNoBtn")(roleLabel(funcaoAtual))}</button>
+    </div>
+  </div>
+  `;
 }
 function ascensaoOfferHTML(){
   const c = state.carreira;
@@ -4941,6 +5013,23 @@ function attachHandlers(){
     } else {
       setupAscensaoRegionalStage();
     }
+    render();
+  };
+  const ascensaoRoleSwitchYesBtn = document.getElementById("ascensao-roleswitch-yes");
+  if(ascensaoRoleSwitchYesBtn) ascensaoRoleSwitchYesBtn.onclick = ()=>{
+    const c = state.carreira;
+    c.funcaoAtual = c.pendingRoleSwitchData.novaFuncao;
+    const precomputado = {transferencias: c.pendingRoleSwitchData.transferencias, transferenciasCoach: c.pendingRoleSwitchData.transferenciasCoach};
+    c.pendingRoleSwitchData = null;
+    setupAscensaoRegionalStage(precomputado);
+    render();
+  };
+  const ascensaoRoleSwitchNoBtn = document.getElementById("ascensao-roleswitch-no");
+  if(ascensaoRoleSwitchNoBtn) ascensaoRoleSwitchNoBtn.onclick = ()=>{
+    const c = state.carreira;
+    const precomputado = {transferencias: c.pendingRoleSwitchData.transferencias, transferenciasCoach: c.pendingRoleSwitchData.transferenciasCoach};
+    c.pendingRoleSwitchData = null;
+    setupAscensaoRegionalStage(precomputado);
     render();
   };
   document.querySelectorAll("[data-ascoferta]").forEach(el=>{
