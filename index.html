@@ -1371,14 +1371,6 @@ const WC_SELECOES = {
     players: ["Boaster","benjyfishy","keiko","Okeanos","bao"],
     coaches: ["mini"],
   },
-  "Philippines/Singapore/Indonesia/Malaysia/France": {
-    players: ["PatMen","invy","Jinggg","f0rsakeN","mindfreak","d4v41"],
-    coaches: ["alecks"],
-  },
-  "Latvia/Czech Republic/Belgium/Estonia/Moldova": {
-    players: ["ardiis","cNed","ScreaM","marteen","Sayonara","Kicks"],
-    coaches: ["PatronW"],
-  },
 };
 // Fator de amortecimento aplicado à soma de (coach + composição + sinergia) antes de somar ao
 // rating base — evita que os buffs empilhados deixem o jogo fácil demais.
@@ -3383,43 +3375,82 @@ function buildGroupQualifiersAI(teams){
   ];
 }
 
+// Brasil e Estados Unidos entram direto nos playoffs, sem passar pela fase de grupos — as
+// outras 12 Seleções disputam 3 grupos de 4, e os 2 primeiros de cada grupo (6 no total) se
+// juntam aos 2 times de bye pra fechar os 8 dos playoffs.
+const WC_SELECAO_BYE_TEAMS = ["Brazil","United States"];
+function setupCopaTournament(){
+  const rolesNeeded = ["duelist","flex","initiator","controller","sentinel"];
+  const outrasSelecoes = Object.keys(WC_SELECOES).filter(n=>n!==state.selecao && canCompleteRoster(rolesNeeded, selecaoPlayerObjects(n)));
+  const montaTime = (name,i)=>{
+    const roster = buildValidRoster(shuffle(selecaoPlayerObjects(name)));
+    const coaches = WC_SELECOES[name].coaches;
+    return {id:"t"+i, name, roster, rating: teamOverall(roster), coach: coaches[Math.floor(Math.random()*coaches.length)]};
+  };
+  const outrosComBye = outrasSelecoes.filter(n=>WC_SELECAO_BYE_TEAMS.includes(n)).map(montaTime);
+  const outrosDeGrupo = shuffle(outrasSelecoes.filter(n=>!WC_SELECAO_BYE_TEAMS.includes(n))).map(montaTime);
+
+  state.campaignStats = { us: state.roster.map((p,i)=>({name:p.name, role:SLOT_ORDER[i], isCharacter:p.isCharacter, country:p.country, k:0, d:0, a:0})) };
+  state.campaignRecords = {singleMap:{kills:RECORDS.singleMap,holder:"aspas"}, md3:{kills:RECORDS.md3,holder:"aspas"}, md5:{kills:RECORDS.md5,holder:"marteen"}};
+  state.journey = [];
+
+  const playerTeam = {id:"player", isPlayer:true, name:state.selecao, roster:state.roster, coach:state.headCoach, rating: teamOverall(state.roster)};
+
+  if(WC_SELECAO_BYE_TEAMS.includes(state.selecao)){
+    // o próprio jogador escolheu Brasil ou Estados Unidos — já tem bye, vai direto pros playoffs
+    const grupoA = outrosDeGrupo.slice(0,4), grupoB = outrosDeGrupo.slice(4,8), grupoC = outrosDeGrupo.slice(8,12);
+    const qualA = buildGroupQualifiersAI(grupoA), qualB = buildGroupQualifiersAI(grupoB), qualC = buildGroupQualifiersAI(grupoC);
+    const seeds = shuffle([playerTeam, ...outrosComBye, ...qualA, ...qualB, ...qualC]);
+    state.tournament = {stage:"groups_skip", playerTeam};
+    buildPlayoffBracketSeeded(seeds, BRACKET_DEF);
+    advanceTournament();
+    return;
+  }
+
+  // o jogador está numa das 12 Seleções normais — cai num dos 3 grupos (o dele fica "ao vivo",
+  // os outros dois são resolvidos na hora).
+  const todosDeGrupo = shuffle([playerTeam, ...outrosDeGrupo]);
+  const grupoA = todosDeGrupo.slice(0,4), grupoB = todosDeGrupo.slice(4,8), grupoC = todosDeGrupo.slice(8,12);
+  const meuGrupo = grupoA.some(t=>t.isPlayer) ? grupoA : (grupoB.some(t=>t.isPlayer) ? grupoB : grupoC);
+  const otherGroupsTop2 = {};
+  if(meuGrupo!==grupoA) otherGroupsTop2.A = buildGroupQualifiersAI(grupoA);
+  if(meuGrupo!==grupoB) otherGroupsTop2.B = buildGroupQualifiersAI(grupoB);
+  if(meuGrupo!==grupoC) otherGroupsTop2.C = buildGroupQualifiersAI(grupoC);
+
+  const groupBracket = { seeds: meuGrupo, matches: {}, pointerIdx: 0, pending: null };
+  GROUP_BRACKET_DEF.forEach(def=>{ groupBracket.matches[def.id] = {winner:null, loser:null}; });
+
+  state.tournament = {
+    stage:"groups",
+    playerTeam,
+    groupATeams: meuGrupo,
+    groupBracket,
+    otherGroupsTop2,
+    byeTeams: outrosComBye,
+    bracket: null,
+  };
+  advanceGroupBracket();
+}
 function setupTournament(){
   if(state.difficulty==="regional"){ setupRegionalTournament(); return; }
+  if(state.difficulty==="copa"){ setupCopaTournament(); return; }
   const playerTeam = {id:"player", isPlayer:true, rating: teamOverall(state.roster)};
-  let pool;
-  if(state.difficulty==="copa"){
-    const rolesNeeded = ["duelist","flex","initiator","controller","sentinel"];
-    const otherSelecoes = Object.keys(WC_SELECOES).filter(n=>n!==state.selecao && canCompleteRoster(rolesNeeded, selecaoPlayerObjects(n)));
-    pool = shuffle(otherSelecoes.map((name,i)=>({id:"t"+i, name, rating:0})));
-  } else {
-    pool = shuffle(
-      TEAM_NAMES.filter(tm=>tm.name!==state.teamName).map((tm,i)=>({id:"t"+i, name:tm.name, rating:tm.rating}))
-    );
-  }
+  const pool = shuffle(
+    TEAM_NAMES.filter(tm=>tm.name!==state.teamName).map((tm,i)=>({id:"t"+i, name:tm.name, rating:tm.rating}))
+  );
   const groupATeams = [playerTeam, pool[0], pool[1], pool[2]];
   const rest = pool.slice(3);
   const groupB = rest.slice(0,4), groupC = rest.slice(4,8), groupD = rest.slice(8,12);
   const aiTeams = [...groupATeams.slice(1), ...groupB, ...groupC, ...groupD];
 
-  if(state.difficulty==="copa"){
-    // cada Seleção adversária monta o elenco só com os craques dela mesma, e o coach vem
-    // da lista de técnicos daquela Seleção especificamente (não do sorteio do modo normal).
-    aiTeams.forEach(tm=>{
-      tm.roster = buildValidRoster(shuffle(selecaoPlayerObjects(tm.name)));
-      tm.rating = teamOverall(tm.roster);
-      const coaches = WC_SELECOES[tm.name].coaches;
-      tm.coach = coaches[Math.floor(Math.random()*coaches.length)];
-    });
-  } else {
-    // monta um elenco de 5 jogadores para cada equipe adversária — cobrindo as 5 funções
-    // de verdade (igual um draft), em vez de um recorte aleatório do pool.
-    const usedNames = new Set(state.roster.map(p=>p.name));
-    const availablePlayers = shuffle(POOL.filter(p=>!usedNames.has(p.name)));
-    aiTeams.forEach((tm,i)=>{
-      tm.roster = buildAIRoster(availablePlayers);
-      tm.coach = state.remainingCoaches[i] || null;
-    });
-  }
+  // monta um elenco de 5 jogadores para cada equipe adversária — cobrindo as 5 funções
+  // de verdade (igual um draft), em vez de um recorte aleatório do pool.
+  const usedNames = new Set(state.roster.map(p=>p.name));
+  const availablePlayers = shuffle(POOL.filter(p=>!usedNames.has(p.name)));
+  aiTeams.forEach((tm,i)=>{
+    tm.roster = buildAIRoster(availablePlayers);
+    tm.coach = state.remainingCoaches[i] || null;
+  });
 
   const otherGroupsTop2 = {};
   [["B",groupB],["C",groupC],["D",groupD]].forEach(([letter, teams])=>{
@@ -4142,8 +4173,7 @@ const WC_SELECAO_FLAGS = {
   "United States":["US"], "South Korea":["KR"], "China":["CN"], "Canada":["CA"], "Turkey":["TR"],
   "Brazil":["BR"], "Argentina":["AR"], "Chile":["CL"], "Morocco":["MA"], "Lithuania":["LT"],
   "Finland/Sweden":["FI","SE"], "Russia":["RU"], "Poland/Ukraine":["PL","UA"],
-  "United Kingdom/Vietnam":["GB","VN"], "Philippines/Singapore/Indonesia/Malaysia/France":["PH","SG","ID","MY","FR"],
-  "Latvia/Czech Republic/Belgium/Estonia/Moldova":["LV","CZ","BE","EE","MD"],
+  "United Kingdom/Vietnam":["GB","VN"],
 };
 Object.entries(WC_SELECAO_FLAGS).forEach(([selecao, codes])=>{
   codes.forEach(code=>{ WC_COUNTRY_TO_SELECAO[code] = selecao; });
@@ -4151,7 +4181,8 @@ Object.entries(WC_SELECAO_FLAGS).forEach(([selecao, codes])=>{
 function selecaoSelectHTML(){
   const roles = ["duelist","flex","initiator","controller","sentinel"];
   const names = Object.keys(WC_SELECOES).filter(name=>canCompleteRoster(roles, selecaoPlayerObjects(name)));
-  if(names.length < 16){
+  const totalSelecoes = Object.keys(WC_SELECOES).length;
+  if(names.length < totalSelecoes){
     const unavailable = Object.keys(WC_SELECOES).filter(n=>!names.includes(n));
     return `
     <div class="panel angle" style="text-align:center;">
@@ -5409,7 +5440,12 @@ function handleContinue(){
           {...brk.matches.m3.winner, isGroupWinner:true},
           {...brk.matches.m5.winner, isGroupWinner:false},
         ];
-        const qualifiers = [...top2, ...tr.otherGroupsTop2.B, ...tr.otherGroupsTop2.C, ...tr.otherGroupsTop2.D];
+        // Copa do Mundo (isolada ou dentro do Ascensão) tem um formato próprio: só 3 grupos de
+        // 4 (não 4), e Brasil/Estados Unidos entram direto nos playoffs sem passar pela fase
+        // de grupos.
+        const qualifiers = (state.difficulty==="copa" || tr.ascensaoPhase==="worldcup")
+          ? [...top2, ...Object.values(tr.otherGroupsTop2).flat(), ...(tr.byeTeams||[])]
+          : [...top2, ...tr.otherGroupsTop2.B, ...tr.otherGroupsTop2.C, ...tr.otherGroupsTop2.D];
         buildPlayoffBracket(qualifiers);
         advanceTournament();
       } else {
@@ -5754,32 +5790,39 @@ function setupAscensaoWorldCupStage(regionalPlacement, qualificou, mundialResult
   state.teamName = c.nacao;
   state.headCoach = playerTeam.coach;
   const outrasNacoes = Object.keys(WC_SELECOES).filter(n=>n!==c.nacao);
-  const aiTeams = outrasNacoes.map(nacao=>{
+  const montaTimeNacao = nacao=>{
     const roster = ascensaoApplyChampionBonus(buildBestRoster(ascensaoSelecaoPlayerObjects(nacao)));
     return {id:nacao, name:nacao, roster, coach:WC_SELECOES[nacao].coaches[0], rating:teamOverall(roster)};
-  });
-  const allTeams = shuffle([playerTeam, ...aiTeams]);
-  const groupA = allTeams.slice(0,4), groupB = allTeams.slice(4,8), groupC = allTeams.slice(8,12), groupD = allTeams.slice(12,16);
-  const myGroup = [groupA,groupB,groupC,groupD].find(g=>g.some(tm=>tm.isPlayer));
-  const others = [groupA,groupB,groupC,groupD].filter(g=>g!==myGroup);
+  };
+  const outrosComBye = outrasNacoes.filter(n=>WC_SELECAO_BYE_TEAMS.includes(n)).map(montaTimeNacao);
+  const outrosDeGrupo = shuffle(outrasNacoes.filter(n=>!WC_SELECAO_BYE_TEAMS.includes(n))).map(montaTimeNacao);
+
+  if(WC_SELECAO_BYE_TEAMS.includes(c.nacao)){
+    // minha propria selecao (Brasil ou Estados Unidos) ja tem bye — vai direto pros playoffs
+    const grupoA = outrosDeGrupo.slice(0,4), grupoB = outrosDeGrupo.slice(4,8), grupoC = outrosDeGrupo.slice(8,12);
+    const qualA = buildGroupQualifiersAI(grupoA), qualB = buildGroupQualifiersAI(grupoB), qualC = buildGroupQualifiersAI(grupoC);
+    const seeds = shuffle([playerTeam, ...outrosComBye, ...qualA, ...qualB, ...qualC]);
+    state.tournament = {
+      stage: "groups_skip", playerTeam, ascensaoPhase: "worldcup",
+      ascensaoRegionalPlacement: regionalPlacement, ascensaoQualificou: qualificou, ascensaoMundialResultado: mundialResultado,
+    };
+    buildPlayoffBracketSeeded(seeds, BRACKET_DEF);
+    advanceTournament();
+    return;
+  }
+
+  const todosDeGrupo = shuffle([playerTeam, ...outrosDeGrupo]);
+  const grupoA = todosDeGrupo.slice(0,4), grupoB = todosDeGrupo.slice(4,8), grupoC = todosDeGrupo.slice(8,12);
+  const myGroup = grupoA.some(t=>t.isPlayer) ? grupoA : (grupoB.some(t=>t.isPlayer) ? grupoB : grupoC);
   const otherGroupsTop2 = {};
-  ["B","C","D"].forEach((letra,i)=>{
-    const g = others[i];
-    const brkAI = { seeds: shuffle(g), matches: {} };
-    GROUP_BRACKET_DEF.forEach(d=>{ brkAI.matches[d.id] = {winner:null,loser:null}; });
-    GROUP_BRACKET_DEF.forEach(d=>{
-      const a = resolveBracketTeam(d.aFrom, brkAI), b = resolveBracketTeam(d.bFrom, brkAI);
-      brkAI.matches[d.id] = decideMatchWinner(a, b, 2);
-    });
-    otherGroupsTop2[letra] = [
-      {...brkAI.matches.m3.winner, isGroupWinner:true},
-      {...brkAI.matches.m5.winner, isGroupWinner:false},
-    ];
-  });
+  if(myGroup!==grupoA) otherGroupsTop2.A = buildGroupQualifiersAI(grupoA);
+  if(myGroup!==grupoB) otherGroupsTop2.B = buildGroupQualifiersAI(grupoB);
+  if(myGroup!==grupoC) otherGroupsTop2.C = buildGroupQualifiersAI(grupoC);
   state.tournament = {
     stage: "groups",
     playerTeam,
     otherGroupsTop2,
+    byeTeams: outrosComBye,
     ascensaoPhase: "worldcup",
     ascensaoRegionalPlacement: regionalPlacement,
     ascensaoQualificou: qualificou,
