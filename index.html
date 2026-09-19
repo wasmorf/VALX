@@ -5825,6 +5825,11 @@ function setupAscensaoWorldCupStage(regionalPlacement, qualificou, mundialResult
   };
   const outrosComBye = outrasNacoes.filter(n=>WC_SELECAO_BYE_TEAMS.includes(n)).map(montaTimeNacao);
   const outrosDeGrupo = shuffle(outrasNacoes.filter(n=>!WC_SELECAO_BYE_TEAMS.includes(n))).map(montaTimeNacao);
+  // reseta as estatísticas da campanha pro elenco da SELEÇÃO (não o do clube, que é o que
+  // ficou salvo do estágio Regional anterior) — senão o MVP dessa fase pode sair um craque
+  // do seu time de clube que nem está jogando pela Seleção. Vale pros dois caminhos (bye ou
+  // fase de grupos), então fica antes da bifurcação.
+  state.campaignStats = { us: myRoster.map((p,i)=>({name:p.name, role:SLOT_ORDER[i], isCharacter:p.isCharacter, country:p.country, k:0, d:0, a:0})) };
 
   if(WC_SELECAO_BYE_TEAMS.includes(c.nacao)){
     // minha propria selecao (Brasil ou Estados Unidos) ja tem bye — vai direto pros playoffs
@@ -5859,7 +5864,6 @@ function setupAscensaoWorldCupStage(regionalPlacement, qualificou, mundialResult
     groupBracket: { seeds: shuffle(myGroup), matches: {}, pointerIdx:0, pending:null },
   };
   GROUP_BRACKET_DEF.forEach(d=>{ state.tournament.groupBracket.matches[d.id] = {winner:null, loser:null}; });
-  state.campaignStats = { us: myRoster.map((p,i)=>({name:p.name, role:SLOT_ORDER[i], isCharacter:p.isCharacter, country:p.country, k:0, d:0, a:0})) };
   advanceGroupBracket();
 }
 // Fecha a temporada: guarda o resultado (e o da Copa do Mundo, se rolou) no histórico e mostra
