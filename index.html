@@ -1359,7 +1359,7 @@ const WC_SELECOES = {
   },
   "Brazil": {
     players: ["Sacy","Sato","artzin","aspas","basic","blowz","cauanzin","cortezia","dgzin","less","lukxo","mwzera","pANcada","spikezin","tkzin","tuyz"],
-    coaches: ["shaW","bzkA","Stk","Kamino"],
+    coaches: ["bzkA","shaW","Stk","Kamino"],
   },
   "Argentina": {
     players: ["saadhak","Neon","Dantedeu5","nzr","jotinha"],
@@ -1986,6 +1986,14 @@ function coachBuff(coachName){
     if((state.carreira.campeoesRegionaisCoach||[]).some(n=>n.toLowerCase()===nomeLower)) b += ASCENSAO_REGIONAL_CHAMPION_BONUS;
   }
   return b;
+}
+// Entre os HCs disponíveis de uma Seleção, escolhe sempre o melhor (maior coachBuff) — se tiver
+// só uma opção, é essa mesmo; com mais de uma, nunca fica preso na primeira da lista à toa.
+function bestSelecaoCoach(nacao){
+  const coaches = WC_SELECOES[nacao] && WC_SELECOES[nacao].coaches;
+  if(!coaches || !coaches.length) return null;
+  if(coaches.length===1) return coaches[0];
+  return [...coaches].sort((a,b)=>coachBuff(b)-coachBuff(a))[0];
 }
 // Emoji de bandeira a partir de um código de país (ex: "BR" -> 🇧🇷). Usado só quando temos o dado.
 // Bandeiras desenhadas em SVG embutido (sem depender de internet) — funciona offline em qualquer
@@ -3406,8 +3414,7 @@ function setupCopaTournament(){
   const outrasSelecoes = Object.keys(WC_SELECOES).filter(n=>n!==state.selecao && canCompleteRoster(rolesNeeded, selecaoPlayerObjects(n)));
   const montaTime = (name,i)=>{
     const roster = buildValidRoster(shuffle(selecaoPlayerObjects(name)));
-    const coaches = WC_SELECOES[name].coaches;
-    return {id:"t"+i, name, roster, rating: teamOverall(roster), coach: coaches[Math.floor(Math.random()*coaches.length)]};
+    return {id:"t"+i, name, roster, rating: teamOverall(roster), coach: bestSelecaoCoach(name)};
   };
   const outrosComBye = outrasSelecoes.filter(n=>WC_SELECAO_BYE_TEAMS.includes(n)).map(montaTime);
   const outrosDeGrupo = shuffle(outrasSelecoes.filter(n=>!WC_SELECAO_BYE_TEAMS.includes(n))).map(montaTime);
@@ -5807,14 +5814,14 @@ function setupAscensaoWorldCupStage(regionalPlacement, qualificou, mundialResult
   state.screen = "match";
   state.journeyStageStart = state.journey.length;
   const myRoster = buildAscensaoNationalTeam();
-  const playerTeam = {id:"player", isPlayer:true, name:c.nacao, roster:myRoster, coach:WC_SELECOES[c.nacao].coaches[0], rating:teamOverall(myRoster)};
+  const playerTeam = {id:"player", isPlayer:true, name:c.nacao, roster:myRoster, coach:bestSelecaoCoach(c.nacao), rating:teamOverall(myRoster)};
   state.roster = myRoster;
   state.teamName = c.nacao;
   state.headCoach = playerTeam.coach;
   const outrasNacoes = Object.keys(WC_SELECOES).filter(n=>n!==c.nacao);
   const montaTimeNacao = nacao=>{
     const roster = ascensaoApplyChampionBonus(buildBestRoster(ascensaoSelecaoPlayerObjects(nacao)));
-    return {id:nacao, name:nacao, roster, coach:WC_SELECOES[nacao].coaches[0], rating:teamOverall(roster)};
+    return {id:nacao, name:nacao, roster, coach:bestSelecaoCoach(nacao), rating:teamOverall(roster)};
   };
   const outrosComBye = outrasNacoes.filter(n=>WC_SELECAO_BYE_TEAMS.includes(n)).map(montaTimeNacao);
   const outrosDeGrupo = shuffle(outrasNacoes.filter(n=>!WC_SELECAO_BYE_TEAMS.includes(n))).map(montaTimeNacao);
