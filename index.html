@@ -463,7 +463,7 @@ const POOL = [
   {name:"icy", roles:["sentinel","duelist"], overall:84, tags:["lurker","entry"]},
   {name:"Asuna", roles:["flex","duelist"], overall:90, tags:["mm","utility","clutch","campeao_mundial","entry"]},
   {name:"bang", roles:["controller"], overall:88, tags:["clutch","utility","campeao_mundial"]},
-  {name:"Sacy", roles:["initiator"], overall:92, tags:["clutch","utility","igl","campeao_mundial"]},
+  {name:"Sacy", roles:["initiator"], overall:93, tags:["clutch","utility","igl","campeao_mundial"]},
   {name:"nAts", roles:["sentinel"], overall:90, tags:["igl","lurker","clutch","utility","campeao_mundial"]},
   {name:"eeiu", roles:["initiator"], overall:88, tags:["clutch","utility"]},
   {name:"BABYBAY", roles:["sentinel","flex"], overall:90, tags:["lurker","utility"]},
@@ -1021,9 +1021,31 @@ function buildTeamWithCharacterRandomRole(realPlayers){
 function ascensaoSelecaoPlayerObjects(nacao){
   return selecaoPlayerObjects(nacao).filter(p=>!ASCENSAO_EXCLUDED_PLAYERS.has(p.name.toLowerCase()));
 }
+// Só pra Seleção: testa TODAS as funções que o craque escolheu (principal + secundárias) e
+// monta o time com a que deixa a Seleção com o maior overall possível — diferente do time do
+// clube, aqui não pergunta nada, já monta automaticamente na melhor função entre as escolhidas.
+function buildTeamWithCharacterBestRole(realPlayers){
+  const c = state.carreira;
+  const characterRoles = [c.funcao, ...c.funcoesSecundarias];
+  const characterOverall = ascensaoCharacterOverall();
+  const characterPlayer = {name:c.nome, roles:characterRoles, overall:characterOverall, tags:c.qualidades, isCharacter:true, country:c.nacionalidade};
+  let melhorRoster = null, melhorScore = -1;
+  for(const myRole of characterRoles){
+    const remainingRoles = SLOT_ORDER.filter(rk=>rk!==myRole);
+    const assigned = assignRolesFrom(remainingRoles, realPlayers);
+    if(!assigned) continue;
+    const roster = SLOT_ORDER.map(rk=>{
+      if(rk===myRole) return characterPlayer;
+      return assigned[remainingRoles.indexOf(rk)];
+    });
+    const score = teamOverall(roster);
+    if(score>melhorScore){ melhorScore = score; melhorRoster = roster; }
+  }
+  return melhorRoster || buildValidRoster(realPlayers);
+}
 function buildAscensaoNationalTeam(){
   const jogadoresOrdenados = [...ascensaoSelecaoPlayerObjects(state.carreira.nacao)].sort((a,b)=>b.overall-a.overall);
-  return ascensaoApplyChampionBonus(buildTeamWithCharacter(jogadoresOrdenados, true));
+  return ascensaoApplyChampionBonus(buildTeamWithCharacterBestRole(jogadoresOrdenados));
 }
 function buildAscensaoOrgTeam(name, insertCharacter, overridePlayers, overrideCoach){
   const baseRosters = (state.carreira && state.carreira.orgRostersSnapshot) || ASCENSAO_TEAM_ROSTERS;
