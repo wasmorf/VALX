@@ -509,7 +509,7 @@ const POOL = [
   {name:"Meteor", roles:["sentinel","duelist","controller","flex"], overall:89, tags:["clutch","utility","lurker","campeao_mundial","entry"]},
   {name:"Karon", roles:["controller"], overall:90, tags:["clutch","utility","campeao_mundial"]},
   {name:"Wo0t", roles:["flex","sentinel","duelist"], overall:91, tags:["mm","utility","clutch","entry","campeao_mundial","lurker"]},
-  {name:"lukxo", roles:["sentinel","controller"], overall:92, tags:["mm","operator","clutch","lurker","utility"]},
+  {name:"lukxo", roles:["sentinel","controller"], overall:92, tags:["mm","operator","clutch","lurker","utility","campeao_mundial"]},
   {name:"NaturE", roles:["initiator"], overall:85, tags:["igl","utility"]},
   {name:"liazzi", roles:["flex","duelist","controller","sentinel"], overall:85, tags:["utility","lurker","entry"]},
   {name:"Brinks", roles:["controller"], overall:86, tags:["clutch","utility","igl"]},
@@ -519,7 +519,7 @@ const POOL = [
   {name:"nataNk", roles:["flex","sentinel"], overall:87, tags:["utility","lurker"]},
   {name:"Lysoar", roles:["controller","flex"], overall:87, tags:["clutch","utility"]},
   {name:"Okeanos", roles:["flex","controller","initiator"], overall:88, tags:["utility","mm","clutch"]},
-  {name:"DaviH", roles:["initiator"], overall:87, tags:["utility","clutch"]},
+  {name:"DaviH", roles:["initiator"], overall:87, tags:["utility","clutch","campeao_mundial"]},
   {name:"zerona", roles:["flex","duelist","initiator"], overall:87, tags:["utility","entry"]},
   {name:"LewN", roles:["flex","duelist","sentinel"], overall:86, tags:["utility","clutch","mm","entry","lurker"]},
   {name:"mada", roles:["duelist"], overall:92, tags:["entry","clutch","mm","campeao_mundial"]},
@@ -536,7 +536,7 @@ const POOL = [
   {name:"Dantedeu5", roles:["duelist"], overall:88, tags:["entry","clutch","mm"]},
   {name:"blowz", roles:["initiator"], overall:92, tags:["utility","clutch","mm","campeao_mundial"]},
   {name:"Virtyy", roles:["duelist"], overall:86, tags:["entry"]},
-  {name:"Darker", roles:["controller","sentinel"], overall:87, tags:["clutch","utility","lurker"]},
+  {name:"Darker", roles:["controller","sentinel"], overall:87, tags:["clutch","utility","lurker","campeao_mundial"]},
   {name:"Tinchoff", roles:["sentinel","flex"], overall:84, tags:["lurker","utility"]},
   {name:"RgLM", roles:["controller"], overall:85, tags:["utility"]},
   {name:"skz", roles:["flex","initiator"], overall:86, tags:["clutch","utility"]},
@@ -660,7 +660,7 @@ const POOL = [
   {name:"Kyu", roles:["initiator"], overall:87, tags:["utility"]},
   {name:"invy", roles:["initiator","controller"], overall:87, tags:["utility","clutch","mm"]},
   {name:"Ivy", roles:["sentinel"], overall:89, tags:["lurker","utility","campeao_mundial"]},
-  {name:"erde", roles:["flex","controller","sentinel"], overall:89, tags:["igl","utility","mm","clutch","lurker"]},
+  {name:"erde", roles:["flex","controller","sentinel"], overall:89, tags:["igl","utility","mm","clutch","lurker","campeao_mundial"]},
   {name:"Dambi", roles:["duelist"], overall:90, tags:["entry","clutch","mm","campeao_mundial"]},
   {name:"Xross", roles:["flex","initiator","duelist"], overall:88, tags:["utility","entry","mm","campeao_mundial"]},
   {name:"Mazino", roles:["flex","controller","initiator"], overall:88, tags:["igl","clutch","utility"]},
@@ -671,7 +671,7 @@ const POOL = [
   {name:"Neon", roles:["sentinel","duelist","flex"], overall:93, tags:["mm","clutch","operator","entry","lurker","campeao_mundial","utility"]},
   {name:"alym", roles:["duelist"], overall:87, tags:["mm","clutch","entry"]},
   {name:"Sayonara", roles:["initiator","flex"], overall:87, tags:["utility","clutch","mm"]},
-  {name:"tkzin", roles:["duelist"], overall:89, tags:["entry","mm","clutch"]},
+  {name:"tkzin", roles:["duelist"], overall:89, tags:["entry","mm","clutch","campeao_mundial"]},
   {name:"Francis", roles:["flex","initiator","duelist"], overall:88, tags:["utility","clutch","campeao_mundial","entry"]},
   {name:"CHICHOO", roles:["sentinel","controller"], overall:91, tags:["utility","clutch","mm","campeao_mundial","lurker"]},
   {name:"raafa", roles:["initiator"], overall:84, tags:["utility","igl"]},
@@ -1320,7 +1320,7 @@ function simulateRegionalTransfers(regiao, excludeOrg, usadosGlobalmente){
 const REGIONAL_MUNDIAL_QUALIFY_COUNT = {BR:4, NA:4, EMEA:4, LAS:2, APAC:1, CHN:1};
 
 // Head coaches disponíveis — 1 escolhido pelo jogador, os outros 15 vão pras equipes adversárias.
-const COACHES = ["Rojo","Nbs","bzkA","Potter","frod","mini","Chet","d00mbros","Kaplan","alecks","Romanilly","Stk","Onur","JoshRT","bonkar","shaW","Kamino","SilKanoN","NaThanD","Stunner","KEY","WKN","Ewok","Engh","PatronW","gaabxx","Veer","phonics","ZONYK","solo","neilzinho","ANGE1","peu","DragziKW","Carlao","ryotzz","Negaral","Itopata","pule","Autumn","alexRr","LEGIJA","LohaN","Vlad","ZE1SH","Scuttt","glow","KDG"];
+const COACHES = ["Rojo","Nbs","bzkA","Potter","frod","mini","Chet","d00mbros","Kaplan","alecks","Romanilly","Bati","Stk","Onur","JoshRT","bonkar","shaW","Kamino","SilKanoN","NaThanD","Stunner","KEY","WKN","Ewok","Engh","PatronW","gaabxx","Veer","phonics","ZONYK","solo","neilzinho","ANGE1","peu","DragziKW","Carlao","ryotzz","Negaral","Itopata","pule","Autumn","alexRr","LEGIJA","LohaN","Vlad","ZE1SH","Scuttt","glow","KDG"];
 // Buff de cada Head Coach: bônus fixo aplicado ao rating do time em todo cálculo de vitória
 // de rodada/partida — vale pra qualquer equipe (sua ou adversária) que tiver esse técnico.
 const COACH_BUFFS = {
@@ -1330,7 +1330,7 @@ const COACH_BUFFS = {
   SilKanoN:5, nathand:5, Stunner:5, KEY:5, WKN:5, Ewok:5, ENGH:5, PatronW:5,
   gaabxx:5, Veer:5, phonics:5, ZONYK:5, solo:5, neilzinho:5,
   ANGE1:5, peu:5, DragziKW:5, Carlao:5, ryotzz:5, Negaral:5, Itopata:5, pule:5,
-  Autumn:5, alexRr:5, LEGIJA:5, LohaN:5, Vlad:5, ZE1SH:5, Scuttt:5, glow:5, KDG:5,
+  Bati:5, Autumn:5, alexRr:5, LEGIJA:5, LohaN:5, Vlad:5, ZE1SH:5, Scuttt:5, glow:5, KDG:5,
 };
 // Elencos das Seleções pro futuro Modo Copa do Mundo — separado do país "real" de cada craque
 // (usado no modo normal) porque aqui alguns jogam por uma seleção diferente da nacionalidade
@@ -1717,13 +1717,16 @@ const PLAYER_RESIDENCE = {
   "pxs":"BR",
   "taka":"BR",
   "tex":"US",
+  "davih":["BR","AR","CL","BO","CO","EC","GY","PY","PE","SR","UY","VE"],
 };
 // País "extra" de sinergia pra técnicos, igual o PLAYER_RESIDENCE mas pra HC.
 const COACH_RESIDENCE = {
   "rojo":["AR","CL"],
   "frod":"BR",
+  "bati":["BR","AR","CL","BO","CO","EC","GY","PY","PE","SR","UY","VE"],
 };
 const PLAYER_TEAM = {
+  "darker":["LOUD26"],"lukxo":["LOUD26"],"tkzin":["LOUD26"],"erde":["LOUD26"],"davih":["LOUD26"],
   "mel":["SHOPIFYGOLD2324","SHOPIFYGOLD24","SHOPIFYGOLD25"],"florescent":["SHOPIFYGOLD2324","SHOPIFYGOLD24"],"alexis":["SHOPIFYGOLD2324","SHOPIFYGOLD24","SHOPIFYGOLD25"],"sarahcat":["SHOPIFYGOLD2324","SHOPIFYGOLD24","SHOPIFYGOLD25"],"noia":["SHOPIFYGOLD2324","SHOPIFYGOLD24","SHOPIFYGOLD25"],
   "daiki":["LIQUIDBRGC25","LIQUIDBRGC23"],"bizerra":["LIQUIDBRGC25","LIQUIDBRGC23"],"isaa":["LIQUIDBRGC25","LIQUIDBRGC23"],"joojina":["LIQUIDBRGC25","LIQUIDBRGC23"],"jelly":["LIQUIDBRGC25"],
   "conir":["KRUBLAZE23"],
@@ -1864,7 +1867,7 @@ const COACH_COUNTRY = {
   "rojo":"ES",
   "bzka":"BR","frod":"US","onur":"AR","potter":"US","bonkar":"SE","d00mbros":"SE",
   "joshrt":"US","mini":"GB","nbs":"LT","chet":"US","kaplan":"US","alecks":"FR",
-  "romanilly":"AR","stk":"BR","shaw":"BR","kamino":"BR",
+  "romanilly":"AR","bati":"PT","stk":"BR","shaw":"BR","kamino":"BR",
   "silkanon":"KR","nathand":"CN","stunner":"CA","key":"TR","wkn":"CL","ewok":"ZA","engh":"RU",
   "gaabxx":"BR","veer":"US","phonics":"BR","zonyk":"CL","solo":"KR","neilzinho":"GB",
   "peu":"BR","dragzikw":"BR","carlao":"BR","ryotzz":"BR","negaral":"BR",
@@ -1878,6 +1881,7 @@ const COACH_TEAM = {
   "kaplan":"SENTINELS24","alecks":"PAPERREX25","bonkar":"NRG25","onur":"LEVIATAN26",
   "nbs":"100T26","d00mbros":"100T26",
   "engh":"GAMBIT21","scuttt":"FNC24","solo":"GENG24","autumn":"T125",
+  "romanilly":"LOUD26","bati":"LOUD26",
 };
 // Craques que já foram Campeões Regionais DE VERDADE (fora da campanha do Ascensão) — mesma
 // ideia do COACH_TEAM acima, mas pro lado dos jogadores. Dá o mesmo bônus de "Campeão
@@ -1932,6 +1936,7 @@ const PLAYER_WORLD_CHAMPION = new Set([
   "jinggg","f0rsaken","d4v41","patmen","something",
   "alfajer","boaster","chronicle","derke","leo",
   "aspas","less","pancada","saadhak","sacy",
+  "darker","lukxo","tkzin","erde","davih",
 ]);
 
 // Sinergia: quanto mais craques do MESMO time real (vlr.gg) ou do MESMO país estiverem juntos na
@@ -1940,7 +1945,7 @@ const PLAYER_WORLD_CHAMPION = new Set([
 // parcial; quem não tem país/time confirmado simplesmente não conta pra essa sinergia.
 function playerCountries(name){
   const lc = name.toLowerCase();
-  return [PLAYER_COUNTRY[lc], PLAYER_RESIDENCE[lc]].filter(Boolean);
+  return [PLAYER_COUNTRY[lc], PLAYER_RESIDENCE[lc]].flat().filter(Boolean);
 }
 // Alguns países sempre contam como "o mesmo" pra sinergia (mesmo sem ninguém marcar residência
 // manualmente) — por enquanto só Canadá e EUA, já que são culturalmente muito próximos e
@@ -2098,8 +2103,8 @@ function compositionBonus(roster, isSlotted){
   // Duelista + Iniciador do MESMO país, ou que já foram campeões mundiais juntos (mesmo elenco
   // real) -> buff extra geral, em cima do buff normal de tê-los os dois no time.
   if(duelist && initiator){
-    const dCountries = [PLAYER_COUNTRY[duelist.name.toLowerCase()], PLAYER_RESIDENCE[duelist.name.toLowerCase()]].filter(Boolean);
-    const iCountries = [PLAYER_COUNTRY[initiator.name.toLowerCase()], PLAYER_RESIDENCE[initiator.name.toLowerCase()]].filter(Boolean);
+    const dCountries = [PLAYER_COUNTRY[duelist.name.toLowerCase()], PLAYER_RESIDENCE[duelist.name.toLowerCase()]].flat().filter(Boolean);
+    const iCountries = [PLAYER_COUNTRY[initiator.name.toLowerCase()], PLAYER_RESIDENCE[initiator.name.toLowerCase()]].flat().filter(Boolean);
     const sameCountry = dCountries.some(c=>iCountries.includes(c));
     const dTeams = PLAYER_TEAM[duelist.name.toLowerCase()] || [];
     const iTeams = PLAYER_TEAM[initiator.name.toLowerCase()] || [];
@@ -3248,7 +3253,7 @@ function playerRegionKey(playerName){
 // nacionalidade quando os dois existem, já que quem mora em outro país tende a competir por lá.
 function freeAgentRegion(nomeMinusculo){
   const residencia = PLAYER_RESIDENCE[nomeMinusculo];
-  if(residencia && COUNTRY_TO_REGION[residencia]) return COUNTRY_TO_REGION[residencia];
+  if(typeof residencia==="string" && COUNTRY_TO_REGION[residencia]) return COUNTRY_TO_REGION[residencia];
   return COUNTRY_TO_REGION[PLAYER_COUNTRY[nomeMinusculo]];
 }
 function regionalPlayerObjects(regiao){
