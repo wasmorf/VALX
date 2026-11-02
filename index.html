@@ -395,7 +395,7 @@
 </head>
 <body>
 <div id="app"></div>
-<button class="version-badge" id="version-badge-btn">v 1.2</button>
+<button class="version-badge" id="version-badge-btn">v 1.3</button>
 
 <script>
 /* ---------------- DATA ---------------- */
@@ -407,7 +407,11 @@ const POOL = [
   {name:"melissa", roles:["initiator"], overall:85, tags:["utility","clutch"]},
   {name:"waved", roles:["flex","duelist"], overall:86, tags:["entry","mm"]},
   {name:"Krysme", roles:["sentinel"], overall:85, tags:["lurker","utility"]},
-  {name:"antG", roles:["flex","initiator","controller"], overall:85, tags:["utility","clutch"]},
+  {name:"antG", roles:["flex","initiator","controller"], overall:87, tags:["utility","clutch","igl","mm","campeao_mundial"]},
+  {name:"none", roles:["duelist"], overall:86, tags:["entry","campeao_mundial"]},
+  {name:"ponix", roles:["initiator"], overall:86, tags:["utility","campeao_mundial"]},
+  {name:"micaela", roles:["controller"], overall:86, tags:["utility","clutch","campeao_mundial"]},
+  {name:"tok1o", roles:["sentinel"], overall:87, tags:["lurker","mm","campeao_mundial"]},
   {name:"blu", roles:["initiator"], overall:85, tags:["igl","utility"]},
   {name:"m4ndzin", roles:["flex","duelist","initiator","controller"], overall:85, tags:["utility","clutch"]},
   {name:"srN", roles:["duelist"], overall:86, tags:["entry","mm"]},
@@ -1320,7 +1324,7 @@ function simulateRegionalTransfers(regiao, excludeOrg, usadosGlobalmente){
 const REGIONAL_MUNDIAL_QUALIFY_COUNT = {BR:4, NA:4, EMEA:4, LAS:2, APAC:1, CHN:1};
 
 // Head coaches disponíveis — 1 escolhido pelo jogador, os outros 15 vão pras equipes adversárias.
-const COACHES = ["Rojo","Nbs","bzkA","Potter","frod","mini","Chet","d00mbros","Kaplan","alecks","Romanilly","Bati","Stk","Onur","JoshRT","bonkar","shaW","Kamino","SilKanoN","NaThanD","Stunner","KEY","WKN","Ewok","Engh","PatronW","gaabxx","Veer","phonics","ZONYK","solo","neilzinho","ANGE1","peu","DragziKW","Carlao","ryotzz","Negaral","Itopata","pule","Autumn","alexRr","LEGIJA","LohaN","Vlad","ZE1SH","Scuttt","glow","KDG"];
+const COACHES = ["Rojo","Nbs","bzkA","Potter","frod","mini","Chet","d00mbros","Kaplan","alecks","Romanilly","Bati","bonzitt","Stk","Onur","JoshRT","bonkar","shaW","Kamino","SilKanoN","NaThanD","Stunner","KEY","WKN","Ewok","Engh","PatronW","gaabxx","Veer","phonics","ZONYK","solo","neilzinho","ANGE1","peu","DragziKW","Carlao","ryotzz","Negaral","Itopata","pule","Autumn","alexRr","LEGIJA","LohaN","Vlad","ZE1SH","Scuttt","glow","KDG"];
 // Buff de cada Head Coach: bônus fixo aplicado ao rating do time em todo cálculo de vitória
 // de rodada/partida — vale pra qualquer equipe (sua ou adversária) que tiver esse técnico.
 const COACH_BUFFS = {
@@ -1330,7 +1334,7 @@ const COACH_BUFFS = {
   SilKanoN:5, nathand:5, Stunner:5, KEY:5, WKN:5, Ewok:5, ENGH:5, PatronW:5,
   gaabxx:5, Veer:5, phonics:5, ZONYK:5, solo:5, neilzinho:5,
   ANGE1:5, peu:5, DragziKW:5, Carlao:5, ryotzz:5, Negaral:5, Itopata:5, pule:5,
-  Bati:5, Autumn:5, alexRr:5, LEGIJA:5, LohaN:5, Vlad:5, ZE1SH:5, Scuttt:5, glow:5, KDG:5,
+  Bati:5, bonzitt:5, Autumn:5, alexRr:5, LEGIJA:5, LohaN:5, Vlad:5, ZE1SH:5, Scuttt:5, glow:5, KDG:5,
 };
 // Elencos das Seleções pro futuro Modo Copa do Mundo — separado do país "real" de cada craque
 // (usado no modo normal) porque aqui alguns jogam por uma seleção diferente da nacionalidade
@@ -1401,6 +1405,7 @@ const BUFF_DAMPING = 0.7;
 // Cobertura parcial (nem todo o pool de 192 tem dado confirmado); quem não tem, simplesmente não
 // participa dessa sinergia específica.
 const PLAYER_COUNTRY = {
+  "none":"BR","ponix":"CL","micaela":"AR","tok1o":"AR",
   "lissa":"BR",
   "sayuri":"BR",
   "melissa":"BR",
@@ -1726,6 +1731,7 @@ const COACH_RESIDENCE = {
   "bati":["BR","AR","CL","BO","CO","EC","GY","PY","PE","SR","UY","VE"],
 };
 const PLAYER_TEAM = {
+  "antg":["KRUGC26"],"none":["KRUGC26"],"ponix":["KRUGC26"],"micaela":["KRUGC26"],"tok1o":["KRUGC26"],
   "darker":["LOUD26"],"lukxo":["LOUD26"],"tkzin":["LOUD26"],"erde":["LOUD26"],"davih":["LOUD26"],
   "mel":["SHOPIFYGOLD2324","SHOPIFYGOLD24","SHOPIFYGOLD25"],"florescent":["SHOPIFYGOLD2324","SHOPIFYGOLD24"],"alexis":["SHOPIFYGOLD2324","SHOPIFYGOLD24","SHOPIFYGOLD25"],"sarahcat":["SHOPIFYGOLD2324","SHOPIFYGOLD24","SHOPIFYGOLD25"],"noia":["SHOPIFYGOLD2324","SHOPIFYGOLD24","SHOPIFYGOLD25"],
   "daiki":["LIQUIDBRGC25","LIQUIDBRGC23"],"bizerra":["LIQUIDBRGC25","LIQUIDBRGC23"],"isaa":["LIQUIDBRGC25","LIQUIDBRGC23"],"joojina":["LIQUIDBRGC25","LIQUIDBRGC23"],"jelly":["LIQUIDBRGC25"],
@@ -1867,7 +1873,7 @@ const COACH_COUNTRY = {
   "rojo":"ES",
   "bzka":"BR","frod":"US","onur":"AR","potter":"US","bonkar":"SE","d00mbros":"SE",
   "joshrt":"US","mini":"GB","nbs":"LT","chet":"US","kaplan":"US","alecks":"FR",
-  "romanilly":"AR","bati":"PT","stk":"BR","shaw":"BR","kamino":"BR",
+  "romanilly":"AR","bati":"PT","bonzitt":"AR","stk":"BR","shaw":"BR","kamino":"BR",
   "silkanon":"KR","nathand":"CN","stunner":"CA","key":"TR","wkn":"CL","ewok":"ZA","engh":"RU",
   "gaabxx":"BR","veer":"US","phonics":"BR","zonyk":"CL","solo":"KR","neilzinho":"GB",
   "peu":"BR","dragzikw":"BR","carlao":"BR","ryotzz":"BR","negaral":"BR",
@@ -1881,7 +1887,7 @@ const COACH_TEAM = {
   "kaplan":"SENTINELS24","alecks":"PAPERREX25","bonkar":"NRG25","onur":"LEVIATAN26",
   "nbs":"100T26","d00mbros":"100T26",
   "engh":"GAMBIT21","scuttt":"FNC24","solo":"GENG24","autumn":"T125",
-  "romanilly":"LOUD26","bati":"LOUD26",
+  "romanilly":"LOUD26","bati":"LOUD26","bonzitt":"KRUGC26",
 };
 // Craques que já foram Campeões Regionais DE VERDADE (fora da campanha do Ascensão) — mesma
 // ideia do COACH_TEAM acima, mas pro lado dos jogadores. Dá o mesmo bônus de "Campeão
@@ -1937,6 +1943,7 @@ const PLAYER_WORLD_CHAMPION = new Set([
   "alfajer","boaster","chronicle","derke","leo",
   "aspas","less","pancada","saadhak","sacy",
   "darker","lukxo","tkzin","erde","davih",
+  "antg","none","ponix","micaela","tok1o",
 ]);
 
 // Sinergia: quanto mais craques do MESMO time real (vlr.gg) ou do MESMO país estiverem juntos na
@@ -2513,6 +2520,9 @@ const I18N = {
       `},
     ],
     changelogSections:[
+      {title:"v 1.2 → v 1.3", body:`
+        <p><strong>KRU GC campeã mundial 2026</strong> — antG, none, ponix, micaela e tok1o agora são Campeãs Mundiais, e o HC bonzitt entra como técnico campeão mundial. Os jogadores novos estão no banco, e antG subiu pra 87 e ganhou IGL e mira monstra.</p>
+      `},
       {title:"v 1.1 → v 1.2", body:`
         <p><strong>LOUD 2026 campeã mundial</strong> — Darker, lukxo, tkzin, erde e DaviH agora são Campeões Mundiais, e Romanilly e Bati entram como HCs campeões mundiais. Bati e DaviH têm sinergia com brasileiros e sul-americanos.</p>
         <p><strong>Seleções</strong> — Seleções com mais de um HC agora sempre pegam o melhor disponível (bzkA no Brasil). Na Seleção do Ascensão, o jogo monta automaticamente na função (entre as que você escolheu) que deixa o time mais forte.</p>
@@ -2789,6 +2799,9 @@ const I18N = {
       `},
     ],
     changelogSections:[
+      {title:"v 1.2 → v 1.3", body:`
+        <p><strong>KRU GC 2026 world champions</strong> — antG, none, ponix, micaela and tok1o are now World Champions, and HC bonzitt joins as a world champion coach. The new players are in the pool, and antG went up to 87 and gained IGL and monster aim.</p>
+      `},
       {title:"v 1.1 → v 1.2", body:`
         <p><strong>LOUD 2026 world champions</strong> — Darker, lukxo, tkzin, erde and DaviH are now World Champions, and Romanilly and Bati join as world champion HCs. Bati and DaviH have synergy with Brazilians and South Americans.</p>
         <p><strong>National Teams</strong> — National Teams with more than one HC now always get the best one available (bzkA for Brazil). On your Road to the Top national team, the game automatically picks whichever of your chosen roles makes the team strongest.</p>
@@ -3065,6 +3078,9 @@ const I18N = {
       `},
     ],
     changelogSections:[
+      {title:"v 1.2 → v 1.3", body:`
+        <p><strong>KRU GC campeona mundial 2026</strong> — antG, none, ponix, micaela y tok1o ahora son Campeonas Mundiales, y el HC bonzitt entra como entrenador campeón mundial. Los jugadores nuevos están en la base, y antG subió a 87 y ganó IGL y mira monstruosa.</p>
+      `},
       {title:"v 1.1 → v 1.2", body:`
         <p><strong>LOUD 2026 campeona mundial</strong> — Darker, lukxo, tkzin, erde y DaviH ahora son Campeones Mundiales, y Romanilly y Bati entran como HCs campeones mundiales. Bati y DaviH tienen sinergia con brasileños y sudamericanos.</p>
         <p><strong>Selecciones</strong> — las Selecciones con más de un HC ahora siempre toman el mejor disponible (bzkA en Brasil). En la Selección de Rumbo a la Cima, el juego arma el equipo automáticamente en la función (entre las que elegiste) que lo deje más fuerte.</p>
