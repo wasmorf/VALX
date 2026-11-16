@@ -395,7 +395,7 @@
 </head>
 <body>
 <div id="app"></div>
-<button class="version-badge" id="version-badge-btn">v 1.3</button>
+<button class="version-badge" id="version-badge-btn">v 1.4</button>
 
 <script>
 /* ---------------- DATA ---------------- */
@@ -446,7 +446,7 @@ const POOL = [
   {name:"Rb", roles:["flex","controller","initiator","duelist"], overall:91, tags:["clutch","utility","campeao_mundial","entry"]},
   {name:"BuZz", roles:["duelist"], overall:91, tags:["operator","entry","mm","clutch","campeao_mundial"]},
   {name:"MaKo", roles:["controller"], overall:90, tags:["utility","clutch","igl"]},
-  {name:"Marved", roles:["controller"], overall:91, tags:["utility","clutch","campeao_mundial"]},
+  {name:"Marved", roles:["controller","flex"], overall:91, tags:["utility","clutch","campeao_mundial"]},
   {name:"zekken", roles:["duelist","flex"], overall:92, tags:["entry","mm","clutch","operator","campeao_mundial","utility"]},
   {name:"saadhak", roles:["flex","sentinel","initiator","controller"], overall:91, tags:["igl","utility","clutch","mm","campeao_mundial","lurker"]},
   {name:"xand", roles:["flex","duelist","initiator","sentinel"], overall:83, tags:["utility","igl","lurker","entry"]},
@@ -457,7 +457,7 @@ const POOL = [
   {name:"C0M", roles:["initiator"], overall:87, tags:["igl utility","clutch","lurker","campeao_mundial","utility"]},
   {name:"Demon1", roles:["flex","duelist","controller","sentinel"], overall:87, tags:["clutch","mm","entry","campeao_mundial","lurker","utility"]},
   {name:"crashies", roles:["initiator"], overall:91, tags:["utility","clutch","campeao_mundial"]},
-  {name:"mwzera", roles:["initiator"], overall:87, tags:["utility","mm"]},
+  {name:"mwzera", roles:["initiator","flex"], overall:87, tags:["utility","mm"]},
   {name:"Derke", roles:["duelist"], overall:92, tags:["entry","mm","operator","clutch","campeao_mundial"]},
   {name:"Leo", roles:["flex","initiator"], overall:92, tags:["utility","clutch","campeao_mundial"]},
   {name:"Alfajer", roles:["flex","sentinel"], overall:92, tags:["mm","lurker","clutch","campeao_mundial","utility"]},
@@ -467,7 +467,6 @@ const POOL = [
   {name:"icy", roles:["sentinel","duelist"], overall:84, tags:["lurker","entry"]},
   {name:"Asuna", roles:["flex","duelist"], overall:90, tags:["mm","utility","clutch","campeao_mundial","entry"]},
   {name:"bang", roles:["controller"], overall:88, tags:["clutch","utility","campeao_mundial"]},
-  {name:"Sacy", roles:["initiator"], overall:93, tags:["clutch","utility","igl","campeao_mundial"]},
   {name:"nAts", roles:["sentinel"], overall:90, tags:["igl","lurker","clutch","utility","campeao_mundial"]},
   {name:"eeiu", roles:["initiator"], overall:88, tags:["clutch","utility"]},
   {name:"BABYBAY", roles:["sentinel","flex"], overall:90, tags:["lurker","utility"]},
@@ -500,7 +499,7 @@ const POOL = [
   {name:"s0m", roles:["controller"], overall:91, tags:["clutch","mm","utility","campeao_mundial"]},
   {name:"silentzz", roles:["flex","sentinel","duelist"], overall:87, tags:["clutch","utility","lurker","entry"]},
   {name:"Jamppi", roles:["initiator","duelist"], overall:90, tags:["clutch","utility","igl","entry"]},
-  {name:"marteen", roles:["duelist"], overall:88, tags:["clutch","mm","entry","operator"]},
+  {name:"marteen", roles:["duelist","flex"], overall:88, tags:["clutch","mm","entry","operator"]},
   {name:"Boo", roles:["controller"], overall:87, tags:["clutch","utility","igl","campeao_mundial"]},
   {name:"bao", roles:["sentinel","controller","flex"], overall:89, tags:["clutch","lurker","mm","utility"]},
   {name:"Rossy", roles:["flex","controller","sentinel","initiator"], overall:86, tags:["clutch","utility","lurker"]},
@@ -511,14 +510,14 @@ const POOL = [
   {name:"Zyppan", roles:["flex","controller","duelist"], overall:87, tags:["utility","campeao_mundial","entry"]},
   {name:"valyn", roles:["controller"], overall:92, tags:["igl","utility","clutch"]},
   {name:"Meteor", roles:["sentinel","duelist","controller","flex"], overall:89, tags:["clutch","utility","lurker","campeao_mundial","entry"]},
-  {name:"Karon", roles:["controller"], overall:90, tags:["clutch","utility","campeao_mundial"]},
+  {name:"Karon", roles:["controller","initiator"], overall:90, tags:["clutch","utility","campeao_mundial"]},
   {name:"Wo0t", roles:["flex","sentinel","duelist"], overall:91, tags:["mm","utility","clutch","entry","campeao_mundial","lurker"]},
   {name:"lukxo", roles:["sentinel","controller"], overall:93, tags:["mm","operator","clutch","lurker","utility","campeao_mundial"]},
   {name:"NaturE", roles:["initiator"], overall:85, tags:["igl","utility"]},
   {name:"liazzi", roles:["flex","duelist","controller","sentinel"], overall:85, tags:["utility","lurker","entry"]},
   {name:"Brinks", roles:["controller"], overall:86, tags:["clutch","utility","igl"]},
   {name:"bezn1", roles:["sentinel","flex"], overall:85, tags:["clutch","utility","lurker"]},
-  {name:"stax", roles:["initiator","controller"], overall:89, tags:["clutch","utility","igl","campeao_mundial"]},
+  {name:"stax", roles:["initiator","controller","sentinel"], overall:89, tags:["clutch","utility","igl","campeao_mundial"]},
   {name:"OXY", roles:["duelist"], overall:92, tags:["entry","operator","clutch","mm"]},
   {name:"nataNk", roles:["flex","sentinel"], overall:87, tags:["utility","lurker"]},
   {name:"Lysoar", roles:["controller","flex"], overall:87, tags:["clutch","utility"]},
@@ -582,7 +581,7 @@ const POOL = [
   {name:"askia", roles:["controller"], overall:86, tags:["utility","mm","clutch"]},
   {name:"guuih", roles:["sentinel"], overall:86, tags:["clutch","lurker"]},
   {name:"Stwz1", roles:["flex","initiator","controller","sentinel"], overall:86, tags:["utility","lurker"]},
-  {name:"Bruxo", roles:["initiator"], overall:84, tags:["utility","igl"]},
+  {name:"Bruxo", roles:["initiator","controller"], overall:84, tags:["utility","igl"]},
   {name:"peixeh", roles:["controller"], overall:86, tags:["utility","clutch"]},
   {name:"taka", roles:["sentinel"], overall:84, tags:["clutch","lurker"]},
   {name:"swag", roles:["sentinel"], overall:85, tags:["clutch","lurker"]},
@@ -598,7 +597,7 @@ const POOL = [
   {name:"MiradaNinja", roles:["flex","controller","sentinel"], overall:86, tags:["clutch","lurker","igl","utility"]},
   {name:"Juicy", roles:["duelist"], overall:86, tags:["entry"]},
   {name:"SiufatBB", roles:["initiator"], overall:87, tags:["utility"]},
-  {name:"spring", roles:["controller"], overall:84, tags:["utility"]},
+  {name:"spring", roles:["controller","sentinel"], overall:84, tags:["utility"]},
   {name:"Yuicaw", roles:["sentinel"], overall:86, tags:["clutch","lurker"]},
   {name:"f4ngeer", roles:["duelist"], overall:84, tags:["entry"]},
   {name:"iamgrq", roles:["flex"], overall:84, tags:["utility"]},
@@ -619,8 +618,8 @@ const POOL = [
   {name:"sociablEE", roles:["controller"], overall:87, tags:["utility"]},
   {name:"Kolosha", roles:["duelist"], overall:85, tags:["entry"]},
   {name:"ExiT", roles:["flex","duelist"], overall:84, tags:["utility","entry"]},
-  {name:"chloric", roles:["initiator"], overall:84, tags:["utility"]},
-  {name:"Ruxic", roles:["controller"], overall:84, tags:["utility"]},
+  {name:"chloric", roles:["initiator","controller"], overall:84, tags:["utility"]},
+  {name:"Ruxic", roles:["controller","initiator"], overall:84, tags:["utility"]},
   {name:"Foxy9", roles:["sentinel"], overall:86, tags:["clutch","lurker"]},
   {name:"yong", roles:["sentinel"], overall:86, tags:["clutch","lurker"]},
   {name:"DH", roles:["sentinel"], overall:84, tags:["clutch","lurker"]},
@@ -665,7 +664,7 @@ const POOL = [
   {name:"invy", roles:["initiator","controller"], overall:87, tags:["utility","clutch","mm"]},
   {name:"Ivy", roles:["sentinel"], overall:89, tags:["lurker","utility","campeao_mundial"]},
   {name:"erde", roles:["flex","controller","sentinel"], overall:93, tags:["igl","utility","mm","clutch","lurker","campeao_mundial"]},
-  {name:"Dambi", roles:["duelist"], overall:90, tags:["entry","clutch","mm","campeao_mundial"]},
+  {name:"Dambi", roles:["duelist","flex"], overall:90, tags:["entry","clutch","mm","campeao_mundial"]},
   {name:"Xross", roles:["flex","initiator","duelist"], overall:88, tags:["utility","entry","mm","campeao_mundial"]},
   {name:"Mazino", roles:["flex","controller","initiator"], overall:88, tags:["igl","clutch","utility"]},
   {name:"MrFaliN", roles:["initiator","controller"], overall:86, tags:["clutch","utility"]},
@@ -706,7 +705,7 @@ const POOL = [
   {name:"keiko", roles:["flex","duelist","controller","sentinel"], overall:92, tags:["operator","entry","utility","clutch","mm","lurker"]},
   {name:"xeus", roles:["flex","duelist","sentinel"], overall:87, tags:["lurker","entry","mm","clutch","utility"]},
   {name:"basic", roles:["flex","duelist","initiator","controller","sentinel"], overall:89, tags:["clutch","utility","mm","lurker","entry"]},
-  {name:"Paincakes", roles:["initiator"], overall:86, tags:["igl","utility"]},
+  {name:"Paincakes", roles:["initiator","sentinel"], overall:86, tags:["igl","utility"]},
   {name:"mta", roles:["initiator"], overall:86, tags:["utility"]},
   {name:"Rarga", roles:["duelist"], overall:86, tags:["mm","operator","entry","clutch"]},
   {name:"PxS", roles:["flex","initiator","controller","sentinel"], overall:87, tags:["utility","clutch","lurker"]},
@@ -714,7 +713,238 @@ const POOL = [
   {name:"iZu", roles:["initiator","duelist","controller"], overall:90, tags:["clutch","mm","utility","operator","campeao_mundial","entry"]},
   {name:"NoMan", roles:["flex","duelist","sentinel"], overall:86, tags:["clutch","utility","lurker","entry"]},
   {name:"moose", roles:["controller","sentinel"], overall:83, tags:["clutch","utility","lurker"]},
+  // ===== VCT 2027 (estimados) =====
+  {name:"canezerra", roles:["initiator", "duelist", "flex"], overall:85, tags:["utility"]},
+  {name:"turkish", roles:["controller","flex"], overall:83, tags:["utility"]},
+  {name:"Kring", roles:["sentinel"], overall:83, tags:["lurker"]},
+  {name:"raised", roles:["initiator"], overall:84, tags:["utility"]},
+  {name:"spike", roles:["controller"], overall:87, tags:["utility"]},
+  {name:"Minny", roles:["duelist", "flex", "initiator", "controller", "sentinel"], overall:85, tags:["entry"]},
+  {name:"Kachoww", roles:["initiator"], overall:84, tags:["utility"]},
+  {name:"Jamelinho213", roles:["sentinel", "duelist", "flex", "initiator", "controller"], overall:85, tags:["lurker"]},
+  {name:"Chaza", roles:["flex"], overall:81, tags:["clutch"]},
+  {name:"MAGNUM", roles:["initiator", "duelist", "flex", "controller", "sentinel"], overall:85, tags:["utility"]},
+  {name:"kozzy", roles:["controller","sentinel"], overall:85, tags:["utility"]},
+  {name:"hezacoil", roles:["initiator"], overall:82, tags:["utility"]},
+  {name:"batujnax", roles:["sentinel"], overall:80, tags:["lurker", "igl"]},
+  {name:"oroni", roles:["sentinel"], overall:84, tags:["lurker"]},
+  {name:"Ray", roles:["controller"], overall:83, tags:["utility"]},
+  {name:"Xiesta", roles:["sentinel"], overall:81, tags:["lurker"]},
+  {name:"xffero", roles:["flex"], overall:80, tags:["clutch"]},
+  {name:"Jemkin", roles:["duelist"], overall:83, tags:["entry"]},
+  {name:"Monyet", roles:["initiator"], overall:83, tags:["utility"]},
+  {name:"Kushy", roles:["controller"], overall:83, tags:["utility"]},
+  {name:"KEN", roles:["duelist"], overall:79, tags:["entry"]},
+  {name:"yatsuka", roles:["initiator"], overall:80, tags:["utility"]},
+  {name:"Kr1stal", roles:["flex"], overall:78, tags:["clutch"]},
+  {name:"JitBoyS", roles:["duelist"], overall:80, tags:["entry"]},
+  {name:"seph1roth", roles:["initiator"], overall:79, tags:["utility"]},
+  {name:"Meiy", roles:["duelist"], overall:78, tags:["entry"]},
+  {name:"Akame", roles:["initiator"], overall:80, tags:["utility"]},
+  {name:"SugarZ3ro", roles:["controller"], overall:79, tags:["utility"]},
+  {name:"Aace", roles:["sentinel"], overall:82, tags:["lurker"]},
+  {name:"CLZ", roles:["flex"], overall:77, tags:["clutch", "igl"]},
+  {name:"crazyguy", roles:["duelist"], overall:74, tags:["entry"]},
+  {name:"stew", roles:["sentinel"], overall:86, tags:["lurker"]},
+  {name:"zjc", roles:["controller"], overall:82, tags:["utility"]},
+  {name:"whzy", roles:["controller", "duelist", "flex", "initiator"], overall:82, tags:["utility"]},
+  {name:"nephh", roles:["sentinel"], overall:84, tags:["lurker"]},
+  {name:"Knight", roles:["flex"], overall:82, tags:["clutch"]},
+  {name:"alvinboy", roles:["duelist"], overall:84, tags:["entry"]},
+  {name:"splash", roles:["duelist"], overall:82, tags:["entry"]},
+  {name:"slowly", roles:["initiator","flex"], overall:84, tags:["utility"]},
+  {name:"Erv", roles:["controller"], overall:81, tags:["utility"]},
+  {name:"BerLIN", roles:["duelist", "flex", "initiator", "controller", "sentinel"], overall:80, tags:["entry"]},
+  {name:"jkuro", roles:["initiator"], overall:84, tags:["utility"]},
+  {name:"crownfisher", roles:["sentinel","controller"], overall:83, tags:["lurker"]},
+  {name:"glacier", roles:["flex"], overall:79, tags:["clutch"]},
+  {name:"zhe", roles:["duelist"], overall:78, tags:["entry"]},
+  {name:"Kai", roles:["flex"], overall:80, tags:["clutch"]},
+  {name:"Nicc", roles:["controller"], overall:82, tags:["utility"]},
+  {name:"Abo", roles:["flex"], overall:77, tags:["clutch"]},
+  {name:"Toosy", roles:["duelist"], overall:77, tags:["entry"]},
+  {name:"Sharks", roles:["sentinel", "duelist", "flex"], overall:80, tags:["lurker"]},
+  {name:"Zeus", roles:["controller"], overall:78, tags:["utility"]},
+  {name:"WsLeo", roles:["sentinel"], overall:77, tags:["lurker"]},
+  {name:"Yoyo", roles:["flex"], overall:80, tags:["clutch"]},
+  {name:"Satoshi", roles:["duelist"], overall:81, tags:["entry"]},
+  {name:"heybay", roles:["initiator"], overall:82, tags:["utility"]},
+  {name:"Razziss", roles:["flex"], overall:78, tags:["clutch"]},
+  {name:"Xdll", roles:["controller"], overall:76, tags:["utility"]},
+  {name:"Caedye", roles:["sentinel"], overall:76, tags:["lurker"]},
+  {name:"Seoldam", roles:["flex"], overall:75, tags:["clutch"]},
+  {name:"HoneyBunny", roles:["duelist"], overall:79, tags:["entry"]},
+  {name:"MrTenzouEz", roles:["initiator"], overall:75, tags:["utility"]},
+  {name:"Sovano", roles:["flex"], overall:75, tags:["clutch"]},
+  {name:"parscofield", roles:["duelist"], overall:77, tags:["entry"]},
+  {name:"Gotten", roles:["initiator"], overall:76, tags:["utility"]},
+  {name:"Nakya", roles:["controller"], overall:77, tags:["utility"]},
+  {name:"ValdyN", roles:["sentinel"], overall:72, tags:["lurker"]},
+  {name:"ray4c", roles:["flex"], overall:72, tags:["clutch"]},
+  {name:"Xan", roles:["duelist"], overall:73, tags:["entry"]},
+  {name:"kellyS", roles:["initiator"], overall:75, tags:["utility"]},
+  {name:"iceyyzx", roles:["controller"], overall:74, tags:["utility"]},
+  {name:"natzVAL_", roles:["sentinel"], overall:76, tags:["lurker"]},
+  {name:"NcSlasher", roles:["flex"], overall:73, tags:["clutch", "igl"]},
+  {name:"TenTen", roles:["controller", "duelist", "flex", "initiator"], overall:77, tags:["utility"]},
+  {name:"Yuran", roles:["sentinel"], overall:75, tags:["lurker"]},
+  {name:"Kippei", roles:["flex"], overall:79, tags:["clutch"]},
+  {name:"misaya", roles:["duelist"], overall:74, tags:["entry"]},
+  {name:"UdoTan", roles:["flex"], overall:73, tags:["clutch"]},
+  {name:"Smoke", roles:["flex", "duelist", "initiator", "controller", "sentinel"], overall:78, tags:["clutch"]},
+  {name:"nightz", roles:["duelist", "flex"], overall:81, tags:["entry"]},
+  {name:"Ion2x", roles:["sentinel", "duelist", "flex", "initiator", "controller"], overall:80, tags:["lurker"]},
+  {name:"Exa", roles:["flex"], overall:80, tags:["clutch"]},
+  {name:"glowstick", roles:["initiator"], overall:78, tags:["utility"]},
+  {name:"s9cred", roles:["flex"], overall:78, tags:["clutch"]},
+  {name:"tonza", roles:["duelist"], overall:79, tags:["entry"]},
+  {name:"Shanks", roles:["duelist", "flex", "initiator", "controller", "sentinel"], overall:80, tags:["entry"]},
+  {name:"Subroza", roles:["initiator"], overall:74, tags:["utility"]},
+  {name:"lilo1", roles:["controller", "duelist", "flex", "initiator", "sentinel"], overall:74, tags:["utility"]},
+  {name:"NagZet", roles:["sentinel","initiator"], overall:76, tags:["lurker"]},
+  {name:"above", roles:["flex"], overall:77, tags:["clutch"]},
+  {name:"askiazin", roles:["controller", "duelist", "flex", "initiator", "sentinel"], overall:79, tags:["utility"]},
+  {name:"sanojvlr", roles:["sentinel"], overall:78, tags:["lurker"]},
+  {name:"tisxna", roles:["flex"], overall:80, tags:["clutch"]},
+  {name:"drakzenn", roles:["duelist","initiator"], overall:75, tags:["entry"]},
+  {name:"sanoj", roles:["controller"], overall:73, tags:["utility"]},
+  {name:"drakz", roles:["sentinel"], overall:74, tags:["lurker"]},
+  {name:"infiltrator", roles:["initiator"], overall:73, tags:["utility"]},
+  {name:"Ali", roles:["controller"], overall:76, tags:["utility"]},
+  {name:"Fair", roles:["sentinel"], overall:74, tags:["lurker"]},
+  {name:"Veyreon", roles:["flex"], overall:76, tags:["clutch"]},
+  {name:"Karma", roles:["duelist"], overall:73, tags:["entry"]},
+  {name:"Governor", roles:["initiator"], overall:70, tags:["utility", "igl"]},
+  {name:"rubkkoide", roles:["controller"], overall:78, tags:["utility"]},
+  {name:"recoil", roles:["initiator"], overall:73, tags:["utility"]},
+  {name:"azrex", roles:["controller"], overall:75, tags:["utility"]},
+  {name:"Tofu", roles:["sentinel"], overall:74, tags:["lurker"]},
+  {name:"sinatraa", roles:["flex"], overall:76, tags:["clutch"]},
+  {name:"PROD", roles:["duelist"], overall:73, tags:["entry"]},
+  {name:"zombs", roles:["initiator"], overall:71, tags:["utility"]},
+  {name:"dizzy", roles:["controller"], overall:72, tags:["utility"]},
+  {name:"atlas", roles:["controller", "duelist", "flex", "initiator", "sentinel"], overall:74, tags:["utility"]},
+  {name:"enzo", roles:["flex"], overall:73, tags:["clutch"]},
+  {name:"max", roles:["duelist"], overall:77, tags:["entry"]},
+  {name:"icie", roles:["initiator","controller"], overall:72, tags:["utility"]},
+  {name:"ScrewFace", roles:["flex"], overall:73, tags:["clutch"]},
+  {name:"ExpMoe", roles:["duelist"], overall:75, tags:["entry"]},
+  {name:"jinwoo", roles:["initiator"], overall:75, tags:["utility"]},
+  {name:"voriac", roles:["controller"], overall:77, tags:["utility"]},
+  {name:"Weegle", roles:["sentinel"], overall:71, tags:["lurker"]},
+  {name:"stellar", roles:["initiator"], overall:72, tags:["utility"]},
+  {name:"heartless", roles:["flex"], overall:75, tags:["clutch"]},
+  {name:"stunna", roles:["duelist"], overall:71, tags:["entry"]},
+  {name:"lead", roles:["controller"], overall:72, tags:["utility"]},
+  {name:"nx1", roles:["sentinel"], overall:76, tags:["lurker"]},
+  {name:"tunaso", roles:["flex"], overall:74, tags:["clutch"]},
+  {name:"SUTHER", roles:["duelist"], overall:77, tags:["entry"]},
+  {name:"Dark3st", roles:["flex"], overall:74, tags:["clutch"]},
+  {name:"Zamal", roles:["duelist"], overall:74, tags:["entry"]},
+  {name:"Zoestool", roles:["initiator"], overall:73, tags:["utility"]},
+  {name:"om3y", roles:["controller"], overall:76, tags:["utility"]},
+  {name:"ghoul33", roles:["duelist"], overall:74, tags:["entry"]},
+  {name:"rich", roles:["controller"], overall:76, tags:["utility"]},
+  {name:"tiezzi", roles:["sentinel"], overall:73, tags:["lurker"]},
+  {name:"ethos", roles:["flex"], overall:74, tags:["clutch"]},
+  {name:"luid", roles:["flex"], overall:72, tags:["clutch"]},
+  {name:"CXIX666", roles:["controller"], overall:75, tags:["utility"]},
+  {name:"yiyee", roles:["sentinel"], overall:75, tags:["lurker"]},
+  {name:"Deryeon", roles:["flex"], overall:76, tags:["clutch"]},
+  {name:"Knyzl", roles:["duelist"], overall:76, tags:["entry"]},
+  {name:"Ninebody", roles:["initiator"], overall:72, tags:["utility"]},
+  {name:"xRan", roles:["flex"], overall:75, tags:["clutch"]},
+  {name:"amber", roles:["duelist"], overall:77, tags:["entry"]},
+  {name:"MrCANI", roles:["initiator"], overall:76, tags:["utility"]},
+  {name:"Shiyboy", roles:["controller"], overall:80, tags:["utility"]},
+  {name:"whitecatw", roles:["sentinel"], overall:76, tags:["lurker"]},
+  {name:"ember", roles:["flex"], overall:74, tags:["clutch"]},
+  {name:"Shyboy", roles:["duelist"], overall:73, tags:["entry"]},
+  {name:"kklin", roles:["initiator"], overall:74, tags:["utility"]},
+  {name:"Wayne", roles:["controller"], overall:74, tags:["utility"]},
+  {name:"5CM", roles:["duelist", "flex", "initiator", "controller", "sentinel"], overall:77, tags:["entry"]},
+  {name:"Yanggg", roles:["initiator","flex"], overall:78, tags:["utility"]},
+  {name:"Scales", roles:["controller"], overall:76, tags:["utility"]},
+  {name:"Lin", roles:["sentinel"], overall:76, tags:["lurker"]},
+  {name:"7teen", roles:["flex"], overall:78, tags:["clutch"]},
+  {name:"withzhe", roles:["duelist"], overall:76, tags:["entry"]},
+  {name:"YK", roles:["initiator"], overall:80, tags:["utility"]},
+  {name:"Z1yan", roles:["controller"], overall:76, tags:["utility"]},
+  {name:"nnono", roles:["sentinel"], overall:74, tags:["lurker"]},
+  {name:"Spitfires", roles:["duelist"], overall:75, tags:["entry"]},
+  {name:"Dynamite", roles:["initiator"], overall:78, tags:["utility"]},
+  {name:"Coco", roles:["controller"], overall:75, tags:["utility"]},
+  {name:"ra1ny", roles:["sentinel"], overall:79, tags:["lurker"]},
+  {name:"Yoze", roles:["flex"], overall:73, tags:["clutch"]},
+  {name:"SuHang", roles:["duelist"], overall:74, tags:["entry"]},
+  {name:"Krst1Ng", roles:["flex"], overall:74, tags:["clutch"]},
+  {name:"coldfish", roles:["duelist"], overall:74, tags:["entry"]},
+  {name:"Akeman", roles:["initiator"], overall:74, tags:["utility"]},
+  {name:"sibeastw0w", roles:["controller"], overall:75, tags:["utility"]},
+  {name:"Tonk", roles:["sentinel"], overall:73, tags:["lurker"]},
+  {name:"WoodAy1", roles:["duelist"], overall:72, tags:["entry"]},
+  {name:"moonlight", roles:["initiator"], overall:76, tags:["utility"]},
+  {name:"Leav3u", roles:["flex"], overall:74, tags:["clutch"]},
+  {name:"Bai", roles:["sentinel"], overall:73, tags:["lurker"]},
+  {name:"AvovA", roles:["controller"], overall:76, tags:["utility"]},
+  {name:"d3murr", roles:["sentinel"], overall:77, tags:["lurker"]},
+  {name:"Tenkai", roles:["flex"], overall:75, tags:["clutch"]},
+  {name:"CHADONjr", roles:["duelist"], overall:78, tags:["entry"]},
+  {name:"Keatz", roles:["initiator"], overall:74, tags:["utility"]},
+  {name:"BlockVALO", roles:["controller"], overall:72, tags:["utility"]},
+  {name:"TarboshEG", roles:["sentinel"], overall:72, tags:["lurker"]},
+  {name:"Vandetaa420", roles:["flex"], overall:71, tags:["clutch"]},
+  {name:"Proxh", roles:["controller", "duelist", "flex", "initiator", "sentinel"], overall:82, tags:["utility"]},
+  {name:"MONSTEERR", roles:["sentinel"], overall:79, tags:["lurker"]},
+  {name:"Pa1ze", roles:["flex"], overall:82, tags:["clutch"]},
+  {name:"Fit1nho", roles:["duelist","initiator"], overall:79, tags:["entry"]},
+  {name:"RunneR", roles:["flex", "duelist", "initiator", "controller", "sentinel"], overall:82, tags:["clutch"]},
+  {name:"starxo", roles:["duelist","flex"], overall:77, tags:["entry", "igl"]},
+  {name:"KHaaLiD", roles:["sentinel", "duelist", "flex", "initiator", "controller"], overall:77, tags:["lurker"]},
+  {name:"Zimo", roles:["flex","sentinel"], overall:76, tags:["clutch"]},
+  {name:"Fighter", roles:["duelist"], overall:78, tags:["entry"]},
+  {name:"Death", roles:["controller"], overall:73, tags:["utility"]},
+  {name:"audaz", roles:["flex", "duelist", "initiator", "controller", "sentinel"], overall:78, tags:["clutch"]},
+  {name:"wezzy", roles:["duelist"], overall:77, tags:["entry"]},
+  {name:"Yigox", roles:["initiator"], overall:78, tags:["utility"]},
+  {name:"influx", roles:["controller","sentinel"], overall:76, tags:["utility"]},
+  {name:"Flickless", roles:["sentinel"], overall:75, tags:["lurker"]},
+  {name:"waddle", roles:["flex"], overall:76, tags:["clutch"]},
+  {name:"Filu", roles:["duelist"], overall:77, tags:["entry"]},
+  {name:"kamyk", roles:["initiator"], overall:77, tags:["utility"]},
+  {name:"BULD", roles:["controller"], overall:73, tags:["utility"]},
+  {name:"chiwa", roles:["sentinel"], overall:78, tags:["lurker"]},
+  {name:"B1SK", roles:["flex"], overall:75, tags:["clutch"]},
+  {name:"Yohpa_", roles:["flex"], overall:75, tags:["clutch"]},
+  {name:"KingTitoune5", roles:["duelist"], overall:75, tags:["entry"]},
+  {name:"poethFPS", roles:["initiator"], overall:76, tags:["utility"]},
+  {name:"Kajuksz", roles:["controller"], overall:77, tags:["utility"]},
+  {name:"H1ber", roles:["sentinel"], overall:72, tags:["lurker", "igl"]},
+  {name:"Javelin", roles:["sentinel", "duelist", "flex", "initiator", "controller"], overall:77, tags:["lurker"]},
+  {name:"avey", roles:["duelist","flex"], overall:78, tags:["entry"]},
+  {name:"Darxcioo", roles:["initiator"], overall:78, tags:["utility"]},
+  {name:"sizo", roles:["controller"], overall:74, tags:["utility"]},
+  {name:"TakaS", roles:["sentinel"], overall:74, tags:["lurker"]},
+  {name:"Jesse", roles:["flex"], overall:78, tags:["clutch"]},
+  {name:"mepeezy", roles:["duelist"], overall:75, tags:["entry"]},
+  {name:"wtex", roles:["initiator"], overall:78, tags:["utility"]},
+  {name:"Vorwenn", roles:["controller"], overall:75, tags:["utility", "igl"]},
+  {name:"al0rante", roles:["sentinel"], overall:73, tags:["lurker"]},
+  {name:"hoody", roles:["flex"], overall:76, tags:["clutch"]},
+  {name:"WanZeRu", roles:["duelist"], overall:75, tags:["entry"]},
+  {name:"Sevire", roles:["initiator"], overall:75, tags:["utility"]},
+  {name:"westside", roles:["controller"], overall:71, tags:["utility"]},
+  {name:"Spear", roles:["controller"], overall:74, tags:["utility"]},
+  {name:"Masic", roles:["sentinel"], overall:76, tags:["lurker"]},
+  {name:"MerSa", roles:["flex"], overall:74, tags:["clutch"]},
+  {name:"JrayN", roles:["duelist"], overall:75, tags:["entry"]},
+  {name:"Rensz", roles:["initiator"], overall:72, tags:["utility"]},
+  {name:"BadreX", roles:["duelist"], overall:73, tags:["entry"]},
+  {name:"nekky", roles:["flex"], overall:73, tags:["clutch"]},
+  {name:"bipo", roles:["sentinel"], overall:72, tags:["lurker"]},
 ];
+const POOL_MAP = new Map(); POOL.forEach(p=>{ const k=p.name.toLowerCase(); if(!POOL_MAP.has(k)) POOL_MAP.set(k,p); });
+function poolGet(n){ return n ? POOL_MAP.get(String(n).toLowerCase()) : undefined; }
 
 // 16 organizações reais — uma é escolhida pelo jogador, as outras 15 viram adversárias.
 const TEAM_NAMES = [
@@ -741,13 +971,22 @@ const TEAM_NAMES = [
 // as 16 organizações de sempre). Só 6 desses times já existem no TEAM_NAMES hoje; os outros
 // 50 são times novos que ainda não têm elenco nem entram no draft/torneio.
 const TEAM_REGIONS = {
-  "BR": ["LOUD","FURIA","MIBR","2GAME","Team Solid","Red Canids","INTZ","paiN Gaming","FaZe","FLUXO"],
-  "NA": ["Sentinels","OpTic","G2","100 Thieves","NRG","Evil Geniuses","Envy","Cloud9","M80","TSM"],
-  "LAS": ["Leviatán","KRÜ","9z","Shinden","Bestia","All Knights"],
-  "APAC": ["Paper Rex","Gen.G","DRX","T1"],
-  "CHN": ["EDward Gaming","Wolves Esports","All Gamers","FunPlus Phoenix"],
-  "EMEA": ["Karmine Corp","Team Liquid","FUT Esports","FNATIC","BBL Esports","Team Vitality","Team Heretics","Natus Vincere"],
+  "AMERICAS": ["Sentinels", "100 Thieves", "G2 Esports", "NRG", "LOUD", "MIBR", "KRÜ Visa", "Leviatán Esports"],
+  "EMEA": ["Team Vitality", "FNATIC", "Team Liquid", "Team Heretics", "Karmine Corp", "Gentle Mates", "FUT Esports", "BBL Esports"],
+  "PACIFIC": ["Paper Rex", "T1", "Gen.G", "Rex Regum Qeon", "ZETA DIVISION", "FULL SENSE", "Crazy Raccoon", "GAM Esports"],
+  "CN": ["EDward Gaming", "Bilibili Gaming", "TYLOO", "JD Gaming", "All Gamers", "Trace Esports", "Xi Lai Gaming", "Weibo Gaming"],
 };
+// Times não parceiros (Challengers/Game Changers): entram no Kickoff/Cups via qualifier.
+const TERRITORY_CHALLENGERS = {
+  "AMERICAS": ["Shopify Rebellion", "Cloud9", "ENVY", "Shopify Rebellion Gold", "FlyQuest", "Masterclass", "Arashi", "2GAME Esports", "PxS' team", "Winthrop University", "9z", "Untamable Beasts", "Team Solid", "Yellow Dragon Gaming", "Evictix", "OAFS", "Wildcard", "LEGADO", "counterfeit", "TIME DO B3M", "SÓ TEM VELHO", "Rejects", "BRASIL2002", "NXG", "X-MEN"],
+  "EMEA": ["R8 Esports", "Barça eSports", "Mandatory", "Team Stallions", "Beşiktaş Esports", "UCAM Esports", "Aurora Gaming", "F9 EICAR", "NAVI Junior", "WIP Esports", "Joblife", "NKVT", "Eternal Fire", "Galatasaray Esports", "Eintracht Frankfurt"],
+  "PACIFIC": ["Murash Gaming", "Alter Ego × Kertanegara", "BOOM Esports", "QT DIG", "Nongshim RedForce"],
+  "CN": ["UR", "Havoc Yonder Gaming", "Any Questions Gaming", "LGD Gaming", "TEC", "KeepBest Gaming", "VLG", "XJG", "Young Gaming"],
+};
+function territoryAllOrgs(r){ return [...(TEAM_REGIONS[r]||[]), ...(TERRITORY_CHALLENGERS[r]||[])]; }
+const ORG_TERRITORY = {};
+Object.keys(TEAM_REGIONS).forEach(r=>territoryAllOrgs(r).forEach(o=>{ ORG_TERRITORY[o]=r; }));
+function orgIsPartner(org){ const r=ORG_TERRITORY[org]; return !!(r && TEAM_REGIONS[r].includes(org)); }
 // Alguns nomes em TEAM_REGIONS já existem em TEAM_NAMES com grafia um pouco diferente —
 // esse mapa aproveita o rating de quem já existe em vez de recalcular do zero.
 const TEAM_REGION_NAME_ALIASES = {
@@ -765,63 +1004,109 @@ function teamRegionRating(name){
 // Elencos reais dos times de "Rumo à Ascensão", pesquisados aos poucos — só entram aqui os times
 // que já têm elenco confirmado; quem não está aqui ainda usa teamRegionRating() (força genérica).
 const ASCENSAO_TEAM_ROSTERS = {
-  // ===== BR =====
-  "LOUD": {players:["tkzin","erde","DaviH","Darker","lukxo"], coach:"romanilly"},
-  "MIBR": {players:["aspas","Mazino","Sacy",null,null], coach:"frod"},
-  "FURIA": {players:["basic","artzin","Shyy",null,null], coach:"shaw"},
-  "2GAME": {players:["qck","gobera","frz","Brinks","xenom"], coach:"gaabxx"},
-  "Team Solid": {players:["havoc","liazzi","raafa","GuhRVN","nevoy"], coach:"peu"},
-  "Red Canids": {players:["forbanz","prozin","urango","RgLM","sw"], coach:"DragziKW"},
-  "INTZ": {players:["Tisora","PxS","siduzord","askia","guuih"], coach:"Carlao"},
-  "paiN Gaming": {players:["Loss","Stwz1","Bruxo","peixeh","taka"], coach:"ryotzz"},
-  "FaZe": {players:["Palla","mazin","cauanzin","tuyz","silentzz"], coach:"Stk"},
-  "FLUXO": {players:["Zanatsu","skz","jzz","Khalil","swag"], coach:"Negaral"},
-  // ===== NA =====
-  "Sentinels": {players:["Jerrwin","Reduxx","JonahP","johnqt","cortezia"], coach:"Ewok"},
-  "G2": {players:["jawgemo","leaf","trent","valyn","BABYBAY"], coach:"JoshRT"},
-  "100 Thieves": {players:["Timotino","Asuna","Vora","bang","Cryocells"], coach:"Nbs"},
-  "NRG": {players:["mada","keiko","brawk","Ethan","skuba"], coach:"bonkar"},
-  "Evil Geniuses": {players:["dgzin","zerona","Paincakes","supamen","bao"], coach:"Potter"},
-  "Envy": {players:["nightz1x","P0PPIN","Rossy","GLYPH","ion"], coach:"Stunner"},
-  "Cloud9": {players:["OXY","Zellsis","Jackk","v1c","FireBallOps"], coach:"Veer"},
-  "M80": {players:["Boni","NiSMO","Kyu","Spaz","alvin"], coach:"kaplan"},
-  "TSM": {players:["Demon1","bdog","runi","moose","neT"], coach:"d00mbros"},
-  "OpTic": {players:["penny","Victor","crashies","Marved","FNS"], coach:"Chet"},
-  // ===== LAS =====
-  "Leviatán": {players:["Sato","spikezin","blowz","kiNgg","Neon"], coach:"onur"},
-  "KRÜ": {players:["Dantedeu5","heat","mwzera","saadhak","less"], coach:"ZONYK"},
-  "All Knights": {players:["keznit","mta","Melser","david","Tacolilla"], coach:"Itopata"},
-  "Bestia": {players:["seven","phc","jotinha","chubizin","mont1"], coach:"phonics"},
-  "9z": {players:["Tuli","Kimbo","M1key","skyppervz","MiradaNinja"], coach:"pule"},
-  "Shinden": {players:["adverso","xand","pollo","pANcada","bezn1"], coach:"Rojo"},
-  // ===== CHN =====
-  "EDward Gaming": {players:["ZmjjKK","Jieni7","nobody","Smoggy","CHICHOO"], coach:"Autumn"},
-  "Wolves Esports": {players:["Juicy","Lysoar","SiufatBB","spring","Yuicaw"], coach:"alexRr"},
-  "All Gamers": {players:["f4ngeer","iamgrq","Shr1mp","K1ra","Au1"], coach:"nathand"},
-  "FunPlus Phoenix": {players:["ardiis","Setrod","coconut","Xlele","AAAAY"], coach:"LEGIJA"},
+  // ===== AMERICAS =====
+  "Sentinels": {players:["OXY", "brawk", "canezerra", "keiko", "johnqt"], reserve:["Zellsis"], coach:"Ewok", ac:"GUNTER"},
+  "100 Thieves": {players:["Timotino", "bang", "Cryocells", "Asuna", "vora"], reserve:[], coach:"Nbs", ac:"d00mbros"},
+  "G2 Esports": {players:["leaf", "trent", "Sato", "HYUNMIN", "kiNgg"], reserve:[], coach:"JoshRT", ac:null},
+  "NRG": {players:["mada", "skuba", "eeiu", "Ethan", null], reserve:[], coach:"bonkar", ac:"mitch"},
+  "LOUD": {players:["DaviH", "tkzin", "artzin", "basic", "cortezia"], reserve:[], coach:"Romanilly", ac:"Bati"},
+  "MIBR": {players:["dgzin", "Less", "turkish", "Kring", null], reserve:[], coach:"frod", ac:"Happy"},
+  "KRÜ Visa": {players:["Darker", "David", "raised", null, null], reserve:[], coach:"ZONYK", ac:null},
+  "Leviatán Esports": {players:["Neon", "spike", "blowz", "erde", "lukxo"], reserve:[], coach:"Onur", ac:null},
+  "Shopify Rebellion": {players:["Smoke", "Zander", "Kyu", "Boni", "Nismo"], reserve:[], coach:"effys", ac:"Oderus"},
+  "Cloud9": {players:["alym", "nightz", "Derrek", "FireBallOps", "GLYPH"], reserve:[], coach:"Immi", ac:null},
+  "ENVY": {players:["Ion2x", "Exa", "V1c", "Xeppaa", "Paincakes"], reserve:[], coach:null, ac:null},
+  "Shopify Rebellion Gold": {players:["dodonut", "glowstick", "Noia", "alexis", null], reserve:[], coach:"monSi", ac:null},
+  "FlyQuest": {players:["s9cred", "tonza", "Kess", null, null], reserve:[], coach:null, ac:null},
+  "Masterclass": {players:["florescent", "Marved", "s0m", "Shanks", "Subroza"], reserve:[], coach:"FNS", ac:"Tanizhq"},
+  "Arashi": {players:["lilo1", "NagZet", "above", "peixeh", "swag"], reserve:[], coach:"Valadao", ac:"Luck"},
+  "2GAME Esports": {players:["frz", "xenom", "gobera", "Zanatsu", "prozin"], reserve:[], coach:"gaabxx", ac:null},
+  "PxS' team": {players:["Tisora", "askiazin", "sanojvlr", "tisxna", "drakzenn"], reserve:["askia", "sanoj", "drakz", "PxS"], coach:"Carlao", ac:null},
+  "Winthrop University": {players:["infiltrator", "Ali", "Fair", "Veyreon", "Karma"], reserve:["Governor"], coach:"slowiscool", ac:"Branchies"},
+  "9z": {players:["Dantedeu5", "Siduzord", "rubkkoide", "Melser", "Tacolilla"], reserve:[], coach:"Godspeed", ac:"phonics"},
+  "Untamable Beasts": {players:["recoil", "azrex", "Tofu", "sinatraa", "PROD"], reserve:["zombs", "dizzy"], coach:null, ac:null},
+  "Team Solid": {players:["mwzera", "havoc", "liazzi", "Bruxo", "cauanzin"], reserve:[], coach:"peu", ac:null},
+  "Yellow Dragon Gaming": {players:["atlas", "leo", "enzo", "max", "icie"], reserve:[], coach:"jovi", ac:null},
+  "Evictix": {players:["ScrewFace", "ExpMoe", "jinwoo", "voriac", "Weegle"], reserve:[], coach:null, ac:null},
+  "OAFS": {players:["stellar", "jakee", "bdog", "heartless", "stunna"], reserve:[], coach:null, ac:null},
+  "Wildcard": {players:["icy", "neT", "Spaz", "nerve", "zerona"], reserve:[], coach:null, ac:null},
+  "LEGADO": {players:["lead", "nx1", "tunaso", "SUTHER", null], reserve:[], coach:"WKN", ac:null},
+  "counterfeit": {players:["Dark3st", "Zamal", "Zoestool", "om3y", null], reserve:[], coach:null, ac:null},
+  "TIME DO B3M": {players:["heat", "ghoul33", "murizzz", "rich", null], reserve:[], coach:null, ac:null},
+  "SÓ TEM VELHO": {players:["tiezzi", null, null, null, null], reserve:[], coach:"Fame", ac:"panique"},
+  "Rejects": {players:["Victor", null, null, null, null], reserve:[], coach:null, ac:null},
+  "BRASIL2002": {players:["silentzz", null, null, null, null], reserve:[], coach:null, ac:null},
+  "NXG": {players:["ethos", null, null, null, null], reserve:[], coach:null, ac:null},
+  "X-MEN": {players:["luid", null, null, null, null], reserve:[], coach:null, ac:null},
   // ===== EMEA =====
-  "FNATIC": {players:["kaajak","Veqaj","Leo","Boaster","cloud"], coach:"ENGH"},
-  "BBL Esports": {players:["Lar0k","loversrock","Rose","Loita","Crewen"], coach:"KEY"},
-  "Team Liquid": {players:["purp0","kamo","trexx","Kicks","nAts"], coach:"LohaN"},
-  "FUT Esports": {players:["s0pp","xeus","KROSTALY","sociablEE","yetujey"], coach:"Vlad"},
-  "Karmine Corp": {players:["LewN","N4RRATE","avez","dos9","SUYGETSU"], coach:"ZE1SH"},
-  "Team Vitality": {players:["Derke","Jamppi","Sayonara","PROFEK","Chronicle"], coach:"Scuttt"},
-  "Team Heretics": {players:["MiniBoo","Wo0t","RieNs","Boo","benjyfishy"], coach:"neilzinho"},
-  "Natus Vincere": {players:["Kolosha","ExiT","chloric","Ruxic","hiro"], coach:"ANGE1"},
-  // ===== APAC =====
-  "Paper Rex": {players:["something","Jinggg","invy","f0rsakeN","d4v41"], coach:"alecks"},
-  "Gen.G": {players:["t3xture","Munchkin","Ash","Karon","Foxy9"], coach:"solo"},
-  "DRX": {players:["HYUNMIN","freeing","BeYN","MaKo","yong"], coach:"glow"},
-  "T1": {players:["BuZz","Meteor","iZu","stax","DH"], coach:"KDG"},
+  "Team Vitality": {players:["PROFEK", "Chronicle", "Sayonara", "jawgemo", "Jamppi"], reserve:[], coach:"Scuttt", ac:"SLK"},
+  "FNATIC": {players:["Cloud", "marteen", "Minny", "kaajak", "valyn"], reserve:[], coach:"ANGE1", ac:null},
+  "Team Liquid": {players:["GSR", "Kachoww", "kamo", "nAts", null], reserve:[], coach:"LohaN", ac:null},
+  "Team Heretics": {players:["benjyfishy", "hiro", "Jamelinho213", "RieNs", "chloric"], reserve:[], coach:"neilzinho", ac:null},
+  "Karmine Corp": {players:["dos9", "LewN", "SUYGETSU", "N4RRATE", "Avez"], reserve:["Chaza"], coach:"ZE1SH", ac:null},
+  "Gentle Mates": {players:["Alfajer", "Ruxic", "MAGNUM", "kozzy", "Boaster"], reserve:[], coach:"Kaplan", ac:"Desmo"},
+  "FUT Esports": {players:["yetujey", "Wo0t", "hezacoil", "aspas", "batujnax"], reserve:[], coach:null, ac:"Bambino"},
+  "BBL Esports": {players:["Lar0k", "Loita", "ComeBack", "oroni", null], reserve:[], coach:"KEY", ac:null},
+  "R8 Esports": {players:["AvovA", "d3murr", "Tenkai", "CHADONjr", "Keatz"], reserve:["BlockVALO", "TarboshEG", "Vandetaa420"], coach:null, ac:null},
+  "Barça eSports": {players:["purp0", "Proxh", "MONSTEERR", "Pa1ze", "Fit1nho"], reserve:[], coach:"meisoN", ac:"xikii_gg"},
+  "Mandatory": {players:["Veqaj", "Kicks", "MiniBoo", "RunneR", "starxo"], reserve:[], coach:"Larsson", ac:"SKAZZ"},
+  "Team Stallions": {players:["ExiT", "KHaaLiD", "Zimo", "Fighter", "hAwksinho"], reserve:["Death"], coach:"Andreas", ac:null},
+  "Beşiktaş Esports": {players:["MrFaliN", "audaz", "wezzy", "Yigox", "influx"], reserve:[], coach:"GAIS", ac:null},
+  "UCAM Esports": {players:["Flickless", "waddle", "Filu", "kamyk", "BULD"], reserve:[], coach:"Bromas", ac:null},
+  "Aurora Gaming": {players:["Derke", "trexx", "Boo", "chiwa", "B1SK"], reserve:[], coach:"hvoya", ac:null},
+  "F9 EICAR": {players:["Yohpa_", "KingTitoune5", "poethFPS", "Kajuksz", "H1ber"], reserve:[], coach:"finalmoment", ac:null},
+  "NAVI Junior": {players:["Javelin", "Kolosha", "avey", "Darxcioo", "sizo"], reserve:[], coach:"Johnta", ac:null},
+  "WIP Esports": {players:["TakaS", "Jesse", "mepeezy", "wtex", "Vorwenn"], reserve:[], coach:"Celo", ac:null},
+  "Joblife": {players:["al0rante", "hoody", "WanZeRu", "Sevire", "westside"], reserve:[], coach:null, ac:null},
+  "NKVT": {players:["Spear", "Masic", "MerSa", "JrayN", "Rensz"], reserve:[], coach:null, ac:null},
+  "Eternal Fire": {players:["BadreX", "s0pp", "sociablEE", null, null], reserve:[], coach:null, ac:null},
+  "Galatasaray Esports": {players:["nekky", null, null, null, null], reserve:[], coach:"Viento", ac:null},
+  "Eintracht Frankfurt": {players:["bipo", null, null, null, null], reserve:[], coach:null, ac:null},
+  // ===== PACIFIC =====
+  "Paper Rex": {players:["something", "f0rsakeN", "invy", "PatMen", null], reserve:[], coach:"alecks", ac:null},
+  "T1": {players:["iZu", "BuZz", "TenZ", "crashies", "stax"], reserve:[], coach:"Sacy", ac:"Sungmin"},
+  "Gen.G": {players:["t3xture", "Raxcal", "Karon", "Dambi", "MaKo"], reserve:["Ray", "Xiesta"], coach:"solo", ac:"hsk"},
+  "Rex Regum Qeon": {players:["xffero", "Jemkin", "Monyet", "Kushy", null], reserve:[], coach:"Faded", ac:null},
+  "ZETA DIVISION": {players:["KEN", "yatsuka", null, null, null], reserve:[], coach:"ryota-", ac:"XQQ"},
+  "FULL SENSE": {players:["Kr1stal", "JitBoyS", "seph1roth", null, null], reserve:[], coach:"Crws", ac:null},
+  "Crazy Raccoon": {players:["Meiy", "Akame", "SugarZ3ro", "Aace", "CLZ"], reserve:[], coach:"Vorz", ac:null},
+  "GAM Esports": {players:["crazyguy", null, null, null, null], reserve:[], coach:null, ac:null},
+  "Murash Gaming": {players:["Xdll", "Caedye", "Seoldam", "HoneyBunny", "MrTenzouEz"], reserve:[], coach:"Lefiedot", ac:"mltdwn"},
+  "Alter Ego × Kertanegara": {players:["Sovano", "parscofield", "Gotten", "Nakya", "ValdyN"], reserve:["ray4c"], coach:"RBTX", ac:null},
+  "BOOM Esports": {players:["Xan", "kellyS", "iceyyzx", "natzVAL_", "NcSlasher"], reserve:[], coach:"meowvlrt", ac:null},
+  "QT DIG": {players:["Meteor", "TenTen", "Yuran", "Kippei", "misaya"], reserve:[], coach:null, ac:null},
+  "Nongshim RedForce": {players:["UdoTan", null, null, null, null], reserve:[], coach:"Persia", ac:null},
+  // ===== CN =====
+  "EDward Gaming": {players:["Jieni7", "stew", "Rossy", null, null], reserve:["zjc"], coach:"Autumn", ac:null},
+  "Bilibili Gaming": {players:["whzy", "nephh", "Knight", "alvinboy", "Smoggy"], reserve:[], coach:"Itopata", ac:"JeXeN"},
+  "TYLOO": {players:["splash", "slowly", "Erv", "SiuFatBB", null], reserve:[], coach:"pipsoN", ac:"hypnotizing"},
+  "JD Gaming": {players:["BerLIN", "jkuro", "Yuicaw", "crownfisher", "glacier"], reserve:["zhe"], coach:"bail", ac:null},
+  "All Gamers": {players:["Shr1mp", "K1ra", "iamgrq", "Spring", "Jinggg"], reserve:["f4ngeer"], coach:"Fayde", ac:null},
+  "Trace Esports": {players:["Kai", "nobody", "CHICHOO", "Nicc", null], reserve:["Abo", "Toosy"], coach:"destroyeR", ac:"AfteR"},
+  "Xi Lai Gaming": {players:["Sharks", "happywei", "d4v41", "ZmjjKK", "Zeus"], reserve:["WsLeo"], coach:null, ac:"steady"},
+  "Weibo Gaming": {players:["Yoyo", "Satoshi", "heybay", "babybay", null], reserve:["Razziss"], coach:"Milan", ac:"Senny"},
+  "UR": {players:["CXIX666", "yiyee", "Deryeon", "Knyzl", "Ninebody"], reserve:[], coach:null, ac:null},
+  "Havoc Yonder Gaming": {players:["xRan", "amber", "MrCANI", "Shiyboy", "whitecatw"], reserve:["ember", "Shyboy", "kklin", "Wayne"], coach:"Cyyy", ac:"Nearley"},
+  "Any Questions Gaming": {players:["5CM", "Yanggg", "Scales", "koalanoob", "S1Mon"], reserve:["juicy"], coach:"ED101", ac:"Sunshine"},
+  "LGD Gaming": {players:["Lin", "7teen", "withzhe", "YK", "Z1yan"], reserve:["nnono"], coach:"York", ac:"DaJ"},
+  "TEC": {players:["Spitfires", "Dynamite", "Coco", "ra1ny", "Yoze"], reserve:["SuHang"], coach:"Anaks", ac:null},
+  "KeepBest Gaming": {players:["Krst1Ng", "coldfish", "Akeman", "sibeastw0w", "Tonk"], reserve:[], coach:null, ac:null},
+  "VLG": {players:["WoodAy1", "moonlight", null, null, null], reserve:[], coach:"heav1n", ac:null},
+  "XJG": {players:["Leav3u", null, null, null, null], reserve:[], coach:null, ac:null},
+  "Young Gaming": {players:["Bai", null, null, null, null], reserve:[], coach:null, ac:null},
 };
 // Cria uma cópia independente dos elencos/técnicos originais — usada uma vez no início de cada
 // carreira do Ascensão. As trocas de mercado atualizam ESSA cópia, não o banco original, e cada
 // temporada nova continua de onde a anterior parou (em vez de resetar sempre pro mesmo ponto de
 // partida) — isso é o que faz os times evoluírem de verdade ao longo da carreira.
+// Reservas (6º jogador) ficam fora do mercado de agentes livres: já têm time.
+function ascensaoReserveNames(baseRosters){
+  return Object.values(baseRosters).flatMap(d=>(d.reserve||[]).map(n=>n.toLowerCase()));
+}
 function ascensaoBuildFreshSnapshot(){
   const snapshot = {};
   Object.entries(ASCENSAO_TEAM_ROSTERS).forEach(([org, dados])=>{
-    snapshot[org] = {players: [...dados.players], coach: dados.coach};
+    snapshot[org] = {players: [...dados.players], coach: dados.coach, ac: dados.ac||null, reserve: [...(dados.reserve||[])]};
   });
   return snapshot;
 }
@@ -853,7 +1138,7 @@ function ascensaoDedupeSnapshot(snapshot, orgsAutoritativos){
 // Campeão Regional dá um bônus menor que Campeão Mundial — quem ganhou os dois soma os dois.
 // Craques que NUNCA devem aparecer no Rumo à Ascensão (nem escalados em time, nem como agente
 // livre no mercado) — mesmo continuando disponíveis normalmente nos outros modos.
-const ASCENSAO_EXCLUDED_PLAYERS = new Set(["yay","tenz"]);
+const ASCENSAO_EXCLUDED_PLAYERS = new Set([]);
 // Igual acima, mas pra técnicos — nunca aparecem escalados nem como agente livre no Ascensão.
 const ASCENSAO_EXCLUDED_COACHES = new Set([]);
 const ASCENSAO_CHAMPION_BONUS = 3;
@@ -1051,21 +1336,34 @@ function buildAscensaoNationalTeam(){
   const jogadoresOrdenados = [...ascensaoSelecaoPlayerObjects(state.carreira.nacao)].sort((a,b)=>b.overall-a.overall);
   return ascensaoApplyChampionBonus(buildTeamWithCharacterBestRole(jogadoresOrdenados));
 }
+// Monta o time com 5 em funções válidas; se o elenco real não cobre as 5 funções (comum nos
+// elencos novos do VCT 2027), quem sobra joga fora de posição com -3 de overall.
+function ascensaoForceRoster(players){
+  const roster = buildValidRoster(players);
+  const placed = new Set(roster.filter(Boolean).map(p=>p.name));
+  const spare = players.filter(p=>!placed.has(p.name));
+  return roster.map(p=>{
+    if(p) return p;
+    const extra = spare.shift();
+    return extra ? {...extra, overall: Math.max(60, extra.overall-3), outOfRole:true} : null;
+  });
+}
 function buildAscensaoOrgTeam(name, insertCharacter, overridePlayers, overrideCoach){
   const baseRosters = (state.carreira && state.carreira.orgRostersSnapshot) || ASCENSAO_TEAM_ROSTERS;
   const real = baseRosters[name];
   const playerNames = overridePlayers || (real && real.players);
   const coachFinal = overrideCoach!==undefined ? overrideCoach : (real && real.coach);
+  const acFinal = (real && real.ac) || null;
   if(playerNames){
-    const roster = playerNames.map(n=>POOL.find(p=>p.name.toLowerCase()===n.toLowerCase())).filter(Boolean);
+    const roster = playerNames.filter(Boolean).map(n=>poolGet(n)).filter(Boolean);
     if(roster.length>=5){
       if(insertCharacter){
         const roster2 = ascensaoApplyChampionBonus(buildTeamWithCharacter(roster));
-        if(!roster2.some(p=>!p)) return {id:name, name, roster:roster2, coach:coachFinal, rating:teamOverall(roster2)};
+        if(!roster2.some(p=>!p)) return {id:name, name, roster:roster2, coach:coachFinal, ac:acFinal, rating:teamOverall(roster2)};
       }
-      const validRoster = ascensaoApplyChampionBonus(buildValidRoster(roster));
+      const validRoster = ascensaoApplyChampionBonus(ascensaoForceRoster(roster));
       if(!validRoster.some(p=>!p)){
-        return {id:name, name, roster:validRoster, coach:coachFinal, rating:teamOverall(validRoster)};
+        return {id:name, name, roster:validRoster, coach:coachFinal, ac:acFinal, rating:teamOverall(validRoster)};
       }
     }
   }
@@ -1082,7 +1380,7 @@ function buildAscensaoOrgTeam(name, insertCharacter, overridePlayers, overrideCo
 // vira opção pros próximos times depois que o meu já foi substituído de verdade.
 function simulateRegionalCoachTransfers(regiao, excludeOrg, transferenciasDeJogadores, usadosGlobalmenteCoach){
   const baseRosters = (state.carreira && state.carreira.orgRostersSnapshot) || ASCENSAO_TEAM_ROSTERS;
-  const orgs = TEAM_REGIONS[regiao].filter(o=>o!==excludeOrg && baseRosters[o]);
+  const orgs = territoryAllOrgs(regiao).filter(o=>o!==excludeOrg && baseRosters[o]);
   const coachCopies = {};
   orgs.forEach(org=>{ coachCopies[org] = baseRosters[org].coach; });
   function buffDe(nomeCoach){ return nomeCoach ? coachBuff(nomeCoach) : -1; }
@@ -1152,19 +1450,19 @@ function simulateRegionalCoachTransfers(regiao, excludeOrg, transferenciasDeJoga
 }
 function simulateRegionalTransfers(regiao, excludeOrg, usadosGlobalmente){
   const baseRosters = (state.carreira && state.carreira.orgRostersSnapshot) || ASCENSAO_TEAM_ROSTERS;
-  const orgs = TEAM_REGIONS[regiao].filter(o=>o!==excludeOrg && baseRosters[o]);
+  const orgs = territoryAllOrgs(regiao).filter(o=>o!==excludeOrg && baseRosters[o]);
   const rosterCopies = {};
   orgs.forEach(org=>{ rosterCopies[org] = [...baseRosters[org].players]; });
   const roles = ["duelist","flex","initiator","controller","sentinel"];
   function overallDe(nome){
     if(!nome) return -1;
-    const p = POOL.find(x=>x.name.toLowerCase()===nome.toLowerCase());
+    const p = poolGet(nome);
     return p ? p.overall : 80;
   }
   // Pontua um candidato pra uma vaga: overall é a base, mas pesa também se o país dele bate
   // com a região do time (ou é vizinho), e sinergia com quem já tá no elenco (mesmo país).
   function pontuaCandidato(nomeCandidato, restanteDoElenco){
-    const p = POOL.find(x=>x.name.toLowerCase()===nomeCandidato.toLowerCase());
+    const p = poolGet(nomeCandidato);
     let pontos = overallDe(nomeCandidato);
     if(!p) return pontos;
     const paisesCandidato = playerCountries(p.name);
@@ -1172,7 +1470,7 @@ function simulateRegionalTransfers(regiao, excludeOrg, usadosGlobalmente){
     if(regiaoDoPais===regiao) pontos += 15;
     else if((ASCENSAO_REGION_PROXIMITY[regiao]||[]).includes(regiaoDoPais)) pontos += 6;
     const sinergia = restanteDoElenco.filter(nomeColega=>{
-      const pColega = POOL.find(x=>x.name.toLowerCase()===nomeColega.toLowerCase());
+      const pColega = poolGet(nomeColega);
       return pColega && playerCountries(pColega.name).some(pc=>paisesCandidato.includes(pc));
     }).length;
     pontos += sinergia * 1.5;
@@ -1183,19 +1481,30 @@ function simulateRegionalTransfers(regiao, excludeOrg, usadosGlobalmente){
   // a mesma pontuação de nacionalidade/proximidade/sinergia dos reforços normais.
   orgs.forEach(org=>{
     if(!rosterCopies[org].includes(null)) return;
-    const jaEmAlgumTimeNoJogo = new Set(Object.values(rosterCopies).flatMap(r=>r.filter(Boolean).map(n=>n.toLowerCase())));
+    const jaEmAlgumTimeNoJogo = new Set([...Object.values(rosterCopies).flatMap(r=>r.filter(Boolean).map(n=>n.toLowerCase())), ...ascensaoReserveNames(baseRosters)]);
     if(usadosGlobalmente) usadosGlobalmente.forEach(n=>jaEmAlgumTimeNoJogo.add(n.toLowerCase()));
-    const fixos = rosterCopies[org].filter(Boolean).map(n=>POOL.find(p=>p.name.toLowerCase()===n.toLowerCase())).filter(Boolean);
+    const fixos = rosterCopies[org].filter(Boolean).map(n=>poolGet(n)).filter(Boolean);
     const nomesFixos = new Set(fixos.map(f=>f.name.toLowerCase()));
     const candidatosPontuados = POOL.filter(p=>!jaEmAlgumTimeNoJogo.has(p.name.toLowerCase()) && !ASCENSAO_EXCLUDED_PLAYERS.has(p.name.toLowerCase()) && !nomesFixos.has(p.name.toLowerCase()))
       .sort((a,b)=>pontuaCandidato(b.name, fixos.map(f=>f.name))-pontuaCandidato(a.name, fixos.map(f=>f.name)));
     // embaralha só dentro do grupo dos melhores (top ~12) — mantém a prioridade geral por
     // nacionalidade/proximidade/sinergia, mas sem sempre montar a combinação idêntica.
-    const topCandidatos = shuffle(candidatosPontuados.slice(0,12));
-    const restoCandidatos = candidatosPontuados.slice(12);
+    // não parceiros não contratam craque de elite pra preencher vaga (teto de overall 82)
+    const tetoVaga = orgIsPartner(org) ? 99 : 82;
+    const candidatosFiltrados = candidatosPontuados.filter(p=>p.overall<=tetoVaga);
+    const candidatosBase = candidatosFiltrados.length>=20 ? candidatosFiltrados : candidatosPontuados;
+    const topCandidatos = shuffle(candidatosBase.slice(0,12));
+    const restoCandidatos = candidatosBase.slice(12);
     const candidatosOrdenados = [...topCandidatos, ...restoCandidatos];
-    const completo = buildValidRoster([...fixos, ...candidatosOrdenados]);
+    const completo = ascensaoForceRoster([...fixos, ...candidatosOrdenados.slice(0,40)]);
     if(completo.every(Boolean)) rosterCopies[org] = completo.map(p=>p.name);
+  });
+  // Elencos reais que não cobrem as 5 funções não conseguem "fechar" nenhuma troca; pra eles,
+  // qualquer reforço vale (jogam fora de posição, igual na hora de montar o time).
+  const coverableOrg = {};
+  orgs.forEach(org=>{
+    const objs = rosterCopies[org].filter(Boolean).map(n=>poolGet(n)).filter(Boolean);
+    coverableOrg[org] = objs.length<5 || canCompleteRoster(roles, objs);
   });
   // Agentes livres — craques do banco que hoje não estão escalados em nenhum time — também
   // entram no mercado como opção de contratação. Recalculado a cada rodada (ver abaixo) pra
@@ -1209,7 +1518,7 @@ function simulateRegionalTransfers(regiao, excludeOrg, usadosGlobalmente){
     // Agentes livres de verdade — craques do banco que não estão em NENHUM elenco fixo do jogo,
     // atribuídos a essa região pela nacionalidade deles (playerRegionKey não serve aqui, porque
     // ele só reconhece quem já tem time — por definição, um agente livre nunca teria região).
-    const todosOsEscaladosNoJogo = new Set(Object.values(baseRosters).flatMap(d=>d.players.filter(Boolean).map(n=>n.toLowerCase())));
+    const todosOsEscaladosNoJogo = new Set([...Object.values(baseRosters).flatMap(d=>d.players.filter(Boolean).map(n=>n.toLowerCase())), ...ascensaoReserveNames(baseRosters)]);
     const agentesLivresDaRegiao = POOL.filter(p=>{
       if(todosOsEscaladosNoJogo.has(p.name.toLowerCase())) return false;
       if(jaEmAlgumTimeAgora.has(p.name.toLowerCase())) return false;
@@ -1264,8 +1573,8 @@ function simulateRegionalTransfers(regiao, excludeOrg, usadosGlobalmente){
       for(const candidato of opcoes){
         const tentativa = [...rosterCopies[org]];
         tentativa[vaga[org].idx] = candidato;
-        const rosterObjs = tentativa.map(n=>n && POOL.find(p=>p.name.toLowerCase()===n.toLowerCase())).filter(Boolean);
-        if(rosterObjs.length===5 && canCompleteRoster(roles, rosterObjs)){
+        const rosterObjs = tentativa.map(n=>n && poolGet(n)).filter(Boolean);
+        if(rosterObjs.length===5 && (canCompleteRoster(roles, rosterObjs) || !coverableOrg[org])){
           validos.push(candidato);
           if(validos.length>=10) break;
         }
@@ -1291,7 +1600,7 @@ function simulateRegionalTransfers(regiao, excludeOrg, usadosGlobalmente){
         // ninguém no mercado que sirva — busco um reforço de emergência fora do mercado atual
         // (na região, excluindo quem já está escalado em qualquer time) pra não ficar com
         // buraco nem duplicar o craque que já foi embora de verdade.
-        const jaEscalados = new Set(Object.values(rosterCopies).flat().filter(Boolean).map(n=>n.toLowerCase()));
+        const jaEscalados = new Set([...Object.values(rosterCopies).flat().filter(Boolean).map(n=>n.toLowerCase()), ...ascensaoReserveNames(baseRosters)]);
         if(excludeOrg && baseRosters[excludeOrg]) baseRosters[excludeOrg].players.filter(Boolean).forEach(n=>jaEscalados.add(n.toLowerCase()));
         if(usadosGlobalmente) usadosGlobalmente.forEach(n=>jaEscalados.add(n.toLowerCase()));
         ASCENSAO_EXCLUDED_PLAYERS.forEach(n=>jaEscalados.add(n));
@@ -1301,8 +1610,8 @@ function simulateRegionalTransfers(regiao, excludeOrg, usadosGlobalmente){
         for(const cand of emergencia){
           const tentativa = [...rosterCopies[org]];
           tentativa[vaga[org].idx] = cand.name;
-          const rosterObjs = tentativa.map(n=>n && POOL.find(p=>p.name.toLowerCase()===n.toLowerCase())).filter(Boolean);
-          if(rosterObjs.length===5 && canCompleteRoster(roles, rosterObjs)){
+          const rosterObjs = tentativa.map(n=>n && poolGet(n)).filter(Boolean);
+          if(rosterObjs.length===5 && (canCompleteRoster(roles, rosterObjs) || !coverableOrg[org])){
             validosEmergencia.push(cand.name);
             if(validosEmergencia.length>=10) break;
           }
@@ -1321,20 +1630,82 @@ function simulateRegionalTransfers(regiao, excludeOrg, usadosGlobalmente){
   return rosterCopies;
 }
 // Quantos times de cada região se classificam pro Mundial, dependendo do tamanho da região.
-const REGIONAL_MUNDIAL_QUALIFY_COUNT = {BR:4, NA:4, EMEA:4, LAS:2, APAC:1, CHN:1};
+const REGIONAL_MUNDIAL_QUALIFY_COUNT = {AMERICAS:4, EMEA:4, PACIFIC:4, CN:4};
 
 // Head coaches disponíveis — 1 escolhido pelo jogador, os outros 15 vão pras equipes adversárias.
-const COACHES = ["Rojo","Nbs","bzkA","Potter","frod","mini","Chet","d00mbros","Kaplan","alecks","Romanilly","Bati","bonzitt","Stk","Onur","JoshRT","bonkar","shaW","Kamino","SilKanoN","NaThanD","Stunner","KEY","WKN","Ewok","Engh","PatronW","gaabxx","Veer","phonics","ZONYK","solo","neilzinho","ANGE1","peu","DragziKW","Carlao","ryotzz","Negaral","Itopata","pule","Autumn","alexRr","LEGIJA","LohaN","Vlad","ZE1SH","Scuttt","glow","KDG"];
+const COACHES = ["Rojo","Nbs","bzkA","Potter","frod","mini","Chet","d00mbros","Kaplan","alecks","Romanilly","Bati","bonzitt","Sacy","Stk","Onur","JoshRT","bonkar","shaW","Kamino","SilKanoN","NaThanD","Stunner","KEY","WKN","Ewok","Engh","PatronW","gaabxx","Veer","phonics","ZONYK","solo","neilzinho","ANGE1","peu","DragziKW","Carlao","ryotzz","Negaral","Itopata","pule","Autumn","alexRr","LEGIJA","LohaN","Vlad","ZE1SH","Scuttt","glow","KDG","GUNTER","mitch","Happy","SLK","Desmo","Bambino","Sungmin","hsk","Faded","ryota-","XQQ","Crws","Vorz","JeXeN","pipsoN","hypnotizing","bail","Fayde","destroyeR","AfteR","steady","Milan","Senny","Lefiedot","mltdwn","RBTX","meowvlrt","Persia","effys","Oderus","Immi","monSi","FNS","Tanizhq","Valadao","Luck","slowiscool","Branchies","Godspeed","jovi","Fame","panique","Cyyy","Nearley","ED101","Sunshine","York","DaJ","Anaks","heav1n","meisoN","xikii_gg","Larsson","SKAZZ","Andreas","GAIS","Bromas","hvoya","finalmoment","Johnta","Celo","Viento"];
 // Buff de cada Head Coach: bônus fixo aplicado ao rating do time em todo cálculo de vitória
 // de rodada/partida — vale pra qualquer equipe (sua ou adversária) que tiver esse técnico.
 const COACH_BUFFS = {
+  "GUNTER":4,
+  "mitch":4,
+  "Happy":4,
+  "SLK":4,
+  "Desmo":4,
+  "Bambino":4,
+  "Sungmin":4,
+  "hsk":4,
+  "Faded":5,
+  "ryota-":5,
+  "XQQ":4,
+  "Crws":5,
+  "Vorz":5,
+  "JeXeN":4,
+  "pipsoN":5,
+  "hypnotizing":4,
+  "bail":5,
+  "Fayde":5,
+  "destroyeR":5,
+  "AfteR":4,
+  "steady":4,
+  "Milan":5,
+  "Senny":4,
+  "Lefiedot":5,
+  "mltdwn":4,
+  "RBTX":5,
+  "meowvlrt":5,
+  "Persia":5,
+  "effys":5,
+  "Oderus":4,
+  "Immi":5,
+  "monSi":5,
+  "FNS":5,
+  "Tanizhq":4,
+  "Valadao":5,
+  "Luck":4,
+  "slowiscool":5,
+  "Branchies":4,
+  "Godspeed":5,
+  "jovi":5,
+  "Fame":5,
+  "panique":4,
+  "Cyyy":5,
+  "Nearley":4,
+  "ED101":5,
+  "Sunshine":4,
+  "York":5,
+  "DaJ":4,
+  "Anaks":5,
+  "heav1n":5,
+  "meisoN":5,
+  "xikii_gg":4,
+  "Larsson":5,
+  "SKAZZ":4,
+  "Andreas":5,
+  "GAIS":5,
+  "Bromas":5,
+  "hvoya":5,
+  "finalmoment":5,
+  "Johnta":5,
+  "Celo":5,
+  "Viento":5,
   Rojo:5,
   Nbs:5, bzka:5, Potter:7, frod:5, mini:5, Chet:4, d00mbros:5, kaplan:5,
   alecks:5, romanilly:5, Stk:5, onur:5, JoshRT:8, bonkar:5, shaw:5, Kamino:5,
   SilKanoN:5, nathand:5, Stunner:5, KEY:5, WKN:5, Ewok:5, ENGH:5, PatronW:5,
   gaabxx:5, Veer:5, phonics:5, ZONYK:5, solo:5, neilzinho:5,
   ANGE1:5, peu:5, DragziKW:5, Carlao:5, ryotzz:5, Negaral:5, Itopata:5, pule:5,
-  Bati:5, bonzitt:5, Autumn:5, alexRr:5, LEGIJA:5, LohaN:5, Vlad:5, ZE1SH:5, Scuttt:5, glow:5, KDG:5,
+  Bati:5, bonzitt:5, Sacy:5, Autumn:5, alexRr:5, LEGIJA:5, LohaN:5, Vlad:5, ZE1SH:5, Scuttt:5, glow:5, KDG:5,
 };
 // Elencos das Seleções pro futuro Modo Copa do Mundo — separado do país "real" de cada craque
 // (usado no modo normal) porque aqui alguns jogam por uma seleção diferente da nacionalidade
@@ -1362,7 +1733,7 @@ const WC_SELECOES = {
     coaches: ["KEY"],
   },
   "Brazil": {
-    players: ["Sacy","Sato","artzin","aspas","basic","blowz","cauanzin","cortezia","dgzin","less","lukxo","mwzera","pANcada","spikezin","tkzin","tuyz"],
+    players: ["Sato","artzin","aspas","basic","blowz","cauanzin","cortezia","dgzin","less","lukxo","mwzera","pANcada","spikezin","tkzin","tuyz"],
     coaches: ["bzkA","shaW","Stk","Kamino"],
   },
   "Argentina": {
@@ -1405,6 +1776,234 @@ const BUFF_DAMPING = 0.7;
 // Cobertura parcial (nem todo o pool de 192 tem dado confirmado); quem não tem, simplesmente não
 // participa dessa sinergia específica.
 const PLAYER_COUNTRY = {
+  "canezerra":"US",
+  "turkish":"BR",
+  "kring":"BR",
+  "raised":"AR",
+  "spike":"BR",
+  "minny":"CZ",
+  "kachoww":"TR",
+  "jamelinho213":"FR",
+  "chaza":"GB",
+  "magnum":"CZ",
+  "kozzy":"RO",
+  "hezacoil":"TR",
+  "batujnax":"TR",
+  "oroni":"TR",
+  "ray":"KR",
+  "xiesta":"KR",
+  "xffero":"ID",
+  "jemkin":"ID",
+  "monyet":"ID",
+  "kushy":"ID",
+  "ken":"JP",
+  "yatsuka":"JP",
+  "kr1stal":"RU",
+  "jitboys":"TH",
+  "seph1roth":"TH",
+  "meiy":"JP",
+  "akame":"KR",
+  "sugarz3ro":"JP",
+  "aace":"JP",
+  "clz":"JP",
+  "crazyguy":"VN",
+  "stew":"KR",
+  "zjc":"CN",
+  "whzy":"CN",
+  "nephh":"SG",
+  "knight":"CN",
+  "alvinboy":"CN",
+  "splash":"CN",
+  "slowly":"CN",
+  "erv":"CN",
+  "berlin":"TW",
+  "jkuro":"CN",
+  "crownfisher":"CN",
+  "glacier":"CN",
+  "zhe":"CN",
+  "kai":"CN",
+  "nicc":"CN",
+  "abo":"CN",
+  "toosy":"CN",
+  "sharks":"CN",
+  "zeus":"CN",
+  "wsleo":"CN",
+  "yoyo":"TW",
+  "satoshi":"CN",
+  "heybay":"HK",
+  "razziss":"RU",
+  "xdll":"JP",
+  "caedye":"JP",
+  "seoldam":"JP",
+  "honeybunny":"JP",
+  "mrtenzouez":"JP",
+  "sovano":"ID",
+  "parscofield":"ID",
+  "gotten":"ID",
+  "nakya":"ID",
+  "valdyn":"ID",
+  "ray4c":"ID",
+  "xan":"ID",
+  "kellys":"ID",
+  "iceyyzx":"ID",
+  "natzval_":"ID",
+  "ncslasher":"ID",
+  "tenten":"JP",
+  "yuran":"JP",
+  "kippei":"JP",
+  "misaya":"JP",
+  "udotan":"KR",
+  "smoke":"CA",
+  "nightz":"US",
+  "ion2x":"US",
+  "exa":"US",
+  "glowstick":"CA",
+  "s9cred":"US",
+  "tonza":"US",
+  "shanks":"CA",
+  "subroza":"CA",
+  "lilo1":"CA",
+  "nagzet":"CA",
+  "above":"CA",
+  "askiazin":"BR",
+  "sanojvlr":"BR",
+  "tisxna":"BR",
+  "drakzenn":"BR",
+  "sanoj":"BR",
+  "drakz":"BR",
+  "infiltrator":"US",
+  "ali":"US",
+  "fair":"US",
+  "veyreon":"US",
+  "karma":"US",
+  "governor":"US",
+  "rubkkoide":"AR",
+  "recoil":"US",
+  "azrex":"US",
+  "tofu":"US",
+  "sinatraa":"US",
+  "prod":"US",
+  "zombs":"US",
+  "dizzy":"US",
+  "atlas":"US",
+  "enzo":"US",
+  "max":"US",
+  "icie":"US",
+  "screwface":"US",
+  "expmoe":"US",
+  "jinwoo":"US",
+  "voriac":"US",
+  "weegle":"US",
+  "stellar":"US",
+  "heartless":"US",
+  "stunna":"US",
+  "lead":"BR",
+  "nx1":"BR",
+  "tunaso":"BR",
+  "suther":"BR",
+  "dark3st":"US",
+  "zamal":"US",
+  "zoestool":"US",
+  "om3y":"US",
+  "ghoul33":"BR",
+  "rich":"BR",
+  "tiezzi":"BR",
+  "ethos":"US",
+  "luid":"BR",
+  "cxix666":"CN",
+  "yiyee":"CN",
+  "deryeon":"CN",
+  "knyzl":"CN",
+  "ninebody":"CN",
+  "xran":"CN",
+  "amber":"CN",
+  "mrcani":"CN",
+  "shiyboy":"CN",
+  "whitecatw":"CN",
+  "ember":"CN",
+  "shyboy":"CN",
+  "kklin":"CN",
+  "wayne":"CN",
+  "5cm":"CN",
+  "yanggg":"CN",
+  "scales":"CN",
+  "lin":"CN",
+  "7teen":"CN",
+  "withzhe":"CN",
+  "yk":"CN",
+  "z1yan":"CN",
+  "nnono":"CN",
+  "spitfires":"CN",
+  "dynamite":"CN",
+  "coco":"CN",
+  "ra1ny":"CN",
+  "yoze":"CN",
+  "suhang":"CN",
+  "krst1ng":"CN",
+  "coldfish":"CN",
+  "akeman":"CN",
+  "sibeastw0w":"CN",
+  "tonk":"CN",
+  "wooday1":"CN",
+  "moonlight":"CN",
+  "leav3u":"CN",
+  "bai":"CN",
+  "avova":"RU",
+  "d3murr":"RU",
+  "tenkai":"RU",
+  "chadonjr":"RU",
+  "keatz":"RU",
+  "blockvalo":"RU",
+  "tarbosheg":"RU",
+  "vandetaa420":"RU",
+  "proxh":"ES",
+  "monsteerr":"ES",
+  "pa1ze":"ES",
+  "fit1nho":"ES",
+  "runner":"FR",
+  "starxo":"FR",
+  "khaalid":"DE",
+  "zimo":"DE",
+  "fighter":"DE",
+  "death":"DE",
+  "audaz":"TR",
+  "wezzy":"TR",
+  "yigox":"TR",
+  "influx":"TR",
+  "flickless":"BE",
+  "waddle":"BE",
+  "filu":"BE",
+  "kamyk":"BE",
+  "buld":"BE",
+  "chiwa":"RS",
+  "b1sk":"RS",
+  "yohpa_":"FI",
+  "kingtitoune5":"FI",
+  "poethfps":"FI",
+  "kajuksz":"FI",
+  "h1ber":"FI",
+  "javelin":"UA",
+  "avey":"UA",
+  "darxcioo":"UA",
+  "sizo":"UA",
+  "takas":"FR",
+  "jesse":"FR",
+  "mepeezy":"FR",
+  "wtex":"FR",
+  "vorwenn":"FR",
+  "al0rante":"FR",
+  "hoody":"FR",
+  "wanzeru":"FR",
+  "sevire":"FR",
+  "westside":"FR",
+  "spear":"UA",
+  "masic":"UA",
+  "mersa":"UA",
+  "jrayn":"UA",
+  "rensz":"UA",
+  "badrex":"TR",
+  "nekky":"TR",
+  "bipo":"DE",
   "none":"BR","ponix":"CL","micaela":"AR","tok1o":"AR",
   "lissa":"BR",
   "sayuri":"BR",
@@ -1438,7 +2037,6 @@ const PLAYER_COUNTRY = {
   "heat":"BR",
   "less":"BR",
   "mwzera":"BR",
-  "sacy":"BR",
   "dgzin":"BR",
   "havoc":"BR",
   "tuyz":"BR",
@@ -1837,7 +2435,6 @@ const PLAYER_TEAM = {
   "s0m":["NRG25"],
   "s1mon":["EDG24","EDG2_24"],
   "saadhak":["LOUD22","LOUD23"],
-  "sacy":["LOUD22","SENTINELS24","SEN24"],
   "sato":["LEVIATAN26"],
   "sayf":["LIQUID23","VIT25"],
   "shao":["FPX22"],
@@ -1870,10 +2467,72 @@ const PLAYER_TEAM = {
 };
 // País e time real dos Head Coaches (pesquisado no vlr.gg) — cobertura parcial, mesma lógica dos craques.
 const COACH_COUNTRY = {
+  "gunter":"GB",
+  "mitch":"US",
+  "happy":"FR",
+  "slk":"FR",
+  "desmo":"DK",
+  "bambino":"GB",
+  "sungmin":"KR",
+  "hsk":"KR",
+  "faded":"US",
+  "ryota-":"JP",
+  "xqq":"JP",
+  "crws":"TH",
+  "vorz":"JP",
+  "jexen":"CN",
+  "pipson":"CN",
+  "hypnotizing":"CN",
+  "bail":"KR",
+  "fayde":"CN",
+  "destroyer":"CN",
+  "after":"CN",
+  "steady":"RU",
+  "milan":"NL",
+  "senny":"CN",
+  "lefiedot":"JP",
+  "mltdwn":"JP",
+  "rbtx":"ID",
+  "meowvlrt":"ID",
+  "persia":"KR",
+  "effys":"CA",
+  "oderus":"CA",
+  "immi":"US",
+  "monsi":"CA",
+  "fns":"CA",
+  "tanizhq":"CA",
+  "valadao":"CA",
+  "luck":"CA",
+  "slowiscool":"US",
+  "branchies":"US",
+  "godspeed":"AR",
+  "jovi":"US",
+  "fame":"BR",
+  "panique":"BR",
+  "cyyy":"CN",
+  "nearley":"CN",
+  "ed101":"CN",
+  "sunshine":"CN",
+  "york":"CN",
+  "daj":"CN",
+  "anaks":"CN",
+  "heav1n":"CN",
+  "meison":"ES",
+  "xikii_gg":"ES",
+  "larsson":"FR",
+  "skazz":"FR",
+  "andreas":"DE",
+  "gais":"TR",
+  "bromas":"BE",
+  "hvoya":"RS",
+  "finalmoment":"FI",
+  "johnta":"UA",
+  "celo":"FR",
+  "viento":"TR",
   "rojo":"ES",
   "bzka":"BR","frod":"US","onur":"AR","potter":"US","bonkar":"SE","d00mbros":"SE",
   "joshrt":"US","mini":"GB","nbs":"LT","chet":"US","kaplan":"US","alecks":"FR",
-  "romanilly":"AR","bati":"PT","bonzitt":"AR","stk":"BR","shaw":"BR","kamino":"BR",
+  "romanilly":"AR","bati":"PT","bonzitt":"AR","sacy":"BR","stk":"BR","shaw":"BR","kamino":"BR",
   "silkanon":"KR","nathand":"CN","stunner":"CA","key":"TR","wkn":"CL","ewok":"ZA","engh":"RU",
   "gaabxx":"BR","veer":"US","phonics":"BR","zonyk":"CL","solo":"KR","neilzinho":"GB",
   "peu":"BR","dragzikw":"BR","carlao":"BR","ryotzz":"BR","negaral":"BR",
@@ -1887,7 +2546,7 @@ const COACH_TEAM = {
   "kaplan":"SENTINELS24","alecks":"PAPERREX25","bonkar":"NRG25","onur":"LEVIATAN26",
   "nbs":"100T26","d00mbros":"100T26",
   "engh":"GAMBIT21","scuttt":"FNC24","solo":"GENG24","autumn":"T125",
-  "romanilly":"LOUD26","bati":"LOUD26","bonzitt":"KRUGC26",
+  "romanilly":"LOUD26","bati":"LOUD26","bonzitt":"KRUGC26","sacy":"LOUD22",
 };
 // Craques que já foram Campeões Regionais DE VERDADE (fora da campanha do Ascensão) — mesma
 // ideia do COACH_TEAM acima, mas pro lado dos jogadores. Dá o mesmo bônus de "Campeão
@@ -1900,7 +2559,7 @@ const PLAYER_REGIONAL_CHAMPION = new Set([
   "francis","hyunmin","haodong","ivy","jamppi","jieni7","jinggg","jonahp",
   "k1ra","karon","kicks","lakia","lar0k","leo","lewn","loita",
   "mako","mazino","meteor","munchkin","n4rrate","patmen","rarga","rb",
-  "redgar","riens","rose","s1mon","suygetsu","sacy","sayf","shr1mp",
+  "redgar","riens","rose","s1mon","suygetsu","sayf","shr1mp",
   "siufatbb","smoggy","tenz","timotino","vora","wo0t","xross","zellsis",
   "zmjjkk","alym","artzin","aspas","avez","bang","benjyfishy","cauanzin",
   "coconut","crashies","d4v41","dos9","eeiu","f0rsaken","f4ngeer","happywei",
@@ -1932,6 +2591,7 @@ const COACH_REGIONAL_CHAMPION = {
   "autumn": "T125",
   "ewok": "RRQ25",
   "joshrt": "G225",
+  "sacy": "SENTINELS24",
 };
 // Craques que já foram Campeãs MUNDIAIS de verdade — mesma ideia, só que com o bônus maior de
 // "Campeão Mundial" (permanente, não precisa reconquistar dentro da campanha).
@@ -1941,7 +2601,7 @@ const PLAYER_WORLD_CHAMPION = new Set([
   "asuna","bang","cryocells","timotino","vora",
   "jinggg","f0rsaken","d4v41","patmen","something",
   "alfajer","boaster","chronicle","derke","leo",
-  "aspas","less","pancada","saadhak","sacy",
+  "aspas","less","pancada","saadhak",
   "darker","lukxo","tkzin","erde","davih",
   "antg","none","ponix","micaela","tok1o",
 ]);
@@ -1972,6 +2632,9 @@ function chemistryBonus(roster, coachName){
   }
   const countryPairs = countExtraPairs(countryLists.flat());
   const teamPairs = countExtraPairs(teamLists.flat());
+  return countryPairs*0.75 + teamPairs*1.5 + coachChemistry(roster, coachName);
+}
+function coachChemistry(roster, coachName){
   let coachBonus = 0;
   if(coachName){
     const residenciaCoach = COACH_RESIDENCE[coachName.toLowerCase()];
@@ -1983,7 +2646,12 @@ function chemistryBonus(roster, coachName){
     if(ct) coachBonus += roster.filter(p=>(PLAYER_TEAM[p.name.toLowerCase()]||[]).includes(ct)).length * 1.5;
     if(ctRegional) coachBonus += roster.filter(p=>(PLAYER_TEAM[p.name.toLowerCase()]||[]).includes(ctRegional)).length * 1.5;
   }
-  return countryPairs*0.75 + teamPairs*1.5 + coachBonus; // já ter jogado junto pesa bem mais que só ser do mesmo país
+  return coachBonus; // já ter jogado junto pesa bem mais que só ser do mesmo país
+}
+// Assistant Coach: soma metade do buff e da química de um HC.
+function assistantBuff(roster, acName){
+  if(!acName) return 0;
+  return 0.5*(coachBuff(acName) + coachChemistry(roster, acName));
 }
 // Técnico Campeão Mundial (está no COACH_TEAM) dá um bônus extra de +2, além do buff normal dele.
 function coachBuff(coachName){
@@ -2181,13 +2849,15 @@ function compositionBonus(roster, isSlotted){
 // Config do formato Regional por região: quantos grupos, tamanho de cada grupo,
 // quantos classificam por grupo, e o tamanho do chaveamento de playoffs.
 const REGIONAL_FORMAT = {
-  BR:    {groups:2, groupSize:5, qualifiersPerGroup:3, playoffSize:6},
-  NA:    {groups:2, groupSize:5, qualifiersPerGroup:3, playoffSize:6},
-  EMEA:  {groups:2, groupSize:4, qualifiersPerGroup:2, playoffSize:4},
-  LAS:   {groups:2, groupSize:3, qualifiersPerGroup:2, playoffSize:4},
-  APAC:  {groups:0, groupSize:0, qualifiersPerGroup:0, playoffSize:4}, // direto pro formato suíço
-  CHN:   {groups:0, groupSize:0, qualifiersPerGroup:0, playoffSize:4}, // direto pro formato suíço
+  AMERICAS: {groups:2, groupSize:4, qualifiersPerGroup:2, playoffSize:4},
+  EMEA:     {groups:2, groupSize:4, qualifiersPerGroup:2, playoffSize:4},
+  PACIFIC:  {groups:2, groupSize:4, qualifiersPerGroup:2, playoffSize:4},
+  CN:       {groups:2, groupSize:4, qualifiersPerGroup:2, playoffSize:4},
 };
+// Formato dos eventos de território no Rumo à Ascensão (Kickoff/Cups): 12 times — 8 parceiros +
+// 4 vindos do qualifier —, 2 grupos de 6 (turno único) e playoffs de 6 times em dupla eliminação.
+const ASCENSAO_TERRITORY_FORMAT = {groups:2, groupSize:6, qualifiersPerGroup:3, playoffSize:6, single:true};
+const ASCENSAO_TERRITORY_SLOTS = 12;
 
 // Chaveamento de eliminação dupla com 4 times (mesma lógica do GROUP_BRACKET_DEF, só que
 // termina numa Grande Final de verdade em vez de só gerar 2 classificados).
@@ -2216,7 +2886,7 @@ const SIX_TEAM_BRACKET_DEF = [
 
 // Gera a tabela de turno e returno (todo mundo enfrenta todo mundo 2x) pelo método do círculo.
 // Retorna uma lista de "rodadas", cada rodada é uma lista de confrontos [timeA, timeB].
-function roundRobinSchedule(teams){
+function roundRobinSchedule(teams, single){
   let list = teams.slice();
   if(list.length % 2 !== 0) list.push(null); // bye fantasma se for ímpar
   const n = list.length;
@@ -2230,7 +2900,7 @@ function roundRobinSchedule(teams){
     turno.push(rodada);
     list = [list[0], ...list.slice(2), list[1]];
   }
-  return [...turno, ...turno]; // returno = repete a mesma tabela (turno e returno)
+  return single ? turno : [...turno, ...turno]; // returno = repete a mesma tabela (turno e returno)
 }
 // Conta a rodada como "1, 2, 3..." só contando as rodadas em que o jogador realmente joga —
 // ignora as rodadas de folga (que existem quando o grupo tem número ímpar de times).
@@ -2520,6 +3190,24 @@ const I18N = {
       `},
     ],
     changelogSections:[
+      {title:"v 1.3 → v 1.4", body:`
+        <p><strong>VCT 2027</strong> — 32 times parceiros em 4 territórios (Américas, EMEA, Pacific e CN) mais os times não parceiros, com centenas de jogadores e staff novos no banco. Elencos incompletos ficam incompletos até o time anunciar, e o jogo contrata dentro do mercado de transferências.</p>
+        <p><strong>Calendário</strong> — Open Qualifier, Kickoff, Masters Seoul, Cup 1, Masters Valencia, Cup 2 e Champions com 16 times, mais a Copa do Mundo nas temporadas de Mundial. Eventos de 12 times: 8 parceiros mais 4 vagas decididas no Open Qualifier entre os times não parceiros. Os 4 melhores de cada território por pontos vão pro Champions.</p>
+        <p><strong>Assistant Coach</strong> — agora tem efeito real no jogo, com metade da força de um Head Coach. O 6º jogador fica como reserva.</p>
+        <p><strong>Elencos</strong> — times sem as 5 funções cobertas agora ajustam a função de um jogador em vez de perder 3 de overall. yay foi liberado para o mercado.</p>
+      `},
+      {title:"v 1.3 → v 1.4", body:`
+        <p><strong>VCT 2027</strong> — 32 partner teams across 4 territories (Americas, EMEA, Pacific and CN) plus non-partner teams, with hundreds of new players and staff in the pool. Incomplete rosters stay incomplete until the team announces, and the game signs players through the transfer market.</p>
+        <p><strong>Calendar</strong> — Open Qualifier, Kickoff, Masters Seoul, Cup 1, Masters Valencia, Cup 2 and a 16-team Champions, plus the World Cup in World Cup seasons. 12-team events: 8 partners plus 4 slots decided in the Open Qualifier among non-partner teams. The top 4 of each territory by points go to Champions.</p>
+        <p><strong>Assistant Coach</strong> — now has a real effect in the game, at half the strength of a Head Coach. The 6th player is kept as a reserve.</p>
+        <p><strong>Rosters</strong> — teams that did not cover all 5 roles now adjust one player's role instead of losing 3 overall. yay was released to the market.</p>
+      `},
+      {title:"v 1.3 → v 1.4", body:`
+        <p><strong>VCT 2027</strong> — 32 equipos socios en 4 territorios (Américas, EMEA, Pacific y CN) más los equipos no socios, con cientos de jugadores y staff nuevos en la base. Los planteles incompletos siguen incompletos hasta que el equipo los anuncie, y el juego ficha a través del mercado de transferencias.</p>
+        <p><strong>Calendario</strong> — Open Qualifier, Kickoff, Masters Seúl, Cup 1, Masters Valencia, Cup 2 y Champions con 16 equipos, más la Copa del Mundo en las temporadas de Mundial. Eventos de 12 equipos: 8 socios más 4 cupos definidos en el Open Qualifier entre los no socios. Los 4 mejores de cada territorio por puntos van al Champions.</p>
+        <p><strong>Assistant Coach</strong> — ahora tiene efecto real en el juego, con la mitad de la fuerza de un Head Coach. El 6º jugador queda como reserva.</p>
+        <p><strong>Planteles</strong> — los equipos que no cubrían las 5 funciones ahora ajustan la función de un jugador en vez de perder 3 de overall. yay fue liberado al mercado.</p>
+      `},
       {title:"v 1.2 → v 1.3", body:`
         <p><strong>KRU GC campeã mundial 2026</strong> — antG, none, ponix, micaela e tok1o agora são Campeãs Mundiais, e o HC bonzitt entra como técnico campeão mundial. Os jogadores novos estão no banco, e antG subiu pra 87 e ganhou IGL e mira monstra.</p>
       `},
@@ -3128,6 +3816,7 @@ let state = {
   regionalRegiao: null,
   regionalSelva: false,
   headCoach: null,
+  assistantCoach: null,
   coachOptions: [],
   remainingCoaches: [],
   pool: [],
@@ -3187,8 +3876,8 @@ function weightedDrawOrder(arr){
 function decideWinner(teamA, teamB){
   const compA = compositionBonus(teamA.roster, false);
   const compB = compositionBonus(teamB.roster, false);
-  const buffA = coachBuff(teamA.coach) + (compA.attack+compA.defense)/2 + chemistryBonus(teamA.roster, teamA.coach);
-  const buffB = coachBuff(teamB.coach) + (compB.attack+compB.defense)/2 + chemistryBonus(teamB.roster, teamB.coach);
+  const buffA = coachBuff(teamA.coach) + assistantBuff(teamA.roster, teamA.ac) + (compA.attack+compA.defense)/2 + chemistryBonus(teamA.roster, teamA.coach);
+  const buffB = coachBuff(teamB.coach) + assistantBuff(teamB.roster, teamB.ac) + (compB.attack+compB.defense)/2 + chemistryBonus(teamB.roster, teamB.coach);
   const ratingA = teamA.rating + buffA*BUFF_DAMPING;
   const ratingB = teamB.rating + buffB*BUFF_DAMPING;
   const diff = ratingA - ratingB;
@@ -3276,9 +3965,7 @@ function playerRegionKey(playerName){
   const nameLower = playerName.toLowerCase();
   for(const [time, dados] of Object.entries(ASCENSAO_TEAM_ROSTERS)){
     if(dados.players.some(p=>p && p.toLowerCase()===nameLower)){
-      for(const [regiao, times] of Object.entries(TEAM_REGIONS)){
-        if(times.includes(time)) return regiao;
-      }
+      if(ORG_TERRITORY[time]) return ORG_TERRITORY[time];
     }
   }
   return null;
@@ -3315,9 +4002,7 @@ function coachRegionKey(coachName){
   const nameLower = coachName.toLowerCase();
   for(const [time, dados] of Object.entries(ASCENSAO_TEAM_ROSTERS)){
     if(dados.coach && dados.coach.toLowerCase()===nameLower){
-      for(const [regiao, times] of Object.entries(TEAM_REGIONS)){
-        if(times.includes(time)) return regiao;
-      }
+      if(ORG_TERRITORY[time]) return ORG_TERRITORY[time];
     }
   }
   return null;
@@ -3562,11 +4247,97 @@ function rankRegionalGroup(standings){
   );
 }
 
+function ascensaoOrgStrength(org, snapshot){
+  const base = (state.carreira && state.carreira.orgRostersSnapshot) || ASCENSAO_TEAM_ROSTERS;
+  const names = (snapshot && snapshot[org]) || (base[org] && base[org].players) || [];
+  const ovs = names.filter(Boolean).map(n=>{ const p = poolGet(n); return p ? p.overall : 70; });
+  while(ovs.length<5) ovs.push(66);
+  return ovs.reduce((a,b)=>a+b,0)/ovs.length;
+}
+// Sorteia n times sem repetir, com mais chance pra quem tem elenco mais forte.
+function ascensaoWeightedPick(orgs, snapshot, n){
+  const items = orgs.slice(); const out = [];
+  while(out.length<n && items.length){
+    const ws = items.map(o=>Math.pow(1.35, ascensaoOrgStrength(o, snapshot)-75));
+    const tot = ws.reduce((a,b)=>a+b,0);
+    let r = Math.random()*tot, i = 0;
+    for(; i<ws.length-1; i++){ r -= ws[i]; if(r<=0) break; }
+    out.push(items.splice(i,1)[0]);
+  }
+  return out;
+}
+// Open Qualifier: 8 times não parceiros disputam (chave de 8) as 4 vagas que completam os 12.
+// Territórios com menos de 8 não parceiros (Pacific) fazem um round-robin só de IA.
+function ascensaoQualifierOrgs(regiao, playerOrg, snapshot){
+  const ch = (TERRITORY_CHALLENGERS[regiao]||[]).slice();
+  const n = Math.min(8, ch.length);
+  if(playerOrg && ch.includes(playerOrg)) return [playerOrg, ...ascensaoWeightedPick(ch.filter(o=>o!==playerOrg), snapshot, n-1)];
+  return ascensaoWeightedPick(ch, snapshot, n);
+}
+function ascensaoSimQualifier(teams){
+  if(teams.length===8) return ascensaoRunBracketAI(shuffle(teams.slice()), BRACKET_DEF);
+  const st = initRegionalStandings(teams);
+  roundRobinSchedule(teams, true).forEach(rod=>rod.forEach(([a,b])=>{
+    const res = decideMatchWinnerWithRounds(a, b, 2);
+    registrarResultadoGrupoRegional(st, a, b, res, res.roundsA, res.roundsB);
+  }));
+  return rankRegionalGroup(st).map(s=>s.team);
+}
+// As 4 vagas abertas de um território num evento (simula o qualifier de IA se ainda não rolou).
+function ascensaoQualifiersFor(key, regiao){
+  const c = state.carreira;
+  if(!c.qualifiers) c.qualifiers = {};
+  if(!c.qualifiers[key]) c.qualifiers[key] = {};
+  if(!c.qualifiers[key][regiao]){
+    const m = c.marketNow && c.marketNow[regiao];
+    const own = regiao===c.regiao && c.time && !orgIsPartner(c.time);
+    const orgs = ascensaoQualifierOrgs(regiao, own ? c.time : null, m ? m.transferencias : null);
+    const teams = orgs.map(o=> m ? ascensaoTeamForOrg(o, regiao) : buildAscensaoOrgTeam(o, false));
+    let top4 = ascensaoSimQualifier(teams).map(t=>t.name).slice(0, ASCENSAO_TERRITORY_SLOTS - TEAM_REGIONS[regiao].length);
+    // Pacific tem menos de 8 não parceiros: o time do jogador entra direto no evento.
+    if(own && !top4.includes(c.time)) top4 = [...top4.slice(0, top4.length-1), c.time];
+    c.qualifiers[key][regiao] = top4;
+  }
+  return c.qualifiers[key][regiao];
+}
+function ascensaoTerritoryField(regiao, key){
+  return [...TEAM_REGIONS[regiao], ...ascensaoQualifiersFor(key, regiao)];
+}
+function setupAscensaoQualifierStage(key){
+  const c = state.carreira;
+  state.difficulty = "ascensao";
+  state.screen = "match";
+  if(key==="kickoff") state.journey = [];
+  state.journeyStageStart = state.journey.length;
+  if(!state.campaignRecords || (key==="kickoff" && c.temporada===1)){
+    state.campaignRecords = {singleMap:{kills:RECORDS.singleMap,holder:"aspas"}, md3:{kills:RECORDS.md3,holder:"aspas"}, md5:{kills:RECORDS.md5,holder:"marteen"}};
+  }
+  const playerOrgTeam = ascensaoBuildPlayerTeam();
+  state.roster = playerOrgTeam.roster; state.teamName = c.time; state.headCoach = playerOrgTeam.coach; state.assistantCoach = playerOrgTeam.ac || null;
+  state.campaignStats = { us: state.roster.map((p,i)=>({name:p.name, role:SLOT_ORDER[i], isCharacter:p.isCharacter, country:p.country, k:0, d:0, a:0})) };
+  const m = c.marketNow[c.regiao];
+  c.qualifierOrgs = ascensaoQualifierOrgs(c.regiao, c.time, m.transferencias);
+  const others = c.qualifierOrgs.filter(o=>o!==c.time).map(o=>ascensaoTeamForOrg(o, c.regiao));
+  state.tournament = {stage:"groups_skip", playerTeam:playerOrgTeam, ascensaoPhase:"qualifier", ascensaoStageKey:key};
+  buildPlayoffBracketSeeded(shuffle([playerOrgTeam, ...others]), BRACKET_DEF);
+  advanceTournament();
+}
+function ascensaoFinishQualifier(key, endInfo){
+  const c = state.carreira;
+  const teams = c.qualifierOrgs.map(o=> o===c.time ? ascensaoBuildPlayerTeam() : ascensaoTeamForOrg(o, c.regiao));
+  const ranking = ascensaoSimQualifier(teams).map(t=>t.name).filter(n=>n!==c.time);
+  ranking.splice(Math.min(ascensaoPlacementIndex(endInfo), ranking.length), 0, c.time);
+  if(!c.qualifiers) c.qualifiers = {};
+  if(!c.qualifiers[key]) c.qualifiers[key] = {};
+  c.qualifiers[key][c.regiao] = ranking.slice(0, ASCENSAO_TERRITORY_SLOTS - TEAM_REGIONS[c.regiao].length);
+  return c.qualifiers[key][c.regiao].includes(c.time);
+}
 // Monta e começa a fase Regional AO VIVO do Rumo à Ascensão — o jogador joga cada partida.
-function setupAscensaoRegionalStage(precomputado){
+function setupAscensaoRegionalStage(precomputado, stageKey){
+  stageKey = stageKey || "kickoff";
   const c = state.carreira;
   const regiao = c.regiao;
-  const format = REGIONAL_FORMAT[regiao];
+  const format = ASCENSAO_TERRITORY_FORMAT;
   state.difficulty = "ascensao";
   let transferencias, transferenciasCoach;
   if(precomputado){
@@ -3579,13 +4350,15 @@ function setupAscensaoRegionalStage(precomputado){
     transferenciasCoach = simulateRegionalCoachTransfers(regiao, null, transferencias);
     // salva o resultado dessa temporada no snapshot da carreira — a próxima temporada continua
     // dessas escalações, em vez de recalcular sempre a partir do banco original do zero.
-    TEAM_REGIONS[regiao].forEach(org=>{
-      if(transferencias[org]) c.orgRostersSnapshot[org] = {players: transferencias[org], coach: transferenciasCoach[org] || c.orgRostersSnapshot[org].coach};
+    territoryAllOrgs(regiao).forEach(org=>{
+      if(transferencias[org]) c.orgRostersSnapshot[org] = {...c.orgRostersSnapshot[org], players: transferencias[org], coach: transferenciasCoach[org] || c.orgRostersSnapshot[org].coach};
     });
-    ascensaoDedupeSnapshot(c.orgRostersSnapshot, TEAM_REGIONS[regiao]);
+    ascensaoDedupeSnapshot(c.orgRostersSnapshot, territoryAllOrgs(regiao));
+    ascensaoInitSeason();
+    ascensaoRunSeasonMarket(transferencias, transferenciasCoach);
     // Antes de fechar o time, verifica se essa contratação nova deixaria melhor jogar em outra
     // das funções escolhidas — se sim, pergunta antes de continuar, em vez de trocar sozinho.
-    const realPlayersDoMeuTime = (transferencias[c.time]||[]).map(n=>POOL.find(p=>p.name.toLowerCase()===n.toLowerCase())).filter(Boolean);
+    const realPlayersDoMeuTime = (transferencias[c.time]||[]).map(n=>poolGet(n)).filter(Boolean);
     const oportunidade = ascensaoCheckRoleSwitchOpportunity(realPlayersDoMeuTime);
     if(oportunidade){
       c.pendingRoleSwitchData = {transferencias, transferenciasCoach, novaFuncao: oportunidade.funcao};
@@ -3598,26 +4371,23 @@ function setupAscensaoRegionalStage(precomputado){
   state.roster = playerOrgTeam.roster;
   state.teamName = c.time;
   state.headCoach = playerOrgTeam.coach;
-  const otherOrgs = TEAM_REGIONS[regiao].filter(t=>t!==c.time);
+  state.assistantCoach = playerOrgTeam.ac || null;
+  if(!orgIsPartner(c.time) && (TERRITORY_CHALLENGERS[regiao]||[]).length>=8 && !(c.qualifiers && c.qualifiers[stageKey] && c.qualifiers[stageKey][regiao])){
+    return setupAscensaoQualifierStage(stageKey);
+  }
+  const field = ascensaoTerritoryField(regiao, stageKey);
+  c.lastField = field;
+  const otherOrgs = field.filter(t=>t!==c.time);
   const aiTeams = otherOrgs.map(org=>buildAscensaoOrgTeam(org, false, transferencias[org], transferenciasCoach[org]));
 
   state.campaignStats = { us: state.roster.map((p,i)=>({name:p.name, role:SLOT_ORDER[i], isCharacter:p.isCharacter, country:p.country, k:0, d:0, a:0})) };
   // os recordes só voltam ao valor real na temporada 1 (carreira nova) — depois disso, ficam
   // valendo o que foi quebrado durante a campanha, até o fim das 16 temporadas.
-  if(c.temporada===1 || !state.campaignRecords){
+  if((stageKey==='kickoff' && c.temporada===1) || !state.campaignRecords){
     state.campaignRecords = {singleMap:{kills:RECORDS.singleMap,holder:"aspas"}, md3:{kills:RECORDS.md3,holder:"aspas"}, md5:{kills:RECORDS.md5,holder:"marteen"}};
   }
-  state.journey = [];
-  state.journeyStageStart = 0;
+  if(stageKey==='kickoff'){ state.journey = []; state.journeyStageStart = 0; } else { state.journeyStageStart = state.journey.length; }
   state.screen = "match";
-
-  if(format.groups===0){
-    const seeds = shuffle([playerOrgTeam, ...aiTeams]);
-    state.tournament = {stage:"groups_skip", playerTeam:playerOrgTeam, regionalFormat:format, ascensaoPhase:"regional", ascensaoRegionalTransferSnapshot: transferencias, ascensaoRegionalCoachSnapshot: transferenciasCoach};
-    buildPlayoffBracketSeeded(seeds, FOUR_TEAM_BRACKET_DEF);
-    advanceTournament();
-    return;
-  }
 
   const allTeams = shuffle([playerOrgTeam, ...aiTeams]);
   const groupA = allTeams.slice(0, format.groupSize);
@@ -3632,10 +4402,11 @@ function setupAscensaoRegionalStage(precomputado){
     regionalFormat: format,
     myGroupLetter,
     ascensaoPhase: "regional",
+    ascensaoStageKey: stageKey,
     ascensaoRegionalTransferSnapshot: transferencias,
     ascensaoRegionalCoachSnapshot: transferenciasCoach,
     regionalGroups: {
-      myGroup: { teams: myGroup, schedule: roundRobinSchedule(myGroup), roundIdx:0, matchIdxInRound:0, standings: initRegionalStandings(myGroup), pending:null },
+      myGroup: { teams: myGroup, schedule: roundRobinSchedule(myGroup, format.single), roundIdx:0, matchIdxInRound:0, standings: initRegionalStandings(myGroup), pending:null },
       otherGroup: { teams: otherGroup },
     },
     bracket: null,
@@ -3725,7 +4496,7 @@ function finishRegionalGroupsAndAdvance(){
   const otherG = tr.regionalGroups.otherGroup;
 
   const otherStandings = initRegionalStandings(otherG.teams);
-  roundRobinSchedule(otherG.teams).forEach(rodada=>{
+  roundRobinSchedule(otherG.teams, tr.regionalFormat.single).forEach(rodada=>{
     rodada.forEach(([teamA, teamB])=>{
       const resultado = decideMatchWinnerWithRounds(teamA, teamB, 2);
       registrarResultadoGrupoRegional(otherStandings, teamA, teamB, resultado, resultado.roundsA, resultado.roundsB);
@@ -3806,8 +4577,9 @@ function currentOpponent(){
 function ascensaoContextPrefix(){
   if(state.difficulty!=="ascensao" || !state.tournament || !state.carreira) return "";
   const fase = state.tournament.ascensaoPhase;
-  const nomeCompeticao = fase==="regional" ? t("ascensaoRegionalLabel")
-    : fase==="mundial" ? t("ascensaoMundialLabel")
+  const nomeCompeticao = fase==="qualifier" ? ascensaoStageName("q_"+state.tournament.ascensaoStageKey)
+    : (fase==="regional" || fase==="masters") ? ascensaoStageName(state.tournament.ascensaoStageKey)
+    : fase==='mundial' ? 'Champions'
     : fase==="worldcup" ? t("ascensaoWorldCupLabel")
     : "";
   return `${t("ascensaoSeasonLabel")(state.carreira.temporada)} · ${nomeCompeticao} · `;
@@ -4353,7 +5125,7 @@ function ascensaoCreateHTML(){
     </button>
   `).join("");
   const regionOptionsHTML = Object.keys(TEAM_REGIONS).map(r=>`
-    <button class="team-option angle-sm ${c.regiao===r?'selected':''}" data-ascregiao="${r}">${r} (${TEAM_REGIONS[r].length} times)</button>
+    <button class="team-option angle-sm ${c.regiao===r?'selected':''}" data-ascregiao="${r}">${r} (${territoryAllOrgs(r).length} times)</button>
   `).join("");
   const countryOptionsHTML = Object.keys(WC_COUNTRY_TO_SELECAO).sort((a,b)=>countryName(a).localeCompare(countryName(b))).map(code=>`
     <button class="team-option angle-sm ${c.nacionalidade===code?'selected':''}" data-ascpais="${code}">${countryFlag(code)} ${countryName(code)}</button>
@@ -4408,6 +5180,7 @@ function ascensaoRevealHTML(){
       <div class="test-stat-row"><span>${t("ascensaoQualityLabel")}</span><span class="mono">${c.qualidades.map(tagLabel).join(", ")}</span></div>
       <div class="test-stat-row"><span>${t("ascensaoTeamLabel")}</span><span class="mono">${c.time}</span></div>
       <div class="test-stat-row"><span>${t("ascensaoRegionLabel")}</span><span class="mono">${c.regiao}</span></div>
+      ${(()=>{ const r=(c.orgRostersSnapshot||ASCENSAO_TEAM_ROSTERS)[c.time]; const hc=r&&r.coach, ac=r&&r.ac; return (hc?`<div class="test-stat-row"><span>Head Coach</span><span class="mono">${hc}</span></div>`:'')+(ac?`<div class="test-stat-row"><span>Assistant Coach</span><span class="mono">${ac}</span></div>`:''); })()}
       <div class="test-stat-row"><span>${t("ascensaoNationLabel")}</span><span class="mono">${countryFlag(c.nacionalidade)} ${countryName(c.nacionalidade)}</span></div>
     </div>
     <div class="btn-row" style="justify-content:center;margin-top:18px;">
@@ -4465,7 +5238,7 @@ function ascensaoOfferHTML(){
   const c = state.carreira;
   const ofertasHTML = c.ofertas.map((oferta, i)=>{
     const jogadoresHTML = oferta.jogadores.map(nome=>{
-      const p = POOL.find(x=>x.name.toLowerCase()===nome.toLowerCase());
+      const p = poolGet(nome);
       return `<div class="test-stat-row"><span>${nome} ${p?playerFlag(p):''}</span><span class="mono">${p?roleLabel(p.roles[0]):''}</span></div>`;
     }).join("");
     return `
@@ -4532,8 +5305,9 @@ function ascensaoSeasonHTML(){
         <span class="mono">${t("ascensaoSeasonLabel")(h.temporada)}</span>
         <span class="history-team">${h.time} (${h.regiao})</span>
       </div>
-      <div style="margin-top:4px;color:var(--muted);font-size:12px;">${t("ascensaoRegionalLabel")}: ${ascensaoRegionalPlacementLabel(h.regionalPlacement)} — ${ascensaoQualifiedLabel(h.regionalQualificou)}</div>
-      ${h.mundialResultado ? `<div style="margin-top:2px;color:var(--muted);font-size:12px;">${t("ascensaoMundialLabel")}: ${ascensaoResultLabel(h.mundialResultado)}</div>` : ''}
+      <div style="margin-top:4px;color:var(--muted);font-size:12px;">${ascensaoStageName("kickoff")}: ${ascensaoKickoffLabel(h)}</div>
+      ${ascensaoStagesRows(h)}
+      ${h.mundialResultado ? `<div style="margin-top:2px;color:var(--muted);font-size:12px;">Champions: ${ascensaoResultLabel(h.mundialResultado)}</div>` : ''}
       ${h.copaResultado ? `<div style="margin-top:2px;color:var(--gold);font-size:12px;">${t("ascensaoWorldCupLabel")}: ${ascensaoResultLabel(h.copaResultado)}</div>` : ''}
     </div>
   `).join("");
@@ -4554,9 +5328,9 @@ function ascensaoSeasonHTML(){
     <h1 class="hero" style="font-size:22px;">${t("ascensaoSeasonLabel")(lastEntry.temporada)}</h1>
     <p class="lead" style="margin-top:8px;">${c.nome} ${countryFlag(c.nacionalidade)} — ${lastEntry.time}</p>
     <div class="test-stats" style="margin:14px 0;text-align:left;">
-      <div class="test-stat-row"><span>${t("ascensaoRegionalLabel")}</span><span class="mono" style="color:var(--gold);">${ascensaoRegionalPlacementLabel(lastEntry.regionalPlacement)}</span></div>
-      <div class="test-stat-row"><span></span><span class="mono" style="color:var(--muted);font-size:11px;">${ascensaoQualifiedLabel(lastEntry.regionalQualificou)}</span></div>
-      ${lastEntry.mundialResultado ? `<div class="test-stat-row"><span>${t("ascensaoMundialLabel")}</span><span class="mono" style="color:var(--gold);">${ascensaoResultLabel(lastEntry.mundialResultado)}</span></div>` : ''}
+      <div class="test-stat-row"><span>${ascensaoStageName("kickoff")}</span><span class="mono" style="color:var(--gold);">${ascensaoKickoffLabel(lastEntry)}</span></div>
+      ${ascensaoStagesRows(lastEntry, "row")}
+      ${lastEntry.mundialResultado ? `<div class="test-stat-row"><span>Champions</span><span class="mono" style="color:var(--gold);">${ascensaoResultLabel(lastEntry.mundialResultado)}</span></div>` : ''}
       ${lastEntry.copaResultado ? `<div class="test-stat-row"><span>${t("ascensaoWorldCupLabel")}</span><span class="mono" style="color:var(--teal);">${ascensaoResultLabel(lastEntry.copaResultado)}</span></div>` : ''}
     </div>
     ${partidasHTML}
@@ -4630,7 +5404,7 @@ function regionalStandingsHTML(){
 
 function ascensaoFinalHTML(){
   const c = state.carreira;
-  const regionalTitles = c.historico.filter(h=>h.regionalPlacement && h.regionalPlacement.type==="champion").length;
+  const regionalTitles = c.historico.reduce((n,h)=>n+ascensaoRegionalTitleCount(h),0);
   const mundialTitles = c.historico.filter(h=>h.mundialResultado==="champion").length;
   const copaTitles = c.historico.filter(h=>h.copaResultado==="champion").length;
   const historicoHTML = c.historico.map(h=>`
@@ -4639,8 +5413,9 @@ function ascensaoFinalHTML(){
         <span class="mono">${t("ascensaoSeasonLabel")(h.temporada)}</span>
         <span class="history-team">${h.time} (${h.regiao})</span>
       </div>
-      <div style="margin-top:4px;color:var(--muted);font-size:12px;">${t("ascensaoRegionalLabel")}: ${ascensaoRegionalPlacementLabel(h.regionalPlacement)} — ${ascensaoQualifiedLabel(h.regionalQualificou)}</div>
-      ${h.mundialResultado ? `<div style="margin-top:2px;color:var(--muted);font-size:12px;">${t("ascensaoMundialLabel")}: ${ascensaoResultLabel(h.mundialResultado)}</div>` : ''}
+      <div style="margin-top:4px;color:var(--muted);font-size:12px;">${ascensaoStageName("kickoff")}: ${ascensaoKickoffLabel(h)}</div>
+      ${ascensaoStagesRows(h)}
+      ${h.mundialResultado ? `<div style="margin-top:2px;color:var(--muted);font-size:12px;">Champions: ${ascensaoResultLabel(h.mundialResultado)}</div>` : ''}
       ${h.copaResultado ? `<div style="margin-top:2px;color:var(--gold);font-size:12px;">${t("ascensaoWorldCupLabel")}: ${ascensaoResultLabel(h.copaResultado)}</div>` : ''}
     </div>
   `).join("");
@@ -5109,7 +5884,7 @@ function attachHandlers(){
     state.difficulty = "regional";
     const coachesDaRegiao = regionalCoachObjects(state.regionalRegiao);
     state.coachOptions = coachesDaRegiao.length > 5 ? shuffle(coachesDaRegiao).slice(0,5) : shuffle(coachesDaRegiao);
-    state.headCoach = null;
+    state.headCoach = null; state.assistantCoach = null;
     state.screen = "coachselect";
     render();
   };
@@ -5122,7 +5897,7 @@ function attachHandlers(){
   if(selecaoContinueBtn) selecaoContinueBtn.onclick = ()=>{
     state.teamName = state.selecao;
     state.coachOptions = WC_SELECOES[state.selecao].coaches;
-    state.headCoach = null;
+    state.headCoach = null; state.assistantCoach = null;
     state.screen = "coachselect";
     render();
   };
@@ -5185,8 +5960,10 @@ function attachHandlers(){
   const ascensaoConfirmBtn = document.getElementById("ascensao-confirm-btn");
   if(ascensaoConfirmBtn) ascensaoConfirmBtn.onclick = ()=>{
     const c = state.carreira;
-    const teams = TEAM_REGIONS[c.regiao];
-    c.time = teams[Math.floor(Math.random()*teams.length)];
+    const partners = TEAM_REGIONS[c.regiao], challengers = TERRITORY_CHALLENGERS[c.regiao]||[];
+    // parceiros têm mais chance (peso 3) do que os não parceiros (peso 1)
+    const pesos = [...partners.map(()=>3), ...challengers.map(()=>1)];
+    c.time = weightedSampleWithoutReplacement([...partners, ...challengers], pesos, 1)[0];
     state.screen = "ascensaoReveal";
     render();
   };
@@ -5266,7 +6043,7 @@ function attachHandlers(){
   const teamContinueBtn = document.getElementById("team-continue-btn");
   if(teamContinueBtn) teamContinueBtn.onclick = ()=>{
     state.coachOptions = shuffle(COACHES).slice(0, Math.round(COACHES.length/2));
-    state.headCoach = null;
+    state.headCoach = null; state.assistantCoach = null;
     state.screen = "coachselect";
     render();
   };
@@ -5466,7 +6243,7 @@ function handleContinue(){
     const oppTeam = pending.teamA.isPlayer ? pending.teamB : pending.teamA;
     const {atual, total} = regionalPlayerRoundNumber(g.schedule, pending.roundIdx);
     state.journey.push({
-      stageLabel: `${t("groupStageTag")} · ${t("groupWord")} ${tr.myGroupLetter} · ${t("regionalRoundLabel")(atual, total)}`,
+      stageLabel: `${ascensaoJourneyPrefix()}${t("groupStageTag")} · ${t("groupWord")} ${tr.myGroupLetter} · ${t("regionalRoundLabel")(atual, total)}`,
       opponent: oppTeam.name,
       result: won ? "W" : "L",
       score: `${state.mapsUs}-${state.mapsThem}`,
@@ -5489,7 +6266,7 @@ function handleContinue(){
     const pending = brk.pending;
     const oppTeam = pending.teamA.isPlayer ? pending.teamB : pending.teamA;
     state.journey.push({
-      stageLabel: `${t("groupStageTag")} · ${t("groupWord")} A · ${bracketLabel(pending.def.labelKey)}`,
+      stageLabel: `${ascensaoJourneyPrefix()}${t("groupStageTag")} · ${t("groupWord")} A · ${bracketLabel(pending.def.labelKey)}`,
       opponent: oppTeam.name,
       result: won ? "W" : "L",
       score: `${state.mapsUs}-${state.mapsThem}`,
@@ -5511,10 +6288,15 @@ function handleContinue(){
         // Copa do Mundo (isolada ou dentro do Ascensão) tem um formato próprio: só 3 grupos de
         // 4 (não 4), e Brasil/Estados Unidos entram direto nos playoffs sem passar pela fase
         // de grupos.
-        const qualifiers = (state.difficulty==="copa" || tr.ascensaoPhase==="worldcup")
+        const qualifiers = (state.difficulty==="copa" || tr.ascensaoPhase==="worldcup" || tr.ascensaoPhase==="masters")
           ? [...top2, ...Object.values(tr.otherGroupsTop2).flat(), ...(tr.byeTeams||[])]
           : [...top2, ...tr.otherGroupsTop2.B, ...tr.otherGroupsTop2.C, ...tr.otherGroupsTop2.D];
-        buildPlayoffBracket(qualifiers);
+        if(tr.ascensaoPhase==="masters"){
+          const gs = [top2, ...Object.values(tr.otherGroupsTop2)];
+          buildPlayoffBracketSeeded(ascensaoMastersSeeds(gs.map(g=>g[0]), gs.map(g=>g[1])), SIX_TEAM_BRACKET_DEF);
+        } else {
+          buildPlayoffBracket(qualifiers);
+        }
         advanceTournament();
       } else {
         ascensaoOrFinalize({type:"groups"});
@@ -5531,7 +6313,7 @@ function handleContinue(){
     const pending = brk.pending;
     const oppTeam = pending.teamA.isPlayer ? pending.teamB : pending.teamA;
     state.journey.push({
-      stageLabel: bracketLabel(pending.def.labelKey),
+      stageLabel: ascensaoJourneyPrefix() + bracketLabel(pending.def.labelKey),
       opponent: oppTeam.name,
       result: won ? "W" : "L",
       score: `${state.mapsUs}-${state.mapsThem}`,
@@ -5691,30 +6473,34 @@ function ascensaoHandleStageEnd(endInfo){
   const c = state.carreira;
   const phase = tr.ascensaoPhase;
 
-  if(phase==="regional"){
-    const regionalPlacement = {type: endInfo.type, stageLabelKey: endInfo.stageLabelKey};
-    let qualificou;
-    if(endInfo.type==="groups"){
-      qualificou = false;
-    } else if(endInfo.type==="champion" || endInfo.type==="runnerup"){
-      qualificou = REGIONAL_MUNDIAL_QUALIFY_COUNT[c.regiao] >= (endInfo.type==="champion" ? 1 : 2);
+  if(phase==="qualifier"){
+    const key = tr.ascensaoStageKey;
+    const placement = {type: endInfo.type, stageLabelKey: endInfo.stageLabelKey};
+    const qualified = ascensaoFinishQualifier(key, endInfo);
+    c.seasonStages.push({key:"q_"+key, placement});
+    let proxima, nota;
+    if(qualified){
+      proxima = {type:"stage", key};
+      nota = L3("Classificado para o "+ascensaoStageName(key), "Qualified for "+ascensaoStageName(key), "Clasificado a "+ascensaoStageName(key));
     } else {
-      const qualifyCount = REGIONAL_MUNDIAL_QUALIFY_COUNT[c.regiao];
-      qualificou = ascensaoQualifiesFromPlayoffs(qualifyCount, endInfo);
+      Object.keys(TEAM_REGIONS).forEach(r=>ascensaoSimAITerritory(key, r));
+      c.seasonStages.push({key, notQualified:true});
+      proxima = ascensaoNextAction(key);
+      nota = L3("Eliminado no qualifier: fora do "+ascensaoStageName(key), "Out of the qualifier: not in "+ascensaoStageName(key), "Eliminado en el qualifier: fuera de "+ascensaoStageName(key));
     }
-    tr.ascensaoRegionalPlacement = regionalPlacement;
-    const mvpRegional = endInfo.type==="champion" ? getMVP() : null;
-    if(endInfo.type==="champion") ascensaoRegisterRegionalChampions(mvpRegional);
-    if(qualificou){
-      ascensaoShowStageSummary(t("ascensaoRegionalLabel"), regionalPlacement, null, {type:"mundial"}, true, mvpRegional);
-      return;
-    }
-    // não classificou pro Mundial — mesmo assim, se for ano de Copa, joga a Copa do Mundo.
-    if(isAscensaoWorldCupSeason(c.temporada)){
-      ascensaoShowStageSummary(t("ascensaoRegionalLabel"), regionalPlacement, null, {type:"worldcup", regionalPlacement, qualificou:false}, false, mvpRegional);
-    } else {
-      ascensaoShowStageSummary(t("ascensaoRegionalLabel"), regionalPlacement, null, {type:"finish", regionalPlacement, qualificou:false}, false, mvpRegional);
-    }
+    ascensaoShowStageSummary(ascensaoStageName("q_"+key), placement, null, proxima, nota, null);
+    return;
+  }
+  if(phase==="regional" || phase==="masters"){
+    const key = tr.ascensaoStageKey || "kickoff";
+    const placement = {type: endInfo.type, stageLabelKey: endInfo.stageLabelKey};
+    const mvp = endInfo.type==="champion" ? getMVP() : null;
+    if(endInfo.type==="champion") ascensaoRegisterRegionalChampions(mvp);
+    if(phase==="regional") ascensaoFinishTerritoryEvent(key, endInfo);
+    else ascensaoFinishMasters(key, endInfo);
+    c.seasonStages.push({key, placement});
+    const proxima = ascensaoNextAction(key);
+    ascensaoShowStageSummary(ascensaoStageName(key), placement, null, proxima, ascensaoQualifyNote(key), mvp);
     return;
   }
   if(phase==="mundial"){
@@ -5724,10 +6510,8 @@ function ascensaoHandleStageEnd(endInfo){
     else if(endInfo.type==="champion"){ mundialResultado = "champion"; mvpMundial = getMVP(); ascensaoRegisterChampions(mvpMundial); }
     else if(endInfo.type==="runnerup") mundialResultado = "runnerup";
     else mundialResultado = "worldPlayoffs";
-    const proxima = isAscensaoWorldCupSeason(c.temporada)
-      ? {type:"worldcup", regionalPlacement: tr.ascensaoRegionalPlacement, qualificou:true, mundialResultado}
-      : {type:"finish", regionalPlacement: tr.ascensaoRegionalPlacement, qualificou:true, mundialResultado};
-    ascensaoShowStageSummary(t("ascensaoMundialLabel"), null, mundialResultado, proxima, undefined, mvpMundial);
+    c.seasonStages.push({key:"champions", resultado: mundialResultado});
+    ascensaoShowStageSummary("Champions", null, mundialResultado, ascensaoSeasonEndAction(), undefined, mvpMundial);
     return;
   }
   if(phase==="worldcup"){
@@ -5751,7 +6535,7 @@ function ascensaoShowStageSummary(nomeCompeticao, regionalPlacement, resultadoGe
   c.stageSummary = {
     nomeCompeticao,
     label: regionalPlacement ? ascensaoRegionalPlacementLabel(regionalPlacement) : ascensaoResultLabel(resultadoGenerico),
-    qualificadoLabel: qualificou!==undefined ? ascensaoQualifiedLabel(qualificou) : null,
+    qualificadoLabel: typeof qualificou==="string" ? qualificou : (qualificou!==undefined ? ascensaoQualifiedLabel(qualificou) : null),
     journey: state.journey.slice(state.journeyStageStart || 0),
     mvp: mvp || null,
   };
@@ -5764,7 +6548,9 @@ function ascensaoAdvanceFromSummary(){
   const acao = c.pendingNextAction;
   c.pendingNextAction = null;
   c.stageSummary = null;
-  if(acao.type==="mundial"){
+  if(acao.type==="stage"){
+    ascensaoStartStage(acao.key);
+  } else if(acao.type==="mundial"){
     setupAscensaoMundialStage();
   } else if(acao.type==="worldcup"){
     setupAscensaoWorldCupStage(acao.regionalPlacement, acao.qualificou, acao.mundialResultado);
@@ -5775,47 +6561,19 @@ function ascensaoAdvanceFromSummary(){
 // Monta e começa a fase Mundial ao vivo (16 times, os classificados de todas as 6 regiões).
 function setupAscensaoMundialStage(){
   const c = state.carreira;
+  state.difficulty = "ascensao";
   state.screen = "match";
   state.journeyStageStart = state.journey.length;
-  const playerOrgTeam = state.tournament.playerTeam;
-  const regionalPlacementSalvo = state.tournament.ascensaoRegionalPlacement;
-  const snapshotDaMinhaRegiao = state.tournament.ascensaoRegionalTransferSnapshot;
-  const snapshotDeCoachDaMinhaRegiao = state.tournament.ascensaoRegionalCoachSnapshot;
-  playerOrgTeam.isPlayer = true;
+  const playerOrgTeam = ascensaoBuildPlayerTeam();
+  const kick = (c.seasonStages||[]).find(s=>s.key==="kickoff");
+  const regionalPlacementSalvo = kick && kick.placement;
   state.campaignStats = { us: playerOrgTeam.roster.map((p,i)=>({name:p.name, role:SLOT_ORDER[i], isCharacter:p.isCharacter, country:p.country, k:0, d:0, a:0})) };
   const worldQualifiers = [playerOrgTeam];
-  const usadosGlobalmente = new Set(playerOrgTeam.roster.filter(Boolean).map(p=>p.name));
-  const usadosGlobalmenteCoach = new Set([playerOrgTeam.coach].filter(Boolean));
-  Object.keys(TEAM_REGIONS).forEach(r=>{
-    const n = REGIONAL_MUNDIAL_QUALIFY_COUNT[r];
-    // pra minha própria região, reaproveita o resultado REAL da fase Regional (já rodou o
-    // mercado de verdade) em vez de simular de novo — evita craque duplicado entre o meu
-    // time e outro time da mesma região que participaram do mesmo mercado.
-    const transferencias = (r===c.regiao && snapshotDaMinhaRegiao) ? snapshotDaMinhaRegiao : simulateRegionalTransfers(r, r===c.regiao ? c.time : null, usadosGlobalmente);
-    const transferenciasCoach = (r===c.regiao && snapshotDeCoachDaMinhaRegiao) ? snapshotDeCoachDaMinhaRegiao : simulateRegionalCoachTransfers(r, r===c.regiao ? c.time : null, transferencias, usadosGlobalmenteCoach);
-    if(r!==c.regiao){
-      TEAM_REGIONS[r].forEach(org=>{
-        if(transferencias[org]) c.orgRostersSnapshot[org] = {players: transferencias[org], coach: transferenciasCoach[org] || c.orgRostersSnapshot[org].coach};
-      });
-      ascensaoDedupeSnapshot(c.orgRostersSnapshot, TEAM_REGIONS[r]);
-    }
-    let selecionados;
-    if(r===c.regiao){
-      const outrosDaRegiao = TEAM_REGIONS[r].filter(org=>org!==c.time);
-      selecionados = shuffle(outrosDaRegiao).slice(0, n-1);
-    } else {
-      selecionados = shuffle(TEAM_REGIONS[r]).slice(0,n);
-    }
-    selecionados.forEach(org=>{
-      const time = buildAscensaoOrgTeam(org, false, transferencias[org], transferenciasCoach[org]);
-      worldQualifiers.push(time);
-      time.roster.filter(Boolean).forEach(p=>usadosGlobalmente.add(p.name));
-      if(time.coach) usadosGlobalmenteCoach.add(time.coach);
-    });
-  });
+  (c.championsOrgs||[]).filter(o=>o!==c.time).forEach(org=>worldQualifiers.push(ascensaoTeamForOrg(org, ORG_TERRITORY[org])));
   state.roster = playerOrgTeam.roster;
   state.teamName = playerOrgTeam.name;
   state.headCoach = playerOrgTeam.coach;
+  state.assistantCoach = playerOrgTeam.ac || null;
   const allTeams = shuffle(worldQualifiers);
   const groupA = allTeams.slice(0,4), groupB = allTeams.slice(4,8), groupC = allTeams.slice(8,12), groupD = allTeams.slice(12,16);
   const myGroup = [groupA,groupB,groupC,groupD].find(g=>g.some(tm=>tm.isPlayer));
@@ -5857,6 +6615,7 @@ function setupAscensaoWorldCupStage(regionalPlacement, qualificou, mundialResult
   state.roster = myRoster;
   state.teamName = c.nacao;
   state.headCoach = playerTeam.coach;
+  state.assistantCoach = null;
   const outrasNacoes = Object.keys(WC_SELECOES).filter(n=>n!==c.nacao);
   const montaTimeNacao = nacao=>{
     const roster = ascensaoApplyChampionBonus(buildBestRoster(ascensaoSelecaoPlayerObjects(nacao)));
@@ -5914,18 +6673,17 @@ function setupAscensaoWorldCupStage(regionalPlacement, qualificou, mundialResult
 // De qual região esportiva cada país costuma fazer parte — usado pra saber a "região de casa"
 // do craque pela nacionalidade dele (não pelo time atual).
 const COUNTRY_TO_REGION = {
-  US:"NA", CA:"NA", MX:"NA",
-  BR:"BR",
-  AR:"LAS", CL:"LAS", BO:"LAS", CO:"LAS", EC:"LAS", GY:"LAS", PY:"LAS", PE:"LAS", SR:"LAS", UY:"LAS", VE:"LAS",
-  KR:"APAC", VN:"APAC", PH:"APAC", SG:"APAC", ID:"APAC", MY:"APAC", TH:"APAC",
-  CN:"CHN",
+  US:"AMERICAS", CA:"AMERICAS", MX:"AMERICAS", BR:"AMERICAS", DO:"AMERICAS",
+  AR:"AMERICAS", CL:"AMERICAS", BO:"AMERICAS", CO:"AMERICAS", EC:"AMERICAS", GY:"AMERICAS", PY:"AMERICAS", PE:"AMERICAS", SR:"AMERICAS", UY:"AMERICAS", VE:"AMERICAS",
+  KR:"PACIFIC", VN:"PACIFIC", PH:"PACIFIC", SG:"PACIFIC", ID:"PACIFIC", MY:"PACIFIC", TH:"PACIFIC", JP:"PACIFIC", KH:"PACIFIC", IN:"PACIFIC", AU:"PACIFIC", NZ:"PACIFIC",
+  CN:"CN", TW:"CN", HK:"CN",
   TR:"EMEA", RU:"EMEA", PL:"EMEA", UA:"EMEA", GB:"EMEA", FR:"EMEA", MA:"EMEA", DK:"EMEA", NL:"EMEA",
   LT:"EMEA", FI:"EMEA", SE:"EMEA", LV:"EMEA", CZ:"EMEA", BE:"EMEA", EE:"EMEA", MD:"EMEA", DE:"EMEA", ES:"EMEA",
+  PT:"EMEA", RS:"EMEA", BG:"EMEA", IE:"EMEA", KZ:"EMEA", EG:"EMEA", SA:"EMEA", LB:"EMEA", KG:"EMEA", RO:"EMEA", ZA:"EMEA", IT:"EMEA", AT:"EMEA", NO:"EMEA",
 };
 const ASCENSAO_REGION_PROXIMITY = {
-  BR: ["LAS"], LAS: ["BR"],
-  APAC: ["CHN"], CHN: ["APAC"],
-  NA: [], EMEA: [],
+  AMERICAS: [], EMEA: [],
+  PACIFIC: ["CN"], CN: ["PACIFIC"],
 };
 function ascensaoOrgOfferWeight(orgRegiao, minhaRegiao, minhaRegiaoDeCasa){
   if(orgRegiao===minhaRegiao) return 4;
@@ -5955,7 +6713,7 @@ function ascensaoRollTransferOffer(){
   const c = state.carreira;
   const baseRosters = c.orgRostersSnapshot || ASCENSAO_TEAM_ROSTERS;
   if(Math.random()>=0.82) return false;
-  const candidatos = Object.entries(TEAM_REGIONS).flatMap(([regiao,orgs])=>orgs.map(org=>({org,regiao})))
+  const candidatos = Object.keys(TEAM_REGIONS).flatMap(regiao=>territoryAllOrgs(regiao).map(org=>({org,regiao})))
     .filter(o=>o.org!==c.time && baseRosters[o.org]);
   if(candidatos.length===0) return false;
   const quantidade = Math.min(candidatos.length, Math.floor(Math.random()*4)); // 0 a 3
@@ -5978,7 +6736,7 @@ function ascensaoRollTransferOffer(){
     }
     const jogadores = transferenciasPorRegiao[o.regiao][o.org] || baseRosters[o.org].players;
     const coach = transferenciasCoachPorRegiao[o.regiao][o.org] || baseRosters[o.org].coach;
-    const realPlayers = jogadores.map(n=>POOL.find(p=>p.name.toLowerCase()===n.toLowerCase())).filter(Boolean);
+    const realPlayers = jogadores.map(n=>poolGet(n)).filter(Boolean);
     const rosterComPersonagem = buildTeamWithCharacterRandomRole(realPlayers);
     const personagemNoTime = rosterComPersonagem.find(p=>p && p.isCharacter);
     if(!personagemNoTime) continue; // não coube em nenhuma função que o craque escolheu — não oferece
@@ -6007,15 +6765,276 @@ function ascensaoUpdateOrgForm(){
 }
 function ascensaoFinishSeason(regionalPlacement, regionalQualificou, mundialResultado, copaResultado){
   const c = state.carreira;
-  const entry = {temporada:c.temporada, time:c.time, regiao:c.regiao, regionalPlacement, regionalQualificou, journey: state.journey};
+  const entry = {temporada:c.temporada, time:c.time, regiao:c.regiao, regionalPlacement, regionalQualificou, journey: state.journey, stages: (c.seasonStages||[]).slice()};
   if(mundialResultado) entry.mundialResultado = mundialResultado;
   if(copaResultado) entry.copaResultado = copaResultado;
   c.historico.push(entry);
+  c.seasonStages = []; c.seasonPoints = {}; c.eventRanking = {}; c.mastersField = {}; c.qualifiers = {};
   ascensaoUpdateOrgForm();
   c.temporada += 1;
   state.difficulty = null;
   state.screen = "ascensaoSeason";
 }
+
+/* ===== VCT 2027: temporada em etapas (Kickoff, Masters 1, Cup 1, Masters 2, Cup 2, Champions) ===== */
+const ASCENSAO_STAGE_SEQ = ["kickoff","masters1","cup1","masters2","cup2","champions"];
+const ASCENSAO_STAGE_NAMES = {kickoff:"Kickoff", masters1:"Masters Seoul", cup1:"Cup 1", masters2:"Masters Valencia", cup2:"Cup 2", champions:"Champions", q_kickoff:"Open Qualifier · Kickoff", q_cup1:"Open Qualifier · Cup 1", q_cup2:"Open Qualifier · Cup 2"};
+const ASCENSAO_TERRITORY_POINTS = [10,7,5,4,3,2,1,1,0,0,0,0];
+const ASCENSAO_MASTERS_POINTS = [20,14,10,8,5,5,3,3,1,1,1,1];
+function ascensaoStageName(key){ return ASCENSAO_STAGE_NAMES[key] || key; }
+function L3(pt,en,es){ return state.lang==="en" ? en : state.lang==="es" ? es : pt; }
+function ascensaoRegionalTitleCount(h){
+  if(h.stages) return h.stages.filter(s=>["kickoff","cup1","cup2"].includes(s.key) && s.placement && s.placement.type==="champion").length;
+  return (h.regionalPlacement && h.regionalPlacement.type==="champion") ? 1 : 0;
+}
+function ascensaoKickoffLabel(h){
+  const k = (h.stages||[]).find(s=>s.key==="kickoff");
+  if(k && k.notQualified) return L3("Não classificado","Not qualified","No clasificado");
+  return ascensaoRegionalPlacementLabel(h.regionalPlacement);
+}
+function ascensaoStagesRows(h, mode){
+  if(!h.stages) return "";
+  return h.stages.filter(s=>s.key!=="kickoff" && (s.key!=="champions" || s.notQualified)).map(s=>{
+    const lbl = s.notQualified ? L3("Não classificado","Not qualified","No clasificado") : ascensaoRegionalPlacementLabel(s.placement);
+    if(mode==="row") return `<div class="test-stat-row"><span>${ascensaoStageName(s.key)}</span><span class="mono" style="color:var(--gold);">${lbl}</span></div>`;
+    return `<div style="margin-top:2px;color:var(--muted);font-size:12px;">${ascensaoStageName(s.key)}: ${lbl}</div>`;
+  }).join("");
+}
+function ascensaoJourneyPrefix(){
+  if(state.difficulty!=="ascensao" || !state.tournament) return "";
+  const tr = state.tournament;
+  if(tr.ascensaoPhase==="regional" || tr.ascensaoPhase==="masters") return ascensaoStageName(tr.ascensaoStageKey) + " · ";
+  if(tr.ascensaoPhase==="qualifier") return ascensaoStageName("q_"+tr.ascensaoStageKey) + " · ";
+  if(tr.ascensaoPhase==="mundial") return "Champions · ";
+  if(tr.ascensaoPhase==="worldcup") return t("ascensaoWorldCupLabel") + " · ";
+  return "";
+}
+function ascensaoInitSeason(){
+  const c = state.carreira;
+  c.seasonPoints = {}; c.seasonStages = []; c.eventRanking = {}; c.mastersField = {}; c.championsOrgs = null; c.championsQualified = false; c.qualifiers = {};
+}
+function ascensaoAddPoints(org, pts){
+  const c = state.carreira;
+  c.seasonPoints[org] = (c.seasonPoints[org]||0) + pts;
+}
+// Roda o mercado dos 4 territórios uma vez por temporada (o do jogador já veio pronto).
+function ascensaoRunSeasonMarket(ownTrans, ownCoach){
+  const c = state.carreira;
+  c.marketNow = {};
+  c.marketNow[c.regiao] = {transferencias: ownTrans, transferenciasCoach: ownCoach};
+  const used = new Set(), usedCoach = new Set();
+  Object.values(ownTrans).forEach(pl=>pl.filter(Boolean).forEach(n=>used.add(n)));
+  Object.values(ownCoach).forEach(x=>{ if(x) usedCoach.add(x); });
+  Object.keys(TEAM_REGIONS).filter(r=>r!==c.regiao).forEach(r=>{
+    const tr = simulateRegionalTransfers(r, null, used);
+    const co = simulateRegionalCoachTransfers(r, null, tr, usedCoach);
+    territoryAllOrgs(r).forEach(org=>{
+      if(tr[org]) c.orgRostersSnapshot[org] = {...c.orgRostersSnapshot[org], players: tr[org], coach: co[org] || c.orgRostersSnapshot[org].coach};
+    });
+    ascensaoDedupeSnapshot(c.orgRostersSnapshot, territoryAllOrgs(r));
+    c.marketNow[r] = {transferencias: tr, transferenciasCoach: co};
+    Object.values(tr).forEach(pl=>pl.filter(Boolean).forEach(n=>used.add(n)));
+    Object.values(co).forEach(x=>{ if(x) usedCoach.add(x); });
+  });
+}
+function ascensaoTeamForOrg(org, regiao){
+  const m = state.carreira.marketNow[regiao];
+  return buildAscensaoOrgTeam(org, false, m.transferencias[org], m.transferenciasCoach[org]);
+}
+function ascensaoBuildPlayerTeam(){
+  const c = state.carreira;
+  const m = c.marketNow[c.regiao];
+  const tm = buildAscensaoOrgTeam(c.time, true, m.transferencias[c.time], m.transferenciasCoach[c.time]);
+  tm.isPlayer = true;
+  return tm;
+}
+// Executa uma chave de eliminação dupla só com IA e devolve os times do 1º ao último.
+function ascensaoRunBracketAI(seeds, def){
+  const res = {}; const out = [];
+  const pick = f=> f.seed!==undefined ? seeds[f.seed] : (f.res==="w" ? res[f.m].winner : res[f.m].loser);
+  let finalW = null, finalL = null;
+  def.forEach((d,i)=>{
+    const r = decideMatchWinner(pick(d.aFrom), pick(d.bFrom), 2);
+    res[d.id] = {winner:r.winner, loser:r.loser};
+    if(i===def.length-1){ finalW = r.winner; finalL = r.loser; }
+    else if(LB_KEYS.includes(d.labelKey)) out.push(r.loser);
+  });
+  return [finalW, finalL, ...out.reverse()];
+}
+// Evento de território só com IA (12 times): 2 grupos de 6 (turno único) + chave de 6.
+function ascensaoSimTerritoryRanking(teams){
+  const sh = shuffle(teams.slice());
+  const rank = g=>{
+    const st = initRegionalStandings(g);
+    roundRobinSchedule(g, true).forEach(rod=>rod.forEach(([a,b])=>{
+      const res = decideMatchWinnerWithRounds(a, b, 2);
+      registrarResultadoGrupoRegional(st, a, b, res, res.roundsA, res.roundsB);
+    }));
+    return rankRegionalGroup(st).map(s=>s.team);
+  };
+  const rA = rank(sh.slice(0,6)), rB = rank(sh.slice(6,12));
+  const order = ascensaoRunBracketAI([rA[0],rB[0],rA[1],rB[1],rA[2],rB[2]], SIX_TEAM_BRACKET_DEF);
+  return [...order, rA[3], rB[3], rA[4], rB[4], rA[5], rB[5]];
+}
+function ascensaoPlacementIndex(endInfo){
+  if(endInfo.type==="champion") return 0;
+  if(endInfo.type==="runnerup") return 1;
+  if(endInfo.type==="groups") return 6 + Math.floor(Math.random()*6);
+  const k = endInfo.stageLabelKey;
+  if(k==="lbFinal") return 2;
+  if(k==="lbSemi") return 3;
+  return 4 + Math.floor(Math.random()*2);
+}
+function ascensaoSetRanking(key, regiao, rankingOrgs, tabela){
+  const c = state.carreira;
+  if(!c.eventRanking[key]) c.eventRanking[key] = {};
+  c.eventRanking[key][regiao] = rankingOrgs;
+  rankingOrgs.forEach((org,i)=>ascensaoAddPoints(org, tabela[i]||0));
+}
+function ascensaoSimAITerritory(key, regiao){
+  const c = state.carreira;
+  const m = c.marketNow[regiao];
+  const field = ascensaoTerritoryField(regiao, key);
+  const teams = field.map(org=>ascensaoTeamForOrg(org, regiao));
+  ascensaoSetRanking(key, regiao, ascensaoSimTerritoryRanking(teams).map(t=>t.name), ASCENSAO_TERRITORY_POINTS);
+}
+// Fecha um evento de território que o jogador jogou ao vivo: encaixa a colocação real dele no
+// ranking simulado dos outros times e simula os outros 3 territórios.
+function ascensaoFinishTerritoryEvent(key, endInfo){
+  const c = state.carreira;
+  const teams = (c.lastField || []).map(org=> org===c.time ? ascensaoBuildPlayerTeam() : ascensaoTeamForOrg(org, c.regiao));
+  let ranking = ascensaoSimTerritoryRanking(teams).map(t=>t.name).filter(n=>n!==c.time);
+  ranking.splice(Math.min(ascensaoPlacementIndex(endInfo), ranking.length), 0, c.time);
+  ascensaoSetRanking(key, c.regiao, ranking, ASCENSAO_TERRITORY_POINTS);
+  Object.keys(TEAM_REGIONS).filter(r=>r!==c.regiao).forEach(r=>ascensaoSimAITerritory(key, r));
+}
+// Masters: top 3 de cada território no evento anterior (12 times).
+function ascensaoMastersField(key){
+  const c = state.carreira;
+  const prev = key==="masters1" ? "kickoff" : "cup1";
+  const out = [];
+  Object.keys(TEAM_REGIONS).forEach(r=>{
+    const rk = (c.eventRanking[prev] && c.eventRanking[prev][r]) || [];
+    out.push(...rk.slice(0,3));
+  });
+  return out;
+}
+function ascensaoMastersSeeds(w, r){
+  return [w[0], w[1], r[2], r[1], w[2], r[0]];
+}
+function ascensaoSimMasters(teams){
+  const sh = shuffle(teams.slice());
+  const groups = [sh.slice(0,4), sh.slice(4,8), sh.slice(8,12)];
+  const W = [], R = [], rest = [];
+  groups.forEach(g=>{
+    const q = buildGroupQualifiersAI(shuffle(g.slice()));
+    W.push(q[0]); R.push(q[1]);
+    g.forEach(t=>{ if(t.name!==q[0].name && t.name!==q[1].name) rest.push(t); });
+  });
+  const order = ascensaoRunBracketAI(ascensaoMastersSeeds(W, R), SIX_TEAM_BRACKET_DEF);
+  return [...order, ...shuffle(rest)];
+}
+function ascensaoFinishMasters(key, endInfo){
+  const c = state.carreira;
+  const orgs = c.mastersField[key];
+  const teams = orgs.map(org=> org===c.time ? ascensaoBuildPlayerTeam() : ascensaoTeamForOrg(org, ORG_TERRITORY[org]));
+  let ranking = ascensaoSimMasters(teams).map(t=>t.name).filter(n=>n!==c.time);
+  ranking.splice(Math.min(ascensaoPlacementIndex(endInfo), ranking.length), 0, c.time);
+  if(!c.eventRanking[key]) c.eventRanking[key] = {};
+  ranking.forEach((org,i)=>ascensaoAddPoints(org, ASCENSAO_MASTERS_POINTS[i]||0));
+}
+function ascensaoRunMastersAI(key){
+  const c = state.carreira;
+  const orgs = c.mastersField[key];
+  const teams = orgs.map(org=>ascensaoTeamForOrg(org, ORG_TERRITORY[org]));
+  ascensaoSimMasters(teams).forEach((t,i)=>ascensaoAddPoints(t.name, ASCENSAO_MASTERS_POINTS[i]||0));
+}
+// Champions: top 4 de cada território na soma dos pontos da temporada (16 times).
+function ascensaoChampionsOrgs(){
+  const c = state.carreira;
+  const out = [];
+  Object.keys(TEAM_REGIONS).forEach(r=>{
+    const m = c.marketNow[r];
+    const orgs = territoryAllOrgs(r).slice().sort((a,b)=>
+      ((c.seasonPoints[b]||0)-(c.seasonPoints[a]||0)) || (ascensaoOrgStrength(b, m.transferencias)-ascensaoOrgStrength(a, m.transferencias)));
+    out.push(...orgs.slice(0,4));
+  });
+  return out;
+}
+// Descobre a próxima etapa em que o jogador joga, simulando (só IA) as que ele não disputa.
+function ascensaoNextAction(currentKey){
+  const c = state.carreira;
+  let i = ASCENSAO_STAGE_SEQ.indexOf(currentKey) + 1;
+  while(i < ASCENSAO_STAGE_SEQ.length){
+    const k = ASCENSAO_STAGE_SEQ[i];
+    if(k==="masters1" || k==="masters2"){
+      c.mastersField[k] = ascensaoMastersField(k);
+      if(c.mastersField[k].includes(c.time)) return {type:"stage", key:k};
+      ascensaoRunMastersAI(k);
+      c.seasonStages.push({key:k, notQualified:true});
+    } else if(k==="champions"){
+      c.championsOrgs = ascensaoChampionsOrgs();
+      c.championsQualified = c.championsOrgs.includes(c.time);
+      if(c.championsQualified) return {type:"stage", key:k};
+      c.seasonStages.push({key:k, notQualified:true});
+    } else {
+      return {type:"stage", key:k};
+    }
+    i++;
+  }
+  return ascensaoSeasonEndAction();
+}
+function ascensaoSeasonEndAction(){
+  const c = state.carreira;
+  const kick = c.seasonStages.find(s=>s.key==="kickoff");
+  const champ = c.seasonStages.find(s=>s.key==="champions" && s.resultado);
+  const base = {regionalPlacement: kick && kick.placement, qualificou: !!c.championsQualified, mundialResultado: champ ? champ.resultado : undefined};
+  return isAscensaoWorldCupSeason(c.temporada) ? {type:"worldcup", ...base} : {type:"finish", ...base};
+}
+// Texto sobre a classificação pra próxima etapa, mostrado no resumo.
+function ascensaoQualifyNote(key){
+  const c = state.carreira;
+  if(key==="kickoff" || key==="cup1"){
+    const mk = key==="kickoff" ? "masters1" : "masters2";
+    const ok = c.mastersField[mk] && c.mastersField[mk].includes(c.time);
+    return ok ? L3("Classificado para o "+ascensaoStageName(mk), "Qualified for "+ascensaoStageName(mk), "Clasificado a "+ascensaoStageName(mk))
+              : L3("Fora do "+ascensaoStageName(mk), "Out of "+ascensaoStageName(mk), "Fuera de "+ascensaoStageName(mk));
+  }
+  if(key==="cup2"){
+    return c.championsQualified ? t("ascensaoQualifiedTitle") : L3("Fora do Champions","Out of Champions","Fuera de Champions");
+  }
+  return undefined;
+}
+function setupAscensaoMastersStage(key){
+  const c = state.carreira;
+  state.difficulty = "ascensao";
+  state.screen = "match";
+  state.journeyStageStart = state.journey.length;
+  const playerOrgTeam = ascensaoBuildPlayerTeam();
+  state.roster = playerOrgTeam.roster; state.teamName = c.time; state.headCoach = playerOrgTeam.coach; state.assistantCoach = playerOrgTeam.ac || null;
+  state.campaignStats = { us: state.roster.map((p,i)=>({name:p.name, role:SLOT_ORDER[i], isCharacter:p.isCharacter, country:p.country, k:0, d:0, a:0})) };
+  const others = c.mastersField[key].filter(o=>o!==c.time).map(org=>ascensaoTeamForOrg(org, ORG_TERRITORY[org]));
+  const all = shuffle([playerOrgTeam, ...others]);
+  const gA = all.slice(0,4), gB = all.slice(4,8), gC = all.slice(8,12);
+  const myGroup = [gA,gB,gC].find(g=>g.some(t=>t.isPlayer));
+  const otherGroupsTop2 = {};
+  [["A",gA],["B",gB],["C",gC]].forEach(([l,g])=>{ if(g!==myGroup) otherGroupsTop2[l] = buildGroupQualifiersAI(g); });
+  state.tournament = {
+    stage: "groups", playerTeam: playerOrgTeam, otherGroupsTop2,
+    ascensaoPhase: "masters", ascensaoStageKey: key,
+    groupBracket: { seeds: shuffle(myGroup), matches: {}, pointerIdx:0, pending:null },
+  };
+  GROUP_BRACKET_DEF.forEach(d=>{ state.tournament.groupBracket.matches[d.id] = {winner:null, loser:null}; });
+  advanceGroupBracket();
+}
+function ascensaoStartStage(key){
+  const c = state.carreira;
+  if(key==="masters1" || key==="masters2") return setupAscensaoMastersStage(key);
+  if(key==="champions") return setupAscensaoMundialStage();
+  const m = c.marketNow[c.regiao];
+  return setupAscensaoRegionalStage({transferencias: m.transferencias, transferenciasCoach: m.transferenciasCoach}, key);
+}
+
 function ascensaoOrFinalize(endInfo){
   state.endInfo = endInfo;
   if(state.difficulty==="ascensao"){
@@ -6059,7 +7078,7 @@ async function saveCampaignRecord(){
 async function saveAscensaoCareerRecord(){
   try{
     const c = state.carreira;
-    const regionalTitles = c.historico.filter(h=>h.regionalPlacement && h.regionalPlacement.type==="champion").length;
+    const regionalTitles = c.historico.reduce((n,h)=>n+ascensaoRegionalTitleCount(h),0);
     const mundialTitles = c.historico.filter(h=>h.mundialResultado==="champion").length;
     const copaTitles = c.historico.filter(h=>h.copaResultado==="champion").length;
     const record = {
@@ -6097,7 +7116,7 @@ async function loadCampaignHistory(){
 // títulos por competição e quantas vezes foi MVP.
 function buildAscensaoShareText(){
   const c = state.carreira;
-  const regionalTitles = c.historico.filter(h=>h.regionalPlacement && h.regionalPlacement.type==="champion").length;
+  const regionalTitles = c.historico.reduce((n,h)=>n+ascensaoRegionalTitleCount(h),0);
   const mundialTitles = c.historico.filter(h=>h.mundialResultado==="champion").length;
   const copaTitles = c.historico.filter(h=>h.copaResultado==="champion").length;
   const funcoes = [c.funcao, ...c.funcoesSecundarias].map(roleLabel).join(", ");
@@ -6324,8 +7343,8 @@ function simulateRound(){
   const theirSide = ourSide==="attack" ? "defense" : "attack";
   const ourComp = compositionBonus(state.roster, true);
   const theirComp = compositionBonus(opp.roster, false);
-  const ourBuff = coachBuff(state.headCoach) + ourComp[ourSide] + chemistryBonus(state.roster, state.headCoach);
-  const theirBuff = coachBuff(opp.coach) + theirComp[theirSide] + chemistryBonus(opp.roster, opp.coach);
+  const ourBuff = coachBuff(state.headCoach) + assistantBuff(state.roster, state.assistantCoach) + ourComp[ourSide] + chemistryBonus(state.roster, state.headCoach);
+  const theirBuff = coachBuff(opp.coach) + assistantBuff(opp.roster, opp.ac) + theirComp[theirSide] + chemistryBonus(opp.roster, opp.coach);
 
   // vantagem estatística da defesa (independente de composição/química)
   const ourDefenseEdge = ourSide==="defense" ? DEFENSE_EDGE : 0;
