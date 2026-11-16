@@ -946,24 +946,25 @@ const POOL = [
 const POOL_MAP = new Map(); POOL.forEach(p=>{ const k=p.name.toLowerCase(); if(!POOL_MAP.has(k)) POOL_MAP.set(k,p); });
 function poolGet(n){ return n ? POOL_MAP.get(String(n).toLowerCase()) : undefined; }
 
-// 16 organizações reais — uma é escolhida pelo jogador, as outras 15 viram adversárias.
+// 16 organizações parceiras do VCT 2027 (4 de cada território) — uma é escolhida pelo jogador,
+// as outras 15 viram adversárias no Mundial.
 const TEAM_NAMES = [
-  {name:"LOUD",      rating:99},
-  {name:"MIBR",      rating:86},
-  {name:"FURIA",     rating:96},
-  {name:"FaZe",      rating:85},
-  {name:"LEVIATAN",  rating:87},
-  {name:"KRU",       rating:84},
-  {name:"OPTIC",     rating:88},
-  {name:"NRG",       rating:93},
-  {name:"G2",        rating:97},
-  {name:"100T",      rating:91},
-  {name:"FNATIC",    rating:95},
-  {name:"LIQUID",    rating:90},
-  {name:"HERETICS",  rating:94},
-  {name:"NAVI",      rating:92},
-  {name:"PAPER REX", rating:99},
-  {name:"EDG",       rating:94},
+  {name:"100 Thieves",        rating:91},
+  {name:"G2 Esports",         rating:97},
+  {name:"Leviatán Esports",   rating:92},
+  {name:"Sentinels",          rating:90},
+  {name:"Team Vitality",      rating:95},
+  {name:"FNATIC",             rating:95},
+  {name:"Team Liquid",        rating:90},
+  {name:"Team Heretics",      rating:94},
+  {name:"Paper Rex",          rating:99},
+  {name:"T1",                 rating:93},
+  {name:"Gen.G",              rating:92},
+  {name:"Rex Regum Qeon",     rating:90},
+  {name:"EDward Gaming",      rating:94},
+  {name:"TYLOO",              rating:90},
+  {name:"All Gamers",         rating:88},
+  {name:"Trace Esports",      rating:89},
 ];
 
 // Organização dos times por região — dado guardado pra uso futuro, NÃO está conectado a
@@ -987,6 +988,31 @@ function territoryAllOrgs(r){ return [...(TEAM_REGIONS[r]||[]), ...(TERRITORY_CH
 const ORG_TERRITORY = {};
 Object.keys(TEAM_REGIONS).forEach(r=>territoryAllOrgs(r).forEach(o=>{ ORG_TERRITORY[o]=r; }));
 function orgIsPartner(org){ const r=ORG_TERRITORY[org]; return !!(r && TEAM_REGIONS[r].includes(org)); }
+// Sub-regiões (circuitos de Open Qualifier) de cada território: o campeão de cada uma garante 1 vaga e os vices disputam as que sobram.
+const ASCENSAO_SUB_SLOTS = {
+  AMERICAS:{BR:2, NA:1, LATAM:1},
+  EMEA:{EU:3, TR:1},
+  PACIFIC:{KR:1, JP:1, SEA:2},
+  CN:{CN:4},
+};
+const ORG_SUB = {};
+(function(){
+  const m = {
+    BR:["LOUD","MIBR","PxS' team","Team Solid","Yellow Dragon Gaming","LEGADO","counterfeit","TIME DO B3M","SÓ TEM VELHO","Rejects","BRASIL2002","NXG","X-MEN"],
+    LATAM:["KRÜ Visa","Leviatán Esports","9z","Arashi"],
+    NA:["Sentinels","100 Thieves","G2 Esports","NRG","Shopify Rebellion","Cloud9","ENVY","Shopify Rebellion Gold","FlyQuest","Masterclass","2GAME Esports","Winthrop University","Untamable Beasts","Evictix","OAFS","Wildcard"],
+    EU:["Team Vitality","FNATIC","Team Liquid","Team Heretics","Karmine Corp","Gentle Mates","Barça eSports","Mandatory","UCAM Esports","F9 EICAR","NAVI Junior","WIP Esports","Joblife","NKVT","Eintracht Frankfurt"],
+    TR:["FUT Esports","BBL Esports","R8 Esports","Team Stallions","Beşiktaş Esports","Aurora Gaming","Eternal Fire","Galatasaray Esports"],
+    KR:["T1","Gen.G","Murash Gaming","Nongshim RedForce"],
+    JP:["ZETA DIVISION","Crazy Raccoon","QT DIG"],
+    SEA:["Paper Rex","Rex Regum Qeon","FULL SENSE","GAM Esports","Alter Ego × Kertanegara","BOOM Esports"],
+  };
+  Object.entries(m).forEach(([s,l])=>l.forEach(o=>{ ORG_SUB[o]=s; }));
+  territoryAllOrgs("CN").forEach(o=>{ ORG_SUB[o]="CN"; });
+})();
+function subLabel(s){
+  return ({BR:"Brasil", LATAM:"LATAM", NA:"NA", EU:L3("Europa","Europe","Europa"), TR:L3("Turquia e MENA","Turkey & MENA","Turquía y MENA"), KR:L3("Coreia","Korea","Corea"), JP:L3("Japão","Japan","Japón"), SEA:L3("Sudeste Asiático","Southeast Asia","Sudeste Asiático"), CN:"China"})[s] || s;
+}
 // Alguns nomes em TEAM_REGIONS já existem em TEAM_NAMES com grafia um pouco diferente —
 // esse mapa aproveita o rating de quem já existe em vez de recalcular do zero.
 const TEAM_REGION_NAME_ALIASES = {
@@ -3194,18 +3220,24 @@ const I18N = {
         <p><strong>VCT 2027</strong> — 32 times parceiros em 4 territórios (Américas, EMEA, Pacific e CN) mais os times não parceiros, com centenas de jogadores e staff novos no banco. Elencos incompletos ficam incompletos até o time anunciar, e o jogo contrata dentro do mercado de transferências.</p>
         <p><strong>Calendário</strong> — Open Qualifier, Kickoff, Masters Seoul, Cup 1, Masters Valencia, Cup 2 e Champions com 16 times, mais a Copa do Mundo nas temporadas de Mundial. Eventos de 12 times: 8 parceiros mais 4 vagas decididas no Open Qualifier entre os times não parceiros. Os 4 melhores de cada território por pontos vão pro Champions.</p>
         <p><strong>Assistant Coach</strong> — agora tem efeito real no jogo, com metade da força de um Head Coach. O 6º jogador fica como reserva.</p>
+        <p><strong>Open Qualifiers por sub-região</strong> — ao criar o craque você escolhe Brasil, LATAM ou NA (Américas), Europa ou Turquia e MENA (EMEA), Coreia, Japão ou Sudeste Asiático (Pacific). Cada sub-região tem seu Open Qualifier, que você joga ao vivo com um time não parceiro: o campeão de cada sub-região garante uma vaga, e os vices disputam as vagas que sobram numa chave de última chance, completando os 12 do Kickoff e das Cups junto com os 8 parceiros.</p>
+        <p><strong>Mundial</strong> — os 16 times agora são parceiros do VCT 2027 (4 de cada território). O Regional também usa só os 8 parceiros de cada território.</p>
         <p><strong>Elencos</strong> — times sem as 5 funções cobertas agora ajustam a função de um jogador em vez de perder 3 de overall. yay foi liberado para o mercado.</p>
       `},
       {title:"v 1.3 → v 1.4", body:`
         <p><strong>VCT 2027</strong> — 32 partner teams across 4 territories (Americas, EMEA, Pacific and CN) plus non-partner teams, with hundreds of new players and staff in the pool. Incomplete rosters stay incomplete until the team announces, and the game signs players through the transfer market.</p>
         <p><strong>Calendar</strong> — Open Qualifier, Kickoff, Masters Seoul, Cup 1, Masters Valencia, Cup 2 and a 16-team Champions, plus the World Cup in World Cup seasons. 12-team events: 8 partners plus 4 slots decided in the Open Qualifier among non-partner teams. The top 4 of each territory by points go to Champions.</p>
         <p><strong>Assistant Coach</strong> — now has a real effect in the game, at half the strength of a Head Coach. The 6th player is kept as a reserve.</p>
+        <p><strong>Open Qualifiers by sub-region</strong> — when you create your player you pick Brazil, LATAM or NA (Americas), Europe or Turkey & MENA (EMEA), Korea, Japan or Southeast Asia (Pacific). Each sub-region has its own Open Qualifier, which you play live with a non-partner team: each sub-region champion earns a slot, and the runners-up fight for the remaining slots in a last-chance bracket, completing the 12 teams of the Kickoff and Cups alongside the 8 partners.</p>
+        <p><strong>World mode</strong> — the 16 teams are now VCT 2027 partners (4 per territory). Regional also uses only the 8 partners of each territory.</p>
         <p><strong>Rosters</strong> — teams that did not cover all 5 roles now adjust one player's role instead of losing 3 overall. yay was released to the market.</p>
       `},
       {title:"v 1.3 → v 1.4", body:`
         <p><strong>VCT 2027</strong> — 32 equipos socios en 4 territorios (Américas, EMEA, Pacific y CN) más los equipos no socios, con cientos de jugadores y staff nuevos en la base. Los planteles incompletos siguen incompletos hasta que el equipo los anuncie, y el juego ficha a través del mercado de transferencias.</p>
         <p><strong>Calendario</strong> — Open Qualifier, Kickoff, Masters Seúl, Cup 1, Masters Valencia, Cup 2 y Champions con 16 equipos, más la Copa del Mundo en las temporadas de Mundial. Eventos de 12 equipos: 8 socios más 4 cupos definidos en el Open Qualifier entre los no socios. Los 4 mejores de cada territorio por puntos van al Champions.</p>
         <p><strong>Assistant Coach</strong> — ahora tiene efecto real en el juego, con la mitad de la fuerza de un Head Coach. El 6º jugador queda como reserva.</p>
+        <p><strong>Open Qualifiers por subregión</strong> — al crear tu jugador elegís Brasil, LATAM o NA (Américas), Europa o Turquía y MENA (EMEA), Corea, Japón o Sudeste Asiático (Pacific). Cada subregión tiene su Open Qualifier, que jugás en vivo con un equipo no socio: el campeón de cada subregión asegura un cupo, y los subcampeones disputan los cupos restantes en una llave de última chance, completando los 12 del Kickoff y las Cups junto con los 8 socios.</p>
+        <p><strong>Mundial</strong> — los 16 equipos ahora son socios del VCT 2027 (4 por territorio). El Regional también usa solo los 8 socios de cada territorio.</p>
         <p><strong>Planteles</strong> — los equipos que no cubrían las 5 funciones ahora ajustan la función de un jugador en vez de perder 3 de overall. yay fue liberado al mercado.</p>
       `},
       {title:"v 1.2 → v 1.3", body:`
@@ -4266,13 +4298,23 @@ function ascensaoWeightedPick(orgs, snapshot, n){
   }
   return out;
 }
-// Open Qualifier: 8 times não parceiros disputam (chave de 8) as 4 vagas que completam os 12.
-// Territórios com menos de 8 não parceiros (Pacific) fazem um round-robin só de IA.
-function ascensaoQualifierOrgs(regiao, playerOrg, snapshot){
-  const ch = (TERRITORY_CHALLENGERS[regiao]||[]).slice();
+// Open Qualifier por sub-região: 8 times não parceiros (os da sub-região primeiro, completando com
+// outros não parceiros do território) disputam as vagas que aquela sub-região dá nos 12 times.
+function ascensaoQualifierField(regiao, sub, playerOrg, snapshot){
+  const ch = TERRITORY_CHALLENGERS[regiao]||[];
+  const inSub = ch.filter(o=>ORG_SUB[o]===sub), others = ch.filter(o=>ORG_SUB[o]!==sub);
   const n = Math.min(8, ch.length);
-  if(playerOrg && ch.includes(playerOrg)) return [playerOrg, ...ascensaoWeightedPick(ch.filter(o=>o!==playerOrg), snapshot, n-1)];
-  return ascensaoWeightedPick(ch, snapshot, n);
+  let picked = (playerOrg && inSub.includes(playerOrg))
+    ? [playerOrg, ...ascensaoWeightedPick(inSub.filter(o=>o!==playerOrg), snapshot, Math.min(7, inSub.length-1))]
+    : ascensaoWeightedPick(inSub, snapshot, Math.min(8, inSub.length));
+  if(picked.length<n) picked = [...picked, ...ascensaoWeightedPick(others, snapshot, n-picked.length)];
+  return picked;
+}
+function ascensaoNeedsLiveQualifier(regiao){
+  const c = state.carreira;
+  if(!c.time || orgIsPartner(c.time)) return false;
+  const ch = TERRITORY_CHALLENGERS[regiao]||[];
+  return ch.length>=8 && ch.filter(o=>ORG_SUB[o]===ORG_SUB[c.time]).length>=2;
 }
 function ascensaoSimQualifier(teams){
   if(teams.length===8) return ascensaoRunBracketAI(shuffle(teams.slice()), BRACKET_DEF);
@@ -4283,20 +4325,73 @@ function ascensaoSimQualifier(teams){
   }));
   return rankRegionalGroup(st).map(s=>s.team);
 }
-// As 4 vagas abertas de um território num evento (simula o qualifier de IA se ainda não rolou).
-function ascensaoQualifiersFor(key, regiao){
+// Ranking (só times da sub-região) do Open Qualifier dela. Simula se ainda não rolou.
+function ascensaoSubRanking(key, regiao, sub, override){
+  const c = state.carreira;
+  if(!c.qualRank) c.qualRank = {};
+  if(!c.qualRank[key]) c.qualRank[key] = {};
+  if(!c.qualRank[key][regiao]) c.qualRank[key][regiao] = {};
+  const rr = c.qualRank[key][regiao];
+  if(override){ rr[sub] = override; return override; }
+  if(!rr[sub]){
+    const ch = TERRITORY_CHALLENGERS[regiao]||[];
+    const inSub = ch.filter(o=>ORG_SUB[o]===sub);
+    if(inSub.length<=1) rr[sub] = inSub.slice();
+    else {
+      const m = c.marketNow && c.marketNow[regiao];
+      const own = regiao===c.regiao && c.time && !orgIsPartner(c.time);
+      const orgs = ascensaoQualifierField(regiao, sub, own && ORG_SUB[c.time]===sub ? c.time : null, m ? m.transferencias : null);
+      const teams = orgs.map(o=> m ? ascensaoTeamForOrg(o, regiao) : buildAscensaoOrgTeam(o, false));
+      rr[sub] = ascensaoSimQualifier(teams).map(t=>t.name).filter(o=>ORG_SUB[o]===sub);
+    }
+  }
+  return rr[sub];
+}
+// Formato: o campeão de cada sub-região garante uma vaga; os vices (completando 4 times com os
+// próximos colocados) disputam as vagas que sobraram numa chave de última chance.
+function ascensaoQualifierPlan(key, regiao){
+  const ch = TERRITORY_CHALLENGERS[regiao]||[];
+  const need = ASCENSAO_TERRITORY_SLOTS - TEAM_REGIONS[regiao].length;
+  const subs = Object.keys(ASCENSAO_SUB_SLOTS[regiao]).filter(s=>ch.some(o=>ORG_SUB[o]===s));
+  const ranks = subs.map(s=>ascensaoSubRanking(key, regiao, s));
+  if(subs.length<=1) return {direct: (ranks[0]||[]).slice(0, need), contenders:[], lastSlots:0};
+  const direct = ranks.map(r=>r[0]).filter(Boolean);
+  const contenders = [];
+  for(let place=1; contenders.length<4 && place<10; place++){
+    ranks.forEach(r=>{ if(r[place] && contenders.length<4) contenders.push(r[place]); });
+  }
+  const lastSlots = Math.max(0, Math.min(need - direct.length, contenders.length));
+  return {direct, contenders, lastSlots};
+}
+// As 4 vagas abertas de um território num evento (simula tudo da IA se ainda não rolou).
+// lastResult: ordem final da chave de última chance quando o jogador jogou ao vivo.
+function ascensaoQualifiersFor(key, regiao, lastResult){
   const c = state.carreira;
   if(!c.qualifiers) c.qualifiers = {};
   if(!c.qualifiers[key]) c.qualifiers[key] = {};
-  if(!c.qualifiers[key][regiao]){
+  if(lastResult || !c.qualifiers[key][regiao]){
     const m = c.marketNow && c.marketNow[regiao];
+    const ch = TERRITORY_CHALLENGERS[regiao]||[];
+    const need = ASCENSAO_TERRITORY_SLOTS - TEAM_REGIONS[regiao].length;
+    const plan = ascensaoQualifierPlan(key, regiao);
+    let res = plan.direct.slice();
+    if(plan.lastSlots>0){
+      let order = lastResult;
+      if(!order){
+        if(plan.contenders.length<=plan.lastSlots) order = plan.contenders;
+        else {
+          const teams = plan.contenders.map(o=> m ? ascensaoTeamForOrg(o, regiao) : buildAscensaoOrgTeam(o, false));
+          order = teams.length===4 ? ascensaoRunBracketAI(shuffle(teams), FOUR_TEAM_BRACKET_DEF).map(t=>t.name) : ascensaoSimQualifier(teams).map(t=>t.name);
+        }
+      }
+      res.push(...order.slice(0, plan.lastSlots));
+    }
+    if(res.length<need) res.push(...ascensaoWeightedPick(ch.filter(o=>!res.includes(o)), m ? m.transferencias : null, need-res.length));
+    res = res.slice(0, need);
     const own = regiao===c.regiao && c.time && !orgIsPartner(c.time);
-    const orgs = ascensaoQualifierOrgs(regiao, own ? c.time : null, m ? m.transferencias : null);
-    const teams = orgs.map(o=> m ? ascensaoTeamForOrg(o, regiao) : buildAscensaoOrgTeam(o, false));
-    let top4 = ascensaoSimQualifier(teams).map(t=>t.name).slice(0, ASCENSAO_TERRITORY_SLOTS - TEAM_REGIONS[regiao].length);
-    // Pacific tem menos de 8 não parceiros: o time do jogador entra direto no evento.
-    if(own && !top4.includes(c.time)) top4 = [...top4.slice(0, top4.length-1), c.time];
-    c.qualifiers[key][regiao] = top4;
+    // Pacific tem poucos não parceiros: o time do jogador entra direto no evento.
+    if(own && ch.length<8 && !res.includes(c.time)) res = [...res.slice(0, res.length-1), c.time];
+    c.qualifiers[key][regiao] = res;
   }
   return c.qualifiers[key][regiao];
 }
@@ -4316,21 +4411,50 @@ function setupAscensaoQualifierStage(key){
   state.roster = playerOrgTeam.roster; state.teamName = c.time; state.headCoach = playerOrgTeam.coach; state.assistantCoach = playerOrgTeam.ac || null;
   state.campaignStats = { us: state.roster.map((p,i)=>({name:p.name, role:SLOT_ORDER[i], isCharacter:p.isCharacter, country:p.country, k:0, d:0, a:0})) };
   const m = c.marketNow[c.regiao];
-  c.qualifierOrgs = ascensaoQualifierOrgs(c.regiao, c.time, m.transferencias);
+  c.qualifierSub = ORG_SUB[c.time];
+  c.qualifierOrgs = ascensaoQualifierField(c.regiao, c.qualifierSub, c.time, m.transferencias);
   const others = c.qualifierOrgs.filter(o=>o!==c.time).map(o=>ascensaoTeamForOrg(o, c.regiao));
   state.tournament = {stage:"groups_skip", playerTeam:playerOrgTeam, ascensaoPhase:"qualifier", ascensaoStageKey:key};
   buildPlayoffBracketSeeded(shuffle([playerOrgTeam, ...others]), BRACKET_DEF);
   advanceTournament();
 }
+// Resultado do 1º qualifier ao vivo: "yes" (campeão da sub-região), "lc" (vai pra última chance) ou "no".
 function ascensaoFinishQualifier(key, endInfo){
   const c = state.carreira;
   const teams = c.qualifierOrgs.map(o=> o===c.time ? ascensaoBuildPlayerTeam() : ascensaoTeamForOrg(o, c.regiao));
   const ranking = ascensaoSimQualifier(teams).map(t=>t.name).filter(n=>n!==c.time);
   ranking.splice(Math.min(ascensaoPlacementIndex(endInfo), ranking.length), 0, c.time);
-  if(!c.qualifiers) c.qualifiers = {};
-  if(!c.qualifiers[key]) c.qualifiers[key] = {};
-  c.qualifiers[key][c.regiao] = ranking.slice(0, ASCENSAO_TERRITORY_SLOTS - TEAM_REGIONS[c.regiao].length);
-  return c.qualifiers[key][c.regiao].includes(c.time);
+  ascensaoSubRanking(key, c.regiao, c.qualifierSub, ranking.filter(o=>ORG_SUB[o]===c.qualifierSub));
+  const plan = ascensaoQualifierPlan(key, c.regiao);
+  if(plan.direct.includes(c.time)){ ascensaoQualifiersFor(key, c.regiao); return "yes"; }
+  if(plan.lastSlots>0 && plan.contenders.length>plan.lastSlots && plan.contenders.includes(c.time)){
+    c.qualifierLC = plan.contenders.slice();
+    return "lc";
+  }
+  ascensaoQualifiersFor(key, c.regiao);
+  return ascensaoQualifiersFor(key, c.regiao).includes(c.time) ? "yes" : "no";
+}
+// Chave de última chance (4 vices/próximos colocados disputam as vagas que sobraram).
+function setupAscensaoQualifierLCStage(key){
+  const c = state.carreira;
+  state.difficulty = "ascensao";
+  state.screen = "match";
+  state.journeyStageStart = state.journey.length;
+  const playerOrgTeam = ascensaoBuildPlayerTeam();
+  state.roster = playerOrgTeam.roster; state.teamName = c.time; state.headCoach = playerOrgTeam.coach; state.assistantCoach = playerOrgTeam.ac || null;
+  state.campaignStats = { us: state.roster.map((p,i)=>({name:p.name, role:SLOT_ORDER[i], isCharacter:p.isCharacter, country:p.country, k:0, d:0, a:0})) };
+  const others = c.qualifierLC.filter(o=>o!==c.time).map(o=>ascensaoTeamForOrg(o, c.regiao));
+  state.tournament = {stage:"groups_skip", playerTeam:playerOrgTeam, ascensaoPhase:"qualifierLC", ascensaoStageKey:key};
+  buildPlayoffBracketSeeded(shuffle([playerOrgTeam, ...others]), FOUR_TEAM_BRACKET_DEF);
+  advanceTournament();
+}
+function ascensaoFinishQualifierLC(key, endInfo){
+  const c = state.carreira;
+  const plan = ascensaoQualifierPlan(key, c.regiao);
+  const teams = c.qualifierLC.map(o=> o===c.time ? ascensaoBuildPlayerTeam() : ascensaoTeamForOrg(o, c.regiao));
+  const order = ascensaoRunBracketAI(shuffle(teams), FOUR_TEAM_BRACKET_DEF).map(t=>t.name).filter(n=>n!==c.time);
+  order.splice(Math.min(ascensaoPlacementIndex(endInfo), order.length), 0, c.time);
+  return ascensaoQualifiersFor(key, c.regiao, order).includes(c.time);
 }
 // Monta e começa a fase Regional AO VIVO do Rumo à Ascensão — o jogador joga cada partida.
 function setupAscensaoRegionalStage(precomputado, stageKey){
@@ -4372,7 +4496,7 @@ function setupAscensaoRegionalStage(precomputado, stageKey){
   state.teamName = c.time;
   state.headCoach = playerOrgTeam.coach;
   state.assistantCoach = playerOrgTeam.ac || null;
-  if(!orgIsPartner(c.time) && (TERRITORY_CHALLENGERS[regiao]||[]).length>=8 && !(c.qualifiers && c.qualifiers[stageKey] && c.qualifiers[stageKey][regiao])){
+  if(ascensaoNeedsLiveQualifier(regiao) && !(c.qualifiers && c.qualifiers[stageKey] && c.qualifiers[stageKey][regiao])){
     return setupAscensaoQualifierStage(stageKey);
   }
   const field = ascensaoTerritoryField(regiao, stageKey);
@@ -4577,7 +4701,7 @@ function currentOpponent(){
 function ascensaoContextPrefix(){
   if(state.difficulty!=="ascensao" || !state.tournament || !state.carreira) return "";
   const fase = state.tournament.ascensaoPhase;
-  const nomeCompeticao = fase==="qualifier" ? ascensaoStageName("q_"+state.tournament.ascensaoStageKey)
+  const nomeCompeticao = fase==="qualifierLC" ? ascensaoStageName("ql_"+state.tournament.ascensaoStageKey) : fase==="qualifier" ? ascensaoStageName("q_"+state.tournament.ascensaoStageKey)
     : (fase==="regional" || fase==="masters") ? ascensaoStageName(state.tournament.ascensaoStageKey)
     : fase==='mundial' ? 'Champions'
     : fase==="worldcup" ? t("ascensaoWorldCupLabel")
@@ -5127,10 +5251,14 @@ function ascensaoCreateHTML(){
   const regionOptionsHTML = Object.keys(TEAM_REGIONS).map(r=>`
     <button class="team-option angle-sm ${c.regiao===r?'selected':''}" data-ascregiao="${r}">${r} (${territoryAllOrgs(r).length} times)</button>
   `).join("");
+  const subKeys = c.regiao ? Object.keys(ASCENSAO_SUB_SLOTS[c.regiao]) : [];
+  const subOptionsHTML = subKeys.length>1 ? subKeys.map(s=>`
+    <button class="team-option angle-sm ${c.subregiao===s?'selected':''}" data-ascsub="${s}">${subLabel(s)}</button>
+  `).join("") : "";
   const countryOptionsHTML = Object.keys(WC_COUNTRY_TO_SELECAO).sort((a,b)=>countryName(a).localeCompare(countryName(b))).map(code=>`
     <button class="team-option angle-sm ${c.nacionalidade===code?'selected':''}" data-ascpais="${code}">${countryFlag(code)} ${countryName(code)}</button>
   `).join("");
-  const canConfirm = c.nome.trim().length>0 && c.funcao && c.regiao && c.nacionalidade;
+  const canConfirm = c.nome.trim().length>0 && c.funcao && c.regiao && c.nacionalidade && (subKeys.length<=1 || c.subregiao);
   return `
   <div class="panel angle">
     <h1 class="hero" style="font-size:22px;">${t("ascensaoCreateTitle")}</h1>
@@ -5154,6 +5282,8 @@ function ascensaoCreateHTML(){
 
     <label class="test-slot-label" style="display:block;margin:16px 0 6px;">${t("ascensaoRegionLabel")}</label>
     <div class="selecao-grid">${regionOptionsHTML}</div>
+    ${subOptionsHTML ? `<label class="test-slot-label" style="display:block;margin:16px 0 6px;">${L3("Sub-região (Open Qualifier)","Sub-region (Open Qualifier)","Subregión (Open Qualifier)")}</label>
+    <div class="selecao-grid">${subOptionsHTML}</div>` : ''}
 
     <label class="test-slot-label" style="display:block;margin:16px 0 6px;">${t("ascensaoNationLabel")}</label>
     <p class="lead" style="margin-top:0;">${t("ascensaoNationLead")}</p>
@@ -5916,7 +6046,7 @@ function attachHandlers(){
   if(ascensaoNameInput) ascensaoNameInput.oninput = ()=>{
     state.carreira.nome = ascensaoNameInput.value;
     const btn = document.getElementById("ascensao-confirm-btn");
-    if(btn) btn.disabled = !(state.carreira.nome.trim().length>0 && state.carreira.funcao && state.carreira.regiao && state.carreira.nacionalidade);
+    if(btn) btn.disabled = !(state.carreira.nome.trim().length>0 && state.carreira.funcao && state.carreira.regiao && state.carreira.nacionalidade && (Object.keys(ASCENSAO_SUB_SLOTS[state.carreira.regiao]).length<=1 || state.carreira.subregiao));
   };
   document.querySelectorAll("[data-ascfuncao]").forEach(el=>{
     el.onclick = ()=>{
@@ -5947,7 +6077,10 @@ function attachHandlers(){
     };
   });
   document.querySelectorAll("[data-ascregiao]").forEach(el=>{
-    el.onclick = ()=>{ state.carreira.regiao = el.dataset.ascregiao; render(); };
+    el.onclick = ()=>{ state.carreira.regiao = el.dataset.ascregiao; state.carreira.subregiao = null; render(); };
+  });
+  document.querySelectorAll("[data-ascsub]").forEach(el=>{
+    el.onclick = ()=>{ state.carreira.subregiao = el.dataset.ascsub; render(); };
   });
   document.querySelectorAll("[data-ascpais]").forEach(el=>{
     el.onclick = ()=>{
@@ -5960,7 +6093,9 @@ function attachHandlers(){
   const ascensaoConfirmBtn = document.getElementById("ascensao-confirm-btn");
   if(ascensaoConfirmBtn) ascensaoConfirmBtn.onclick = ()=>{
     const c = state.carreira;
-    const partners = TEAM_REGIONS[c.regiao], challengers = TERRITORY_CHALLENGERS[c.regiao]||[];
+    const subKeys = Object.keys(ASCENSAO_SUB_SLOTS[c.regiao]);
+    const noSub = o=> subKeys.length<=1 || ORG_SUB[o]===c.subregiao;
+    const partners = TEAM_REGIONS[c.regiao].filter(noSub), challengers = (TERRITORY_CHALLENGERS[c.regiao]||[]).filter(noSub);
     // parceiros têm mais chance (peso 3) do que os não parceiros (peso 1)
     const pesos = [...partners.map(()=>3), ...challengers.map(()=>1)];
     c.time = weightedSampleWithoutReplacement([...partners, ...challengers], pesos, 1)[0];
@@ -6473,22 +6608,26 @@ function ascensaoHandleStageEnd(endInfo){
   const c = state.carreira;
   const phase = tr.ascensaoPhase;
 
-  if(phase==="qualifier"){
+  if(phase==="qualifier" || phase==="qualifierLC"){
     const key = tr.ascensaoStageKey;
+    const lc = phase==="qualifierLC";
     const placement = {type: endInfo.type, stageLabelKey: endInfo.stageLabelKey};
-    const qualified = ascensaoFinishQualifier(key, endInfo);
-    c.seasonStages.push({key:"q_"+key, placement});
+    const r = lc ? (ascensaoFinishQualifierLC(key, endInfo) ? "yes" : "no") : ascensaoFinishQualifier(key, endInfo);
+    c.seasonStages.push({key:(lc?"ql_":"q_")+key, placement});
     let proxima, nota;
-    if(qualified){
+    if(r==="yes"){
       proxima = {type:"stage", key};
       nota = L3("Classificado para o "+ascensaoStageName(key), "Qualified for "+ascensaoStageName(key), "Clasificado a "+ascensaoStageName(key));
+    } else if(r==="lc"){
+      proxima = {type:"stage", key:"ql_"+key};
+      nota = L3("Vice da sub-região: vai pra chave de última chance pela vaga", "Sub-region runner-up: off to the last-chance bracket for a slot", "Subcampeón de la subregión: va a la llave de última chance por un cupo");
     } else {
-      Object.keys(TEAM_REGIONS).forEach(r=>ascensaoSimAITerritory(key, r));
+      Object.keys(TEAM_REGIONS).forEach(rg=>ascensaoSimAITerritory(key, rg));
       c.seasonStages.push({key, notQualified:true});
       proxima = ascensaoNextAction(key);
       nota = L3("Eliminado no qualifier: fora do "+ascensaoStageName(key), "Out of the qualifier: not in "+ascensaoStageName(key), "Eliminado en el qualifier: fuera de "+ascensaoStageName(key));
     }
-    ascensaoShowStageSummary(ascensaoStageName("q_"+key), placement, null, proxima, nota, null);
+    ascensaoShowStageSummary(ascensaoStageName((lc?"ql_":"q_")+key), placement, null, proxima, nota, null);
     return;
   }
   if(phase==="regional" || phase==="masters"){
@@ -6769,7 +6908,7 @@ function ascensaoFinishSeason(regionalPlacement, regionalQualificou, mundialResu
   if(mundialResultado) entry.mundialResultado = mundialResultado;
   if(copaResultado) entry.copaResultado = copaResultado;
   c.historico.push(entry);
-  c.seasonStages = []; c.seasonPoints = {}; c.eventRanking = {}; c.mastersField = {}; c.qualifiers = {};
+  c.seasonStages = []; c.seasonPoints = {}; c.eventRanking = {}; c.mastersField = {}; c.qualifiers = {}; c.qualRank = {};
   ascensaoUpdateOrgForm();
   c.temporada += 1;
   state.difficulty = null;
@@ -6778,7 +6917,7 @@ function ascensaoFinishSeason(regionalPlacement, regionalQualificou, mundialResu
 
 /* ===== VCT 2027: temporada em etapas (Kickoff, Masters 1, Cup 1, Masters 2, Cup 2, Champions) ===== */
 const ASCENSAO_STAGE_SEQ = ["kickoff","masters1","cup1","masters2","cup2","champions"];
-const ASCENSAO_STAGE_NAMES = {kickoff:"Kickoff", masters1:"Masters Seoul", cup1:"Cup 1", masters2:"Masters Valencia", cup2:"Cup 2", champions:"Champions", q_kickoff:"Open Qualifier · Kickoff", q_cup1:"Open Qualifier · Cup 1", q_cup2:"Open Qualifier · Cup 2"};
+const ASCENSAO_STAGE_NAMES = {kickoff:"Kickoff", masters1:"Masters Seoul", cup1:"Cup 1", masters2:"Masters Valencia", cup2:"Cup 2", champions:"Champions", q_kickoff:"Open Qualifier · Kickoff", ql_kickoff:"Última chance · Kickoff", ql_cup1:"Última chance · Cup 1", ql_cup2:"Última chance · Cup 2", q_cup1:"Open Qualifier · Cup 1", q_cup2:"Open Qualifier · Cup 2"};
 const ASCENSAO_TERRITORY_POINTS = [10,7,5,4,3,2,1,1,0,0,0,0];
 const ASCENSAO_MASTERS_POINTS = [20,14,10,8,5,5,3,3,1,1,1,1];
 function ascensaoStageName(key){ return ASCENSAO_STAGE_NAMES[key] || key; }
@@ -6805,13 +6944,14 @@ function ascensaoJourneyPrefix(){
   const tr = state.tournament;
   if(tr.ascensaoPhase==="regional" || tr.ascensaoPhase==="masters") return ascensaoStageName(tr.ascensaoStageKey) + " · ";
   if(tr.ascensaoPhase==="qualifier") return ascensaoStageName("q_"+tr.ascensaoStageKey) + " · ";
+  if(tr.ascensaoPhase==="qualifierLC") return ascensaoStageName("ql_"+tr.ascensaoStageKey) + " · ";
   if(tr.ascensaoPhase==="mundial") return "Champions · ";
   if(tr.ascensaoPhase==="worldcup") return t("ascensaoWorldCupLabel") + " · ";
   return "";
 }
 function ascensaoInitSeason(){
   const c = state.carreira;
-  c.seasonPoints = {}; c.seasonStages = []; c.eventRanking = {}; c.mastersField = {}; c.championsOrgs = null; c.championsQualified = false; c.qualifiers = {};
+  c.seasonPoints = {}; c.seasonStages = []; c.eventRanking = {}; c.mastersField = {}; c.championsOrgs = null; c.championsQualified = false; c.qualifiers = {}; c.qualRank = {};
 }
 function ascensaoAddPoints(org, pts){
   const c = state.carreira;
@@ -7031,6 +7171,7 @@ function ascensaoStartStage(key){
   const c = state.carreira;
   if(key==="masters1" || key==="masters2") return setupAscensaoMastersStage(key);
   if(key==="champions") return setupAscensaoMundialStage();
+  if(key.startsWith("ql_")) return setupAscensaoQualifierLCStage(key.slice(3));
   const m = c.marketNow[c.regiao];
   return setupAscensaoRegionalStage({transferencias: m.transferencias, transferenciasCoach: m.transferenciasCoach}, key);
 }
