@@ -65,12 +65,13 @@ function coachBuff(coachName){
 }
 // Técnicos de uma Seleção: os cadastrados + qualquer técnico do banco com a nacionalidade dela.
 function selecaoCoaches(nacao){
-  if(!WC_SELECOES[nacao]) return [];
+  const dados = encNationData(nacao);
+  if(!dados) return [];
   const extras = COACHES.filter(c=>{
     const code = COACH_COUNTRY[c.toLowerCase()];
     return code && WC_COUNTRY_TO_SELECAO[code]===nacao;
   });
-  return [...new Set([...WC_SELECOES[nacao].coaches, ...extras])];
+  return [...new Set([...dados.coaches, ...extras])];
 }
 // Entre os HCs disponíveis de uma Seleção, escolhe sempre o melhor (maior coachBuff) — se tiver
 // só uma opção, é essa mesmo; com mais de uma, nunca fica preso na primeira da lista à toa.

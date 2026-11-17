@@ -47,13 +47,14 @@ function ascensaoContextPrefix(){
     : (fase==="regional" || fase==="masters") ? ascensaoStageName(state.tournament.ascensaoStageKey)
     : fase==='mundial' ? 'Champions'
     : fase==="worldcup" ? t("ascensaoWorldCupLabel")
+    : fase==="encQualifier" ? t("ascensaoWorldCupLabel")
     : "";
   return `${t("ascensaoSeasonLabel")(state.carreira.temporada)} · ${nomeCompeticao} · `;
 }
 function contextLabel(){
   const tr = state.tournament;
   if(!tr) return "";
-  const prefix = ascensaoContextPrefix();
+  const prefix = ascensaoContextPrefix() + encQualifierPrefix();
   if(tr.stage==="regionalGroups"){
     const g = tr.regionalGroups.myGroup;
     const roundLabel = g.pending ? t("regionalRoundLabel")(regionalPlayerRoundNumber(g.schedule, g.pending.roundIdx).atual, regionalPlayerRoundNumber(g.schedule, g.pending.roundIdx).total) : "";
@@ -61,7 +62,7 @@ function contextLabel(){
   }
   if(tr.stage==="groups"){
     const roundLabel = tr.groupBracket && tr.groupBracket.pending ? bracketLabel(tr.groupBracket.pending.def.labelKey) : "";
-    return `${prefix}${t("groupStageTag")} · ${t("groupWord")} A${roundLabel ? " · "+roundLabel : ""}`;
+    return `${prefix}${t("groupStageTag")} · ${t("groupWord")} ${tr.encGroupLetter||"A"}${roundLabel ? " · "+roundLabel : ""}`;
   }
   if(tr.stage==="playoffs" && tr.bracket && tr.bracket.pending){
     return `${prefix}${t("playoffsTag")} · ${bracketLabel(tr.bracket.pending.def.labelKey)}`;

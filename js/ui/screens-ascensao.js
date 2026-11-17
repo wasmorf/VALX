@@ -132,6 +132,7 @@ function ascensaoResultLabel(resultado){
     eliminatedGroups: t("ascensaoRegionalGroupsTitle"),
     eliminatedPlayoffs: t("ascensaoRegionalPlayoffsTitle"),
     qualified: t("ascensaoQualifiedTitle"),
+    notQualified: L3("Não classificou nos qualificatórios","Did not qualify","No clasificó en los clasificatorios"),
   }[resultado];
 }
 function ascensaoRoleSwitchHTML(){

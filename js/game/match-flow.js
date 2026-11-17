@@ -35,7 +35,7 @@ function handleContinue(){
     const pending = brk.pending;
     const oppTeam = pending.teamA.isPlayer ? pending.teamB : pending.teamA;
     state.journey.push({
-      stageLabel: `${ascensaoJourneyPrefix()}${t("groupStageTag")} · ${t("groupWord")} A · ${bracketLabel(pending.def.labelKey)}`,
+      stageLabel: `${ascensaoJourneyPrefix()}${t("groupStageTag")} · ${t("groupWord")} ${tr.encGroupLetter||"A"} · ${bracketLabel(pending.def.labelKey)}`,
       opponent: oppTeam.name,
       result: won ? "W" : "L",
       score: `${state.mapsUs}-${state.mapsThem}`,
@@ -63,6 +63,8 @@ function handleContinue(){
         if(tr.ascensaoPhase==="masters"){
           const gs = [top2, ...Object.values(tr.otherGroupsTop2)];
           buildPlayoffBracketSeeded(ascensaoMastersSeeds(gs.map(g=>g[0]), gs.map(g=>g[1])), SIX_TEAM_BRACKET_DEF);
+        } else if(state.difficulty==="copa" || tr.ascensaoPhase==="worldcup"){
+          buildPlayoffBracket(qualifiers, ENC_BRACKET16_DEF); // Esports Nations Cup: 16 times
         } else {
           buildPlayoffBracket(qualifiers);
         }
@@ -82,7 +84,7 @@ function handleContinue(){
     const pending = brk.pending;
     const oppTeam = pending.teamA.isPlayer ? pending.teamB : pending.teamA;
     state.journey.push({
-      stageLabel: ascensaoJourneyPrefix() + bracketLabel(pending.def.labelKey),
+      stageLabel: ascensaoJourneyPrefix() + encQualifierPrefix() + bracketLabel(pending.def.labelKey),
       opponent: oppTeam.name,
       result: won ? "W" : "L",
       score: `${state.mapsUs}-${state.mapsThem}`,

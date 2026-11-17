@@ -3,14 +3,18 @@
    ========================================================== */
 
 function teamSelectHTML(){
-  const optionsHTML = TEAM_NAMES.map(tm=>`
-    <button class="team-option angle-sm ${state.teamName===tm.name?'selected':''}" data-team="${tm.name}">${tm.name}</button>
+  const terrNames = {AMERICAS:"Americas", EMEA:"EMEA", PACIFIC:"Pacific", CN:"China"};
+  const optionsHTML = Object.keys(TEAM_REGIONS).map(r=>`
+    <div class="mono" style="color:var(--muted);font-size:12px;letter-spacing:.08em;margin:14px 0 8px;">${terrNames[r]||r}</div>
+    <div class="team-grid">${TEAM_REGIONS[r].map(name=>`
+      <button class="team-option angle-sm ${state.teamName===name?'selected':''}" data-team="${name}">${name}</button>
+    `).join("")}</div>
   `).join("");
   return `
   <div class="panel angle">
     <h1 class="hero" style="font-size:24px;">${t("teamSelectTitle")}</h1>
     <p class="lead">${t("teamSelectLead")}</p>
-    <div class="team-grid">${optionsHTML}</div>
+    ${optionsHTML}
     <div class="btn-row">
       <button class="btn" id="team-continue-btn" ${state.teamName?'':'disabled'}>${t("teamSelectContinue")}</button>
       <button class="btn secondary" id="team-back-btn">${t("rulesBackBtn")}</button>
@@ -31,7 +35,7 @@ function coachSelectHTML(){
     <p class="lead">${state.difficulty==="copa" ? t("coachSelectLeadCopa") : t("coachSelectLead")}</p>
     <div class="coach-grid">${optionsHTML}</div>
     <div class="btn-row">
-      <button class="btn" id="coach-continue-btn" ${state.headCoach?'':'disabled'}>${t("coachSelectContinue")}</button>
+      <button class="btn" id="coach-continue-btn" ${(state.headCoach || (state.coachOptions||[]).length===0)?'':'disabled'}>${t("coachSelectContinue")}</button>
       <button class="btn secondary" id="coach-back-btn">${t("rulesBackBtn")}</button>
     </div>
   </div>
@@ -247,7 +251,7 @@ function matchHTML(){
       <div class="team-block">
         <div class="team-name">${selecaoLabel(state.teamName)}</div>
         <div class="team-sub mono">OVR ${us}</div>
-        <div class="team-sub" style="margin-top:2px;">${state.headCoach} ${countryFlag(COACH_COUNTRY[state.headCoach.toLowerCase()])}</div>
+        <div class="team-sub" style="margin-top:2px;">${state.headCoach||"—"} ${countryFlag(COACH_COUNTRY[(state.headCoach||"").toLowerCase()])}</div>
       </div>
       <div class="vs-x">${t("vs")}</div>
       <div class="team-block">
@@ -277,6 +281,10 @@ function endHTML(){
     icon = "🥈"; titleColor = "var(--text)";
     title = state.difficulty==="regional" ? t("regionalRunnerUpTitle")(state.regionalRegiao) : t("runnerUpTitle");
     lead = t("runnerUpLead");
+  } else if(info.type==="notQualified"){
+    icon = "🗺️";
+    title = L3("Não classificou nos qualificatórios","Did not qualify","No clasificó en los clasificatorios");
+    lead = L3("Sua seleção ficou fora das vagas do qualificatório da região na Esports Nations Cup.","Your national team missed the regional qualifier spots for the Esports Nations Cup.","Tu selección quedó fuera de los cupos del clasificatorio regional de la Esports Nations Cup.");
   } else if(info.type==="playoffs"){
     icon = "🗺️";
     title = t("playoffsEliminatedTitle"); lead = t("playoffsEliminatedLead")(bracketLabel(info.stageLabelKey));

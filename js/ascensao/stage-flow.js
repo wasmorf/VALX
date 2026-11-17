@@ -190,7 +190,7 @@ function setupAscensaoMundialStage(){
   GROUP_BRACKET_DEF.forEach(d=>{ state.tournament.groupBracket.matches[d.id] = {winner:null, loser:null}; });
   advanceGroupBracket();
 }
-// Monta e começa a Copa do Mundo ao vivo (16 Seleções, 4 grupos estilo GSL, playoffs de 8) —
+// Monta e começa a Copa do Mundo ao vivo (32 Seleções, 8 grupos estilo GSL, playoffs de 16) —
 // o personagem entra na Seleção do seu país, substituindo um craque real na função dele.
 function setupAscensaoWorldCupStage(regionalPlacement, qualificou, mundialResultado){
   const c = state.carreira;
@@ -203,50 +203,38 @@ function setupAscensaoWorldCupStage(regionalPlacement, qualificou, mundialResult
   state.teamName = c.nacao;
   state.headCoach = playerTeam.coach;
   state.assistantCoach = null;
-  const outrasNacoes = Object.keys(WC_SELECOES).filter(n=>n!==c.nacao);
+  const asc = {regionalPlacement, qualificou, mundialResultado};
+  // reseta as estatísticas da campanha pro elenco da SELEÇÃO (não o do clube, que é o que
+  // ficou salvo do estágio Regional anterior) — senão o MVP dessa fase pode sair um craque
+  // do seu time de clube que nem está jogando pela Seleção.
+  state.campaignStats = { us: myRoster.map((p,i)=>({name:p.name, role:SLOT_ORDER[i], isCharacter:p.isCharacter, country:p.country, k:0, d:0, a:0})) };
+  if(!WC_SELECOES[c.nacao]){
+    // Seleção não convidada: joga o qualificatório regional ao vivo antes dos grupos da ENC.
+    encStartLiveQualifier(playerTeam, {mode:"ascensao", asc});
+    return;
+  }
+  encStartAscensaoGroups(playerTeam, encOpponentNations(c.nacao).opponents, asc);
+}
+// Monta os 8 grupos da Esports Nations Cup no Ascensão, com as 31 adversárias já definidas.
+function encStartAscensaoGroups(playerTeam, opponentNames, asc){
   const montaTimeNacao = nacao=>{
     const roster = ascensaoApplyChampionBonus(buildBestRoster(ascensaoSelecaoPlayerObjects(nacao)));
     return {id:nacao, name:nacao, roster, coach:bestSelecaoCoach(nacao), rating:teamOverall(roster)};
   };
-  const outrosComBye = outrasNacoes.filter(n=>WC_SELECAO_BYE_TEAMS.includes(n)).map(montaTimeNacao);
-  const outrosDeGrupo = shuffle(outrasNacoes.filter(n=>!WC_SELECAO_BYE_TEAMS.includes(n))).map(montaTimeNacao);
-  // reseta as estatísticas da campanha pro elenco da SELEÇÃO (não o do clube, que é o que
-  // ficou salvo do estágio Regional anterior) — senão o MVP dessa fase pode sair um craque
-  // do seu time de clube que nem está jogando pela Seleção. Vale pros dois caminhos (bye ou
-  // fase de grupos), então fica antes da bifurcação.
-  state.campaignStats = { us: myRoster.map((p,i)=>({name:p.name, role:SLOT_ORDER[i], isCharacter:p.isCharacter, country:p.country, k:0, d:0, a:0})) };
-
-  if(WC_SELECAO_BYE_TEAMS.includes(c.nacao)){
-    // minha propria selecao (Brasil ou Estados Unidos) ja tem bye — vai direto pros playoffs
-    const grupoA = outrosDeGrupo.slice(0,4), grupoB = outrosDeGrupo.slice(4,8), grupoC = outrosDeGrupo.slice(8,12);
-    const qualA = buildGroupQualifiersAI(grupoA), qualB = buildGroupQualifiersAI(grupoB), qualC = buildGroupQualifiersAI(grupoC);
-    const seeds = shuffle([playerTeam, ...outrosComBye, ...qualA, ...qualB, ...qualC]);
-    state.tournament = {
-      stage: "groups_skip", playerTeam, ascensaoPhase: "worldcup",
-      ascensaoRegionalPlacement: regionalPlacement, ascensaoQualificou: qualificou, ascensaoMundialResultado: mundialResultado,
-    };
-    buildPlayoffBracketSeeded(seeds, BRACKET_DEF);
-    advanceTournament();
-    return;
-  }
-
-  const todosDeGrupo = shuffle([playerTeam, ...outrosDeGrupo]);
-  const grupoA = todosDeGrupo.slice(0,4), grupoB = todosDeGrupo.slice(4,8), grupoC = todosDeGrupo.slice(8,12);
-  const myGroup = grupoA.some(t=>t.isPlayer) ? grupoA : (grupoB.some(t=>t.isPlayer) ? grupoB : grupoC);
-  const otherGroupsTop2 = {};
-  if(myGroup!==grupoA) otherGroupsTop2.A = buildGroupQualifiersAI(grupoA);
-  if(myGroup!==grupoB) otherGroupsTop2.B = buildGroupQualifiersAI(grupoB);
-  if(myGroup!==grupoC) otherGroupsTop2.C = buildGroupQualifiersAI(grupoC);
+  const outrosDeGrupo = shuffle(opponentNames).map(montaTimeNacao);
+  const {meuGrupo, otherGroupsTop2, letra} = encSetupGroups(playerTeam, outrosDeGrupo);
+  state.screen = "match";
   state.tournament = {
     stage: "groups",
     playerTeam,
     otherGroupsTop2,
-    byeTeams: outrosComBye,
+    encGroupLetter: letra,
+    byeTeams: [],
     ascensaoPhase: "worldcup",
-    ascensaoRegionalPlacement: regionalPlacement,
-    ascensaoQualificou: qualificou,
-    ascensaoMundialResultado: mundialResultado,
-    groupBracket: { seeds: shuffle(myGroup), matches: {}, pointerIdx:0, pending:null },
+    ascensaoRegionalPlacement: asc.regionalPlacement,
+    ascensaoQualificou: asc.qualificou,
+    ascensaoMundialResultado: asc.mundialResultado,
+    groupBracket: { seeds: shuffle(meuGrupo), matches: {}, pointerIdx:0, pending:null },
   };
   GROUP_BRACKET_DEF.forEach(d=>{ state.tournament.groupBracket.matches[d.id] = {winner:null, loser:null}; });
   advanceGroupBracket();

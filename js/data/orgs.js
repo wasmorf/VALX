@@ -38,8 +38,8 @@ const TEAM_REGIONS = {
 };
 // Times não parceiros (Challengers/Game Changers): entram no Kickoff/Cups via qualifier.
 const TERRITORY_CHALLENGERS = {
-  "AMERICAS": ["Shopify Rebellion", "Cloud9", "ENVY", "Shopify Rebellion Gold", "FlyQuest", "Masterclass", "Arashi", "2GAME Esports", "PxS' team", "Winthrop University", "9z", "Untamable Beasts", "Team Solid", "Yellow Dragon Gaming", "Evictix", "OAFS", "Wildcard", "LEGADO", "counterfeit", "TIME DO B3M", "SÓ TEM VELHO", "Rejects", "BRASIL2002", "NXG", "X-MEN"],
-  "EMEA": ["R8 Esports", "Barça eSports", "Mandatory", "Team Stallions", "Beşiktaş Esports", "UCAM Esports", "Aurora Gaming", "F9 EICAR", "NAVI Junior", "WIP Esports", "Joblife", "NKVT", "Eternal Fire", "Galatasaray Esports", "Eintracht Frankfurt"],
+  "AMERICAS": ["Shopify Rebellion", "Cloud9", "ENVY", "Shopify Rebellion Gold", "FlyQuest", "Masterclass", "Arashi", "2GAME Esports", "PxS' team", "Winthrop University", "9z", "Untamable Beasts", "Team Solid", "Yellow Dragon Gaming", "Evictix", "OAFS", "Wildcard", "EL LEGADO", "counterfeit", "TIME DO B3M", "SÓ TEM VELHO", "Rejects", "BRASIL2002", "NXG", "X-MEN", "0 intelecto", "ARRANCA DREAMS", "Mafiosos", "Master Bank", "505", "Old School Krew", "Squirtle Rangers", "STREAMER ARENA", "ARG.MIX", "fracasados ny", "MALAJUNTA", "TRAMITE"],
+  "EMEA": ["R8 Esports", "Barça eSports", "Mandatory", "Team Stallions", "Beşiktaş Esports", "UCAM Esports", "Aurora Gaming", "F9 EICAR", "NAVI Junior", "WIP Esports", "Joblife", "NKVT", "Eternal Fire", "Galatasaray Esports", "Eintracht Frankfurt", "Misa Esports", "Trigon Titans"],
   "PACIFIC": ["Murash Gaming", "Alter Ego × Kertanegara", "BOOM Esports", "QT DIG", "Nongshim RedForce"],
   "CN": ["UR", "Havoc Yonder Gaming", "Any Questions Gaming", "LGD Gaming", "TEC", "KeepBest Gaming", "VLG", "XJG", "Young Gaming"],
 };
@@ -49,7 +49,7 @@ Object.keys(TEAM_REGIONS).forEach(r=>territoryAllOrgs(r).forEach(o=>{ ORG_TERRIT
 function orgIsPartner(org){ const r=ORG_TERRITORY[org]; return !!(r && TEAM_REGIONS[r].includes(org)); }
 // Sub-regiões (circuitos de Open Qualifier) de cada território: o campeão de cada uma garante 1 vaga e os vices disputam as que sobram.
 const ASCENSAO_SUB_SLOTS = {
-  AMERICAS:{BR:2, NA:1, LATAM:1},
+  AMERICAS:{NA:1, BR:1, LATAM_N:1, LATAM_S:1},
   EMEA:{EU:3, TR:1},
   PACIFIC:{KR:1, JP:1, SEA:2},
   CN:{CN:4},
@@ -57,11 +57,12 @@ const ASCENSAO_SUB_SLOTS = {
 const ORG_SUB = {};
 (function(){
   const m = {
-    BR:["LOUD","MIBR","PxS' team","Team Solid","Yellow Dragon Gaming","LEGADO","counterfeit","TIME DO B3M","SÓ TEM VELHO","Rejects","BRASIL2002","NXG","X-MEN"],
-    LATAM:["KRÜ Visa","Leviatán Esports","9z","Arashi"],
-    NA:["Sentinels","100 Thieves","G2 Esports","NRG","Shopify Rebellion","Cloud9","ENVY","Shopify Rebellion Gold","FlyQuest","Masterclass","2GAME Esports","Winthrop University","Untamable Beasts","Evictix","OAFS","Wildcard"],
+    BR:["LOUD","MIBR","Team Solid","TIME DO B3M","SÓ TEM VELHO","BRASIL2002","0 intelecto","ARRANCA DREAMS","Mafiosos","Master Bank"],
+    NA:["Sentinels","100 Thieves","G2 Esports","NRG","Shopify Rebellion","Cloud9","ENVY","Shopify Rebellion Gold","FlyQuest","Masterclass","2GAME Esports","Winthrop University","Untamable Beasts","Evictix","OAFS","Wildcard","PxS' team","Yellow Dragon Gaming","counterfeit","Rejects","NXG","X-MEN"],
+    LATAM_N:["505","Old School Krew","Squirtle Rangers","STREAMER ARENA"],
+    LATAM_S:["KRÜ Visa","Leviatán Esports","9z","Arashi","EL LEGADO","ARG.MIX","fracasados ny","MALAJUNTA","TRAMITE"],
     EU:["Team Vitality","FNATIC","Team Liquid","Team Heretics","Karmine Corp","Gentle Mates","Barça eSports","Mandatory","UCAM Esports","F9 EICAR","NAVI Junior","WIP Esports","Joblife","NKVT","Eintracht Frankfurt"],
-    TR:["FUT Esports","BBL Esports","R8 Esports","Team Stallions","Beşiktaş Esports","Aurora Gaming","Eternal Fire","Galatasaray Esports"],
+    TR:["FUT Esports","BBL Esports","R8 Esports","Team Stallions","Beşiktaş Esports","Aurora Gaming","Eternal Fire","Galatasaray Esports","Misa Esports","Trigon Titans"],
     KR:["T1","Gen.G","Murash Gaming","Nongshim RedForce"],
     JP:["ZETA DIVISION","Crazy Raccoon","QT DIG"],
     SEA:["Paper Rex","Rex Regum Qeon","FULL SENSE","GAM Esports","Alter Ego × Kertanegara","BOOM Esports"],
@@ -70,7 +71,7 @@ const ORG_SUB = {};
   territoryAllOrgs("CN").forEach(o=>{ ORG_SUB[o]="CN"; });
 })();
 function subLabel(s){
-  return ({BR:"Brasil", LATAM:"LATAM", NA:"NA", EU:L3("Europa","Europe","Europa"), TR:L3("Turquia e MENA","Turkey & MENA","Turquía y MENA"), KR:L3("Coreia","Korea","Corea"), JP:L3("Japão","Japan","Japón"), SEA:L3("Sudeste Asiático","Southeast Asia","Sudeste Asiático"), CN:"China"})[s] || s;
+  return ({BR:"Brasil", LATAM_N:L3("LATAM Norte","LATAM North","LATAM Norte"), LATAM_S:L3("LATAM Sul","LATAM South","LATAM Sur"), NA:"NA", EU:L3("Europa","Europe","Europa"), TR:L3("Turquia e MENA","Turkey & MENA","Turquía y MENA"), KR:L3("Coreia","Korea","Corea"), JP:L3("Japão","Japan","Japón"), SEA:L3("Sudeste Asiático","Southeast Asia","Sudeste Asiático"), CN:"China"})[s] || s;
 }
 // Alguns nomes em TEAM_REGIONS já existem em TEAM_NAMES com grafia um pouco diferente —
 // esse mapa aproveita o rating de quem já existe em vez de recalcular do zero.

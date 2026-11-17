@@ -19,7 +19,7 @@ const I18N = {
     lead:"Escale seus 5 Pro Players e corra atrás do título Mundial. Cada escolha pesa — a diferença entre um super time e um fracasso é mais fina do que parece. Overall não conta a história toda.",
     diffClassicoTitle:"Modo Clássico",
     diffClassicoDesc:"Jogue o Mundial",
-    diffCopaTitle:"Copa do Mundo",
+    diffCopaTitle:"Esports Nations Cup",
     diffCopaDesc:"Jogue por uma Seleção",
     diffSelvaTitle:"Modo Selva",
     diffSelvaDesc:"Atributos ocultos",
@@ -27,7 +27,7 @@ const I18N = {
     teamSelectTitle:"Escolha o nome da sua equipe",
     teamSelectLead:"Essa será a identidade do seu time durante toda a campanha.",
     selecaoSelectTitle:"Escolha sua Seleção",
-    selecaoSelectLead:"Essa vai ser sua Seleção nacional durante toda a Copa do Mundo.",
+    selecaoSelectLead:"Essa vai ser sua Seleção nacional durante toda a Esports Nations Cup.",
     ascensaoModeBtn:"Rumo à Ascensão",
     ascensaoMundialLabel:"Mundial",
     ascensaoRegionalLabel:"Regional",
@@ -66,7 +66,7 @@ const I18N = {
     ascensaoQualityLabel:"Qualidades táticas ",
     ascensaoRegionLabel:"Região",
     ascensaoNationLabel:"Nacionalidade",
-    ascensaoNationLead:"A cada 3 temporadas (a partir da 2ª), você representa a Seleção do seu país na Copa do Mundo.",
+    ascensaoNationLead:"A cada 3 temporadas (a partir da 2ª), você representa a Seleção do seu país na Esports Nations Cup.",
     ascensaoConfirmBtn:"Confirmar e sortear time",
     ascensaoRevealTitle:"Bem-vindo!",
     ascensaoRevealLead:(nome,time,regiao)=>`${nome} acaba de assinar com a ${time} (${regiao})!`,
@@ -86,15 +86,15 @@ const I18N = {
     ascensaoOfferDeclineBtn:"Recusar",
     ascensaoSeeFinalBtn:"Ver resumo da carreira",
     ascensaoStageContinueBtn:"Continuar",
-    ascensaoWorldCupLabel:"Copa do Mundo",
+    ascensaoWorldCupLabel:"Esports Nations Cup",
     ascensaoFinalTitle:"Fim de Carreira",
     ascensaoFinalLead:(nome)=>`${nome} encerrou a carreira de 16 temporadas.`,
     ascensaoShareHeadline:nome=>`${nome} encerrou a carreira no Rumo à Ascensão!`,
     ascensaoShareFuncoesLabel:"Funções",
     ascensaoShareMundialLabel:"Títulos Mundiais",
     ascensaoShareRegionalLabel:"Títulos Regionais",
-    ascensaoShareCopaLabel:"Títulos de Copa do Mundo",
-    copaNotReady:(n,names)=>`O Modo Copa do Mundo ainda não está pronto — precisa de 16 Seleções completas pra fechar o formato do torneio, e hoje só ${n} conseguem fechar time de 5. Falta reforço em: ${names}.`,
+    ascensaoShareCopaLabel:"Títulos de Esports Nations Cup",
+    copaNotReady:(n,names)=>`O Modo Esports Nations Cup ainda não está pronto — precisa de 16 Seleções completas pra fechar o formato do torneio, e hoje só ${n} conseguem fechar time de 5. Falta reforço em: ${names}.`,
     teamSelectContinue:"Continuar para o draft",
     phase_coachselect:"TÉCNICO",
     coachSelectTitle:"Escolha o Head Coach",
@@ -144,7 +144,7 @@ const I18N = {
     groupStageTag:"FASE DE GRUPOS",
     playoffsTag:"PLAYOFFS",
     labels:{
-      ubR1:"Upper Bracket — Rodada 1", ubSemi:"Upper Bracket — Semifinal", ubFinal:"Upper Bracket — Final",
+      ubR1:"Upper Bracket — Rodada 1", ubQuarter:"Upper Bracket — Quartas", lbR3:"Lower Bracket — Rodada 3", lbR4:"Lower Bracket — Rodada 4", ubSemi:"Upper Bracket — Semifinal", ubFinal:"Upper Bracket — Final",
       groupR1:"Primeira Fase", groupUpper:"Upper (classifica)", groupLower:"Lower (eliminação)", groupDecider:"Decisão do grupo",
       lbR1:"Lower Bracket — Rodada 1", lbR2:"Lower Bracket — Rodada 2", lbSemi:"Lower Bracket — Semifinal", lbFinal:"Lower Bracket — Final",
       grandFinal:"Grande Final",
@@ -177,7 +177,7 @@ const I18N = {
     shareCoachLabel:"Coach",
     shareCta:"Tente ganhar o Mundial você também",
     shareCtaRegional:"Tente ganhar o Regional você também",
-    shareCtaCopa:"Tente ganhar a Copa do Mundo você também",
+    shareCtaCopa:"Tente ganhar a Esports Nations Cup você também",
     ascensaoShareCta:"Faça sua História também",
     shareXBtn:"Compartilhar no X",
     rulesSections:[
@@ -219,7 +219,7 @@ const I18N = {
           <li>Duelista <em>e</em> Sentinela usando Operator ao mesmo tempo: nerf geral.</li>
           <li>Nenhum jogador com IGL: nerf geral.</li>
           <li>1 ou 2 jogadores com IGL: buff geral (time bem liderado).</li>
-          <li>3 ou mais jogadores com IGL: nerf geral (não vale nas Seleções da Copa do Mundo).</li>
+          <li>3 ou mais jogadores com IGL: nerf geral (não vale nas Seleções da Esports Nations Cup).</li>
           <li>Duelista sem Entry: nerf no ataque.</li>
           <li>Sentinela sem Lurker: nerf geral.</li>
         </ul>
@@ -242,41 +242,62 @@ const I18N = {
       {title:"Modo Clássico x Modo Selva", body:`
         <p>No <strong>Clássico</strong>, você vê o overall e as qualidades táticas de cada craque durante o draft. Na <strong>Selva</strong>, tudo isso fica escondido — você recruta só pelo nome e reputação.</p>
       `},
-      {title:"Copa do Mundo", body:`
-        <p>Em vez de escolher uma organização, você escolhe uma <strong>Seleção nacional</strong> — o draft só sorteia craques que jogam por aquele país (algumas Seleções são combinadas entre países menores, tipo Finlândia/Suécia). O Head Coach também vem só da lista daquela Seleção.</p>
+      {title:"Esports Nations Cup", body:`
+        <p>Em vez de escolher uma organização, você escolhe uma <strong>Seleção nacional</strong> — o draft só sorteia craques que jogam por aquele país (algumas Seleções são combinadas entre países menores, tipo Polônia/Suécia). O Head Coach também vem só da lista daquela Seleção.</p>
         <p>O resto funciona igual ao modo normal: fase de grupos, playoffs, tudo — só que as outras 15 "equipes" adversárias também são Seleções, cada uma com o elenco real dela.</p>
-        <p>Diferença de regra específica da Copa do Mundo: o nerf de "3 ou mais IGL" não vale aqui (afinal, numa seleção de verdade é normal ter vários craques com liderança tática).</p>
+        <p>Diferença de regra específica da Esports Nations Cup: o nerf de "3 ou mais IGL" não vale aqui (afinal, numa seleção de verdade é normal ter vários craques com liderança tática).</p>
       `},
       {title:"Modo Regional", body:`
         <p>Escolha uma região (BR, NA, LAS, EMEA, APAC ou CHN) e um time de verdade de lá — o draft só sorteia craques que jogam nessa região. Regiões maiores passam por fase de grupos antes dos playoffs; as menores vão direto pro chaveamento.</p>
       `},
       {title:"Rumo à Ascensão", body:`
-        <p>Crie seu próprio craque — função, qualidades táticas e nacionalidade — e viva uma carreira de <strong>16 temporadas</strong>. A cada ano você disputa o Regional; classificando, também disputa o Mundial; e a cada poucas temporadas, a Copa do Mundo pela Seleção do seu país.</p>
+        <p>Crie seu próprio craque — função, qualidades táticas e nacionalidade — e viva uma carreira de <strong>16 temporadas</strong>. A cada ano você disputa o Regional; classificando, também disputa o Mundial; e a cada poucas temporadas, a Esports Nations Cup pela Seleção do seu país.</p>
         <p>Entre temporadas, os times fazem transferências entre si, e você também pode receber propostas de outras organizações.</p>
       `},
     ],
     changelogSections:[
+      {title:"v 1.4 → v 1.5", body:`
+        <p><strong>Clássico</strong> — agora dá pra escolher qualquer um dos 32 times parceiros (por território). O time escolhido entra no lugar de um time do mesmo território, mantendo 4 por território.</p>
+        <p><strong>Esports Nations Cup ao vivo</strong> — as 95 nações estão disponíveis no solo e no Road to the Top. Quem escolhe uma nação sem convite joga o qualificatório regional ao vivo, e o cabeçalho das partidas mostra o qualificatório (ex.: "Qualificatório América do Sul · Playoffs"). A fase de grupos mostra a letra do seu grupo (A–H).</p>
+        <p><strong>Bandeiras e elencos</strong> — bandeiras desenhadas para todas as novas nações e elencos reais para as 78 não convidadas (sem jogadores repetidos entre nações). Novos jogadores entram com overall entre 80 e 86.</p>
+        <p><strong>Desempenho</strong> — iniciar uma campanha no Clássico ficou muito mais rápido (de ~45s para menos de 1s).</p>
+      `},
       {title:"v 1.3 → v 1.4", body:`
         <p><strong>VCT 2027</strong> — 32 times parceiros em 4 territórios (Américas, EMEA, Pacific e CN) mais os times não parceiros, com centenas de jogadores e staff novos no banco. Elencos incompletos ficam incompletos até o time anunciar, e o jogo contrata dentro do mercado de transferências.</p>
-        <p><strong>Calendário</strong> — Open Qualifier, Kickoff, Masters Seoul, Cup 1, Masters Valencia, Cup 2 e Champions com 16 times, mais a Copa do Mundo nas temporadas de Mundial. Eventos de 12 times: 8 parceiros mais 4 vagas decididas no Open Qualifier entre os times não parceiros. Os 4 melhores de cada território por pontos vão pro Champions.</p>
+        <p><strong>Esports Nations Cup</strong> — a antiga Copa do Mundo agora tem 32 seleções: 17 convidadas (já nos grupos) + 15 vindas dos qualificatórios regionais (NA 2, SA 2, África 2, MENA 2, Europa 3, Sudeste Asiático/Oceania 2, Ásia 2), 8 grupos de 4 e playoffs de 16. Sem seleções juntas e sem wildcards.</p>
+        <p><strong>Calendário</strong> — Open Qualifier, Kickoff, Masters 1, Cup 1, Masters 2, Cup 2 e Champions com 16 times, mais a Esports Nations Cup nas temporadas de Mundial. Eventos de 12 times: 8 parceiros mais 4 vagas decididas no Open Qualifier entre os times não parceiros. Os 4 melhores de cada território por pontos vão pro Champions.</p>
         <p><strong>Assistant Coach</strong> — agora tem efeito real no jogo, com metade da força de um Head Coach. O 6º jogador fica como reserva.</p>
-        <p><strong>Open Qualifiers por sub-região</strong> — ao criar o craque você escolhe Brasil, LATAM ou NA (Américas), Europa ou Turquia e MENA (EMEA), Coreia, Japão ou Sudeste Asiático (Pacific). Cada sub-região tem seu Open Qualifier, que você joga ao vivo com um time não parceiro: o campeão de cada sub-região garante uma vaga, e os vices disputam as vagas que sobram numa chave de última chance, completando os 12 do Kickoff e das Cups junto com os 8 parceiros.</p>
+        <p><strong>Open Qualifiers por sub-região</strong> — ao criar o craque você escolhe NA, Brasil, LATAM Norte ou LATAM Sul (Américas), Europa ou Turquia e MENA (EMEA), Coreia, Japão ou Sudeste Asiático (Pacific). Cada sub-região tem seu Open Qualifier, que você joga ao vivo com um time não parceiro: o campeão de cada sub-região garante uma vaga, e os vices disputam as vagas que sobram numa chave de última chance, completando os 12 do Kickoff e das Cups junto com os 8 parceiros.</p>
         <p><strong>Mundial</strong> — os 16 times agora são parceiros do VCT 2027 (4 de cada território). O Regional também usa só os 8 parceiros de cada território.</p>
         <p><strong>Elencos</strong> — times sem as 5 funções cobertas agora ajustam a função de um jogador em vez de perder 3 de overall. yay foi liberado para o mercado.</p>
       `},
+      {title:"v 1.4 → v 1.5", body:`
+        <p><strong>Classic</strong> — you can now pick any of the 32 partner teams (by territory). Your team takes the place of a team from the same territory, keeping 4 per territory.</p>
+        <p><strong>Esports Nations Cup live</strong> — all 95 nations are available in solo and Road to the Top. Picking a non-invited nation means playing the regional qualifier live, and the match header shows the qualifier (e.g. "South America Qualifier · Playoffs"). The group stage shows your group letter (A–H).</p>
+        <p><strong>Flags and rosters</strong> — hand-drawn flags for all new nations and real rosters for the 78 non-invited ones (no repeated players across nations). New players come in with overall between 80 and 86.</p>
+        <p><strong>Performance</strong> — starting a Classic campaign is much faster (from ~45s to under 1s).</p>
+      `},
       {title:"v 1.3 → v 1.4", body:`
         <p><strong>VCT 2027</strong> — 32 partner teams across 4 territories (Americas, EMEA, Pacific and CN) plus non-partner teams, with hundreds of new players and staff in the pool. Incomplete rosters stay incomplete until the team announces, and the game signs players through the transfer market.</p>
-        <p><strong>Calendar</strong> — Open Qualifier, Kickoff, Masters Seoul, Cup 1, Masters Valencia, Cup 2 and a 16-team Champions, plus the World Cup in World Cup seasons. 12-team events: 8 partners plus 4 slots decided in the Open Qualifier among non-partner teams. The top 4 of each territory by points go to Champions.</p>
+        <p><strong>Esports Nations Cup</strong> — the old World Cup now has 32 national teams: 17 invited (straight into groups) + 15 from regional qualifiers (NA 2, SA 2, Africa 2, MENA 2, Europe 3, SEA/Oceania 2, Asia 2), 8 groups of 4 and a 16-team playoff. No combined teams and no wildcards.</p>
+        <p><strong>Calendar</strong> — Open Qualifier, Kickoff, Masters 1, Cup 1, Masters 2, Cup 2 and a 16-team Champions, plus the Esports Nations Cup in Esports Nations Cup seasons. 12-team events: 8 partners plus 4 slots decided in the Open Qualifier among non-partner teams. The top 4 of each territory by points go to Champions.</p>
         <p><strong>Assistant Coach</strong> — now has a real effect in the game, at half the strength of a Head Coach. The 6th player is kept as a reserve.</p>
-        <p><strong>Open Qualifiers by sub-region</strong> — when you create your player you pick Brazil, LATAM or NA (Americas), Europe or Turkey & MENA (EMEA), Korea, Japan or Southeast Asia (Pacific). Each sub-region has its own Open Qualifier, which you play live with a non-partner team: each sub-region champion earns a slot, and the runners-up fight for the remaining slots in a last-chance bracket, completing the 12 teams of the Kickoff and Cups alongside the 8 partners.</p>
+        <p><strong>Open Qualifiers by sub-region</strong> — when you create your player you pick NA, Brazil, LATAM North or LATAM South (Americas), Europe or Turkey & MENA (EMEA), Korea, Japan or Southeast Asia (Pacific). Each sub-region has its own Open Qualifier, which you play live with a non-partner team: each sub-region champion earns a slot, and the runners-up fight for the remaining slots in a last-chance bracket, completing the 12 teams of the Kickoff and Cups alongside the 8 partners.</p>
         <p><strong>World mode</strong> — the 16 teams are now VCT 2027 partners (4 per territory). Regional also uses only the 8 partners of each territory.</p>
         <p><strong>Rosters</strong> — teams that did not cover all 5 roles now adjust one player's role instead of losing 3 overall. yay was released to the market.</p>
       `},
+      {title:"v 1.4 → v 1.5", body:`
+        <p><strong>Clásico</strong> — ahora podés elegir cualquiera de los 32 equipos socios (por territorio). Tu equipo ocupa el lugar de uno del mismo territorio, manteniendo 4 por territorio.</p>
+        <p><strong>Esports Nations Cup en vivo</strong> — las 95 naciones están disponibles en solo y Rumbo a la Cima. Quien elige una nación sin invitación juega el clasificatorio regional en vivo, y el encabezado de las partidas muestra el clasificatorio (ej.: "Clasificatorio Sudamérica · Playoffs"). La fase de grupos muestra la letra de tu grupo (A–H).</p>
+        <p><strong>Banderas y planteles</strong> — banderas dibujadas para todas las naciones nuevas y planteles reales para las 78 no invitadas (sin jugadores repetidos entre naciones). Los jugadores nuevos entran con overall entre 80 y 86.</p>
+        <p><strong>Rendimiento</strong> — iniciar una campaña en Clásico es mucho más rápido (de ~45s a menos de 1s).</p>
+      `},
       {title:"v 1.3 → v 1.4", body:`
         <p><strong>VCT 2027</strong> — 32 equipos socios en 4 territorios (Américas, EMEA, Pacific y CN) más los equipos no socios, con cientos de jugadores y staff nuevos en la base. Los planteles incompletos siguen incompletos hasta que el equipo los anuncie, y el juego ficha a través del mercado de transferencias.</p>
-        <p><strong>Calendario</strong> — Open Qualifier, Kickoff, Masters Seúl, Cup 1, Masters Valencia, Cup 2 y Champions con 16 equipos, más la Copa del Mundo en las temporadas de Mundial. Eventos de 12 equipos: 8 socios más 4 cupos definidos en el Open Qualifier entre los no socios. Los 4 mejores de cada territorio por puntos van al Champions.</p>
+        <p><strong>Esports Nations Cup</strong> — el antiguo Mundial ahora tiene 32 selecciones: 17 invitadas (directo a grupos) + 15 de clasificatorios regionales (NA 2, SA 2, África 2, MENA 2, Europa 3, Sudeste Asiático/Oceanía 2, Asia 2), 8 grupos de 4 y playoffs de 16. Sin selecciones combinadas y sin wildcards.</p>
+        <p><strong>Calendario</strong> — Open Qualifier, Kickoff, Masters 1, Cup 1, Masters 2, Cup 2 y Champions con 16 equipos, más la Esports Nations Cup en las temporadas de Mundial. Eventos de 12 equipos: 8 socios más 4 cupos definidos en el Open Qualifier entre los no socios. Los 4 mejores de cada territorio por puntos van al Champions.</p>
         <p><strong>Assistant Coach</strong> — ahora tiene efecto real en el juego, con la mitad de la fuerza de un Head Coach. El 6º jugador queda como reserva.</p>
-        <p><strong>Open Qualifiers por subregión</strong> — al crear tu jugador elegís Brasil, LATAM o NA (Américas), Europa o Turquía y MENA (EMEA), Corea, Japón o Sudeste Asiático (Pacific). Cada subregión tiene su Open Qualifier, que jugás en vivo con un equipo no socio: el campeón de cada subregión asegura un cupo, y los subcampeones disputan los cupos restantes en una llave de última chance, completando los 12 del Kickoff y las Cups junto con los 8 socios.</p>
+        <p><strong>Open Qualifiers por subregión</strong> — al crear tu jugador elegís NA, Brasil, LATAM Norte o LATAM Sur (Américas), Europa o Turquía y MENA (EMEA), Corea, Japón o Sudeste Asiático (Pacific). Cada subregión tiene su Open Qualifier, que jugás en vivo con un equipo no socio: el campeón de cada subregión asegura un cupo, y los subcampeones disputan los cupos restantes en una llave de última chance, completando los 12 del Kickoff y las Cups junto con los 8 socios.</p>
         <p><strong>Mundial</strong> — los 16 equipos ahora son socios del VCT 2027 (4 por territorio). El Regional también usa solo los 8 socios de cada territorio.</p>
         <p><strong>Planteles</strong> — los equipos que no cubrían las 5 funciones ahora ajustan la función de un jugador en vez de perder 3 de overall. yay fue liberado al mercado.</p>
       `},
@@ -286,21 +307,21 @@ const I18N = {
       {title:"v 1.1 → v 1.2", body:`
         <p><strong>LOUD 2026 campeã mundial</strong> — Darker, lukxo, tkzin, erde e DaviH agora são Campeões Mundiais, e Romanilly e Bati entram como HCs campeões mundiais. Bati e DaviH têm sinergia com brasileiros e sul-americanos.</p>
         <p><strong>Seleções</strong> — Seleções com mais de um HC agora sempre pegam o melhor disponível (bzkA no Brasil). Na Seleção do Ascensão, o jogo monta automaticamente na função (entre as que você escolheu) que deixa o time mais forte.</p>
-        <p><strong>Correção</strong> — o MVP da Copa do Mundo do Ascensão podia mostrar um craque do seu clube que nem estava na Seleção.</p>
+        <p><strong>Correção</strong> — o MVP da Esports Nations Cup do Ascensão podia mostrar um craque do seu clube que nem estava na Seleção.</p>
         <p><strong>Overalls</strong> — Darker, DaviH, Jamppi, Sayonara e PROFEK subiram pra 90, tkzin pra 92, e erde e lukxo pra 93. less agora também joga de controlador.</p>
       `},
       {title:"v 1.0 → v 1.1", body:`
         <p><strong>Visual novo</strong> — layout inteiro atualizado: mais limpo, moderno e responsivo tanto no computador quanto no celular, com as fontes certas carregando pela primeira vez.</p>
         <p><strong>Ascensão sem repetição</strong> — o mercado agora lembra as trocas de temporadas anteriores em vez de recalcular tudo do zero, então os times evoluem de verdade ao longo da carreira. Craques fora da sua região tendem a voltar pra casa com o tempo.</p>
-        <p><strong>Ofertas de transferência mais inteligentes</strong> — só chegam ofertas pras funções que você escolheu (principal ou secundárias), mostrando a função e o técnico atual do time antes de aceitar. A Seleção na Copa do Mundo sempre usa sua função principal.</p>
+        <p><strong>Ofertas de transferência mais inteligentes</strong> — só chegam ofertas pras funções que você escolheu (principal ou secundárias), mostrando a função e o técnico atual do time antes de aceitar. A Seleção na Esports Nations Cup sempre usa sua função principal.</p>
         <p><strong>Troca de função por contratação</strong> — se uma contratação nova deixaria seu time melhor numa função secundária, o jogo pergunta antes de trocar, em vez de decidir sozinho.</p>
         <p><strong>Regra de IGL ajustada</strong> — 1 ou 2 craques com IGL no time agora dão buff; só a partir de 3 é que vira nerf.</p>
         <p>Além disso: mais craques novas adicionadas ao banco, e mais correções de bugs no mercado de transferências.</p>
       `},
       {title:"Beta → v 1.0", body:`
-        <p><strong>Rumo à Ascensão</strong> — modo de carreira completo: crie seu craque, jogue 16 temporadas passando por Regional, Mundial e Copa do Mundo, receba ofertas de outros times e acompanhe sua história até o fim.</p>
+        <p><strong>Rumo à Ascensão</strong> — modo de carreira completo: crie seu craque, jogue 16 temporadas passando por Regional, Mundial e Esports Nations Cup, receba ofertas de outros times e acompanhe sua história até o fim.</p>
         <p><strong>Mercado de transferências</strong> — times reais trocam craques e técnicos entre si a cada temporada, levando em conta nacionalidade, proximidade de região e sinergia. Agentes livres também entram no mercado.</p>
-        <p><strong>Temas visuais</strong> — o Modo Selva ganhou um visual vermelho escuro e denso, e a Copa do Mundo muda de cor de acordo com a Seleção escolhida.</p>
+        <p><strong>Temas visuais</strong> — o Modo Selva ganhou um visual vermelho escuro e denso, e a Esports Nations Cup muda de cor de acordo com a Seleção escolhida.</p>
         <p><strong>MVP e recordes</strong> — MVP da campanha aparece ao ser campeão de qualquer competição, e recordes quebrados durante uma campanha do Ascensão valem até o fim dela.</p>
         <p><strong>Campeãs Mundiais e Regionais</strong> — dezenas de craques novas adicionadas ao banco, com bônus permanente pra quem já foi campeã de verdade e sinergia entre quem jogou junto.</p>
         <p>Além disso: várias correções de bugs, ajustes de equilíbrio no mercado, e a tela de Campanhas Anteriores agora também guarda as carreiras do Ascensão.</p>
@@ -322,7 +343,7 @@ const I18N = {
     lead:"Draft your 5 pro players and chase the World Championship.<br>Every pick matters — the line between a super team and a disaster is thinner than it looks.<br>And Overall doesn't tell the whole story.",
     diffClassicoTitle:"Classic Mode",
     diffClassicoDesc:"Visible attributes",
-    diffCopaTitle:"World Cup",
+    diffCopaTitle:"Esports Nations Cup",
     diffCopaDesc:"Play for a National Team",
     diffSelvaTitle:"Wild Mode",
     diffSelvaDesc:"Hidden attributes",
@@ -330,7 +351,7 @@ const I18N = {
     teamSelectTitle:"Choose your team name",
     teamSelectLead:"This will be your team's identity for the whole campaign.",
     selecaoSelectTitle:"Choose your National Team",
-    selecaoSelectLead:"This will be your national team for the whole World Cup.",
+    selecaoSelectLead:"This will be your national team for the whole Esports Nations Cup.",
     ascensaoModeBtn:"Road to the Top",
     ascensaoModeDesc:"Create your pro, land on a real team, and follow a 16-season career.",
     ascensaoMundialLabel:"Worlds",
@@ -369,7 +390,7 @@ const I18N = {
     ascensaoQualityLabel:"Tactical qualities ",
     ascensaoRegionLabel:"Region",
     ascensaoNationLabel:"Nationality",
-    ascensaoNationLead:"Every 3 seasons (starting from season 2), you represent your country's team at the World Cup.",
+    ascensaoNationLead:"Every 3 seasons (starting from season 2), you represent your country's team at the Esports Nations Cup.",
     ascensaoConfirmBtn:"Confirm and draw team",
     ascensaoRevealTitle:"Welcome!",
     ascensaoRevealLead:(nome,time,regiao)=>`${nome} just signed with ${time} (${regiao})!`,
@@ -388,7 +409,7 @@ const I18N = {
     ascensaoRoleSwitchNoBtn:(atual)=>`Stay on ${atual}`,
     ascensaoOfferDeclineBtn:"Decline",
     ascensaoSeeFinalBtn:"See career summary",
-    ascensaoWorldCupLabel:"World Cup",
+    ascensaoWorldCupLabel:"Esports Nations Cup",
     ascensaoStageContinueBtn:"Continue",
     ascensaoFinalTitle:"Career Over",
     ascensaoFinalLead:(nome)=>`${nome} finished a 16-season career.`,
@@ -396,8 +417,8 @@ const I18N = {
     ascensaoShareFuncoesLabel:"Roles",
     ascensaoShareMundialLabel:"World Titles",
     ascensaoShareRegionalLabel:"Regional Titles",
-    ascensaoShareCopaLabel:"World Cup Titles",
-    copaNotReady:(n,names)=>`World Cup Mode isn't ready yet — the tournament format needs 16 complete national teams, and right now only ${n} can field a full 5-player squad. Still needs reinforcements for: ${names}.`,
+    ascensaoShareCopaLabel:"Esports Nations Cup Titles",
+    copaNotReady:(n,names)=>`Esports Nations Cup Mode isn't ready yet — the tournament format needs 16 complete national teams, and right now only ${n} can field a full 5-player squad. Still needs reinforcements for: ${names}.`,
     teamSelectContinue:"Continue to the draft",
     phase_coachselect:"COACH",
     coachSelectTitle:"Choose your Head Coach",
@@ -447,7 +468,7 @@ const I18N = {
     groupStageTag:"GROUP STAGE",
     playoffsTag:"PLAYOFFS",
     labels:{
-      ubR1:"Upper Bracket — Round 1", ubSemi:"Upper Bracket — Semifinal", ubFinal:"Upper Bracket — Final",
+      ubR1:"Upper Bracket — Round 1", ubQuarter:"Upper Bracket — Quarterfinal", lbR3:"Lower Bracket — Round 3", lbR4:"Lower Bracket — Round 4", ubSemi:"Upper Bracket — Semifinal", ubFinal:"Upper Bracket — Final",
       groupR1:"Opening Stage", groupUpper:"Upper (qualify)", groupLower:"Lower (elimination)", groupDecider:"Group decider",
       lbR1:"Lower Bracket — Round 1", lbR2:"Lower Bracket — Round 2", lbSemi:"Lower Bracket — Semifinal", lbFinal:"Lower Bracket — Final",
       grandFinal:"Grand Final",
@@ -480,7 +501,7 @@ const I18N = {
     shareCoachLabel:"Coach",
     shareCta:"Try to win the World Championship too",
     shareCtaRegional:"Try to win the Regional too",
-    shareCtaCopa:"Try to win the World Cup too",
+    shareCtaCopa:"Try to win the Esports Nations Cup too",
     ascensaoShareCta:"Make your own story too",
     shareXBtn:"Share on X",
     rulesSections:[
@@ -522,7 +543,7 @@ const I18N = {
           <li>Duelist <em>and</em> Sentinel both using Operator: general nerf.</li>
           <li>No player with IGL: general nerf.</li>
           <li>1 or 2 players with IGL: general buff (well-led team).</li>
-          <li>3 or more players with IGL: general nerf (doesn't apply to World Cup national teams).</li>
+          <li>3 or more players with IGL: general nerf (doesn't apply to Esports Nations Cup national teams).</li>
           <li>Duelist without Entry: attack nerf.</li>
           <li>Sentinel without Lurker: general nerf.</li>
         </ul>
@@ -545,16 +566,16 @@ const I18N = {
       {title:"Classic Mode vs Wild Mode", body:`
         <p>In <strong>Classic</strong>, you see each pro's overall and tactical qualities during the draft. In <strong>Wild</strong>, all of that stays hidden — you recruit on name and reputation alone.</p>
       `},
-      {title:"World Cup", body:`
-        <p>Instead of picking an organization, you pick a <strong>national team</strong> — the draft only draws pros who play for that country (some national teams are combined from smaller countries, like Finland/Sweden). The Head Coach also comes only from that national team's own list.</p>
+      {title:"Esports Nations Cup", body:`
+        <p>Instead of picking an organization, you pick a <strong>national team</strong> — the draft only draws pros who play for that country (some national teams are combined from smaller countries, like Poland/Sweden). The Head Coach also comes only from that national team's own list.</p>
         <p>Everything else works like the normal mode: group stage, playoffs, all of it — except the other 15 rival "teams" are national teams too, each with their own real roster.</p>
-        <p>World Cup-specific rule difference: the "3 or more IGL" nerf doesn't apply here (a real national team having several tactical leaders is normal).</p>
+        <p>Esports Nations Cup-specific rule difference: the "3 or more IGL" nerf doesn't apply here (a real national team having several tactical leaders is normal).</p>
       `},
       {title:"Regional Mode", body:`
         <p>Pick a region (BR, NA, LAS, EMEA, APAC or CHN) and a real team from there — the draft only draws pros who actually play in that region. Bigger regions go through a group stage before playoffs; smaller ones go straight to the bracket.</p>
       `},
       {title:"Road to the Top", body:`
-        <p>Create your own pro — role, tactical qualities, and nationality — and live a <strong>16-season</strong> career. Every year you compete in your Regional; qualifying also gets you into Worlds; and every few seasons, the World Cup with your country's national team.</p>
+        <p>Create your own pro — role, tactical qualities, and nationality — and live a <strong>16-season</strong> career. Every year you compete in your Regional; qualifying also gets you into Worlds; and every few seasons, the Esports Nations Cup with your country's national team.</p>
         <p>Between seasons, real teams make transfers among themselves, and you can also receive offers from other organizations.</p>
       `},
     ],
@@ -565,21 +586,21 @@ const I18N = {
       {title:"v 1.1 → v 1.2", body:`
         <p><strong>LOUD 2026 world champions</strong> — Darker, lukxo, tkzin, erde and DaviH are now World Champions, and Romanilly and Bati join as world champion HCs. Bati and DaviH have synergy with Brazilians and South Americans.</p>
         <p><strong>National Teams</strong> — National Teams with more than one HC now always get the best one available (bzkA for Brazil). On your Road to the Top national team, the game automatically picks whichever of your chosen roles makes the team strongest.</p>
-        <p><strong>Fix</strong> — the Road to the Top World Cup MVP could show a club player who wasn't on the national team.</p>
+        <p><strong>Fix</strong> — the Road to the Top Esports Nations Cup MVP could show a club player who wasn't on the national team.</p>
         <p><strong>Overalls</strong> — Darker, DaviH, Jamppi, Sayonara and PROFEK went up to 90, tkzin to 92, and erde and lukxo to 93. less can now also play controller.</p>
       `},
       {title:"v 1.0 → v 1.1", body:`
         <p><strong>New visuals</strong> — the whole layout got an update: cleaner, more modern, and properly responsive on both desktop and mobile, with the right fonts loading for the first time.</p>
         <p><strong>Road to the Top without the repetition</strong> — the market now remembers previous seasons' trades instead of recalculating everything from scratch, so teams genuinely evolve over a career. Players outside their home region tend to move back over time.</p>
-        <p><strong>Smarter transfer offers</strong> — offers only come for roles you chose (primary or secondary), and show the role and the team's current coach before you accept. The World Cup national team always uses your primary role.</p>
+        <p><strong>Smarter transfer offers</strong> — offers only come for roles you chose (primary or secondary), and show the role and the team's current coach before you accept. The Esports Nations Cup national team always uses your primary role.</p>
         <p><strong>Role switch on signing</strong> — if a new signing would make your team better off with you in a secondary role, the game asks before switching instead of deciding on its own.</p>
         <p><strong>IGL rule adjusted</strong> — 1 or 2 players with IGL on the team now give a buff; only 3 or more turns into a nerf.</p>
         <p>Also: more new pros added to the pool, and more bug fixes in the transfer market.</p>
       `},
       {title:"Beta → v 1.0", body:`
-        <p><strong>Road to the Top</strong> — full career mode: create your pro, play 16 seasons through Regional, Worlds, and the World Cup, receive offers from other teams, and follow your story to the end.</p>
+        <p><strong>Road to the Top</strong> — full career mode: create your pro, play 16 seasons through Regional, Worlds, and the Esports Nations Cup, receive offers from other teams, and follow your story to the end.</p>
         <p><strong>Transfer market</strong> — real teams trade players and coaches among themselves every season, factoring in nationality, region proximity, and synergy. Free agents also join the market.</p>
-        <p><strong>Visual themes</strong> — Selva Mode got a dark, dense red look, and the World Cup changes color based on the national team you pick.</p>
+        <p><strong>Visual themes</strong> — Selva Mode got a dark, dense red look, and the Esports Nations Cup changes color based on the national team you pick.</p>
         <p><strong>MVP and records</strong> — campaign MVP shows up whenever you win any competition, and records broken during a Road to the Top career hold until the career ends.</p>
         <p><strong>World and Regional Champions</strong> — dozens of new pros added to the pool, with a permanent bonus for real-life champions and synergy for those who played together.</p>
         <p>Also: several bug fixes, market balance tweaks, and the Previous Campaigns screen now also saves Road to the Top careers.</p>
@@ -601,7 +622,7 @@ const I18N = {
     lead:"Arma tus 5 jugadores profesionales y ve tras el título Mundial.<br>Cada elección pesa — la diferencia entre un súper equipo y un fracaso es más fina de lo que parece.<br>Y el Overall no cuenta toda la historia.",
     diffClassicoTitle:"Modo Clásico",
     diffClassicoDesc:"Atributos visibles",
-    diffCopaTitle:"Copa del Mundo",
+    diffCopaTitle:"Esports Nations Cup",
     diffCopaDesc:"Juega por una Selección",
     diffSelvaTitle:"Modo Selva",
     diffSelvaDesc:"Atributos ocultos",
@@ -667,7 +688,7 @@ const I18N = {
     ascensaoRoleSwitchNoBtn:(atual)=>`Seguir de ${atual}`,
     ascensaoOfferDeclineBtn:"Rechazar",
     ascensaoSeeFinalBtn:"Ver resumen de carrera",
-    ascensaoWorldCupLabel:"Copa del Mundo",
+    ascensaoWorldCupLabel:"Esports Nations Cup",
     ascensaoStageContinueBtn:"Continuar",
     ascensaoFinalTitle:"Fin de Carrera",
     ascensaoFinalLead:(nome)=>`${nome} terminó una carrera de 16 temporadas.`,
@@ -675,8 +696,8 @@ const I18N = {
     ascensaoShareFuncoesLabel:"Funciones",
     ascensaoShareMundialLabel:"Títulos Mundiales",
     ascensaoShareRegionalLabel:"Títulos Regionales",
-    ascensaoShareCopaLabel:"Títulos de Copa del Mundo",
-    copaNotReady:(n,names)=>`El Modo Copa del Mundo todavía no está listo — el formato del torneo necesita 16 Selecciones completas, y hoy solo ${n} pueden armar un equipo completo de 5. Todavía falta refuerzo en: ${names}.`,
+    ascensaoShareCopaLabel:"Títulos de Esports Nations Cup",
+    copaNotReady:(n,names)=>`El Modo Esports Nations Cup todavía no está listo — el formato del torneo necesita 16 Selecciones completas, y hoy solo ${n} pueden armar un equipo completo de 5. Todavía falta refuerzo en: ${names}.`,
     teamSelectContinue:"Continuar al draft",
     phase_coachselect:"ENTRENADOR",
     coachSelectTitle:"Elige tu Head Coach",
@@ -726,7 +747,7 @@ const I18N = {
     groupStageTag:"FASE DE GRUPOS",
     playoffsTag:"PLAYOFFS",
     labels:{
-      ubR1:"Upper Bracket — Ronda 1", ubSemi:"Upper Bracket — Semifinal", ubFinal:"Upper Bracket — Final",
+      ubR1:"Upper Bracket — Ronda 1", ubQuarter:"Upper Bracket — Cuartos", lbR3:"Lower Bracket — Ronda 3", lbR4:"Lower Bracket — Ronda 4", ubSemi:"Upper Bracket — Semifinal", ubFinal:"Upper Bracket — Final",
       groupR1:"Primera Fase", groupUpper:"Upper (clasifica)", groupLower:"Lower (eliminación)", groupDecider:"Decisión del grupo",
       lbR1:"Lower Bracket — Ronda 1", lbR2:"Lower Bracket — Ronda 2", lbSemi:"Lower Bracket — Semifinal", lbFinal:"Lower Bracket — Final",
       grandFinal:"Gran Final",
@@ -759,7 +780,7 @@ const I18N = {
     shareCoachLabel:"Coach",
     shareCta:"Intenta ganar el Mundial tú también",
     shareCtaRegional:"Intenta ganar el Regional tú también",
-    shareCtaCopa:"Intenta ganar la Copa del Mundo tú también",
+    shareCtaCopa:"Intenta ganar la Esports Nations Cup tú también",
     ascensaoShareCta:"Haz tu propia historia también",
     shareXBtn:"Compartir en X",
     rulesSections:[
@@ -801,7 +822,7 @@ const I18N = {
           <li>Duelista <em>y</em> Centinela usando Operator al mismo tiempo: nerf general.</li>
           <li>Ningún jugador con IGL: nerf general.</li>
           <li>1 o 2 jugadores con IGL: buff general (equipo bien liderado).</li>
-          <li>3 o más jugadores con IGL: nerf general (no aplica en las Selecciones de la Copa del Mundo).</li>
+          <li>3 o más jugadores con IGL: nerf general (no aplica en las Selecciones de la Esports Nations Cup).</li>
           <li>Duelista sin Entry: nerf de ataque.</li>
           <li>Centinela sin Lurker: nerf general.</li>
         </ul>
@@ -824,16 +845,16 @@ const I18N = {
       {title:"Modo Clásico vs Modo Selva", body:`
         <p>En <strong>Clásico</strong>, ves el overall y las cualidades tácticas de cada crack durante el draft. En <strong>Selva</strong>, todo eso queda oculto — reclutas solo por el nombre y la reputación.</p>
       `},
-      {title:"Copa del Mundo", body:`
-        <p>En vez de elegir una organización, eliges una <strong>Selección nacional</strong> — el draft solo sortea cracks que juegan por ese país (algunas Selecciones son combinadas entre países más chicos, como Finlandia/Suecia). El Head Coach también viene solo de la lista de esa Selección.</p>
+      {title:"Esports Nations Cup", body:`
+        <p>En vez de elegir una organización, eliges una <strong>Selección nacional</strong> — el draft solo sortea cracks que juegan por ese país (algunas Selecciones son combinadas entre países más chicos, como Polonia/Suecia). El Head Coach también viene solo de la lista de esa Selección.</p>
         <p>El resto funciona igual que el modo normal: fase de grupos, playoffs, todo — solo que los otros 15 "equipos" rivales también son Selecciones, cada una con su elenco real.</p>
-        <p>Diferencia de regla específica de la Copa del Mundo: el nerf de "3 o más IGL" no aplica acá (una selección real con varios líderes tácticos es normal).</p>
+        <p>Diferencia de regla específica de la Esports Nations Cup: el nerf de "3 o más IGL" no aplica acá (una selección real con varios líderes tácticos es normal).</p>
       `},
       {title:"Modo Regional", body:`
         <p>Elige una región (BR, NA, LAS, EMEA, APAC o CHN) y un equipo real de ahí — el draft solo sortea cracks que juegan de verdad en esa región. Las regiones más grandes tienen fase de grupos antes de los playoffs; las más chicas van directo al cuadro.</p>
       `},
       {title:"Rumbo a la Cima", body:`
-        <p>Crea tu propio crack — función, cualidades tácticas y nacionalidad — y vive una carrera de <strong>16 temporadas</strong>. Cada año juegas tu Regional; si clasificas, también el Mundial; y cada pocas temporadas, la Copa del Mundo con la Selección de tu país.</p>
+        <p>Crea tu propio crack — función, cualidades tácticas y nacionalidad — y vive una carrera de <strong>16 temporadas</strong>. Cada año juegas tu Regional; si clasificas, también el Mundial; y cada pocas temporadas, la Esports Nations Cup con la Selección de tu país.</p>
         <p>Entre temporadas, los equipos reales hacen transferencias entre ellos, y vos también podés recibir ofertas de otras organizaciones.</p>
       `},
     ],
@@ -844,21 +865,21 @@ const I18N = {
       {title:"v 1.1 → v 1.2", body:`
         <p><strong>LOUD 2026 campeona mundial</strong> — Darker, lukxo, tkzin, erde y DaviH ahora son Campeones Mundiales, y Romanilly y Bati entran como HCs campeones mundiales. Bati y DaviH tienen sinergia con brasileños y sudamericanos.</p>
         <p><strong>Selecciones</strong> — las Selecciones con más de un HC ahora siempre toman el mejor disponible (bzkA en Brasil). En la Selección de Rumbo a la Cima, el juego arma el equipo automáticamente en la función (entre las que elegiste) que lo deje más fuerte.</p>
-        <p><strong>Corrección</strong> — el MVP de la Copa del Mundo de Rumbo a la Cima podía mostrar a un jugador de tu club que no estaba en la Selección.</p>
+        <p><strong>Corrección</strong> — el MVP de la Esports Nations Cup de Rumbo a la Cima podía mostrar a un jugador de tu club que no estaba en la Selección.</p>
         <p><strong>Overalls</strong> — Darker, DaviH, Jamppi, Sayonara y PROFEK subieron a 90, tkzin a 92, y erde y lukxo a 93. less ahora también juega de controlador.</p>
       `},
       {title:"v 1.0 → v 1.1", body:`
         <p><strong>Visual nuevo</strong> — todo el diseño fue actualizado: más limpio, moderno y responsive tanto en computadora como en celular, con las fuentes correctas cargando por primera vez.</p>
         <p><strong>Rumbo a la Cima sin repetición</strong> — el mercado ahora recuerda las transferencias de temporadas anteriores en vez de recalcular todo desde cero, así que los equipos evolucionan de verdad a lo largo de la carrera. Los cracks fuera de su región tienden a volver a casa con el tiempo.</p>
-        <p><strong>Ofertas de transferencia más inteligentes</strong> — solo llegan ofertas para las funciones que elegiste (principal o secundarias), mostrando la función y el entrenador actual del equipo antes de aceptar. La Selección en la Copa del Mundo siempre usa tu función principal.</p>
+        <p><strong>Ofertas de transferencia más inteligentes</strong> — solo llegan ofertas para las funciones que elegiste (principal o secundarias), mostrando la función y el entrenador actual del equipo antes de aceptar. La Selección en la Esports Nations Cup siempre usa tu función principal.</p>
         <p><strong>Cambio de función por contratación</strong> — si una contratación nueva dejaría tu equipo mejor en una función secundaria, el juego pregunta antes de cambiar, en vez de decidir solo.</p>
         <p><strong>Regla de IGL ajustada</strong> — 1 o 2 jugadores con IGL en el equipo ahora dan buff; recién a partir de 3 se vuelve nerf.</p>
         <p>Además: más cracks nuevas agregadas a la base, y más correcciones de errores en el mercado de transferencias.</p>
       `},
       {title:"Beta → v 1.0", body:`
-        <p><strong>Rumbo a la Cima</strong> — modo de carrera completo: creá tu crack, jugá 16 temporadas pasando por el Regional, el Mundial y la Copa del Mundo, recibí ofertas de otros equipos y seguí tu historia hasta el final.</p>
+        <p><strong>Rumbo a la Cima</strong> — modo de carrera completo: creá tu crack, jugá 16 temporadas pasando por el Regional, el Mundial y la Esports Nations Cup, recibí ofertas de otros equipos y seguí tu historia hasta el final.</p>
         <p><strong>Mercado de transferencias</strong> — los equipos reales intercambian jugadores y técnicos entre ellos cada temporada, considerando nacionalidad, proximidad de región y sinergia. Los agentes libres también entran al mercado.</p>
-        <p><strong>Temas visuales</strong> — el Modo Selva tiene ahora un look rojo oscuro y denso, y la Copa del Mundo cambia de color según la Selección elegida.</p>
+        <p><strong>Temas visuales</strong> — el Modo Selva tiene ahora un look rojo oscuro y denso, y la Esports Nations Cup cambia de color según la Selección elegida.</p>
         <p><strong>MVP y récords</strong> — el MVP de la campaña aparece al ser campeón de cualquier competición, y los récords rotos durante una carrera de Rumbo a la Cima valen hasta el final de la carrera.</p>
         <p><strong>Campeonas Mundiales y Regionales</strong> — docenas de cracks nuevas agregadas a la base, con un bono permanente para quienes ya fueron campeonas de verdad y sinergia entre quienes jugaron juntas.</p>
         <p>Además: varias correcciones de errores, ajustes de equilibrio en el mercado, y la pantalla de Campañas Anteriores ahora también guarda las carreras de Rumbo a la Cima.</p>

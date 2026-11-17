@@ -4,7 +4,7 @@
 
 /* ===== VCT 2027: temporada em etapas (Kickoff, Masters 1, Cup 1, Masters 2, Cup 2, Champions) ===== */
 const ASCENSAO_STAGE_SEQ = ["kickoff","masters1","cup1","masters2","cup2","champions"];
-const ASCENSAO_STAGE_NAMES = {kickoff:"Kickoff", masters1:"Masters Seoul", cup1:"Cup 1", masters2:"Masters Valencia", cup2:"Cup 2", champions:"Champions", q_kickoff:"Open Qualifier · Kickoff", ql_kickoff:"Última chance · Kickoff", ql_cup1:"Última chance · Cup 1", ql_cup2:"Última chance · Cup 2", q_cup1:"Open Qualifier · Cup 1", q_cup2:"Open Qualifier · Cup 2"};
+const ASCENSAO_STAGE_NAMES = {kickoff:"Kickoff", masters1:"Masters 1", cup1:"Cup 1", masters2:"Masters 2", cup2:"Cup 2", champions:"Champions", q_kickoff:"Open Qualifier · Kickoff", ql_kickoff:"Última chance · Kickoff", ql_cup1:"Última chance · Cup 1", ql_cup2:"Última chance · Cup 2", q_cup1:"Open Qualifier · Cup 1", q_cup2:"Open Qualifier · Cup 2"};
 const ASCENSAO_TERRITORY_POINTS = [10,7,5,4,3,2,1,1,0,0,0,0];
 const ASCENSAO_MASTERS_POINTS = [20,14,10,8,5,5,3,3,1,1,1,1];
 function ascensaoStageName(key){ return ASCENSAO_STAGE_NAMES[key] || key; }
@@ -34,6 +34,7 @@ function ascensaoJourneyPrefix(){
   if(tr.ascensaoPhase==="qualifierLC") return ascensaoStageName("ql_"+tr.ascensaoStageKey) + " · ";
   if(tr.ascensaoPhase==="mundial") return "Champions · ";
   if(tr.ascensaoPhase==="worldcup") return t("ascensaoWorldCupLabel") + " · ";
+  if(tr.ascensaoPhase==="encQualifier") return t("ascensaoWorldCupLabel") + " · ";
   return "";
 }
 function ascensaoInitSeason(){
@@ -265,6 +266,7 @@ function ascensaoStartStage(key){
 
 function ascensaoOrFinalize(endInfo){
   state.endInfo = endInfo;
+  if(state.tournament && state.tournament.ascensaoPhase==="encQualifier"){ encHandleQualifierEnd(endInfo); return; }
   if(state.difficulty==="ascensao"){
     ascensaoHandleStageEnd(endInfo);
   } else {

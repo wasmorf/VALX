@@ -83,7 +83,7 @@ function rosterSelecaoKey(roster){
 // de todo mundo disponível pra fechar um time completo.
 const WC_SELECAO_OVERALL_RESTRICTED = new Set(["United States","South Korea","Brazil","Canada"]);
 function selecaoPlayerObjects(selecaoName){
-  const names = new Set(WC_SELECOES[selecaoName].players.map(n=>n.toLowerCase()));
+  const names = new Set(encNationData(selecaoName).players.map(n=>n.toLowerCase()));
   let jogadores = POOL.filter(p=>names.has(p.name.toLowerCase()));
   if(WC_SELECAO_OVERALL_RESTRICTED.has(selecaoName)) jogadores = jogadores.filter(p=>p.overall>=87);
   return jogadores;
@@ -212,7 +212,19 @@ function buildBestRoster(players){
 function buildAIRoster(sharedPool){
   // Ordena por overall + sinergia antes de casar as funções — assim o time da IA sempre monta
   // a MELHOR combinação possível com quem sobrou no pool, não só a primeira que encaixar.
-  const ordenados = [...sharedPool].sort((a,b)=>scoreComSinergia(b,sharedPool)-scoreComSinergia(a,sharedPool));
+  // Pontua cada jogador UMA vez (e com times/países em cache) — com o pool grande, recalcular
+  // dentro do comparador do sort levava ~45s pra montar os 15 elencos da IA.
+  const info = sharedPool.map(p=>({p, t:PLAYER_TEAM[p.name.toLowerCase()]||[], c:playerCountries(p.name)}));
+  info.forEach(a=>{
+    let pts = a.p.overall;
+    info.forEach(b=>{
+      if(b===a) return;
+      if(a.t.length && b.t.length && a.t.some(t=>b.t.includes(t))) pts += 0.75;
+      if(a.c.length && b.c.length && a.c.some(c=>b.c.includes(c))) pts += 0.3;
+    });
+    a.pts = pts;
+  });
+  const ordenados = info.sort((a,b)=>b.pts-a.pts).map(a=>a.p);
   const roster = buildValidRoster(ordenados);
   if(roster.every(Boolean)){
     roster.forEach(p=>{
@@ -259,46 +271,70 @@ function buildGroupQualifiersAI(teams){
   ];
 }
 
-// Brasil e Estados Unidos entram direto nos playoffs, sem passar pela fase de grupos — as
-// outras 12 Seleções disputam 3 grupos de 4, e os 2 primeiros de cada grupo (6 no total) se
-// juntam aos 2 times de bye pra fechar os 8 dos playoffs.
-const WC_SELECAO_BYE_TEAMS = ["Brazil","United States"];
-function setupCopaTournament(){
-  const rolesNeeded = ["duelist","flex","initiator","controller","sentinel"];
-  const outrasSelecoes = Object.keys(WC_SELECOES).filter(n=>n!==state.selecao && canCompleteRoster(rolesNeeded, selecaoPlayerObjects(n)));
-  const montaTime = (name,i)=>{
-    const roster = buildValidRoster(shuffle(selecaoPlayerObjects(name)));
-    return {id:"t"+i, name, roster, rating: teamOverall(roster), coach: bestSelecaoCoach(name)};
-  };
-  const outrosComBye = outrasSelecoes.filter(n=>WC_SELECAO_BYE_TEAMS.includes(n)).map(montaTime);
-  const outrosDeGrupo = shuffle(outrasSelecoes.filter(n=>!WC_SELECAO_BYE_TEAMS.includes(n))).map(montaTime);
-
-  state.campaignStats = { us: state.roster.map((p,i)=>({name:p.name, role:SLOT_ORDER[i], isCharacter:p.isCharacter, country:p.country, k:0, d:0, a:0})) };
-  state.campaignRecords = {singleMap:{kills:RECORDS.singleMap,holder:"aspas"}, md3:{kills:RECORDS.md3,holder:"aspas"}, md5:{kills:RECORDS.md5,holder:"marteen"}};
-  state.journey = [];
-
-  const playerTeam = {id:"player", isPlayer:true, name:state.selecao, roster:state.roster, coach:state.headCoach, rating: teamOverall(state.roster)};
-
-  if(WC_SELECAO_BYE_TEAMS.includes(state.selecao)){
-    // o próprio jogador escolheu Brasil ou Estados Unidos — já tem bye, vai direto pros playoffs
-    const grupoA = outrosDeGrupo.slice(0,4), grupoB = outrosDeGrupo.slice(4,8), grupoC = outrosDeGrupo.slice(8,12);
-    const qualA = buildGroupQualifiersAI(grupoA), qualB = buildGroupQualifiersAI(grupoB), qualC = buildGroupQualifiersAI(grupoC);
-    const seeds = shuffle([playerTeam, ...outrosComBye, ...qualA, ...qualB, ...qualC]);
-    state.tournament = {stage:"groups_skip", playerTeam};
-    buildPlayoffBracketSeeded(seeds, BRACKET_DEF);
-    advanceTournament();
-    return;
-  }
-
-  // o jogador está numa das 12 Seleções normais — cai num dos 3 grupos (o dele fica "ao vivo",
-  // os outros dois são resolvidos na hora).
-  const todosDeGrupo = shuffle([playerTeam, ...outrosDeGrupo]);
-  const grupoA = todosDeGrupo.slice(0,4), grupoB = todosDeGrupo.slice(4,8), grupoC = todosDeGrupo.slice(8,12);
-  const meuGrupo = grupoA.some(t=>t.isPlayer) ? grupoA : (grupoB.some(t=>t.isPlayer) ? grupoB : grupoC);
+// Esports Nations Cup: 32 seleções — 17 convidadas (já nos grupos) + 15 classificadas dos
+// qualificatórios regionais —, 8 grupos de 4 (estilo GSL) e playoffs de 16 em dupla eliminação.
+const WC_SELECAO_BYE_TEAMS = [];  // sem byes: todas as convidadas começam na fase de grupos
+const ENC_GROUP_LETTERS = ["A","B","C","D","E","F","G","H"];
+const ENC_ROLES_NEEDED = ["duelist","flex","initiator","controller","sentinel"];
+// Nome da região de qualificatório (NA, SA, SSA, MENA, EU, SEA, AS) no idioma atual.
+function encRegionLabel(r){
+  return ({NA:L3("América do Norte","North America","América del Norte"), SA:L3("América do Sul","South America","América del Sur"), SSA:L3("África","Africa","África"), MENA:L3("Oriente Médio e Norte da África","Middle East & North Africa","Medio Oriente y Norte de África"), EU:L3("Europa","Europe","Europa"), SEA:L3("Sudeste Asiático e Oceania","Southeast Asia & Oceania","Sudeste Asiático y Oceanía"), AS:L3("Ásia","Asia","Asia")})[r] || r;
+}
+// Prefixo "Qualificatório · <Região> · " quando o jogador está na chave do qualificatório da ENC.
+function encQualifierPrefix(){
+  const tr = state.tournament;
+  if(!tr || tr.ascensaoPhase!=="encQualifier" || !tr.encCtx) return "";
+  return L3("Qualificatório","Qualifier","Clasificatorio") + " " + encRegionLabel(tr.encCtx.region) + " · ";
+}
+// Monta o time de uma seleção qualquer (convidada ou de qualificatório).
+function encBuildNationTeam(name, id){
+  const roster = buildValidRoster(shuffle(selecaoPlayerObjects(name)));
+  return {id, name, roster, rating: teamOverall(roster), coach: bestSelecaoCoach(name)};
+}
+// Região de qualificatório (NA, SA, SSA, MENA, EU, SEA, AS) de uma seleção não convidada — ou null.
+function encNationRegion(name){
+  return Object.keys(ENC_QUALIFIER_NATIONS).find(r=>ENC_QUALIFIER_NATIONS[r][name]) || null;
+}
+// Simula os qualificatórios regionais (todos contra todos entre as seleções da região) e devolve
+// as classificadas. Se o jogador representa uma seleção não convidada (playerTeam), o time dele
+// disputa o qualificatório da própria região: se ficar nas vagas, entra no lugar de uma IA.
+// Retorna {qualified: nomes das seleções IA classificadas, playerQualified: true/false/null}.
+function encSimulateQualifiers(playerNation, playerTeam, skipRegion){
+  const qualified = [];
+  let playerQualified = null;
+  Object.entries(ENC_QUALIFIER_SLOTS).forEach(([region, slots])=>{
+    if(region===skipRegion) return;
+    const nomes = Object.keys(ENC_QUALIFIER_NATIONS[region]).filter(n=>n!==playerNation && canCompleteRoster(ENC_ROLES_NEEDED, selecaoPlayerObjects(n)));
+    const times = nomes.map((n,i)=>encBuildNationTeam(n, "q"+region+i));
+    const meuTime = (playerTeam && encNationRegion(playerNation)===region);
+    if(meuTime) times.push(playerTeam);
+    const ordem = ascensaoSimQualifier(times).slice(0, slots);
+    if(meuTime) playerQualified = ordem.some(t=>t.isPlayer);
+    qualified.push(...ordem.filter(t=>!t.isPlayer).map(t=>t.name));
+  });
+  return {qualified, playerQualified};
+}
+// Seleções adversárias: convidadas (menos a do jogador) + as classificadas dos qualificatórios.
+// Se o jogador está numa seleção não convidada e NÃO se classifica, playerQualified vem false.
+function encOpponentNations(myNation, playerTeam){
+  const convidadas = Object.keys(WC_SELECOES).filter(n=>n!==myNation && canCompleteRoster(ENC_ROLES_NEEDED, selecaoPlayerObjects(n)));
+  const q = encSimulateQualifiers(myNation, playerTeam);
+  return {opponents:[...convidadas, ...q.qualified], playerQualified: q.playerQualified};
+}
+// Divide as 32 seleções em 8 grupos; o do jogador fica "ao vivo", os outros 7 são resolvidos na hora.
+function encSetupGroups(playerTeam, outrosDeGrupo){
+  const todos = shuffle([playerTeam, ...outrosDeGrupo]);
+  const grupos = ENC_GROUP_LETTERS.map((_,i)=>todos.slice(i*4, i*4+4));
+  const meuGrupo = grupos.find(g=>g.some(t=>t.isPlayer));
+  const letra = ENC_GROUP_LETTERS[grupos.indexOf(meuGrupo)];
   const otherGroupsTop2 = {};
-  if(meuGrupo!==grupoA) otherGroupsTop2.A = buildGroupQualifiersAI(grupoA);
-  if(meuGrupo!==grupoB) otherGroupsTop2.B = buildGroupQualifiersAI(grupoB);
-  if(meuGrupo!==grupoC) otherGroupsTop2.C = buildGroupQualifiersAI(grupoC);
+  ENC_GROUP_LETTERS.forEach((letra,i)=>{ if(grupos[i]!==meuGrupo) otherGroupsTop2[letra] = buildGroupQualifiersAI(grupos[i]); });
+  return {meuGrupo, otherGroupsTop2, letra};
+}
+// Fecha a montagem da Copa solo: 8 grupos com as 31 adversárias já definidas.
+function encStartCopaGroups(playerTeam, opponentNames){
+  const outrosDeGrupo = shuffle(opponentNames).map((name,i)=>encBuildNationTeam(name, "t"+i));
+  const {meuGrupo, otherGroupsTop2, letra} = encSetupGroups(playerTeam, outrosDeGrupo);
 
   const groupBracket = { seeds: meuGrupo, matches: {}, pointerIdx: 0, pending: null };
   GROUP_BRACKET_DEF.forEach(def=>{ groupBracket.matches[def.id] = {winner:null, loser:null}; });
@@ -309,17 +345,82 @@ function setupCopaTournament(){
     groupATeams: meuGrupo,
     groupBracket,
     otherGroupsTop2,
-    byeTeams: outrosComBye,
+    encGroupLetter: letra,
+    byeTeams: [],
     bracket: null,
   };
   advanceGroupBracket();
+}
+function setupCopaTournament(){
+  state.campaignStats = { us: state.roster.map((p,i)=>({name:p.name, role:SLOT_ORDER[i], isCharacter:p.isCharacter, country:p.country, k:0, d:0, a:0})) };
+  state.campaignRecords = {singleMap:{kills:RECORDS.singleMap,holder:"aspas"}, md3:{kills:RECORDS.md3,holder:"aspas"}, md5:{kills:RECORDS.md5,holder:"marteen"}};
+  state.journey = [];
+
+  const playerTeam = {id:"player", isPlayer:true, name:state.selecao, roster:state.roster, coach:state.headCoach, rating: teamOverall(state.roster)};
+  if(!WC_SELECOES[state.selecao]){
+    // seleção não convidada: joga o qualificatório regional ao vivo antes dos grupos
+    encStartLiveQualifier(playerTeam, {mode:"copa"});
+    return;
+  }
+  encStartCopaGroups(playerTeam, encOpponentNations(state.selecao).opponents);
+}
+// ===== Qualificatório regional ao vivo (seleções não convidadas da Esports Nations Cup) =====
+// O jogador enfrenta outras seleções da própria região numa chave de dupla eliminação (4 ou 8
+// times); as vagas da região (2 ou 3) vão pra quem terminar nas primeiras colocações.
+function encStartLiveQualifier(playerTeam, ctx){
+  const nation = playerTeam.name;
+  const region = encNationRegion(nation);
+  const slots = ENC_QUALIFIER_SLOTS[region];
+  const outras = shuffle(Object.keys(ENC_QUALIFIER_NATIONS[region]).filter(n=>n!==nation && canCompleteRoster(ENC_ROLES_NEEDED, selecaoPlayerObjects(n))));
+  const size = outras.length>=7 ? 8 : 4;
+  const adversarios = outras.slice(0, size-1).map((n,i)=>encBuildNationTeam(n, "q"+i));
+  const def = size===8 ? BRACKET_DEF : FOUR_TEAM_BRACKET_DEF;
+  state.screen = "match";
+  state.tournament = {stage:"groups_skip", playerTeam, ascensaoPhase:"encQualifier", encCtx:{...ctx, nation, region, slots, field: adversarios}};
+  buildPlayoffBracketSeeded(shuffle([playerTeam, ...adversarios]), def);
+  advanceTournament();
+}
+// Fim do qualificatório ao vivo: decide se o jogador se classificou, fecha as vagas das IAs e
+// segue pros grupos (ou encerra, se ficou de fora).
+function encHandleQualifierEnd(endInfo){
+  const tr = state.tournament, ctx = tr.encCtx, playerTeam = tr.playerTeam;
+  const passou = ascensaoQualifiesFromPlayoffs(ctx.slots, endInfo);
+  const ranking = ascensaoSimQualifier(ctx.field).map(t=>t.name);
+  ranking.splice(Math.min(ascensaoPlacementIndex(endInfo), ranking.length), 0, "__player__");
+  const regiaoIA = ranking.slice(0, ctx.slots).filter(n=>n!=="__player__");
+  const outrasRegioes = encSimulateQualifiers(ctx.nation, null, ctx.region).qualified;
+  const opponents = [...Object.keys(WC_SELECOES).filter(n=>canCompleteRoster(ENC_ROLES_NEEDED, selecaoPlayerObjects(n))), ...regiaoIA, ...outrasRegioes];
+  if(passou){
+    if(ctx.mode==="copa") encStartCopaGroups(playerTeam, opponents);
+    else encStartAscensaoGroups(playerTeam, opponents, ctx.asc);
+    return;
+  }
+  if(ctx.mode==="copa"){
+    state.endInfo = {type:"notQualified"};
+    finalizeCampaign();
+  } else {
+    state.endInfo = {type:"notQualified"};
+    ascensaoShowStageSummary(t("ascensaoWorldCupLabel"), null, "notQualified", {
+      type:"finish", regionalPlacement: ctx.asc.regionalPlacement, qualificou: ctx.asc.qualificou,
+      mundialResultado: ctx.asc.mundialResultado, copaResultado: "notQualified",
+    }, undefined, null);
+  }
 }
 function setupTournament(){
   if(state.difficulty==="regional"){ setupRegionalTournament(); return; }
   if(state.difficulty==="copa"){ setupCopaTournament(); return; }
   const playerTeam = {id:"player", isPlayer:true, rating: teamOverall(state.roster)};
+  // Campo de 16 times (4 por território). Se o jogador escolheu um parceiro fora dos 16 "base",
+  // ele toma a vaga de um time base aleatório do mesmo território.
+  let baseField = TEAM_NAMES.slice();
+  if(!baseField.some(tm=>tm.name===state.teamName)){
+    const terr = ORG_TERRITORY[state.teamName];
+    const sameTerr = baseField.filter(tm=>ORG_TERRITORY[tm.name]===terr);
+    const drop = sameTerr.length ? sameTerr[Math.floor(Math.random()*sameTerr.length)] : baseField[Math.floor(Math.random()*baseField.length)];
+    baseField = baseField.filter(tm=>tm!==drop);
+  }
   const pool = shuffle(
-    TEAM_NAMES.filter(tm=>tm.name!==state.teamName).map((tm,i)=>({id:"t"+i, name:tm.name, rating:tm.rating}))
+    baseField.filter(tm=>tm.name!==state.teamName).map((tm,i)=>({id:"t"+i, name:tm.name, rating:tm.rating}))
   );
   const groupATeams = [playerTeam, pool[0], pool[1], pool[2]];
   const rest = pool.slice(3);
