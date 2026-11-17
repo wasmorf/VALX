@@ -445,7 +445,7 @@ function simulateRegionalTransfers(regiao, excludeOrg, usadosGlobalmente){
     const vaga = {};
     let pool = [...agentesLivresDaRegiao];
     const CHANCE_LIBERAR_ALEATORIO = 0.2;
-    const CHANCE_PARTICIPAR_DO_MERCADO = 0.65;
+    const CHANCE_PARTICIPAR_DO_MERCADO = 0.78;
     const orgsParticipando = orgs.filter(()=>Math.random()<CHANCE_PARTICIPAR_DO_MERCADO);
     orgsParticipando.forEach(org=>{
       const elenco = rosterCopies[org].map((nome,idx)=>({nome, idx, overall:overallDe(nome)}));
@@ -489,7 +489,7 @@ function simulateRegionalTransfers(regiao, excludeOrg, usadosGlobalmente){
       // não troca um craque do circuito certo por alguém de fora da preferência de circuito dele
       const fitLiberado = orgTransferFit(playerTransferPrefs(vaga[org].nome.toLowerCase()), org);
       for(const candidato of opcoes){
-        if(fitLiberado>0 && orgTransferFit(playerTransferPrefs(candidato.toLowerCase()), org)===0) continue;
+        if(fitLiberado>0 && Math.random()<0.7 && orgTransferFit(playerTransferPrefs(candidato.toLowerCase()), org)===0) continue;
         const tentativa = [...rosterCopies[org]];
         tentativa[vaga[org].idx] = candidato;
         const rosterObjs = tentativa.map(n=>n && poolGet(n)).filter(Boolean);

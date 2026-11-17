@@ -354,11 +354,12 @@ function weightedSampleWithoutReplacement(items, weights, count){
 function ascensaoRollTransferOffer(){
   const c = state.carreira;
   const baseRosters = c.orgRostersSnapshot || ASCENSAO_TEAM_ROSTERS;
-  if(Math.random()>=0.82) return false;
   const candidatos = Object.keys(TEAM_REGIONS).flatMap(regiao=>territoryAllOrgs(regiao).map(org=>({org,regiao})))
     .filter(o=>o.org!==c.time && baseRosters[o.org]);
   if(candidatos.length===0) return false;
-  const quantidade = Math.min(candidatos.length, Math.floor(Math.random()*4)); // 0 a 3
+  // quantidade de ofertas da temporada: 0 (10%), 1 (42%), 2 (26%), 3 (12%), 4 (6%), 5 (4%)
+  const sorteioQtd = Math.random()*100;
+  const quantidade = Math.min(candidatos.length, sorteioQtd<10 ? 0 : sorteioQtd<52 ? 1 : sorteioQtd<78 ? 2 : sorteioQtd<90 ? 3 : sorteioQtd<96 ? 4 : 5);
   if(quantidade===0) return false;
   const minhaRegiaoDeCasa = COUNTRY_TO_REGION[c.nacionalidade];
   const pesos = candidatos.map(o=>ascensaoOrgOfferWeight(o.regiao, c.regiao, minhaRegiaoDeCasa, o.org));

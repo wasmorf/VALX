@@ -177,7 +177,8 @@ function ascensaoRunMastersAI(key){
   const teams = orgs.map(org=>ascensaoTeamForOrg(org, ORG_TERRITORY[org]));
   ascensaoSimMasters(teams).forEach((t,i)=>ascensaoAddPoints(t.name, ASCENSAO_MASTERS_POINTS[i]||0));
 }
-// Champions: top 4 de cada território na soma dos pontos da temporada (16 times).
+// Champions: os 3 melhores de cada território na soma dos pontos da temporada + o campeão da
+// Cup 2 do território (16 times). Se o campeão da Cup 2 já está no top 3, a vaga vai pro 4º em pontos.
 function ascensaoChampionsOrgs(){
   const c = state.carreira;
   const out = [];
@@ -185,7 +186,12 @@ function ascensaoChampionsOrgs(){
     const m = c.marketNow[r];
     const orgs = territoryAllOrgs(r).slice().sort((a,b)=>
       ((c.seasonPoints[b]||0)-(c.seasonPoints[a]||0)) || (ascensaoOrgStrength(b, m.transferencias)-ascensaoOrgStrength(a, m.transferencias)));
-    out.push(...orgs.slice(0,4));
+    const picked = orgs.slice(0,3);
+    const cup2 = c.eventRanking && c.eventRanking.cup2 && c.eventRanking.cup2[r];
+    const campeaoCup2 = cup2 && cup2[0];
+    if(campeaoCup2 && !picked.includes(campeaoCup2)) picked.push(campeaoCup2);
+    else picked.push(...orgs.filter(o=>!picked.includes(o)).slice(0,1));
+    out.push(...picked);
   });
   return out;
 }

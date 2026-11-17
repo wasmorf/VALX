@@ -2113,7 +2113,7 @@ function simulateRegionalTransfers(regiao, excludeOrg, usadosGlobalmente){
     const vaga = {};
     let pool = [...agentesLivresDaRegiao];
     const CHANCE_LIBERAR_ALEATORIO = 0.2;
-    const CHANCE_PARTICIPAR_DO_MERCADO = 0.65;
+    const CHANCE_PARTICIPAR_DO_MERCADO = 0.78;
     const orgsParticipando = orgs.filter(()=>Math.random()<CHANCE_PARTICIPAR_DO_MERCADO);
     orgsParticipando.forEach(org=>{
       const elenco = rosterCopies[org].map((nome,idx)=>({nome, idx, overall:overallDe(nome)}));
@@ -2157,7 +2157,7 @@ function simulateRegionalTransfers(regiao, excludeOrg, usadosGlobalmente){
       // não troca um craque do circuito certo por alguém de fora da preferência de circuito dele
       const fitLiberado = orgTransferFit(playerTransferPrefs(vaga[org].nome.toLowerCase()), org);
       for(const candidato of opcoes){
-        if(fitLiberado>0 && orgTransferFit(playerTransferPrefs(candidato.toLowerCase()), org)===0) continue;
+        if(fitLiberado>0 && Math.random()<0.7 && orgTransferFit(playerTransferPrefs(candidato.toLowerCase()), org)===0) continue;
         const tentativa = [...rosterCopies[org]];
         tentativa[vaga[org].idx] = candidato;
         const rosterObjs = tentativa.map(n=>n && poolGet(n)).filter(Boolean);
@@ -4517,7 +4517,8 @@ const I18N = {
         <p><strong>Esports Nations Cup ao vivo</strong> — as 95 nações estão disponíveis no solo e no Road to the Top. Quem escolhe uma nação sem convite joga o qualificatório regional ao vivo, e o cabeçalho das partidas mostra o qualificatório (ex.: "Qualificatório América do Sul · Playoffs"). A fase de grupos mostra a letra do seu grupo (A–H).</p>
         <p><strong>Bandeiras e elencos</strong> — bandeiras desenhadas para todas as novas nações e elencos reais para as 78 não convidadas (sem jogadores repetidos entre nações). Novos jogadores entram com overall entre 80 e 86.</p>
         <p><strong>Desempenho</strong> — iniciar uma campanha no Clássico ficou muito mais rápido (de ~45s para menos de 1s).</p>
-        <p><strong>Mercado de transferências</strong> — agora respeita o circuito de cada nacionalidade: América do Norte → LATAM Norte; América do Sul → LATAM Sul e Brasil; África e Oriente Médio/Norte da África → Europa e Turquia/MENA; Europa → Europa; Sudeste Asiático, Oceania e Ásia → Pacífico; China → China. Jogadores fora do seu circuito têm mais chance de voltar pra casa, e o mercado não troca um jogador do circuito certo por alguém de fora.</p>
+        <p><strong>Champions</strong> — agora vão os 3 melhores de cada território na soma de pontos mais o campeão da Cup 2 do território. Se o campeão da Cup 2 já está entre os 3 melhores, a vaga vai pro 4º em pontos.</p>
+        <p><strong>Mercado de transferências</strong> — agora respeita o circuito de cada nacionalidade: América do Norte → LATAM Norte; América do Sul → LATAM Sul e Brasil; África e Oriente Médio/Norte da África → Europa e Turquia/MENA; Europa → Europa; Sudeste Asiático, Oceania e Ásia → Pacífico; China → China. Jogadores fora do seu circuito têm mais chance de voltar pra casa, e o mercado não troca um jogador do circuito certo por alguém de fora. Também há um pouco mais de transferências por temporada, e as ofertas pro seu craque ficaram um pouco mais frequentes, de 0 a 5 por temporada (0 é raro).</p>
       `},
       {title:"v 1.3 → v 1.4", body:`
         <p><strong>VCT 2027</strong> — 32 times parceiros em 4 territórios (Américas, EMEA, Pacific e CN) mais os times não parceiros, com centenas de jogadores e staff novos no banco. Elencos incompletos ficam incompletos até o time anunciar, e o jogo contrata dentro do mercado de transferências.</p>
@@ -4533,7 +4534,8 @@ const I18N = {
         <p><strong>Esports Nations Cup live</strong> — all 95 nations are available in solo and Road to the Top. Picking a non-invited nation means playing the regional qualifier live, and the match header shows the qualifier (e.g. "South America Qualifier · Playoffs"). The group stage shows your group letter (A–H).</p>
         <p><strong>Flags and rosters</strong> — hand-drawn flags for all new nations and real rosters for the 78 non-invited ones (no repeated players across nations). New players come in with overall between 80 and 86.</p>
         <p><strong>Performance</strong> — starting a Classic campaign is much faster (from ~45s to under 1s).</p>
-        <p><strong>Transfer market</strong> — now respects each nationality's circuit: North America → LATAM North; South America → LATAM South and Brazil; Africa and Middle East/North Africa → Europe and Turkey/MENA; Europe → Europe; Southeast Asia, Oceania and Asia → Pacific; China → China. Players outside their circuit are more likely to move back home, and the market no longer swaps a right-circuit player for an outsider.</p>
+        <p><strong>Champions</strong> — now the top 3 of each territory by points plus the territory's Cup 2 champion go. If the Cup 2 champion is already in the top 3, the slot goes to the 4th in points.</p>
+        <p><strong>Transfer market</strong> — now respects each nationality's circuit: North America → LATAM North; South America → LATAM South and Brazil; Africa and Middle East/North Africa → Europe and Turkey/MENA; Europe → Europe; Southeast Asia, Oceania and Asia → Pacific; China → China. Players outside their circuit are more likely to move back home, and the market no longer swaps a right-circuit player for an outsider. There are also slightly more transfers per season, and offers for your player are a bit more frequent, from 0 to 5 per season (0 is rare).</p>
       `},
       {title:"v 1.3 → v 1.4", body:`
         <p><strong>VCT 2027</strong> — 32 partner teams across 4 territories (Americas, EMEA, Pacific and CN) plus non-partner teams, with hundreds of new players and staff in the pool. Incomplete rosters stay incomplete until the team announces, and the game signs players through the transfer market.</p>
@@ -4549,7 +4551,8 @@ const I18N = {
         <p><strong>Esports Nations Cup en vivo</strong> — las 95 naciones están disponibles en solo y Rumbo a la Cima. Quien elige una nación sin invitación juega el clasificatorio regional en vivo, y el encabezado de las partidas muestra el clasificatorio (ej.: "Clasificatorio Sudamérica · Playoffs"). La fase de grupos muestra la letra de tu grupo (A–H).</p>
         <p><strong>Banderas y planteles</strong> — banderas dibujadas para todas las naciones nuevas y planteles reales para las 78 no invitadas (sin jugadores repetidos entre naciones). Los jugadores nuevos entran con overall entre 80 y 86.</p>
         <p><strong>Rendimiento</strong> — iniciar una campaña en Clásico es mucho más rápido (de ~45s a menos de 1s).</p>
-        <p><strong>Mercado de transferencias</strong> — ahora respeta el circuito de cada nacionalidad: América del Norte → LATAM Norte; América del Sur → LATAM Sur y Brasil; África y Medio Oriente/Norte de África → Europa y Turquía/MENA; Europa → Europa; Sudeste Asiático, Oceanía y Asia → Pacífico; China → China. Los jugadores fuera de su circuito tienen más chance de volver a casa, y el mercado ya no cambia a un jugador del circuito correcto por alguien de afuera.</p>
+        <p><strong>Champions</strong> — ahora van los 3 mejores de cada territorio por puntos más el campeón de la Cup 2 del territorio. Si el campeón de la Cup 2 ya está entre los 3 mejores, el cupo pasa al 4º en puntos.</p>
+        <p><strong>Mercado de transferencias</strong> — ahora respeta el circuito de cada nacionalidad: América del Norte → LATAM Norte; América del Sur → LATAM Sur y Brasil; África y Medio Oriente/Norte de África → Europa y Turquía/MENA; Europa → Europa; Sudeste Asiático, Oceanía y Asia → Pacífico; China → China. Los jugadores fuera de su circuito tienen más chance de volver a casa, y el mercado ya no cambia a un jugador del circuito correcto por alguien de afuera. También hay un poco más de transferencias por temporada, y las ofertas para tu jugador son un poco más frecuentes, de 0 a 5 por temporada (0 es raro).</p>
       `},
       {title:"v 1.3 → v 1.4", body:`
         <p><strong>VCT 2027</strong> — 32 equipos socios en 4 territorios (Américas, EMEA, Pacific y CN) más los equipos no socios, con cientos de jugadores y staff nuevos en la base. Los planteles incompletos siguen incompletos hasta que el equipo los anuncie, y el juego ficha a través del mercado de transferencias.</p>
@@ -8500,11 +8503,12 @@ function weightedSampleWithoutReplacement(items, weights, count){
 function ascensaoRollTransferOffer(){
   const c = state.carreira;
   const baseRosters = c.orgRostersSnapshot || ASCENSAO_TEAM_ROSTERS;
-  if(Math.random()>=0.82) return false;
   const candidatos = Object.keys(TEAM_REGIONS).flatMap(regiao=>territoryAllOrgs(regiao).map(org=>({org,regiao})))
     .filter(o=>o.org!==c.time && baseRosters[o.org]);
   if(candidatos.length===0) return false;
-  const quantidade = Math.min(candidatos.length, Math.floor(Math.random()*4)); // 0 a 3
+  // quantidade de ofertas da temporada: 0 (10%), 1 (42%), 2 (26%), 3 (12%), 4 (6%), 5 (4%)
+  const sorteioQtd = Math.random()*100;
+  const quantidade = Math.min(candidatos.length, sorteioQtd<10 ? 0 : sorteioQtd<52 ? 1 : sorteioQtd<78 ? 2 : sorteioQtd<90 ? 3 : sorteioQtd<96 ? 4 : 5);
   if(quantidade===0) return false;
   const minhaRegiaoDeCasa = COUNTRY_TO_REGION[c.nacionalidade];
   const pesos = candidatos.map(o=>ascensaoOrgOfferWeight(o.regiao, c.regiao, minhaRegiaoDeCasa, o.org));
@@ -8743,7 +8747,8 @@ function ascensaoRunMastersAI(key){
   const teams = orgs.map(org=>ascensaoTeamForOrg(org, ORG_TERRITORY[org]));
   ascensaoSimMasters(teams).forEach((t,i)=>ascensaoAddPoints(t.name, ASCENSAO_MASTERS_POINTS[i]||0));
 }
-// Champions: top 4 de cada território na soma dos pontos da temporada (16 times).
+// Champions: os 3 melhores de cada território na soma dos pontos da temporada + o campeão da
+// Cup 2 do território (16 times). Se o campeão da Cup 2 já está no top 3, a vaga vai pro 4º em pontos.
 function ascensaoChampionsOrgs(){
   const c = state.carreira;
   const out = [];
@@ -8751,7 +8756,12 @@ function ascensaoChampionsOrgs(){
     const m = c.marketNow[r];
     const orgs = territoryAllOrgs(r).slice().sort((a,b)=>
       ((c.seasonPoints[b]||0)-(c.seasonPoints[a]||0)) || (ascensaoOrgStrength(b, m.transferencias)-ascensaoOrgStrength(a, m.transferencias)));
-    out.push(...orgs.slice(0,4));
+    const picked = orgs.slice(0,3);
+    const cup2 = c.eventRanking && c.eventRanking.cup2 && c.eventRanking.cup2[r];
+    const campeaoCup2 = cup2 && cup2[0];
+    if(campeaoCup2 && !picked.includes(campeaoCup2)) picked.push(campeaoCup2);
+    else picked.push(...orgs.filter(o=>!picked.includes(o)).slice(0,1));
+    out.push(...picked);
   });
   return out;
 }
