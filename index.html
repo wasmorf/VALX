@@ -5828,7 +5828,9 @@ const I18N = {
     ascensaoOfferLead:n=>`Você recebeu ${n} oferta${n===1?"":"s"} de transferência! Escolha uma pra aceitar:`,
     ascensaoOfferAcceptBtn:"Aceitar oferta",
     ascensaoOfferRoleLabel:"Você jogaria de",
-    ascensaoOfferCoachLabel:"Técnico atual",
+    ascensaoOfferCoachLabel:"Técnico principal",
+    ascensaoOfferAcLabel:"Técnico auxiliar",
+    ascensaoOfferRatingLabel:"Força do time com você",
     ascensaoRoleSwitchTitle:"Troca de função?",
     ascensaoRoleSwitchBody:(atual,nova)=>`Com a contratação dessa temporada, o time ficaria melhor com você jogando de ${nova} em vez de ${atual}. Quer trocar?`,
     ascensaoRoleSwitchYesBtn:(nova)=>`Jogar de ${nova}`,
@@ -6016,6 +6018,7 @@ const I18N = {
         <p><strong>Jogadores novos</strong> — 744 jogadores do VLR que ainda não estavam no jogo foram adicionados, com função pelos agentes e overall pelo desempenho. Também ganharam bandeira nova: Bermudas, Croácia, Hungria, Israel, Romênia, Eslovênia, Eslováquia e Kosovo.</p>
         <p><strong>Funções dos jogadores</strong> — jogadores ganharam funções extras com base nos agentes que realmente jogam (nenhuma função foi removida) (dados do VLR de 2021 a 2027, com peso maior para os anos mais recentes).</p>
         <p><strong>Mercado de transferências</strong> — agora respeita o circuito de cada nacionalidade: América do Norte → LATAM Norte; América do Sul → LATAM Sul e Brasil; África e Oriente Médio/Norte da África → Europa e Turquia/MENA; Europa → Europa; Sudeste Asiático, Oceania e Ásia → Pacífico; China → China. Jogadores fora do seu circuito têm mais chance de voltar pra casa, e o mercado não troca um jogador do circuito certo por alguém de fora. Também há um pouco mais de transferências por temporada, e as ofertas pro seu craque ficaram um pouco mais frequentes, de 0 a 5 por temporada (0 é raro).</p>
+        <p><strong>Prévia da oferta</strong> — ao receber uma oferta, você vê como o time fica se aceitar: os 5 titulares por função (com você em destaque), técnico principal, auxiliar e a força do time. Ao aceitar, o time entra exatamente assim, sem mudar de técnico ou de elenco.</p>
       `},
       {title:"v 1.3 → v 1.4", body:`
         <p><strong>VCT 2027</strong> — 32 times parceiros em 4 territórios (Américas, EMEA, Pacific e CN) mais os times não parceiros, com centenas de jogadores e staff novos no banco. Elencos incompletos ficam incompletos até o time anunciar, e o jogo contrata dentro do mercado de transferências.</p>
@@ -6036,6 +6039,7 @@ const I18N = {
         <p><strong>New players</strong> — 744 VLR players who were not in the game yet were added, with roles from their agents and overall from their performance. New flags too: Bermuda, Croatia, Hungary, Israel, Romania, Slovenia, Slovakia and Kosovo.</p>
         <p><strong>Player roles</strong> — players gained extra roles based on the agents they actually play (no role was removed) (VLR data from 2021 to 2027, with more weight on recent years).</p>
         <p><strong>Transfer market</strong> — now respects each nationality's circuit: North America → LATAM North; South America → LATAM South and Brazil; Africa and Middle East/North Africa → Europe and Turkey/MENA; Europe → Europe; Southeast Asia, Oceania and Asia → Pacific; China → China. Players outside their circuit are more likely to move back home, and the market no longer swaps a right-circuit player for an outsider. There are also slightly more transfers per season, and offers for your player are a bit more frequent, from 0 to 5 per season (0 is rare).</p>
+        <p><strong>Offer preview</strong> — when you get an offer, you see how the team will look if you accept: the 5 starters by role (with you highlighted), head coach, assistant coach and team strength. When you accept, the team joins exactly like that, with no change of coach or roster.</p>
       `},
       {title:"v 1.3 → v 1.4", body:`
         <p><strong>VCT 2027</strong> — 32 partner teams across 4 territories (Americas, EMEA, Pacific and CN) plus non-partner teams, with hundreds of new players and staff in the pool. Incomplete rosters stay incomplete until the team announces, and the game signs players through the transfer market.</p>
@@ -6056,6 +6060,7 @@ const I18N = {
         <p><strong>Jugadores nuevos</strong> — se agregaron 744 jugadores de VLR que aún no estaban en el juego, con función según sus agentes y overall según su rendimiento. También hay banderas nuevas: Bermudas, Croacia, Hungría, Israel, Rumania, Eslovenia, Eslovaquia y Kosovo.</p>
         <p><strong>Funciones de los jugadores</strong> — jugadores ganaron funciones extra según los agentes que realmente juegan (no se quitó ninguna función) (datos de VLR de 2021 a 2027, con más peso en los años recientes).</p>
         <p><strong>Mercado de transferencias</strong> — ahora respeta el circuito de cada nacionalidad: América del Norte → LATAM Norte; América del Sur → LATAM Sur y Brasil; África y Medio Oriente/Norte de África → Europa y Turquía/MENA; Europa → Europa; Sudeste Asiático, Oceanía y Asia → Pacífico; China → China. Los jugadores fuera de su circuito tienen más chance de volver a casa, y el mercado ya no cambia a un jugador del circuito correcto por alguien de afuera. También hay un poco más de transferencias por temporada, y las ofertas para tu jugador son un poco más frecuentes, de 0 a 5 por temporada (0 es raro).</p>
+        <p><strong>Vista previa de la oferta</strong> — al recibir una oferta, ves cómo queda el equipo si aceptas: los 5 titulares por función (contigo destacado), entrenador principal, auxiliar y la fuerza del equipo. Al aceptar, el equipo queda exactamente así, sin cambiar de entrenador ni de plantel.</p>
       `},
       {title:"v 1.3 → v 1.4", body:`
         <p><strong>VCT 2027</strong> — 32 equipos socios en 4 territorios (Américas, EMEA, Pacific y CN) más los equipos no socios, con cientos de jugadores y staff nuevos en la base. Los planteles incompletos siguen incompletos hasta que el equipo los anuncie, y el juego ficha a través del mercado de transferencias.</p>
@@ -6167,7 +6172,9 @@ const I18N = {
     ascensaoOfferLead:n=>`You received ${n} transfer offer${n===1?"":"s"}! Pick one to accept:`,
     ascensaoOfferAcceptBtn:"Accept offer",
     ascensaoOfferRoleLabel:"You would play",
-    ascensaoOfferCoachLabel:"Current coach",
+    ascensaoOfferCoachLabel:"Head coach",
+    ascensaoOfferAcLabel:"Assistant coach",
+    ascensaoOfferRatingLabel:"Team strength with you",
     ascensaoRoleSwitchTitle:"Switch role?",
     ascensaoRoleSwitchBody:(atual,nova)=>`With this season's signing, the team would be better off with you playing ${nova} instead of ${atual}. Want to switch?`,
     ascensaoRoleSwitchYesBtn:(nova)=>`Play ${nova}`,
@@ -6446,7 +6453,9 @@ const I18N = {
     ascensaoOfferLead:n=>`¡Recibiste ${n} oferta${n===1?"":"s"} de transferencia! Elige una para aceptar:`,
     ascensaoOfferAcceptBtn:"Aceptar oferta",
     ascensaoOfferRoleLabel:"Jugarías de",
-    ascensaoOfferCoachLabel:"Entrenador actual",
+    ascensaoOfferCoachLabel:"Entrenador principal",
+    ascensaoOfferAcLabel:"Entrenador auxiliar",
+    ascensaoOfferRatingLabel:"Fuerza del equipo contigo",
     ascensaoRoleSwitchTitle:"¿Cambiar de función?",
     ascensaoRoleSwitchBody:(atual,nova)=>`Con la contratación de esta temporada, el equipo estaría mejor con vos jugando de ${nova} en vez de ${atual}. ¿Querés cambiar?`,
     ascensaoRoleSwitchYesBtn:(nova)=>`Jugar de ${nova}`,
@@ -7412,14 +7421,20 @@ function setupAscensaoRegionalStage(precomputado, stageKey){
   const format = ASCENSAO_TERRITORY_FORMAT;
   state.difficulty = "ascensao";
   let transferencias, transferenciasCoach;
-  if(precomputado){
+  if(precomputado && !precomputado.fromOffer){
     transferencias = precomputado.transferencias;
     transferenciasCoach = precomputado.transferenciasCoach;
   } else {
+    if(precomputado){
+      // veio de uma oferta aceita: usa exatamente o mercado que a prévia da oferta mostrou
+      transferencias = precomputado.transferencias;
+      transferenciasCoach = precomputado.transferenciasCoach;
+    } else {
     // simula o mercado da região inteira ANTES, incluindo o time do próprio jogador — craques
     // bons recebem ofertas de fora mesmo em time campeão, então ninguém fica de fora do mercado.
     transferencias = simulateRegionalTransfers(regiao, null);
     transferenciasCoach = simulateRegionalCoachTransfers(regiao, null, transferencias);
+    }
     // salva o resultado dessa temporada no snapshot da carreira — a próxima temporada continua
     // dessas escalações, em vez de recalcular sempre a partir do banco original do zero.
     territoryAllOrgs(regiao).forEach(org=>{
@@ -7431,7 +7446,7 @@ function setupAscensaoRegionalStage(precomputado, stageKey){
     // Antes de fechar o time, verifica se essa contratação nova deixaria melhor jogar em outra
     // das funções escolhidas — se sim, pergunta antes de continuar, em vez de trocar sozinho.
     const realPlayersDoMeuTime = (transferencias[c.time]||[]).map(n=>poolGet(n)).filter(Boolean);
-    const oportunidade = ascensaoCheckRoleSwitchOpportunity(realPlayersDoMeuTime);
+    const oportunidade = (precomputado && precomputado.fromOffer) ? null : ascensaoCheckRoleSwitchOpportunity(realPlayersDoMeuTime);
     if(oportunidade){
       c.pendingRoleSwitchData = {transferencias, transferenciasCoach, novaFuncao: oportunidade.funcao};
       state.screen = "ascensaoRoleSwitch";
@@ -8441,15 +8456,24 @@ function ascensaoRoleSwitchHTML(){
 function ascensaoOfferHTML(){
   const c = state.carreira;
   const ofertasHTML = c.ofertas.map((oferta, i)=>{
-    const jogadoresHTML = oferta.jogadores.map(nome=>{
+    // prévia EXATA de como o time fica se aceitar: os 5 titulares por função (com você),
+    // técnico principal e auxiliar — é o mesmo elenco que vai entrar em campo.
+    const jogadoresHTML = (oferta.elenco ? oferta.elenco.map(e=>{
+      const p = e.isCharacter ? null : poolGet(e.nome);
+      const flag = e.isCharacter ? (e.country?countryFlag(e.country):'') : (p?playerFlag(p):'');
+      return `<div class="test-stat-row"><span${e.isCharacter?' style="color:var(--gold);font-weight:700;"':''}>${e.isCharacter?'★ ':''}${e.nome} ${flag}</span><span class="mono">${roleLabel(e.role)}${e.overall?' · '+e.overall:''}</span></div>`;
+    }) : oferta.jogadores.map(nome=>{
       const p = poolGet(nome);
       return `<div class="test-stat-row"><span>${nome} ${p?playerFlag(p):''}</span><span class="mono">${p?roleLabel(p.roles[0]):''}</span></div>`;
-    }).join("");
+    })).join("");
+    const acHTML = oferta.ac ? `<p style="font-family:'Chakra Petch';color:var(--text);margin:-4px 0 10px;font-size:13px;">${t("ascensaoOfferAcLabel")}: ${oferta.ac} ${countryFlag(COACH_COUNTRY[oferta.ac.toLowerCase()])}</p>` : '';
+    const ratingHTML = oferta.rating ? `<p class="mono" style="color:var(--muted);font-size:12px;margin:0 0 8px;">${t("ascensaoOfferRatingLabel")}: ${Math.round(oferta.rating)}</p>` : '';
     return `
     <div class="history-item" style="margin-bottom:14px;text-align:left;">
       <h3 style="font-family:'Chakra Petch';margin:0 0 6px;">${oferta.org} <span class="mono" style="color:var(--muted);font-size:12px;">(${oferta.regiao})</span></h3>
       <p style="font-family:'Chakra Petch';font-weight:700;color:var(--crimson);margin:0 0 8px;font-size:13px;">${t("ascensaoOfferRoleLabel")}: ${roleLabel(oferta.funcao)}</p>
       <p style="font-family:'Chakra Petch';color:var(--text);margin:0 0 10px;font-size:13px;">${t("ascensaoOfferCoachLabel")}: ${oferta.coach||"—"} ${oferta.coach?countryFlag(COACH_COUNTRY[oferta.coach.toLowerCase()]):''}</p>
+      ${acHTML}${ratingHTML}
       <div class="test-stats">${jogadoresHTML}</div>
       <div class="btn-row" style="margin-top:10px;">
         <button class="btn" data-ascoferta="${i}">${t("ascensaoOfferAcceptBtn")}</button>
@@ -9230,7 +9254,7 @@ function attachHandlers(){
       state.carreira.regiao = oferta.regiao;
       state.carreira.funcaoAtual = oferta.funcao;
       state.carreira.ofertas = null;
-      setupAscensaoRegionalStage();
+      setupAscensaoRegionalStage({fromOffer:true, transferencias: oferta.transferencias, transferenciasCoach: oferta.transferenciasCoach});
       render();
     };
   });
@@ -10038,7 +10062,11 @@ function ascensaoRollTransferOffer(){
     const personagemNoTime = rosterComPersonagem.find(p=>p && p.isCharacter);
     if(!personagemNoTime) continue; // não coube em nenhuma função que o craque escolheu — não oferece
     const funcaoNaOferta = SLOT_ORDER[rosterComPersonagem.indexOf(personagemNoTime)];
-    ofertasComFuncao.push({ org: o.org, regiao: o.regiao, jogadores, coach, funcao: funcaoNaOferta });
+    // guarda a simulação exata do mercado dessa região: se o jogador aceitar, o time fica
+    // EXATAMENTE como a prévia mostrou (mesmo elenco, mesmo técnico), sem sortear de novo.
+    const elenco = rosterComPersonagem.map((p,i)=>({role:SLOT_ORDER[i], nome:p.name, isCharacter:!!p.isCharacter, country:p.country||PLAYER_COUNTRY[(p.name||'').toLowerCase()]||null, overall:p.overall}));
+    ofertasComFuncao.push({ org: o.org, regiao: o.regiao, jogadores, coach, ac: (baseRosters[o.org] && baseRosters[o.org].ac) || null, funcao: funcaoNaOferta, elenco, rating: teamOverall(rosterComPersonagem),
+      transferencias: transferenciasPorRegiao[o.regiao], transferenciasCoach: transferenciasCoachPorRegiao[o.regiao] });
   }
   if(ofertasComFuncao.length===0) return false;
   c.ofertas = ofertasComFuncao;
