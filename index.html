@@ -3497,7 +3497,7 @@ const I18N = {
     changelogSections:[
       {title:"v 1.3 → v 1.4", body:`
         <p><strong>VCT 2027</strong> — 32 times parceiros em 4 territórios (Américas, EMEA, Pacific e CN) mais os times não parceiros, com centenas de jogadores e staff novos no banco. Elencos incompletos ficam incompletos até o time anunciar, e o jogo contrata dentro do mercado de transferências.</p>
-        <p><strong>Calendário</strong> — Open Qualifier, Kickoff, Masters Seoul, Cup 1, Masters Valencia, Cup 2 e Champions com 16 times, mais a Copa do Mundo nas temporadas de Mundial. Eventos de 12 times: 8 parceiros mais 4 vagas decididas no Open Qualifier entre os times não parceiros. Os 4 melhores de cada território por pontos vão pro Champions.</p>
+        <p><strong>Calendário</strong> — Open Qualifier, Kickoff, Masters 1, Cup 1, Masters 2, Cup 2 e Champions com 16 times, mais a Copa do Mundo nas temporadas de Mundial. Eventos de 12 times: 8 parceiros mais 4 vagas decididas no Open Qualifier entre os times não parceiros. Os 4 melhores de cada território por pontos vão pro Champions.</p>
         <p><strong>Assistant Coach</strong> — agora tem efeito real no jogo, com metade da força de um Head Coach. O 6º jogador fica como reserva.</p>
         <p><strong>Open Qualifiers por sub-região</strong> — ao criar o craque você escolhe NA, Brasil, LATAM Norte ou LATAM Sul (Américas), Europa ou Turquia e MENA (EMEA), Coreia, Japão ou Sudeste Asiático (Pacific). Cada sub-região tem seu Open Qualifier, que você joga ao vivo com um time não parceiro: o campeão de cada sub-região garante uma vaga, e os vices disputam as vagas que sobram numa chave de última chance, completando os 12 do Kickoff e das Cups junto com os 8 parceiros.</p>
         <p><strong>Mundial</strong> — os 16 times agora são parceiros do VCT 2027 (4 de cada território). O Regional também usa só os 8 parceiros de cada território.</p>
@@ -3505,7 +3505,7 @@ const I18N = {
       `},
       {title:"v 1.3 → v 1.4", body:`
         <p><strong>VCT 2027</strong> — 32 partner teams across 4 territories (Americas, EMEA, Pacific and CN) plus non-partner teams, with hundreds of new players and staff in the pool. Incomplete rosters stay incomplete until the team announces, and the game signs players through the transfer market.</p>
-        <p><strong>Calendar</strong> — Open Qualifier, Kickoff, Masters Seoul, Cup 1, Masters Valencia, Cup 2 and a 16-team Champions, plus the World Cup in World Cup seasons. 12-team events: 8 partners plus 4 slots decided in the Open Qualifier among non-partner teams. The top 4 of each territory by points go to Champions.</p>
+        <p><strong>Calendar</strong> — Open Qualifier, Kickoff, Masters 1, Cup 1, Masters 2, Cup 2 and a 16-team Champions, plus the World Cup in World Cup seasons. 12-team events: 8 partners plus 4 slots decided in the Open Qualifier among non-partner teams. The top 4 of each territory by points go to Champions.</p>
         <p><strong>Assistant Coach</strong> — now has a real effect in the game, at half the strength of a Head Coach. The 6th player is kept as a reserve.</p>
         <p><strong>Open Qualifiers by sub-region</strong> — when you create your player you pick NA, Brazil, LATAM North or LATAM South (Americas), Europe or Turkey & MENA (EMEA), Korea, Japan or Southeast Asia (Pacific). Each sub-region has its own Open Qualifier, which you play live with a non-partner team: each sub-region champion earns a slot, and the runners-up fight for the remaining slots in a last-chance bracket, completing the 12 teams of the Kickoff and Cups alongside the 8 partners.</p>
         <p><strong>World mode</strong> — the 16 teams are now VCT 2027 partners (4 per territory). Regional also uses only the 8 partners of each territory.</p>
@@ -3513,7 +3513,7 @@ const I18N = {
       `},
       {title:"v 1.3 → v 1.4", body:`
         <p><strong>VCT 2027</strong> — 32 equipos socios en 4 territorios (Américas, EMEA, Pacific y CN) más los equipos no socios, con cientos de jugadores y staff nuevos en la base. Los planteles incompletos siguen incompletos hasta que el equipo los anuncie, y el juego ficha a través del mercado de transferencias.</p>
-        <p><strong>Calendario</strong> — Open Qualifier, Kickoff, Masters Seúl, Cup 1, Masters Valencia, Cup 2 y Champions con 16 equipos, más la Copa del Mundo en las temporadas de Mundial. Eventos de 12 equipos: 8 socios más 4 cupos definidos en el Open Qualifier entre los no socios. Los 4 mejores de cada territorio por puntos van al Champions.</p>
+        <p><strong>Calendario</strong> — Open Qualifier, Kickoff, Masters 1, Cup 1, Masters 2, Cup 2 y Champions con 16 equipos, más la Copa del Mundo en las temporadas de Mundial. Eventos de 12 equipos: 8 socios más 4 cupos definidos en el Open Qualifier entre los no socios. Los 4 mejores de cada territorio por puntos van al Champions.</p>
         <p><strong>Assistant Coach</strong> — ahora tiene efecto real en el juego, con la mitad de la fuerza de un Head Coach. El 6º jugador queda como reserva.</p>
         <p><strong>Open Qualifiers por subregión</strong> — al crear tu jugador elegís NA, Brasil, LATAM Norte o LATAM Sur (Américas), Europa o Turquía y MENA (EMEA), Corea, Japón o Sudeste Asiático (Pacific). Cada subregión tiene su Open Qualifier, que jugás en vivo con un equipo no socio: el campeón de cada subregión asegura un cupo, y los subcampeones disputan los cupos restantes en una llave de última chance, completando los 12 del Kickoff y las Cups junto con los 8 socios.</p>
         <p><strong>Mundial</strong> — los 16 equipos ahora son socios del VCT 2027 (4 por territorio). El Regional también usa solo los 8 socios de cada territorio.</p>
@@ -7275,7 +7275,7 @@ function ascensaoFinishSeason(regionalPlacement, regionalQualificou, mundialResu
 
 /* ===== VCT 2027: temporada em etapas (Kickoff, Masters 1, Cup 1, Masters 2, Cup 2, Champions) ===== */
 const ASCENSAO_STAGE_SEQ = ["kickoff","masters1","cup1","masters2","cup2","champions"];
-const ASCENSAO_STAGE_NAMES = {kickoff:"Kickoff", masters1:"Masters Seoul", cup1:"Cup 1", masters2:"Masters Valencia", cup2:"Cup 2", champions:"Champions", q_kickoff:"Open Qualifier · Kickoff", ql_kickoff:"Última chance · Kickoff", ql_cup1:"Última chance · Cup 1", ql_cup2:"Última chance · Cup 2", q_cup1:"Open Qualifier · Cup 1", q_cup2:"Open Qualifier · Cup 2"};
+const ASCENSAO_STAGE_NAMES = {kickoff:"Kickoff", masters1:"Masters 1", cup1:"Cup 1", masters2:"Masters 2", cup2:"Cup 2", champions:"Champions", q_kickoff:"Open Qualifier · Kickoff", ql_kickoff:"Última chance · Kickoff", ql_cup1:"Última chance · Cup 1", ql_cup2:"Última chance · Cup 2", q_cup1:"Open Qualifier · Cup 1", q_cup2:"Open Qualifier · Cup 2"};
 const ASCENSAO_TERRITORY_POINTS = [10,7,5,4,3,2,1,1,0,0,0,0];
 const ASCENSAO_MASTERS_POINTS = [20,14,10,8,5,5,3,3,1,1,1,1];
 function ascensaoStageName(key){ return ASCENSAO_STAGE_NAMES[key] || key; }
