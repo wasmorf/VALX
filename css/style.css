@@ -1,0 +1,402 @@
+/* ========== 1. VARIÁVEIS DE DESIGN — cores, raios e sombras ========== */
+  :root{
+    --bg-deep:#0A0C10;
+    --bg-panel:#12151C;
+    --bg-panel-2:#171B24;
+    --bg-elevated:#1D212C;
+    --line:#262B37;
+    --line-soft:#1B1F29;
+    --crimson:#FF4655;
+    --crimson-dim:#5C2530;
+    --crimson-soft:rgba(255,70,85,0.12);
+    --teal:#3BE8C4;
+    --teal-soft:rgba(59,232,196,0.12);
+    --gold:#F0B94D;
+    --text:#ECEDF1;
+    --text-soft:#C7C9D1;
+    --muted:#8B90A0;
+    --glow-a:#151A22;
+    --glow-b:#1A1319;
+    --radius:14px;
+    --radius-sm:9px;
+    --radius-pill:999px;
+    --shadow:0 8px 24px rgba(0,0,0,0.28);
+    --shadow-sm:0 2px 10px rgba(0,0,0,0.22);
+  }
+/* ========== 2. BASE E TIPOGRAFIA ========== */
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;touch-action:manipulation;}
+  body{
+    background:
+      radial-gradient(1100px 560px at 12% -8%, var(--glow-a) 0%, transparent 58%),
+      radial-gradient(900px 480px at 108% 8%, var(--glow-b) 0%, transparent 52%),
+      var(--bg-deep);
+    color:var(--text);
+    font-family:'IBM Plex Sans', sans-serif;
+    min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    transition:background 0.25s ease;
+    touch-action:manipulation;
+    line-height:1.5;
+  }
+  .headline{font-family:'Chakra Petch', sans-serif;}
+  .mono{font-family:'JetBrains Mono', monospace;}
+
+/* ========== 3. LAYOUT GERAL (container responsivo) ========== */
+  #app{max-width:640px;margin:0 auto;padding:22px 18px 64px;}
+  @media (min-width:860px){
+    #app{max-width:760px;padding:36px 24px 80px;}
+  }
+  @media (min-width:1180px){
+    #app{max-width:860px;}
+  }
+
+/* ========== 4. FORMAS ANGULARES (cantos cortados) ========== */
+  .angle{
+    clip-path:polygon(16px 0, 100% 0, 100% calc(100% - 16px), calc(100% - 16px) 100%, 0 100%, 0 16px);
+  }
+  .angle-sm{
+    clip-path:polygon(9px 0, 100% 0, 100% calc(100% - 9px), calc(100% - 9px) 100%, 0 100%, 0 9px);
+  }
+
+  /* ---- top bar ---- */
+/* ========== 5. BARRA SUPERIOR E SELETOR DE IDIOMA ========== */
+  .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;padding-top:2px;}
+  .brand{display:flex;align-items:center;gap:11px;}
+  .brand:active{opacity:0.7;}
+  .brand-mark{width:44px;height:28px;flex:none;color:var(--crimson);display:flex;align-items:center;}
+  .brand-text{display:flex;flex-direction:column;}
+  .brand-name{font-family:'Chakra Petch';font-weight:700;font-size:19px;letter-spacing:0.3px;line-height:1;}
+  .brand-name span{color:var(--crimson);}
+  .phase-tag{font-family:'JetBrains Mono';font-size:11px;color:var(--muted);border:1px solid var(--line);padding:6px 12px;border-radius:var(--radius-pill);background:var(--bg-panel);}
+  .topbar-right{display:flex;align-items:center;gap:10px;}
+  .lang-switch{display:flex;border:1px solid var(--line);border-radius:var(--radius-pill);overflow:hidden;background:var(--bg-panel);}
+  .lang-btn{
+    font-family:'JetBrains Mono';font-size:10.5px;color:var(--muted);background:transparent;
+    border:none;padding:7px 11px;cursor:pointer;letter-spacing:0.4px;transition:color .15s,background .15s;
+  }
+  .lang-btn + .lang-btn{border-left:1px solid var(--line);}
+  .lang-btn.active{background:var(--crimson);color:#fff;}
+  .lang-btn:not(.active):hover{color:var(--text);background:var(--bg-elevated);}
+
+  /* ---- generic panel ---- */
+/* ========== 6. PAINÉIS E TEXTOS DE DESTAQUE ========== */
+  .panel{background:var(--bg-panel);border:1px solid var(--line);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow-sm);}
+  .panel.angle{border-radius:0;}
+  .panel + .panel{margin-top:16px;}
+
+  h1.hero{font-family:'Chakra Petch';font-size:28px;line-height:1.18;font-weight:700;margin:0 0 12px;letter-spacing:0.1px;}
+  p.lead{color:var(--muted);font-size:15px;line-height:1.6;margin:0 0 22px;}
+
+/* ========== 7. BOTÕES ========== */
+  button, .btn, .team-option, .diff-card, .mode-card, .history-item, a{touch-action:manipulation;}
+  .btn{
+    font-family:'Chakra Petch';font-weight:600;font-size:15px;
+    background:var(--crimson);color:#fff;border:none;padding:14px 24px;
+    cursor:pointer;letter-spacing:0.2px;border-radius:var(--radius-sm);
+    transition:filter .15s, transform .1s;
+  }
+  .btn:hover{filter:brightness(1.08);}
+  .btn:active{transform:translateY(1px);filter:brightness(0.96);}
+  .btn.secondary{background:var(--bg-panel-2);border:1px solid var(--line);color:var(--text);}
+  .btn.secondary:hover{border-color:var(--crimson);background:var(--bg-elevated);}
+  .btn:disabled{opacity:0.35;cursor:not-allowed;}
+  .btn:disabled:hover{filter:none;}
+  .btn-row{display:flex;gap:10px;flex-wrap:wrap;}
+
+  /* ---- difficulty cards ---- */
+/* ========== 8. CARTÕES DE MODO E DIFICULDADE ========== */
+  .diff-grid{display:grid;grid-template-columns:1fr;gap:10px;margin-bottom:8px;}
+  .diff-card{
+    background:var(--bg-panel-2);border:1px solid var(--line);padding:17px 18px;cursor:pointer;
+    text-align:left;color:var(--text);border-radius:var(--radius-sm);transition:border-color .15s, background .15s;
+  }
+  .diff-card:hover{border-color:#3A4152;background:var(--bg-elevated);}
+  .diff-card.selected{border-color:var(--crimson);background:var(--crimson-soft);}
+  .diff-card h3{font-family:'Chakra Petch';margin:0 0 4px;font-size:16px;}
+  .diff-card p{margin:0;color:var(--muted);font-size:13px;line-height:1.45;}
+  .mode-grid{display:grid;grid-template-columns:1fr;gap:10px;margin-bottom:8px;}
+  @media (min-width:640px){ .mode-grid{grid-template-columns:1fr 1fr;} }
+  .mode-card{
+    background:var(--bg-panel-2);border:1px solid var(--line);padding:15px 17px;cursor:pointer;
+    text-align:left;color:var(--text);display:flex;align-items:center;gap:14px;border-radius:var(--radius-sm);
+    transition:border-color 0.15s, background 0.15s, transform .12s;
+  }
+  .mode-card:hover{border-color:var(--crimson);background:var(--crimson-soft);transform:translateY(-1px);}
+  .mode-card .mode-icon{
+    flex:none;width:40px;height:40px;display:flex;align-items:center;justify-content:center;
+    font-size:20px;background:var(--bg-panel);border:1px solid var(--line);border-radius:var(--radius-sm);
+  }
+  .mode-card .mode-text{flex:1;min-width:0;}
+  .mode-card h3{font-family:'Chakra Petch';margin:0 0 2px;font-size:15px;}
+  .mode-card p{margin:0;color:var(--muted);font-size:12px;line-height:1.4;}
+  .mode-card .mode-arrow{flex:none;color:var(--muted);font-size:18px;}
+
+  /* ---- team select ---- */
+/* ========== 9. SELEÇÃO DE TIMES E TÉCNICOS ========== */
+  .team-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:20px 0;}
+  @media (min-width:640px){ .team-grid{grid-template-columns:1fr 1fr 1fr;} }
+  .selecao-grid{display:grid;grid-template-columns:1fr;gap:9px;margin:20px 0;}
+  @media (min-width:640px){ .selecao-grid{grid-template-columns:1fr 1fr;} }
+  .team-option{
+    background:var(--bg-panel-2);border:1px solid var(--line);padding:15px 8px;
+    text-align:center;cursor:pointer;color:var(--text);border-radius:var(--radius-sm);
+    font-family:'Chakra Petch';font-weight:600;font-size:14px;letter-spacing:0.2px;
+    transition:border-color .15s, background .15s;
+  }
+  .team-option:hover{border-color:#3A4152;}
+  .team-option.selected{border-color:var(--crimson);background:var(--crimson-soft);color:var(--crimson);}
+
+  /* ---- coach select ---- */
+  .coach-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:20px 0;}
+  @media (min-width:640px){ .coach-grid{grid-template-columns:1fr 1fr 1fr;} }
+  .coach-option{
+    background:var(--bg-panel-2);border:1px solid var(--line);padding:20px 8px;
+    text-align:center;cursor:pointer;color:var(--text);border-radius:var(--radius-sm);
+    transition:border-color .15s, background .15s;
+  }
+  .coach-option:hover{border-color:#3A4152;}
+  .coach-option .coach-name{font-family:'Chakra Petch';font-weight:600;font-size:15px;}
+  .coach-option.selected{border-color:var(--crimson);background:var(--crimson-soft);color:var(--crimson);}
+
+  /* ---- roster slots ---- */
+/* ========== 10. DRAFT — escalação e candidatos ========== */
+  .roster-strip{display:flex;gap:8px;margin-bottom:18px;}
+  .slot{
+    flex:1;min-width:0;height:66px;border:1.5px dashed var(--line);border-radius:var(--radius-sm);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    font-family:'JetBrains Mono';font-size:8.5px;color:var(--muted);background:var(--bg-panel);
+    text-align:center;padding:0 3px;letter-spacing:0.2px;text-transform:uppercase;
+    transition:border-color .15s, background .15s;
+  }
+  .slot.filled{border:1.5px solid var(--teal);border-style:solid;background:var(--teal-soft);color:var(--text);}
+  .slot .slot-name{font-family:'Chakra Petch';font-size:12px;font-weight:600;text-align:center;padding:0 4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width:100%;}
+  .slot .slot-role{color:var(--teal);margin-top:2px;}
+
+  /* ---- draft candidate card ---- */
+  .candidate{background:var(--bg-panel-2);border:1px solid var(--line);padding:22px;text-align:center;border-radius:var(--radius-sm);}
+  .candidate-list{display:flex;flex-direction:column;gap:9px;}
+  .candidate-row{
+    display:flex;justify-content:space-between;align-items:center;gap:10px;
+    background:var(--bg-panel-2);border:1px solid var(--line);padding:13px 15px;border-radius:var(--radius-sm);
+    cursor:pointer;color:var(--text);text-align:left;transition:border-color .15s, background .15s;
+  }
+  .candidate-row:hover{border-color:#3A4152;background:var(--bg-elevated);}
+  .candidate-row:active{border-color:var(--crimson);}
+  .candidate-row .cr-name{font-family:'Chakra Petch';font-weight:600;font-size:15px;}
+  .candidate-row .cr-roles{color:var(--teal);font-family:'JetBrains Mono';font-size:10px;margin-top:2px;}
+  .candidate-row .cr-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px;}
+  .candidate-row .cr-tag{
+    background:var(--bg-panel);border:1px solid var(--line);color:var(--muted);
+    font-family:'JetBrains Mono';font-size:9px;padding:3px 7px;border-radius:var(--radius-pill);
+  }
+  .candidate-row .cr-ovr{font-size:17px;font-weight:600;color:var(--gold);flex:none;font-family:'Chakra Petch';}
+  .candidate-row.synergy-highlight, .candidate.synergy-highlight{border-color:var(--teal);background:var(--teal-soft);}
+  .cr-synergy{
+    display:flex;align-items:center;gap:4px;margin-top:6px;
+    font-family:'JetBrains Mono';font-size:9.5px;color:var(--teal);
+  }
+  .cand-name{font-family:'Chakra Petch';font-size:24px;font-weight:700;margin:2px 0;}
+  .cand-meta{color:var(--muted);font-size:13px;margin-bottom:14px;display:flex;flex-wrap:wrap;gap:6px;justify-content:center;}
+  .cand-meta .role-pill{color:var(--teal);border:1px solid var(--teal);border-radius:var(--radius-pill);padding:3px 10px;font-family:'JetBrains Mono';font-size:11px;}
+  .tag-chips{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;margin:12px 0 2px;}
+  .tag-chip{
+    background:var(--bg-panel);border:1px solid var(--line);color:var(--text-soft);
+    font-family:'JetBrains Mono';font-size:10px;padding:5px 10px;border-radius:var(--radius-pill);
+    letter-spacing:0.2px;
+  }
+  .overall-badge{
+    display:inline-flex;align-items:center;justify-content:center;
+    width:58px;height:58px;border-radius:50%;border:2px solid var(--gold);
+    font-family:'Chakra Petch';font-size:20px;font-weight:700;margin:12px auto 4px;color:var(--gold);
+    box-shadow:0 0 0 5px rgba(240,185,77,0.08);
+  }
+  .hidden-stats{color:var(--muted);font-size:13px;font-style:italic;padding:10px 0;}
+
+  /* ---- pool counter ---- */
+  .pool-info{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;color:var(--muted);font-size:13px;font-family:'JetBrains Mono';}
+
+  /* ---- match screen ---- */
+/* ========== 11. PARTIDA — placar, rounds e elencos ========== */
+  .vs-row{display:flex;align-items:center;justify-content:space-between;margin:22px 0 12px;}
+  .team-block{flex:1;min-width:0;text-align:center;}
+  .team-name{font-family:'Chakra Petch';font-weight:600;font-size:15px;overflow-wrap:break-word;word-break:break-word;line-height:1.25;}
+  .team-sub{color:var(--muted);font-size:11px;margin-top:3px;}
+  .score{font-family:'Chakra Petch';font-size:46px;font-weight:700;letter-spacing:1px;}
+  .score .sep{color:var(--muted);font-size:28px;margin:0 12px;}
+  .vs-x{color:var(--muted);font-family:'JetBrains Mono';font-size:13px;padding:0 14px;}
+  .round-log{
+    font-family:'JetBrains Mono';font-size:11px;color:var(--muted);
+    display:flex;flex-wrap:wrap;gap:5px;justify-content:center;margin:16px 0;
+  }
+  .round-log .r{width:17px;height:17px;display:flex;align-items:center;justify-content:center;border-radius:5px;font-size:10px;}
+  .round-log .r.win{background:var(--crimson-dim);color:#fff;}
+  .round-log .r.loss{background:var(--bg-elevated);color:var(--muted);}
+
+  /* ---- roster / KDA compare ---- */
+  .roster-compare{display:flex;gap:12px;margin:18px 0;}
+  .roster-col{flex:1;min-width:0;}
+  .roster-col-title{
+    font-family:'JetBrains Mono';font-size:10px;color:var(--muted);
+    letter-spacing:0.3px;margin-bottom:7px;text-align:center;
+    overflow-wrap:break-word;word-break:break-word;line-height:1.3;
+  }
+  .roster-player{
+    display:flex;justify-content:space-between;align-items:baseline;gap:4px;
+    padding:6px 0;border-bottom:1px solid var(--line-soft);
+  }
+  .roster-player:last-child{border-bottom:none;}
+  .roster-player .pname{
+    font-family:'Chakra Petch';font-size:12px;font-weight:600;
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  }
+  .roster-player .pkda{font-family:'JetBrains Mono';font-size:11px;color:var(--muted);flex:none;}
+
+/* ========== 12. RESULTADO — troféu, MVP e compartilhamento ========== */
+  .record-banner{
+    background:linear-gradient(135deg, #241a08, #1a1305);
+    border:1px solid var(--gold);color:var(--gold);border-radius:var(--radius-sm);
+    font-family:'Chakra Petch';font-weight:600;font-size:13px;line-height:1.45;
+    padding:13px 16px;margin:16px 0;text-align:center;
+    box-shadow:0 0 20px rgba(240,185,77,0.16);
+  }
+
+  .result-banner{text-align:center;padding:16px 0;margin-bottom:8px;}
+  .result-banner.win{color:var(--teal);}
+  .result-banner.loss{color:var(--crimson);}
+  .result-banner .label{font-family:'Chakra Petch';font-size:23px;font-weight:700;letter-spacing:0.2px;}
+
+
+  /* ---- trophy screen ---- */
+  .trophy-wrap{text-align:center;padding:22px 0;}
+  .trophy-icon{font-size:60px;margin-bottom:8px;}
+  .trophy-title{font-family:'Chakra Petch';font-size:27px;font-weight:700;color:var(--gold);margin:8px 0;}
+
+  .final-roster{display:flex;flex-direction:column;gap:8px;margin:20px 0;}
+  .fr-item{display:flex;justify-content:space-between;align-items:center;background:var(--bg-panel-2);border:1px solid var(--line);border-radius:var(--radius-sm);padding:11px 15px;}
+  .fr-item .n{font-family:'Chakra Petch';font-weight:600;font-size:14px;}
+  .fr-item .r{color:var(--muted);font-size:12px;}
+  .fr-item .o{font-family:'JetBrains Mono';color:var(--gold);}
+
+  .mvp-card{
+    background:linear-gradient(135deg, #241a08, #1a1305);
+    border:1px solid var(--gold);border-radius:var(--radius-sm);padding:18px;text-align:center;margin:20px 0;
+  }
+  .mvp-card .mvp-eyebrow{font-family:'JetBrains Mono';font-size:10px;color:var(--gold);letter-spacing:0.8px;margin-bottom:7px;}
+  .mvp-card .mvp-name{font-family:'Chakra Petch';font-size:20px;font-weight:700;color:#fff;}
+  .mvp-card .mvp-role{color:var(--muted);font-size:12px;margin:2px 0 9px;}
+  .mvp-card .mvp-kda{font-family:'JetBrains Mono';color:var(--gold);font-size:14px;}
+  .mvp-tag{
+    font-family:'JetBrains Mono';font-size:9px;color:#1A1305;background:var(--gold);
+    padding:2px 6px;margin-left:6px;border-radius:var(--radius-pill);letter-spacing:0.3px;vertical-align:middle;
+  }
+
+  /* ---- share buttons ---- */
+  .share-row{display:flex;gap:10px;justify-content:center;margin-top:16px;flex-wrap:wrap;}
+  .share-btn{
+    display:flex;align-items:center;gap:7px;border-radius:var(--radius-sm);
+    background:var(--bg-panel-2);border:1px solid var(--line);color:var(--text);
+    font-family:'Chakra Petch';font-weight:600;font-size:13px;padding:11px 17px;
+    cursor:pointer;transition:border-color .15s;
+  }
+  .share-btn:hover, .share-btn:active{border-color:var(--crimson);}
+  .share-btn svg{flex:none;}
+
+  /* ---- journey / tournament path table ---- */
+/* ========== 13. JORNADA DA CAMPANHA ========== */
+  .journey-table{margin:18px 0;border:1px solid var(--line);border-radius:var(--radius-sm);overflow:hidden;}
+  .journey-row{
+    display:flex;align-items:center;gap:8px;padding:10px 12px;
+    border-bottom:1px solid var(--line-soft);font-size:12px;
+  }
+  .journey-row:last-child{border-bottom:none;}
+  .journey-row .jr-stage{flex:1.3;min-width:0;color:var(--muted);font-family:'JetBrains Mono';font-size:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .journey-row .jr-opp{flex:1;min-width:0;font-family:'Chakra Petch';font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .journey-row .jr-score{flex:none;font-family:'JetBrains Mono';color:var(--text);}
+  .journey-row .jr-result{flex:none;width:20px;text-align:center;font-family:'Chakra Petch';font-weight:700;font-size:12px;}
+  .journey-row .jr-result.win{color:var(--teal);}
+  .journey-row .jr-result.loss{color:var(--crimson);}
+
+  .disclaimer{color:var(--muted);font-size:11px;line-height:1.6;margin-top:26px;text-align:center;}
+
+  /* ---- rules screen ---- */
+/* ========== 14. REGRAS ========== */
+  .rules-btn-row{text-align:center;margin-top:10px;}
+  .rules-link{
+    background:none;border:none;color:var(--muted);font-family:'JetBrains Mono';
+    font-size:11px;text-decoration:underline;letter-spacing:0.2px;cursor:pointer;padding:6px;
+  }
+  .rules-link:hover{color:var(--text);}
+  .rules-section{margin-bottom:24px;}
+  .rules-section h3{
+    font-family:'Chakra Petch';color:var(--crimson);font-size:15px;font-weight:700;
+    margin:0 0 9px;padding-bottom:7px;border-bottom:1px solid var(--line);
+    letter-spacing:0.2px;
+  }
+  .rules-section p{color:var(--muted);font-size:13px;line-height:1.65;margin:0 0 8px;}
+  .rules-section ul{color:var(--muted);font-size:13px;line-height:1.65;margin:6px 0;padding-left:20px;}
+  .rules-section li{margin-bottom:5px;}
+  .rules-section strong{color:var(--text);}
+  .rules-good{color:var(--teal);font-family:'JetBrains Mono';font-size:10px;letter-spacing:0.4px;margin:10px 0 4px;}
+  .rules-bad{color:var(--crimson);font-family:'JetBrains Mono';font-size:10px;letter-spacing:0.4px;margin:10px 0 4px;}
+
+  /* ---- country flag (image + graceful text fallback if it fails to load) ---- */
+/* ========== 15. BANDEIRAS E SELO DE VERSÃO ========== */
+  .flag-img{display:inline-block;vertical-align:middle;border-radius:2px;}
+  .version-badge{
+    position:fixed;bottom:14px;right:14px;
+    font-family:'JetBrains Mono';font-size:12px;font-weight:700;color:var(--crimson);
+    opacity:0.92;letter-spacing:0.3px;z-index:50;cursor:pointer;
+    background:var(--bg-panel);border:1px solid var(--line);padding:5px 11px;border-radius:var(--radius-pill);
+    box-shadow:var(--shadow-sm);transition:opacity .15s, border-color .15s;
+  }
+  .version-badge:hover{opacity:1;border-color:var(--crimson);}
+  .flag-fallback{
+    display:none;vertical-align:middle;
+    font-family:'JetBrains Mono';font-size:8.5px;font-weight:700;letter-spacing:0.3px;
+    background:var(--bg-panel-2);border:1px solid var(--line);color:var(--muted);
+    padding:1px 4px;border-radius:3px;line-height:1.3;
+  }
+
+  /* ---- campaign history ---- */
+/* ========== 16. HISTÓRICO E TABELAS DE CLASSIFICAÇÃO ========== */
+  .history-list{display:flex;flex-direction:column;gap:10px;}
+  .history-item{background:var(--bg-panel-2);border:1px solid var(--line);border-radius:var(--radius-sm);padding:13px 15px;}
+  .test-stats{background:var(--bg-panel-2);border:1px solid var(--line);border-radius:var(--radius-sm);padding:11px 15px;}
+  .standings-table{background:var(--bg-panel-2);border:1px solid var(--line);border-radius:var(--radius-sm);overflow:hidden;}
+  .standings-row{
+    display:grid;grid-template-columns:28px 1fr 46px 56px 40px;align-items:center;gap:4px;
+    padding:9px 11px;font-size:12px;border-bottom:1px solid var(--line-soft);
+  }
+  .standings-row:last-child{border-bottom:none;}
+  .standings-row.standings-header{color:var(--muted);font-size:10px;letter-spacing:0.3px;}
+  .standings-row.me{background:var(--crimson-soft);}
+  .standings-row.qualified .standings-pos{color:var(--teal);font-weight:700;}
+  .standings-pos{font-family:'JetBrains Mono';}
+  .standings-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:'Chakra Petch';font-weight:600;}
+  .standings-pts{text-align:right;font-weight:700;}
+  .standings-wl,.standings-rd{text-align:right;color:var(--muted);}
+  .test-stat-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;font-size:13px;gap:10px;}
+  .test-stat-row:not(:last-child){border-bottom:1px solid var(--line-soft);}
+  .history-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px;}
+  .history-team{font-family:'Chakra Petch';font-weight:700;font-size:14px;}
+  .history-date{color:var(--muted);font-size:10px;}
+  .history-result{font-family:'Chakra Petch';font-weight:600;font-size:13px;margin-bottom:4px;}
+  .history-meta{color:var(--muted);font-size:10.5px;}
+/* ========== 17. RODAPÉ E REDES SOCIAIS ========== */
+  .footer-social{display:flex;justify-content:center;margin-top:22px;}
+  .social-link{
+    width:44px;height:44px;border-radius:13px;background:var(--bg-panel);border:1px solid var(--line);
+    display:flex;align-items:center;justify-content:center;color:var(--text);
+    text-decoration:none;transition:border-color .2s, transform .15s;cursor:pointer;
+  }
+  .social-link:hover{border-color:var(--crimson);transform:translateY(-1px);}
+
+/* ========== 18. ACESSIBILIDADE ========== */
+:focus-visible{outline:2px solid var(--teal);outline-offset:2px;}
+button:focus:not(:focus-visible){outline:none;}
+::selection{background:var(--crimson-soft);color:var(--text);}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important;scroll-behavior:auto !important;}
+}
