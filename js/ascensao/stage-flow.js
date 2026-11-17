@@ -256,11 +256,78 @@ const COUNTRY_TO_REGION = {
   LT:"EMEA", FI:"EMEA", SE:"EMEA", LV:"EMEA", CZ:"EMEA", BE:"EMEA", EE:"EMEA", MD:"EMEA", DE:"EMEA", ES:"EMEA",
   PT:"EMEA", RS:"EMEA", BG:"EMEA", IE:"EMEA", KZ:"EMEA", EG:"EMEA", SA:"EMEA", LB:"EMEA", KG:"EMEA", RO:"EMEA", ZA:"EMEA", IT:"EMEA", AT:"EMEA", NO:"EMEA",
 };
+// ---- Preferência de circuito (sub-região) por nacionalidade — usada no mercado de transferências ----
+// Cada nação do Esports Nations Cup pertence a um grupo regional; esse grupo diz em quais circuitos
+// (ORG_SUB) o craque tende a jogar. O primeiro da lista é o preferido; os demais também servem.
+const ENC_GROUP_TRANSFER_PREFS = {
+  NA:["LATAM_N"],
+  SA:["LATAM_S","BR"],
+  SSA:["EU","TR"],
+  MENA:["EU","TR"],
+  EU:["EU"],
+  SEA:["KR","JP","SEA"],
+  AS:["KR","JP","SEA"],
+};
+const ENC_GROUP_TERRITORY = {NA:"AMERICAS", SA:"AMERICAS", SSA:"EMEA", MENA:"EMEA", EU:"EMEA", SEA:"PACIFIC", AS:"PACIFIC"};
+// Países fora dos grupos de qualificatório (convidados) ou que fogem da regra do grupo.
+const COUNTRY_TRANSFER_PREFS_OVERRIDE = {
+  US:["NA"], CA:["NA"], BR:["BR","LATAM_S"], CL:["LATAM_S","BR"], BO:["LATAM_S","BR"],
+  TR:["TR","EU"], KR:["KR","JP","SEA"], JP:["JP","KR","SEA"],
+  CN:["CN"], TW:["CN"], HK:["CN"],
+};
+(function(){
+  Object.entries(ENC_QUALIFIER_NATIONS).forEach(([g,nations])=>{
+    Object.values(nations).forEach(n=>{
+      if(!COUNTRY_TO_REGION[n.code]) COUNTRY_TO_REGION[n.code] = ENC_GROUP_TERRITORY[g];
+    });
+  });
+  COUNTRY_TO_REGION.HK = "CN"; COUNTRY_TO_REGION.TW = "CN";
+})();
+const _countryPrefsCache = {};
+function countryTransferPrefs(code){
+  if(!code) return null;
+  if(code in _countryPrefsCache) return _countryPrefsCache[code];
+  let prefs = COUNTRY_TRANSFER_PREFS_OVERRIDE[code] || null;
+  if(!prefs){
+    for(const [g,nations] of Object.entries(ENC_QUALIFIER_NATIONS)){
+      if(Object.values(nations).some(n=>n.code===code)){ prefs = ENC_GROUP_TRANSFER_PREFS[g]; break; }
+    }
+  }
+  if(!prefs){
+    const terr = COUNTRY_TO_REGION[code];
+    prefs = terr==="EMEA" ? ["EU"] : terr==="PACIFIC" ? ["KR","JP","SEA"] : terr==="CN" ? ["CN"] : null;
+  }
+  return (_countryPrefsCache[code] = prefs);
+}
+// Circuitos preferidos de um craque (residência e nacionalidade somam).
+function playerTransferPrefs(nameLower){
+  const res = PLAYER_RESIDENCE[nameLower];
+  const codes = [...(Array.isArray(res)?res:(typeof res==="string"?[res]:[])), PLAYER_COUNTRY[nameLower]].filter(Boolean);
+  const out = [];
+  codes.forEach(c=>(countryTransferPrefs(c)||[]).forEach(x=>{ if(!out.includes(x)) out.push(x); }));
+  return out.length ? out : null;
+}
+function coachTransferPrefs(nameLower){
+  const prefs = countryTransferPrefs(COACH_COUNTRY[nameLower]);
+  return prefs && prefs.length ? prefs : null;
+}
+// Bônus de mercado pra um time (org) segundo a preferência de circuito. null = sem informação.
+function orgTransferFit(prefs, org){
+  if(!prefs) return null;
+  const idx = prefs.indexOf(ORG_SUB[org]);
+  return idx<0 ? 0 : (idx===0 ? 15 : 12);
+}
 const ASCENSAO_REGION_PROXIMITY = {
   AMERICAS: [], EMEA: [],
   PACIFIC: ["CN"], CN: ["PACIFIC"],
 };
-function ascensaoOrgOfferWeight(orgRegiao, minhaRegiao, minhaRegiaoDeCasa){
+function ascensaoOrgOfferWeight(orgRegiao, minhaRegiao, minhaRegiaoDeCasa, org){
+  if(org){
+    const prefs = countryTransferPrefs((state.carreira||{}).nacionalidade);
+    const fit = orgTransferFit(prefs, org);
+    if(fit>0) return 5;
+    if(fit===0) return 1;
+  }
   if(orgRegiao===minhaRegiao) return 4;
   if(orgRegiao===minhaRegiaoDeCasa) return 4; // região do seu país também prioriza igual
   if((ASCENSAO_REGION_PROXIMITY[minhaRegiao]||[]).includes(orgRegiao)) return 3;
@@ -294,7 +361,7 @@ function ascensaoRollTransferOffer(){
   const quantidade = Math.min(candidatos.length, Math.floor(Math.random()*4)); // 0 a 3
   if(quantidade===0) return false;
   const minhaRegiaoDeCasa = COUNTRY_TO_REGION[c.nacionalidade];
-  const pesos = candidatos.map(o=>ascensaoOrgOfferWeight(o.regiao, c.regiao, minhaRegiaoDeCasa));
+  const pesos = candidatos.map(o=>ascensaoOrgOfferWeight(o.regiao, c.regiao, minhaRegiaoDeCasa, o.org));
   // sorteia bem mais candidatos do que precisa, porque alguns vão ser descartados por não
   // terem vaga pra nenhuma função que o craque escolheu (principal ou secundária).
   const sorteados = weightedSampleWithoutReplacement(candidatos, pesos, Math.min(candidatos.length, quantidade*3));

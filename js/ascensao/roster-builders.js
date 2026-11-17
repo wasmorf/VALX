@@ -299,7 +299,9 @@ function simulateRegionalCoachTransfers(regiao, excludeOrg, transferenciasDeJoga
     const paisCoach = COACH_COUNTRY[nomeCoach.toLowerCase()];
     if(paisCoach){
       const regiaoDoPais = COUNTRY_TO_REGION[paisCoach];
-      if(regiaoDoPais===regiao) pontos += 15;
+      const fitCo = orgTransferFit(coachTransferPrefs(nomeCoach.toLowerCase()), orgAlvo);
+      if(fitCo!==null){ if(fitCo>0) pontos += fitCo; else if(regiaoDoPais===regiao) pontos += 3; }
+      else if(regiaoDoPais===regiao) pontos += 15;
       else if((ASCENSAO_REGION_PROXIMITY[regiao]||[]).includes(regiaoDoPais)) pontos += 6;
       const rosterDoTime = transferenciasDeJogadores && transferenciasDeJogadores[orgAlvo];
       if(rosterDoTime){
@@ -368,13 +370,18 @@ function simulateRegionalTransfers(regiao, excludeOrg, usadosGlobalmente){
   }
   // Pontua um candidato pra uma vaga: overall é a base, mas pesa também se o país dele bate
   // com a região do time (ou é vizinho), e sinergia com quem já tá no elenco (mesmo país).
-  function pontuaCandidato(nomeCandidato, restanteDoElenco){
+  function pontuaCandidato(nomeCandidato, restanteDoElenco, orgAlvo){
     const p = poolGet(nomeCandidato);
     let pontos = overallDe(nomeCandidato);
     if(!p) return pontos;
     const paisesCandidato = playerCountries(p.name);
     const regiaoDoPais = freeAgentRegion(p.name.toLowerCase());
-    if(regiaoDoPais===regiao) pontos += 15;
+    const fit = orgAlvo ? orgTransferFit(playerTransferPrefs(p.name.toLowerCase()), orgAlvo) : null;
+    if(fit!==null){
+      // circuito preferido pela nacionalidade (ex.: Europa/Turquia pra África e MENA)
+      if(fit>0) pontos += fit;
+      else if(regiaoDoPais===regiao) pontos += 3;
+    } else if(regiaoDoPais===regiao) pontos += 15;
     else if((ASCENSAO_REGION_PROXIMITY[regiao]||[]).includes(regiaoDoPais)) pontos += 6;
     const sinergia = restanteDoElenco.filter(nomeColega=>{
       const pColega = poolGet(nomeColega);
@@ -393,7 +400,7 @@ function simulateRegionalTransfers(regiao, excludeOrg, usadosGlobalmente){
     const fixos = rosterCopies[org].filter(Boolean).map(n=>poolGet(n)).filter(Boolean);
     const nomesFixos = new Set(fixos.map(f=>f.name.toLowerCase()));
     const candidatosPontuados = POOL.filter(p=>!jaEmAlgumTimeNoJogo.has(p.name.toLowerCase()) && !ASCENSAO_EXCLUDED_PLAYERS.has(p.name.toLowerCase()) && !nomesFixos.has(p.name.toLowerCase()))
-      .sort((a,b)=>pontuaCandidato(b.name, fixos.map(f=>f.name))-pontuaCandidato(a.name, fixos.map(f=>f.name)));
+      .sort((a,b)=>pontuaCandidato(b.name, fixos.map(f=>f.name), org)-pontuaCandidato(a.name, fixos.map(f=>f.name), org));
     // embaralha só dentro do grupo dos melhores (top ~12) — mantém a prioridade geral por
     // nacionalidade/proximidade/sinergia, mas sem sempre montar a combinação idêntica.
     // não parceiros não contratam craque de elite pra preencher vaga (teto de overall 82)
@@ -451,6 +458,8 @@ function simulateRegionalTransfers(regiao, excludeOrg, usadosGlobalmente){
       // prioridade alta pra ser liberado — representa ele querendo voltar a jogar mais perto
       // de casa. Não é garantido (senão o time nunca teria opção), só bem mais provável.
       const foraDeLugar = candidatosParaLiberar.filter(c=>{
+        const fitC = orgTransferFit(playerTransferPrefs(c.nome.toLowerCase()), org);
+        if(fitC!==null) return fitC===0;
         const regiaoDoCraque = freeAgentRegion(c.nome.toLowerCase());
         return regiaoDoCraque && regiaoDoCraque!==regiao;
       });
@@ -471,13 +480,16 @@ function simulateRegionalTransfers(regiao, excludeOrg, usadosGlobalmente){
     // Se não achar ninguém que sirva, o próprio craque volta pro time de origem.
     shuffle(orgsParticipando).forEach(org=>{
       const restanteDoElenco = rosterCopies[org].filter(Boolean);
-      const opcoes = shuffle(pool.filter(n=>n!==vaga[org].nome)).sort((a,b)=>pontuaCandidato(b,restanteDoElenco)-pontuaCandidato(a,restanteDoElenco));
+      const opcoes = shuffle(pool.filter(n=>n!==vaga[org].nome)).sort((a,b)=>pontuaCandidato(b,restanteDoElenco,org)-pontuaCandidato(a,restanteDoElenco,org));
       // Junta os primeiros candidatos que REALMENTE fecham o time (cobrem as 5 funções) e
       // sorteia entre eles com peso maior pros melhores — assim o mercado ainda respeita
       // nacionalidade/proximidade/sinergia (quem pontua mais tem mais chance), mas não repete
       // sempre o mesmo "candidato perfeito" toda vez que rodar de novo.
       const validos = [];
+      // não troca um craque do circuito certo por alguém de fora da preferência de circuito dele
+      const fitLiberado = orgTransferFit(playerTransferPrefs(vaga[org].nome.toLowerCase()), org);
       for(const candidato of opcoes){
+        if(fitLiberado>0 && orgTransferFit(playerTransferPrefs(candidato.toLowerCase()), org)===0) continue;
         const tentativa = [...rosterCopies[org]];
         tentativa[vaga[org].idx] = candidato;
         const rosterObjs = tentativa.map(n=>n && poolGet(n)).filter(Boolean);
@@ -512,7 +524,7 @@ function simulateRegionalTransfers(regiao, excludeOrg, usadosGlobalmente){
         if(usadosGlobalmente) usadosGlobalmente.forEach(n=>jaEscalados.add(n.toLowerCase()));
         ASCENSAO_EXCLUDED_PLAYERS.forEach(n=>jaEscalados.add(n));
         const emergencia = shuffle(POOL.filter(p=>!jaEscalados.has(p.name.toLowerCase())))
-          .sort((a,b)=>pontuaCandidato(b.name, restanteDoElenco)-pontuaCandidato(a.name, restanteDoElenco));
+          .sort((a,b)=>pontuaCandidato(b.name, restanteDoElenco, org)-pontuaCandidato(a.name, restanteDoElenco, org));
         const validosEmergencia = [];
         for(const cand of emergencia){
           const tentativa = [...rosterCopies[org]];

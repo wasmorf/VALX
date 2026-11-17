@@ -261,6 +261,7 @@ const I18N = {
         <p><strong>Esports Nations Cup ao vivo</strong> — as 95 nações estão disponíveis no solo e no Road to the Top. Quem escolhe uma nação sem convite joga o qualificatório regional ao vivo, e o cabeçalho das partidas mostra o qualificatório (ex.: "Qualificatório América do Sul · Playoffs"). A fase de grupos mostra a letra do seu grupo (A–H).</p>
         <p><strong>Bandeiras e elencos</strong> — bandeiras desenhadas para todas as novas nações e elencos reais para as 78 não convidadas (sem jogadores repetidos entre nações). Novos jogadores entram com overall entre 80 e 86.</p>
         <p><strong>Desempenho</strong> — iniciar uma campanha no Clássico ficou muito mais rápido (de ~45s para menos de 1s).</p>
+        <p><strong>Mercado de transferências</strong> — agora respeita o circuito de cada nacionalidade: América do Norte → LATAM Norte; América do Sul → LATAM Sul e Brasil; África e Oriente Médio/Norte da África → Europa e Turquia/MENA; Europa → Europa; Sudeste Asiático, Oceania e Ásia → Pacífico; China → China. Jogadores fora do seu circuito têm mais chance de voltar pra casa, e o mercado não troca um jogador do circuito certo por alguém de fora.</p>
       `},
       {title:"v 1.3 → v 1.4", body:`
         <p><strong>VCT 2027</strong> — 32 times parceiros em 4 territórios (Américas, EMEA, Pacific e CN) mais os times não parceiros, com centenas de jogadores e staff novos no banco. Elencos incompletos ficam incompletos até o time anunciar, e o jogo contrata dentro do mercado de transferências.</p>
@@ -276,6 +277,7 @@ const I18N = {
         <p><strong>Esports Nations Cup live</strong> — all 95 nations are available in solo and Road to the Top. Picking a non-invited nation means playing the regional qualifier live, and the match header shows the qualifier (e.g. "South America Qualifier · Playoffs"). The group stage shows your group letter (A–H).</p>
         <p><strong>Flags and rosters</strong> — hand-drawn flags for all new nations and real rosters for the 78 non-invited ones (no repeated players across nations). New players come in with overall between 80 and 86.</p>
         <p><strong>Performance</strong> — starting a Classic campaign is much faster (from ~45s to under 1s).</p>
+        <p><strong>Transfer market</strong> — now respects each nationality's circuit: North America → LATAM North; South America → LATAM South and Brazil; Africa and Middle East/North Africa → Europe and Turkey/MENA; Europe → Europe; Southeast Asia, Oceania and Asia → Pacific; China → China. Players outside their circuit are more likely to move back home, and the market no longer swaps a right-circuit player for an outsider.</p>
       `},
       {title:"v 1.3 → v 1.4", body:`
         <p><strong>VCT 2027</strong> — 32 partner teams across 4 territories (Americas, EMEA, Pacific and CN) plus non-partner teams, with hundreds of new players and staff in the pool. Incomplete rosters stay incomplete until the team announces, and the game signs players through the transfer market.</p>
@@ -291,6 +293,7 @@ const I18N = {
         <p><strong>Esports Nations Cup en vivo</strong> — las 95 naciones están disponibles en solo y Rumbo a la Cima. Quien elige una nación sin invitación juega el clasificatorio regional en vivo, y el encabezado de las partidas muestra el clasificatorio (ej.: "Clasificatorio Sudamérica · Playoffs"). La fase de grupos muestra la letra de tu grupo (A–H).</p>
         <p><strong>Banderas y planteles</strong> — banderas dibujadas para todas las naciones nuevas y planteles reales para las 78 no invitadas (sin jugadores repetidos entre naciones). Los jugadores nuevos entran con overall entre 80 y 86.</p>
         <p><strong>Rendimiento</strong> — iniciar una campaña en Clásico es mucho más rápido (de ~45s a menos de 1s).</p>
+        <p><strong>Mercado de transferencias</strong> — ahora respeta el circuito de cada nacionalidad: América del Norte → LATAM Norte; América del Sur → LATAM Sur y Brasil; África y Medio Oriente/Norte de África → Europa y Turquía/MENA; Europa → Europa; Sudeste Asiático, Oceanía y Asia → Pacífico; China → China. Los jugadores fuera de su circuito tienen más chance de volver a casa, y el mercado ya no cambia a un jugador del circuito correcto por alguien de afuera.</p>
       `},
       {title:"v 1.3 → v 1.4", body:`
         <p><strong>VCT 2027</strong> — 32 equipos socios en 4 territorios (Américas, EMEA, Pacific y CN) más los equipos no socios, con cientos de jugadores y staff nuevos en la base. Los planteles incompletos siguen incompletos hasta que el equipo los anuncie, y el juego ficha a través del mercado de transferencias.</p>
