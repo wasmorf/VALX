@@ -463,7 +463,7 @@ button:focus:not(:focus-visible){outline:none;}
   <main id="app" aria-live="polite"></main>
 
   <footer>
-    <button class="version-badge" id="version-badge-btn" type="button" aria-label="Novidades da versão">v 1.11</button>
+    <button class="version-badge" id="version-badge-btn" type="button" aria-label="Novidades da versão">v 1.12</button>
   </footer>
 
   <noscript>O VALX precisa de JavaScript ativado para funcionar.</noscript>
@@ -2840,6 +2840,24 @@ function simulateRegionalTransfers(regiao, excludeOrg, usadosGlobalmente){
   }
   // Pontua um candidato pra uma vaga: overall é a base, mas pesa também se o país dele bate
   // com a região do time (ou é vizinho), e sinergia com quem já tá no elenco (mesmo país).
+  // Transferência "sem nada a ver": o circuito/região do time não bate com a nacionalidade/residência
+  // do craque (nem é vizinho). Esses casos são fortemente evitados.
+  const SUB_VIZINHOS = {NA:["LATAM_N"], LATAM_N:["NA","LATAM_S"], LATAM_S:["BR","LATAM_N"], BR:["LATAM_S"], EU:["TR"], TR:["EU"], KR:["JP","SEA","CN"], JP:["KR","SEA","CN"], SEA:["KR","JP","CN"], CN:["KR","JP","SEA"]};
+  // 0 = circuito certo/sem info, 1 = circuito vizinho (aceitável), 2 = sem sentido
+  function transferNivel(nome, orgAlvo){
+    if(!nome || !orgAlvo) return 0;
+    const lc = nome.toLowerCase();
+    const prefs = playerTransferPrefs(lc);
+    const fit = orgTransferFit(prefs, orgAlvo);
+    if(fit!==null){
+      if(fit>0) return 0;
+      const sub = ORG_SUB[orgAlvo];
+      return prefs.some(pf=>(SUB_VIZINHOS[pf]||[]).includes(sub)) ? 1 : 2;
+    }
+    const r = freeAgentRegion(lc);
+    return (!!r && r!==regiao && !(ASCENSAO_REGION_PROXIMITY[regiao]||[]).includes(r)) ? 2 : 0;
+  }
+  function transferSemSentido(nome, orgAlvo){ return transferNivel(nome, orgAlvo)===2; }
   function pontuaCandidato(nomeCandidato, restanteDoElenco, orgAlvo){
     const p = poolGet(nomeCandidato);
     let pontos = overallDe(nomeCandidato);
@@ -2858,6 +2876,7 @@ function simulateRegionalTransfers(regiao, excludeOrg, usadosGlobalmente){
       return pColega && playerCountries(pColega.name).some(pc=>paisesCandidato.includes(pc));
     }).length;
     pontos += sinergia * 1.5;
+    { const nv = transferNivel(nomeCandidato, orgAlvo); if(nv===2) pontos -= 30; else if(nv===1) pontos += 5; }
     return pontos;
   }
   // Preenche vagas em aberto (time com "null" no elenco fixo do banco) ANTES do mercado normal
@@ -2907,7 +2926,9 @@ function simulateRegionalTransfers(regiao, excludeOrg, usadosGlobalmente){
       if(todosOsEscaladosNoJogo.has(p.name.toLowerCase())) return false;
       if(jaEmAlgumTimeAgora.has(p.name.toLowerCase())) return false;
       if(ASCENSAO_EXCLUDED_PLAYERS.has(p.name.toLowerCase())) return false;
-      return freeAgentRegion(p.name.toLowerCase()) === regiao;
+      const rf = freeAgentRegion(p.name.toLowerCase());
+      // China e Pacífico (Coreia, Japão, Sudeste Asiático) são o mesmo mercado: agentes livres circulam entre eles
+      return rf === regiao || (!!rf && (ASCENSAO_REGION_PROXIMITY[regiao]||[]).includes(rf));
     }).map(p=>p.name);
     // Passo 1: TODO time tira o craque mais fraco do próprio elenco ao mesmo tempo — fica uma
     // vaga temporária, e o craque vai pro mercado compartilhado (isso já resolve o "ninguém
@@ -2959,6 +2980,8 @@ function simulateRegionalTransfers(regiao, excludeOrg, usadosGlobalmente){
       // não troca um craque do circuito certo por alguém de fora da preferência de circuito dele
       const fitLiberado = orgTransferFit(playerTransferPrefs(vaga[org].nome.toLowerCase()), org);
       for(const candidato of opcoes){
+        // jogadores priorizam times da própria região/circuito ou vizinhos: transferência sem sentido quase nunca rola
+        if(transferSemSentido(candidato, org) && Math.random()<0.95) continue;
         if(fitLiberado>0 && Math.random()<0.7 && orgTransferFit(playerTransferPrefs(candidato.toLowerCase()), org)===0) continue;
         const tentativa = [...rosterCopies[org]];
         tentativa[vaga[org].idx] = candidato;
@@ -6112,6 +6135,9 @@ const I18N = {
       `},
     ],
     changelogSections:[
+      {title:"v 1.11 → v 1.12", body:`
+        <p><strong>Transferências mais realistas</strong> — jogadores priorizam times da própria região/circuito ou de circuito vizinho (NA↔LATAM Norte↔LATAM Sul↔Brasil, Europa↔Turquia). China, Coreia, Japão e Sudeste Asiático agora são o mesmo mercado. Transferências sem sentido quase não acontecem mais.</p>
+      `},
       {title:"v 1.10 → v 1.11", body:`
         <p><strong>Técnicos do Brasil</strong> — 5 técnicos brasileiros novos (stkJ, vkzinn, eternal, zactatic e FLSH) entram no mercado. Sem duplicados.</p>
       `},
@@ -6158,6 +6184,9 @@ const I18N = {
         <p><strong>Mundial</strong> — os 16 times agora são parceiros do VCT 2027 (4 de cada território). O Regional também usa só os 8 parceiros de cada território.</p>
         <p><strong>Elencos</strong> — times sem as 5 funções cobertas agora ajustam a função de um jogador em vez de perder 3 de overall. yay foi liberado para o mercado.</p>
       `},
+      {title:"v 1.11 → v 1.12", body:`
+        <p><strong>More realistic transfers</strong> — players now prioritize teams in their own region/circuit or a neighboring circuit (NA↔LATAM North↔LATAM South↔Brazil, Europe↔Turkey). China, Korea, Japan and Southeast Asia now share one market. Nonsensical transfers almost never happen anymore.</p>
+      `},
       {title:"v 1.10 → v 1.11", body:`
         <p><strong>Brazilian coaches</strong> — 5 new Brazilian coaches (stkJ, vkzinn, eternal, zactatic and FLSH) join the market. No duplicates.</p>
       `},
@@ -6203,6 +6232,9 @@ const I18N = {
         <p><strong>Open Qualifiers by sub-region</strong> — when you create your player you pick NA, Brazil, LATAM North or LATAM South (Americas), Europe or Turkey & MENA (EMEA), Korea, Japan or Southeast Asia (Pacific). Each sub-region has its own Open Qualifier, which you play live with a non-partner team: each sub-region champion earns a slot, and the runners-up fight for the remaining slots in a last-chance bracket, completing the 12 teams of the Kickoff and Cups alongside the 8 partners.</p>
         <p><strong>World mode</strong> — the 16 teams are now VCT 2027 partners (4 per territory). Regional also uses only the 8 partners of each territory.</p>
         <p><strong>Rosters</strong> — teams that did not cover all 5 roles now adjust one player's role instead of losing 3 overall. yay was released to the market.</p>
+      `},
+      {title:"v 1.11 → v 1.12", body:`
+        <p><strong>Fichajes más realistas</strong> — los jugadores priorizan equipos de su región/circuito o de un circuito vecino (NA↔LATAM Norte↔LATAM Sur↔Brasil, Europa↔Turquía). China, Corea, Japón y el Sudeste Asiático ahora comparten un mismo mercado. Los fichajes sin sentido casi no ocurren.</p>
       `},
       {title:"v 1.10 → v 1.11", body:`
         <p><strong>Entrenadores de Brasil</strong> — 5 entrenadores brasileños nuevos (stkJ, vkzinn, eternal, zactatic y FLSH) entran al mercado. Sin duplicados.</p>
@@ -10187,15 +10219,15 @@ const ENC_GROUP_TRANSFER_PREFS = {
   SSA:["EU","TR"],
   MENA:["EU","TR"],
   EU:["EU"],
-  SEA:["KR","JP","SEA"],
-  AS:["KR","JP","SEA"],
+  SEA:["KR","JP","SEA","CN"],
+  AS:["KR","JP","SEA","CN"],
 };
 const ENC_GROUP_TERRITORY = {NA:"AMERICAS", SA:"AMERICAS", SSA:"EMEA", MENA:"EMEA", EU:"EMEA", SEA:"PACIFIC", AS:"PACIFIC"};
 // Países fora dos grupos de qualificatório (convidados) ou que fogem da regra do grupo.
 const COUNTRY_TRANSFER_PREFS_OVERRIDE = {
   US:["NA"], CA:["NA"], BR:["BR","LATAM_S"], CL:["LATAM_S","BR"], BO:["LATAM_S","BR"],
-  TR:["TR","EU"], KR:["KR","JP","SEA"], JP:["JP","KR","SEA"],
-  CN:["CN"], TW:["CN"], HK:["CN"],
+  TR:["TR","EU"], KR:["KR","JP","SEA","CN"], JP:["JP","KR","SEA","CN"],
+  CN:["CN","KR","JP","SEA"], TW:["CN","KR","JP","SEA"], HK:["CN","KR","JP","SEA"],
 };
 (function(){
   Object.entries(ENC_QUALIFIER_NATIONS).forEach(([g,nations])=>{
@@ -10219,7 +10251,7 @@ function countryTransferPrefs(code){
   }
   if(!prefs){
     const terr = COUNTRY_TO_REGION[code];
-    prefs = terr==="EMEA" ? ["EU"] : terr==="PACIFIC" ? ["KR","JP","SEA"] : terr==="CN" ? ["CN"] : null;
+    prefs = terr==="EMEA" ? ["EU"] : terr==="PACIFIC" ? ["KR","JP","SEA","CN"] : terr==="CN" ? ["CN","KR","JP","SEA"] : null;
   }
   return (_countryPrefsCache[code] = prefs);
 }
