@@ -463,7 +463,7 @@ button:focus:not(:focus-visible){outline:none;}
   <main id="app" aria-live="polite"></main>
 
   <footer>
-    <button class="version-badge" id="version-badge-btn" type="button" aria-label="Novidades da versão">v 1.12</button>
+    <button class="version-badge" id="version-badge-btn" type="button" aria-label="Novidades da versão">v 1.13</button>
   </footer>
 
   <noscript>O VALX precisa de JavaScript ativado para funcionar.</noscript>
@@ -2284,7 +2284,7 @@ const TEAM_REGIONS = {
 const TERRITORY_CHALLENGERS = {
   "AMERICAS": ["Shopify Rebellion", "Cloud9", "ENVY", "Shopify Rebellion Gold", "FlyQuest", "Masterclass", "Arashi", "2GAME Esports", "PxS' team", "Winthrop University", "9z", "Untamable Beasts", "Team Solid", "Yellow Dragon Gaming", "Evictix", "OAFS", "Wildcard", "EL LEGADO", "counterfeit", "TIME DO B3M", "SÓ TEM VELHO", "Rejects", "BRASIL2002", "NXG", "X-MEN", "0 intelecto", "ARRANCA DREAMS", "Mafiosos", "Master Bank", "505", "Old School Krew", "Squirtle Rangers", "STREAMER ARENA", "ARG.MIX", "fracasados ny", "MALAJUNTA", "TRAMITE"],
   "EMEA": ["R8 Esports", "Barça eSports", "Mandatory", "Team Stallions", "Beşiktaş Esports", "UCAM Esports", "Aurora Gaming", "F9 EICAR", "NAVI Junior", "WIP Esports", "Joblife", "NKVT", "Eternal Fire", "Galatasaray Esports", "Eintracht Frankfurt", "Misa Esports", "Trigon Titans"],
-  "PACIFIC": ["Murash Gaming", "Alter Ego × Kertanegara", "BOOM Esports", "QT DIG", "Nongshim RedForce"],
+  "PACIFIC": ["VARREL", "Murash Gaming", "Alter Ego × Kertanegara", "BOOM Esports", "QT DIG", "Nongshim RedForce"],
   "CN": ["UR", "Havoc Yonder Gaming", "Any Questions Gaming", "LGD Gaming", "TEC", "KeepBest Gaming", "VLG", "XJG", "Young Gaming"],
 };
 function territoryAllOrgs(r){ return [...(TEAM_REGIONS[r]||[]), ...(TERRITORY_CHALLENGERS[r]||[])]; }
@@ -2308,7 +2308,7 @@ const ORG_SUB = {};
     EU:["Team Vitality","FNATIC","Team Liquid","Team Heretics","Karmine Corp","Gentle Mates","Barça eSports","Mandatory","UCAM Esports","F9 EICAR","NAVI Junior","WIP Esports","Joblife","NKVT","Eintracht Frankfurt"],
     TR:["FUT Esports","BBL Esports","R8 Esports","Team Stallions","Beşiktaş Esports","Aurora Gaming","Eternal Fire","Galatasaray Esports","Misa Esports","Trigon Titans"],
     KR:["T1","Gen.G","Murash Gaming","Nongshim RedForce"],
-    JP:["ZETA DIVISION","Crazy Raccoon","QT DIG"],
+    JP:["ZETA DIVISION","Crazy Raccoon","QT DIG","VARREL"],
     SEA:["Paper Rex","Rex Regum Qeon","FULL SENSE","GAM Esports","Alter Ego × Kertanegara","BOOM Esports"],
   };
   Object.entries(m).forEach(([s,l])=>l.forEach(o=>{ ORG_SUB[o]=s; }));
@@ -2406,34 +2406,35 @@ const ASCENSAO_TEAM_ROSTERS = {
   "WIP Esports": {players:["TakaS", "Jesse", "mepeezy", "wtex", "Vorwenn"], reserve:[], coach:"Celo", ac:null},
   "Joblife": {players:["al0rante", "hoody", "WanZeRu", "Sevire", "westside"], reserve:[], coach:null, ac:null},
   "NKVT": {players:["Spear", "Masic", "MerSa", "JrayN", "Rensz"], reserve:[], coach:null, ac:null},
-  "Eternal Fire": {players:["BadreX", "s0pp", "sociablEE", null, null], reserve:[], coach:null, ac:null},
+  "Eternal Fire": {players:["BadreX", "s0pp", "sociablEE", "KROSTALY", null], reserve:[], coach:null, ac:null},
   "Galatasaray Esports": {players:["nekky", null, null, null, null], reserve:[], coach:"Viento", ac:null},
   "Eintracht Frankfurt": {players:["bipo", null, null, null, null], reserve:[], coach:null, ac:null},
   "Misa Esports": {players:["Ronniee", "Fortres", "pAwn1", "MERZ", "Tiyosta"], reserve:[], coach:null, ac:null},
   "Trigon Titans": {players:["Esconardo", "Celasun", "sterben", "exe", "Anima"], reserve:[], coach:null, ac:null},
   // ===== PACIFIC =====
-  "Paper Rex": {players:["something", "f0rsakeN", "invy", "PatMen", null], reserve:[], coach:"alecks", ac:null},
+  "Paper Rex": {players:["something", "f0rsakeN", "invy", "PatMen", "primmie"], reserve:[], coach:"alecks", ac:null},
   "T1": {players:["iZu", "BuZz", "TenZ", "crashies", "stax"], reserve:[], coach:"Sacy", ac:"Sungmin"},
-  "Gen.G": {players:["t3xture", "Raxcal", "Karon", "Dambi", "MaKo"], reserve:["Ray", "Xiesta", "ZynX"], coach:"solo", ac:"hsk"},
+  "Gen.G": {players:["t3xture", null, "Karon", "Dambi", "MaKo"], reserve:["Ray", "Xiesta", "ZynX"], coach:"solo", ac:"hsk"},
   "Rex Regum Qeon": {players:["xffero", "Jemkin", "Monyet", "Kushy", null], reserve:[], coach:"Faded", ac:null},
   "ZETA DIVISION": {players:["KEN", "yatsuka", null, null, null], reserve:[], coach:"ryota-", ac:"XQQ"},
   "FULL SENSE": {players:["Kr1stal", "JitBoyS", "seph1roth", "Killua", null], reserve:[], coach:"Crws", ac:"Theeluvfamily"},
   "Crazy Raccoon": {players:["Meiy", "Akame", "SugarZ3ro", "Aace", "CLZ"], reserve:[], coach:"Vorz", ac:null},
   "GAM Esports": {players:["crazyguy", null, null, null, null], reserve:[], coach:null, ac:null},
+  "VARREL": {players:["Raxcal", "Jinboong", "Ash", null, null], reserve:[], coach:null, ac:null},
   "Murash Gaming": {players:["Xdll", "Caedye", "Seoldam", "HoneyBunny", "MrTenzouEz"], reserve:[], coach:"Lefiedot", ac:"mltdwn"},
   "Alter Ego × Kertanegara": {players:["Sovano", "parscofield", "Gotten", "Nakya", "ValdyN"], reserve:["ray4c"], coach:"RBTX", ac:null},
   "BOOM Esports": {players:["Xan", "kellyS", "iceyyzx", "natzVAL_", "NcSlasher"], reserve:[], coach:"meowvlrt", ac:null},
   "QT DIG": {players:["Meteor", "TenTen", "Yuran", "Kippei", "misaya"], reserve:[], coach:null, ac:null},
   "Nongshim RedForce": {players:["UdoTan", null, null, null, null], reserve:[], coach:"Persia", ac:null},
   // ===== CN =====
-  "EDward Gaming": {players:["Jieni7", "stew", "Rossy", null, null], reserve:["zjc"], coach:"Autumn", ac:null},
+  "EDward Gaming": {players:["Jieni7", "stew", "Rossy", "iamgrq", null], reserve:["zjc"], coach:"Autumn", ac:null},
   "Bilibili Gaming": {players:["whzy", "nephh", "Knight", "alvinboy", "Smoggy"], reserve:["rushia", "bud", "yilai", "FT"], coach:"Itopata", ac:"JeXeN"},
-  "TYLOO": {players:["splash", "slowly", "Erv", "SiuFatBB", null], reserve:["xihe"], coach:"pipsoN", ac:"hypnotizing"},
+  "TYLOO": {players:["splash", "slowly", null, "SiuFatBB", null], reserve:["xihe"], coach:"pipsoN", ac:"hypnotizing"},
   "JD Gaming": {players:["BerLIN", "jkuro", "Yuicaw", "crownfisher", "glacier"], reserve:["zhe"], coach:"bail", ac:null},
-  "All Gamers": {players:["Shr1mp", "K1ra", "iamgrq", "Spring", "Jinggg"], reserve:["f4ngeer"], coach:"Fayde", ac:null},
+  "All Gamers": {players:["Shr1mp", "K1ra", null, "Spring", "Jinggg"], reserve:["f4ngeer"], coach:"Fayde", ac:null},
   "Trace Esports": {players:["Kai", "nobody", "CHICHOO", "Nicc", "deLb"], reserve:["Abo", "Toosy", "LuoK1ng", "FengF", "FKEY"], coach:"destroyeR", ac:"AfteR"},
   "Xi Lai Gaming": {players:["Sharks", "happywei", "d4v41", "ZmjjKK", "Zeus"], reserve:["WsLeo", "Lysoar"], coach:null, ac:"steady"},
-  "Weibo Gaming": {players:["Yoyo", "Satoshi", "heybay", "babybay", null], reserve:["Razziss"], coach:"Milan", ac:"Senny"},
+  "Weibo Gaming": {players:["Yoyo", "Satoshi", "heybay", "babybay", "Erv"], reserve:["Razziss"], coach:"Milan", ac:"Senny"},
   "UR": {players:["CXIX666", "yiyee", "Deryeon", "Knyzl", "Ninebody"], reserve:[], coach:null, ac:null},
   "Havoc Yonder Gaming": {players:["xRan", "amber", "MrCANI", "Shiyboy", "whitecatw"], reserve:["ember", "kklin", "Wayne"], coach:"Cyyy", ac:"Nearley"},
   "Any Questions Gaming": {players:["5CM", "Yanggg", "Scales", "koalanoob", "S1Mon"], reserve:["juicy"], coach:"ED101", ac:"Sunshine"},
@@ -6135,6 +6136,9 @@ const I18N = {
       `},
     ],
     changelogSections:[
+      {title:"v 1.12 → v 1.13", body:`
+        <p><strong>Rostermania 2027</strong> — movimentações do vct.today aplicadas: Raxcal, Jinboong e Ash no VARREL (org nova, Japão), primmie no Paper Rex, iamgrq no EDward Gaming, Erv no Weibo Gaming e KROSTALY no Eternal Fire.</p>
+      `},
       {title:"v 1.11 → v 1.12", body:`
         <p><strong>Transferências mais realistas</strong> — jogadores priorizam times da própria região/circuito ou de circuito vizinho (NA↔LATAM Norte↔LATAM Sul↔Brasil, Europa↔Turquia). China, Coreia, Japão e Sudeste Asiático agora são o mesmo mercado. Transferências sem sentido quase não acontecem mais.</p>
       `},
@@ -6184,6 +6188,9 @@ const I18N = {
         <p><strong>Mundial</strong> — os 16 times agora são parceiros do VCT 2027 (4 de cada território). O Regional também usa só os 8 parceiros de cada território.</p>
         <p><strong>Elencos</strong> — times sem as 5 funções cobertas agora ajustam a função de um jogador em vez de perder 3 de overall. yay foi liberado para o mercado.</p>
       `},
+      {title:"v 1.12 → v 1.13", body:`
+        <p><strong>Rostermania 2027</strong> — vct.today moves applied: Raxcal, Jinboong and Ash to VARREL (new org, Japan), primmie to Paper Rex, iamgrq to EDward Gaming, Erv to Weibo Gaming and KROSTALY to Eternal Fire.</p>
+      `},
       {title:"v 1.11 → v 1.12", body:`
         <p><strong>More realistic transfers</strong> — players now prioritize teams in their own region/circuit or a neighboring circuit (NA↔LATAM North↔LATAM South↔Brazil, Europe↔Turkey). China, Korea, Japan and Southeast Asia now share one market. Nonsensical transfers almost never happen anymore.</p>
       `},
@@ -6232,6 +6239,9 @@ const I18N = {
         <p><strong>Open Qualifiers by sub-region</strong> — when you create your player you pick NA, Brazil, LATAM North or LATAM South (Americas), Europe or Turkey & MENA (EMEA), Korea, Japan or Southeast Asia (Pacific). Each sub-region has its own Open Qualifier, which you play live with a non-partner team: each sub-region champion earns a slot, and the runners-up fight for the remaining slots in a last-chance bracket, completing the 12 teams of the Kickoff and Cups alongside the 8 partners.</p>
         <p><strong>World mode</strong> — the 16 teams are now VCT 2027 partners (4 per territory). Regional also uses only the 8 partners of each territory.</p>
         <p><strong>Rosters</strong> — teams that did not cover all 5 roles now adjust one player's role instead of losing 3 overall. yay was released to the market.</p>
+      `},
+      {title:"v 1.12 → v 1.13", body:`
+        <p><strong>Rostermania 2027</strong> — movimientos de vct.today aplicados: Raxcal, Jinboong y Ash a VARREL (org nueva, Japón), primmie a Paper Rex, iamgrq a EDward Gaming, Erv a Weibo Gaming y KROSTALY a Eternal Fire.</p>
       `},
       {title:"v 1.11 → v 1.12", body:`
         <p><strong>Fichajes más realistas</strong> — los jugadores priorizan equipos de su región/circuito o de un circuito vecino (NA↔LATAM Norte↔LATAM Sur↔Brasil, Europa↔Turquía). China, Corea, Japón y el Sudeste Asiático ahora comparten un mismo mercado. Los fichajes sin sentido casi no ocurren.</p>
